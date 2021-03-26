@@ -72,10 +72,13 @@ export default function SignIn() {
     try {
       if(!isAccount){
         const data = await request(routes.signUp, "POST", { ...form });
-        // message(data.message);
         console.log(data);
       }
       else{
+        console.log(form);
+        const data = await request(routes.signIn, "POST", { ...form });
+        console.log(data);
+        console.log(data.message);
 
       }
       
