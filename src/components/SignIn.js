@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useContext  } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -12,6 +12,10 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
+
+import { AuthContext } from "../context/AuthContext";
+import { useHttp } from "../hooks/http.hook";
+import { routes } from "../utils/routes";
 
 function Copyright() {
   return (
@@ -48,6 +52,8 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignIn() {
   const classes = useStyles();
+  const { loading, error, request, clearError } = useHttp();
+  const auth = useContext(AuthContext);
   const [isAccount, setIsAccount] = useState(true);
   const [form, setForm] = useState({
     'name': '',
@@ -61,10 +67,19 @@ export default function SignIn() {
     setForm({...form,[e.target.name]:e.target.value})
     
   }
-  const handlerSubmit = (e) =>{
-    setForm({...form,[e.target.name]:e.target.value})
+  async function handlerSubmit(e){
+    try {
+      if(!isAccount){
+        const data = await request(routes.signUp, "POST", { ...form });
+        console.log('create user')
+        // message(data.message);
+        console.log(data);
+      }
+      
+    } catch (e) {}
     
   }
+
   let nameField;
   if (!isAccount) {
     nameField = (
