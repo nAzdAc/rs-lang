@@ -67,13 +67,16 @@ export default function SignIn() {
     setForm({...form,[e.target.name]:e.target.value})
     
   }
-  async function handlerSubmit(e){
+  async function handleSubmit(e){
+    e.preventDefault()
     try {
       if(!isAccount){
         const data = await request(routes.signUp, "POST", { ...form });
-        console.log('create user')
         // message(data.message);
         console.log(data);
+      }
+      else{
+
       }
       
     } catch (e) {}
@@ -113,7 +116,7 @@ export default function SignIn() {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <form className={classes.form} noValidate onSubmit={handlerSubmit}>
+        <form className={classes.form} noValidate onSubmit={handleSubmit}>
           {nameField}
           <TextField
             variant="outlined"
