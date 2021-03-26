@@ -7,7 +7,7 @@ import { useRoutes } from './hooks/routes.hook';
 
 
 function App() {
-	const { token, login, logout, userId, ready, userName } = useAuth();
+	const { token, refreshToken, login, logout, userId, ready, userName } = useAuth();
 	const isAuthenticated = !!token;
 	const routes = useRoutes(isAuthenticated);
 
@@ -19,6 +19,7 @@ function App() {
 		<AuthContext.Provider
 			value={{
 				token,
+        refreshToken,
 				login,
 				logout,
 				userId,

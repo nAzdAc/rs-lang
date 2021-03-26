@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useContext  } from "react";
+import React, { useState, useCallback, useContext } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -56,34 +56,40 @@ export default function SignIn() {
   const auth = useContext(AuthContext);
   const [isAccount, setIsAccount] = useState(true);
   const [form, setForm] = useState({
-    'name': '',
-    'email': '',
-    'password': ''
+    name: "",
+    email: "",
+    password: "",
   });
-  const handleClick = () => {
+  const[sign, setSign]=useState('Sign in')
+  const handleSignClick = () => {
     setIsAccount(false);
+    setSign('Sign up')
+
   };
-  const handleFrormChange = (e) =>{
-    setForm({...form,[e.target.name]:e.target.value})
-    
-  }
-  async function handleSubmit(e){
-    e.preventDefault()
+  const handleFrormChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+  async function handleSubmit(e) {
+    e.preventDefault();
     try {
-      if(!isAccount){
+      if (!isAccount) {
         const data = await request(routes.signUp, "POST", { ...form });
         console.log(data);
-      }
-      else{
+        setIsAccount(true);
+        setForm({
+          name: "",
+          email: "",
+          password: "",
+        });
+        setSign('Sign in')
+      } else {
         console.log(form);
         const data = await request(routes.signIn, "POST", { ...form });
+        auth.login(data.token, data.refreshToken, data.userId, data.name);
         console.log(data);
-        console.log(data.message);
-
-      }
       
+      }
     } catch (e) {}
-    
   }
 
   let nameField;
@@ -106,8 +112,6 @@ export default function SignIn() {
   } else {
     nameField = null;
   }
-  
- 
 
   return (
     <Container component="main" maxWidth="xs">
@@ -117,7 +121,7 @@ export default function SignIn() {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign in
+          {sign}
         </Typography>
         <form className={classes.form} noValidate onSubmit={handleSubmit}>
           {nameField}
@@ -159,16 +163,16 @@ export default function SignIn() {
             color="primary"
             className={classes.submit}
           >
-            Sign In
+            {sign}
           </Button>
-          <Grid container onClick={handleClick}>
+          <Grid container >
             <Grid item xs>
               <Link href="#" variant="body2">
                 Forgot password?
               </Link>
             </Grid>
             <Grid item>
-              <Link href="#" variant="body2">
+              <Link href="#" variant="body2" onClick={handleSignClick}>
                 {"Don't have an account? Sign Up"}
               </Link>
             </Grid>
