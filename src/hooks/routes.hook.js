@@ -1,26 +1,27 @@
 import React from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
-import SignIn from '../components/SignIn'
-
+import SignIn from '../components/SignIn';
+import { SettingsPage } from '../pages/SettingsPage';
 
 export const useRoutes = (isAuthenticated) => {
-	if (isAuthenticated) {
-		return (
-			<Switch>
-				<Route path="/main" exact>
-					<SignIn />
-				</Route>
-				<Redirect to="/main" />
-			</Switch>
-		);
-	}
-
 	return (
 		<Switch>
-			<Route path="/" exact>
-			<SignIn />
+			{/* <Route path="/" exact>
+				<MainPage />
 			</Route>
-			<Redirect to="/" />
+			<Route path="/" exact>
+				<SignInPage />
+			</Route>
+			<Route path="/signup" exact>
+				<SignUpPage />
+			</Route> */}
+			<Route path="/settings">
+				<SettingsPage />
+			</Route>
+			{/* <Route path="/signin" exact>
+				<SignIn />
+			</Route>
+			<Redirect to="/signin" /> */}
 		</Switch>
 	);
 };

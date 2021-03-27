@@ -7,7 +7,7 @@ import { useRoutes } from './hooks/routes.hook';
 
 
 function App() {
-	const { token, refreshToken, login, logout, userId, ready, userName } = useAuth();
+	const { token, refreshToken, login, logout, userId, ready, userName, avatar, uploadAvatar } = useAuth();
 	const isAuthenticated = !!token;
 	const routes = useRoutes(isAuthenticated);
 
@@ -24,7 +24,9 @@ function App() {
 				logout,
 				userId,
 				isAuthenticated,
-				userName
+				userName,
+				avatar,
+				uploadAvatar
 			}}
 		>
 			<BrowserRouter>

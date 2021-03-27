@@ -5,4 +5,5 @@ const getRoute = (trailing) => `${origin}/${trailing}`;
 export const routes = {
 	signUp: getRoute('users'),
 	signIn: getRoute('signin'),
+	upload: getRoute('upload')
 };
