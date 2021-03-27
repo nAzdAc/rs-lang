@@ -55,16 +55,27 @@ export default function SignIn() {
   const { loading, error, request, clearError } = useHttp();
   const auth = useContext(AuthContext);
   const [isAccount, setIsAccount] = useState(true);
+  const [haveAccount, setHaveAccount] = useState(
+    "Don't have an account? Sign Up"
+  );
   const [form, setForm] = useState({
     name: "",
     email: "",
     password: "",
   });
-  const[sign, setSign]=useState('Sign in')
-  const handleSignClick = () => {
-    setIsAccount(false);
-    setSign('Sign up')
+  const [sign, setSign] = useState("Sign in");
 
+  const handleSignClick = () => {
+  
+    if (isAccount) {
+      setHaveAccount("Have an account? Sign Ip");
+      setIsAccount(false);
+      setSign("Sign up");
+    } else {
+      setHaveAccount("Don't have an account? Sign Up");
+      setIsAccount(true);
+      setSign("Sign in");
+    }
   };
   const handleFrormChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -81,13 +92,13 @@ export default function SignIn() {
           email: "",
           password: "",
         });
-        setSign('Sign in')
+        setSign("Sign in");
+        setHaveAccount("Don't have an account? Sign Up");
       } else {
         console.log(form);
         const data = await request(routes.signIn, "POST", { ...form });
         auth.login(data.token, data.refreshToken, data.userId, data.name);
         console.log(data);
-      
       }
     } catch (e) {}
   }
@@ -165,7 +176,7 @@ export default function SignIn() {
           >
             {sign}
           </Button>
-          <Grid container >
+          <Grid container>
             <Grid item xs>
               <Link href="#" variant="body2">
                 Forgot password?
@@ -173,7 +184,7 @@ export default function SignIn() {
             </Grid>
             <Grid item>
               <Link href="#" variant="body2" onClick={handleSignClick}>
-                {"Don't have an account? Sign Up"}
+                {haveAccount}
               </Link>
             </Grid>
           </Grid>
