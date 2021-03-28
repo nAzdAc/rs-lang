@@ -12,7 +12,7 @@ const useStyles = makeStyles({
 		padding: '20px 0px 80px 30px',
 		display: 'flex',
 		flexDirection: 'column',
-		flexWrap: 'wrap',
+		flexWrap: 'wrap'
 	},
 	content: {
 		display: 'flex',
@@ -27,11 +27,11 @@ const useStyles = makeStyles({
 		border: '2px solid #000',
 		marginBottom: '40px',
 		marginRight: '30px',
-    
-    '&:hover': {
-      transform: 'translateY(-5px)',
-      boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.5)',
-    }
+
+		'&:hover': {
+			transform: 'translateY(-5px)',
+			boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.5)'
+		}
 	},
 	buttonsWrapper: {
 		width: '210px',
@@ -58,11 +58,11 @@ const useStyles = makeStyles({
 		padding: '10px 0px',
 		marginRight: '30px',
 		marginBottom: '60px',
-    
-    '&:hover': {
-      transform: 'translateY(-5px)',
-      boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.5)',
-    }
+
+		'&:hover': {
+			transform: 'translateY(-5px)',
+			boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.5)'
+		}
 	},
 	avatarImage: {
 		width: '100px',
@@ -89,12 +89,12 @@ const useStyles = makeStyles({
 		flexDirection: 'column',
 		alignItems: 'center',
 		justifyContent: 'space-evenly',
-    marginLeft: '60px',
-    
-    '&:hover': {
-      transform: 'translateY(-5px)',
-      boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.5)',
-    }
+		marginLeft: '60px',
+
+		'&:hover': {
+			transform: 'translateY(-5px)',
+			boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.5)'
+		}
 	}
 });
 
@@ -113,73 +113,73 @@ const PurpleSwitch = withStyles({
 })(Switch);
 
 const marks = [
-  {
-    value: 0,
-    label: '0'
-  },
-  {
-    value: 25,
-    label: '25'
-  },
-  {
-    value: 50,
-    label: '50'
-  },
-  {
-    value: 75,
-    label: '75'
-  },
-  {
-    value: 100,
-    label: '100'
-  }
+	{
+		value: 0,
+		label: '0'
+	},
+	{
+		value: 25,
+		label: '25'
+	},
+	{
+		value: 50,
+		label: '50'
+	},
+	{
+		value: 75,
+		label: '75'
+	},
+	{
+		value: 100,
+		label: '100'
+	}
 ];
 
 const VolumeSlider = withStyles({
-  root: {
-    width: '200px',
-    color: '#5600E8',
-    height: '8px'
-  },
-  thumb: {
-    height: '24px',
-    width: '24px',
-    marginTop: '-8px',
-    marginLeft: '-12px',
-  },
-  active: {},
-  valueLabel: {
-    left: 'calc(-50% + 8px)',
-  },
-  track: {
-    height: '8px',
-  },
-  rail: {
-    height: '8px',
-  },
-  mark: {
-    backgroundColor: '#bfbfbf',
-    height: 12,
-    width: 1,
-  },
-  markActive: {
-    opacity: 1,
-    backgroundColor: 'currentColor',
-  },
-})(Slider)
+	root: {
+		width: '200px',
+		color: '#5600E8',
+		height: '8px'
+	},
+	thumb: {
+		height: '24px',
+		width: '24px',
+		marginTop: '-8px',
+		marginLeft: '-12px'
+	},
+	active: {},
+	valueLabel: {
+		left: 'calc(-50% + 8px)'
+	},
+	track: {
+		height: '8px'
+	},
+	rail: {
+		height: '8px'
+	},
+	mark: {
+		backgroundColor: '#bfbfbf',
+		height: 12,
+		width: 1
+	},
+	markActive: {
+		opacity: 1,
+		backgroundColor: 'currentColor'
+	}
+})(Slider);
 
 export const SettingsPage = () => {
 	const classes = useStyles();
 	const { avatar, uploadAvatar } = useContext(AuthContext);
-  const [volume, setVolume] = useState(
-    parseInt(localStorage.getItem(LOCAL_STORAGE_KEY.volume)) || INIT_CONSTS.volume
-  );
+	const [ volume, setVolume ] = useState(
+		parseInt(localStorage.getItem(LOCAL_STORAGE_KEY.volume)) || INIT_CONSTS.volume
+	);
 
-  function handleVolume(event, newValue) {
-    console.log(newValue)
-    setVolume(newValue)
-    localStorage.setItem(LOCAL_STORAGE_KEY.volume, newValue)
-  }
+	function handleVolume(event, newValue) {
+		console.log(newValue);
+		setVolume(newValue);
+		localStorage.setItem(LOCAL_STORAGE_KEY.volume, newValue);
+	}
 
 	return (
 		<div className={classes.root}>
@@ -242,12 +242,13 @@ export const SettingsPage = () => {
 					<Typography variant="h4" className={classes.subtitle} style={{ marginBottom: '40px' }}>
 						Громкость
 					</Typography>
-          <VolumeSlider marks={marks}
-          valueLabelDisplay="auto"
-          aria-label="pretto slider"
-          value={volume}
-          onChange={handleVolume}
-          />
+					<VolumeSlider
+						marks={marks}
+						valueLabelDisplay="auto"
+						aria-label="pretto slider"
+						value={volume}
+						onChange={handleVolume}
+					/>
 				</div>
 			</div>
 		</div>

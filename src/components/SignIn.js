@@ -15,7 +15,7 @@ import Container from '@material-ui/core/Container';
 
 import { AuthContext } from '../context/AuthContext';
 import { useHttp } from '../hooks/http.hook';
-import { routes } from '../utils/routes';
+import { backRoutes } from '../utils/backRoutes';
 
 function Copyright() {
 	return (
@@ -81,7 +81,7 @@ export default function SignIn() {
         //     'Content-Type': 'application/json'
         //   }
         // })
-				const data = await request(routes.signUp, 'POST', { ...form });
+				const data = await request(backRoutes.signUp, 'POST', { ...form });
         // const data = await res.json();
 				console.log(data);
 				setIsAccount(true);
@@ -93,7 +93,7 @@ export default function SignIn() {
 				setSign('Sign in');
 			} else {
 				console.log(form);
-				const data = await request(routes.signIn, 'POST', { ...form });
+				const data = await request(backRoutes.signIn, 'POST', { ...form });
 				auth.login(data.token, data.refreshToken, data.userId, data.name);
 				console.log(data);
 			}
