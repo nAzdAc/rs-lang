@@ -1,17 +1,13 @@
 import './App.css';
 import Header from './components/Header';
-import React from "react";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route
-} from "react-router-dom";
+import React from 'react';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { bookLinks, gamesLinks } from './components/routeData';
 import { SettingsPage } from './pages/SettingsPage';
 import { GamesPage } from './pages/GamesPage';
 import { Footer } from './components/Footer';
 
-const RouteComponent = ({text}) => <div>{text}</div>
+const RouteComponent = ({ text }) => <div>{text}</div>;
 
 function App() {
 	return (
