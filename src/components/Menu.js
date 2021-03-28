@@ -9,55 +9,10 @@ import Paper from '@material-ui/core/Paper';
 import Popper from '@material-ui/core/Popper';
 import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
-import { Link as RouterLink, MemoryRouter } from 'react-router-dom';
+import { BrowserRouter, Link as RouterLink } from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-
-const bookLinks = [
-  {
-    to: '/book/level_1',
-    text: 'Уровень 1',
-  },
-  {
-    to: '/book/level_2',
-    text: 'Уровень 2',
-  },
-  {
-    to: '/book/level_3',
-    text: 'Уровень 3',
-  },
-  {
-    to: '/book/level_4',
-    text: 'Уровень 4',
-  },
-  {
-    to: '/book/level_5',
-    text: 'Уровень 5',
-  },
-  {
-    to: '/book/level_6',
-    text: 'Уровень 6',
-  }
-];
-
-const gamesLinks = [
-  {
-    to: '/games/savanna',
-    text: 'Саванна',
-  },
-  {
-    to: '/games/audio',
-    text: 'Аудиовызов',
-  },
-  {
-    to: '/games/sprint',
-    text: 'Спринт',
-  },
-  {
-    to: '/games/memory',
-    text: 'Мемори',
-  }
-];
+import { bookLinks, gamesLinks } from './routeData';
 
 const useStyles = makeStyles({
   btn: {
@@ -106,7 +61,7 @@ const Menu = () => {
 
 
   return (
-    <MemoryRouter initialEntries={['/']} initialIndex={0}>
+    <>
       <MenuStyled>
         <List>
           <div >
@@ -173,7 +128,7 @@ const Menu = () => {
         component={RouterLink}
         to="/login"
       >Войти</Button>
-    </MemoryRouter>
+    </>
   )
 } 
 
