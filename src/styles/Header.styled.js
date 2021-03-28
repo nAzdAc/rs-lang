@@ -7,12 +7,20 @@ export const HeaderStyled = styled.header`
   justify-content: space-around;
   align-items: center;
   background-color: #5600E8;
+  
+  & + div {
+    flex: 1 0 auto;
+  }
 
-  > p {
-    
-    font-family: 'Permanent Marker', cursive;
-    font-size: 48px;
-    line-height: 56px;
-    color: #F2F2F2;
+  > a {
+    text-decoration: none;
+
+    & > p {
+      font-family: 'Permanent Marker', cursive;
+      font-size: 48px;
+      line-height: 56px;
+      color: #F2F2F2;
+      margin: 0;
+    }
   }
 `;
