@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
-import { routes } from '../utils/routes';
+import { backRoutes } from '../utils/backRoutes';
 
 const storageName = 'userData';
 
@@ -31,7 +31,7 @@ export const useAuth = () => {
 		async (file) => {
 			const formData = new FormData();
 			formData.append('avatar', file);
-			const res = await fetch(routes.upload, {
+			const res = await fetch(backRoutes.upload, {
 				method: 'POST',
 				body: formData,
 				headers: {
