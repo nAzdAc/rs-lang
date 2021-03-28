@@ -1,40 +1,51 @@
+import './App.css';
+import Header from './components/Header';
 import React from 'react';
-import { BrowserRouter } from 'react-router-dom';
-import { AuthContext } from './context/AuthContext';
-import { useAuth } from './hooks/auth.hook';
-import { Loader } from './components/Loader';
-import { useRoutes } from './hooks/routes.hook';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { bookLinks, gamesLinks } from './components/routeData';
+import { SettingsPage } from './pages/SettingsPage';
+import { GamesPage } from './pages/GamesPage';
 
+const RouteComponent = ({ text }) => <div>{text}</div>;
 
 function App() {
-	const { token, refreshToken, login, logout, userId, ready, userName, avatar, uploadAvatar } = useAuth();
-	const isAuthenticated = !!token;
-	const routes = useRoutes(isAuthenticated);
-
-	if (!ready) {
-		return <Loader />;
-	}
-
 	return (
-		<AuthContext.Provider
-			value={{
-				token,
-        refreshToken,
-				login,
-				logout,
-				userId,
-				isAuthenticated,
-				userName,
-				avatar,
-				uploadAvatar
-			}}
-		>
-			<BrowserRouter>
-				<div className="app">{routes}</div>
-			</BrowserRouter>
-		</AuthContext.Provider>
+		<Router>
+			<div className="App">
+				<Header />
+				<Switch>
+					<Route path="/book">
+						<RouteComponent text="Book" />
+					</Route>
+					{bookLinks.map((link, i) => (
+						<Route path={link.to}>
+							<RouteComponent text={link.text} />
+						</Route>
+					))}
+					<Route path="/games">
+						<GamesPage />
+					</Route>
+					{gamesLinks.map((link, i) => (
+						<Route path={link.to}>
+							<RouteComponent text={link.text} />
+						</Route>
+					))}
+					<Route path="/dictionary">
+						<RouteComponent text="Словарь" />
+					</Route>
+					<Route path="/stats">
+						<RouteComponent text="Статистика" />
+					</Route>
+					<Route path="/settings">
+						<SettingsPage />
+					</Route>
+					<Route path="/login">
+						<RouteComponent text="Login" />
+					</Route>
+				</Switch>
+			</div>
+		</Router>
 	);
 }
 
 export default App;
-
