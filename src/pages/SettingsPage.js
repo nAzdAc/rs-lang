@@ -9,7 +9,7 @@ import { INIT_CONSTS } from '../utils/initConsts';
 
 const useStyles = makeStyles({
 	root: {
-		padding: '80px 0px 80px 30px',
+		padding: '20px 0px 80px 30px',
 		display: 'flex',
 		flexDirection: 'column',
 		flexWrap: 'wrap',
