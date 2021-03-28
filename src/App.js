@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { bookLinks, gamesLinks } from './components/routeData';
 import { SettingsPage } from './pages/SettingsPage';
 import { GamesPage } from './pages/GamesPage';
+import { Footer } from './components/Footer';
 
 const RouteComponent = ({ text }) => <div>{text}</div>;
 
@@ -43,6 +44,7 @@ function App() {
 						<RouteComponent text="Login" />
 					</Route>
 				</Switch>
+        <Footer/>
 			</div>
 		</Router>
 	);

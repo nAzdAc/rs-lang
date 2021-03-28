@@ -1,8 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap');
 
+* {
+  margin: 0;
+  padding: 0;
+}
+
 body {
   margin: 0 auto;
   max-width: 1440px;
+  height: 100vh;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
@@ -13,4 +19,60 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+#root {
+  height: 100%;
+}
+
+.App {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/*!  FOOTER  !*/
+
+.footer {
+  width: 100%;
+  height: 100px;
+  flex: 0 0 auto;
+  background-color: #5600E8;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.year {
+  font-size: 16px;
+  color: #ffffff;
+}
+
+.github {
+  margin: 1rem;
+  font-size: 16px;
+  color: #ffffff;
+}
+
+@media (max-width: 1180px) {
+  .header,
+  .header_country {
+    padding: 0 30px;
+  }
+}
+
+@media (max-width: 800px) {
+  .developers {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .github {
+    margin: 5px;
+    font-size: 14px;
+  }
+
+  .footer {
+    height: max-content;
+  }
 }
