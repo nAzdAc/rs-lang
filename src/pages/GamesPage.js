@@ -1,9 +1,9 @@
 import React from 'react';
-import { NavLink } from "react-router-dom";
+import { NavLink } from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import { gameCardsContent } from '../utils/initConsts';
-import { SecondaryButton } from '../components/ButtonSec500';
 
 const useStyles = makeStyles({
 	root: {
@@ -22,11 +22,21 @@ const useStyles = makeStyles({
 		justifyContent: 'space-around',
 		border: '2px solid #000',
 		marginRight: '50px',
-    marginBottom: '30px',
+		marginBottom: '30px',
 		padding: '0px 20px 10px 20px',
 		'&:hover': {
 			transform: 'translateY(-5px)',
 			boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.5)'
+		}
+	},
+	button: {
+		fontWeight: 'bold',
+		width: '109px',
+		height: '36px',
+		background: '#01A299',
+		color: '#FFF',
+		'&:hover': {
+			background: '#00D9CE'
 		}
 	}
 });
@@ -48,9 +58,11 @@ export const GamesPage = () => {
 						<Typography variant="subtitle1" className={classes.title}>
 							{card.todo}
 						</Typography>
-            <NavLink className="link" to={card.to}>
-            <SecondaryButton text="НАЧАТЬ" />
-          </NavLink>
+						<NavLink style={{ textDecoration: 'none' }} to={card.to}>
+							<Button variant="contained" size="medium" className={classes.button}>
+								Начать
+							</Button>
+						</NavLink>
 					</div>
 				);
 			})}

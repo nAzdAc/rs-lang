@@ -2,9 +2,11 @@ import './App.css';
 import Header from './components/Header';
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import { bookLinks, gamesLinks } from './components/routeData';
+import { bookLinks } from './components/routeData';
 import { SettingsPage } from './pages/SettingsPage';
 import { GamesPage } from './pages/GamesPage';
+import { SprintPage } from './pages/SprintPage';
+import { frontRoutes } from './utils/frontRoutes';
 import { Footer } from './components/Footer';
 import SignUpPage from './pages/SignUpPage'
 import SignInPage from './pages/SignInPage'
@@ -20,19 +22,26 @@ function App() {
 					<Route path="/book">
 						<RouteComponent text="Book" />
 					</Route>
-					{bookLinks.map((link, i) => (
-						<Route path={link.to}>
+					{bookLinks.map((link, index) => (
+						<Route path={link.to} key={index}>
 							<RouteComponent text={link.text} />
 						</Route>
 					))}
 					<Route path="/games">
 						<GamesPage />
 					</Route>
-					{gamesLinks.map((link, i) => (
-						<Route path={link.to}>
-							<RouteComponent text={link.text} />
+						<Route path={frontRoutes.savanna}>
+							<SprintPage />
 						</Route>
-					))}
+						<Route path={frontRoutes.audio}>
+							<SprintPage />
+						</Route>
+						<Route path={frontRoutes.sprint}>
+							<SprintPage />
+						</Route>
+						<Route path={frontRoutes.match}>
+							<SprintPage />
+						</Route>
 					<Route path="/dictionary">
 						<RouteComponent text="Словарь" />
 					</Route>

@@ -13,7 +13,6 @@ import { Link as RouterLink } from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import { bookLinks, gamesLinks } from './routeData';
-import { SecondaryButton } from './ButtonSec500';
 import SettingsIcon from '@material-ui/icons/Settings';
 
 const useStyles = makeStyles({
@@ -22,7 +21,17 @@ const useStyles = makeStyles({
       transform: 'rotate(180deg)',
       transition: '0.5s'
     }
-  }
+  },
+  button: {
+		fontWeight: 'bold',
+		width: '109px',
+		height: '36px',
+		background: '#01A299',
+		color: '#FFF',
+		'&:hover': {
+			background: '#00D9CE'
+		}
+	}
 });
 
 const NavItem = ({to, text, onClick, handleClose, Icon}) => {
@@ -130,8 +139,8 @@ const Menu = () => {
           <NavItem to="/settings" Icon={SettingsIcon}/>
         </List>
       </MenuStyled>
-      <RouterLink to="/signin">
-        <SecondaryButton text='Войти' />
+      <RouterLink to="/signin>">
+        <Button variant="contained" size="small" className={classes.button} >Войти</Button>
       </RouterLink>
     </>
   )
