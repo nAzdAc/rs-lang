@@ -1,3 +1,5 @@
+import { frontRoutes } from "../utils/frontRoutes";
+
 export const bookLinks = [
   {
     to: '/level_1',
@@ -27,19 +29,19 @@ export const bookLinks = [
 
 export const gamesLinks = [
   {
-    to: '/savanna',
+    to: frontRoutes.savanna,
     text: 'Саванна',
   },
   {
-    to: '/audio',
+    to: frontRoutes.audio,
     text: 'Аудиовызов',
   },
   {
-    to: '/sprint',
+    to: frontRoutes.sprint,
     text: 'Спринт',
   },
   {
-    to: '/memory',
+    to: frontRoutes.match,
     text: 'Мемори',
   }
 ];
