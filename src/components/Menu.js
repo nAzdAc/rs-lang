@@ -130,7 +130,7 @@ const Menu = () => {
           <NavItem to="/settings" Icon={SettingsIcon}/>
         </List>
       </MenuStyled>
-      <RouterLink to="/login">
+      <RouterLink to="/signin">
         <SecondaryButton text='Войти' />
       </RouterLink>
     </>

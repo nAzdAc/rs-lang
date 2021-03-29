@@ -22,8 +22,13 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import FormControl from "@material-ui/core/FormControl";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import AddIcon from "@material-ui/icons/Add";
+import images from "../assets/images/index";
 
 const useStyles = makeStyles((theme) => ({
+  main: {
+    width: "100%",
+    display: "flex",
+  },
   paper: {
     display: "flex",
     flexDirection: "column",
@@ -31,10 +36,10 @@ const useStyles = makeStyles((theme) => ({
     height: "100%",
   },
   mainBox: {
-    width: "428px",
-    padding: "20px 60px 80px 40px ",
-    height: "548px",
+    width: "400px",
+    padding: "20px 50px 50px 40px ",
     boxShadow: "2px 0px 14px 2px rgba(0,0,0,0.09)",
+    margin: "40px auto 40px 0px ",
   },
   avatar: {
     margin: theme.spacing(1),
@@ -47,24 +52,23 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
   },
   button: {
-    width: "207px",
+    width: "180px",
     height: "36px",
     backgroundColor: "#6200EE",
-    marginTop: "auto",
+    marginTop: "30px",
     fontSize: "14px",
   },
   submit: {
-    width: "207px",
+    width: "180px",
     height: "36px",
     backgroundColor: "#01A299",
-    marginTop: "auto",
     fontSize: "14px",
   },
   link: {
     textDecoration: "none",
   },
   title: {
-    marginBottom: theme.spacing(5),
+    marginBottom: '30px',
     marginRight: "auto",
   },
   info: {
@@ -72,10 +76,10 @@ const useStyles = makeStyles((theme) => ({
     opacity: "0.8",
   },
   passwordField: {
-    marginTop: "40px",
+    marginTop: "30px",
   },
   buttonBox: {
-    marginTop: "auto",
+    marginTop: "30px",
     display: "flex",
   },
   register: {
@@ -84,6 +88,12 @@ const useStyles = makeStyles((theme) => ({
   },
   email: {
     marginBottom: "0",
+  },
+  image: {
+    width: "400px",
+    height: "400px",
+    marginTop: "auto",
+    marginLeft: "auto",
   },
 }));
 
@@ -114,105 +124,107 @@ export default function SignIn() {
   };
 
   return (
-    <Container component="main" maxWidth="xs" className={classes.mainBox}>
-      <CssBaseline />
-      <div className={classes.paper}>
-        <Typography
-          component="h1"
-          variant="h2"
-          align="left"
-          className={classes.title}
-        >
-          Registration
-        </Typography>
-        <form className={classes.form} noValidate>
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
-            autoFocus
-            value={form.email}
-            onChange={handleFrormChange}
-            className={classes.email}
-          />
+    <Container className={classes.main}>
+      <Container component="main" maxWidth="xs" className={classes.mainBox}>
+        <CssBaseline />
+        <div className={classes.paper}>
           <Typography
             component="h1"
-            variant="subtitle2"
+            variant="h2"
             align="left"
-            className={classes.info}
+            className={classes.title}
           >
-            Use the real one
+            Registration
           </Typography>
-          <FormControl className={classes.passwordField} variant="outlined">
-            <InputLabel
-              value={form.password}
-              htmlFor="outlined-adornment-password"
-            >
-              Password
-            </InputLabel>
-            <OutlinedInput
-              id="outlined-adornment-password"
-              type={values.showPassword ? "text" : "password"}
-              value={values.password}
-              onChange={handleChange("password")}
-              endAdornment={
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-label="toggle password visibility"
-                    onClick={handleClickShowPassword}
-                    onMouseDown={handleMouseDownPassword}
-                    edge="end"
-                  >
-                    {values.showPassword ? <Visibility /> : <VisibilityOff />}
-                  </IconButton>
-                </InputAdornment>
-              }
-              labelWidth={70}
-            />
-          </FormControl>
-          <Typography
-            component="h1"
-            variant="subtitle2"
-            align="left"
-            className={classes.info}
-          >
-            No stupid restrictions
-          </Typography>
-
-          <Button
-            variant="contained"
-            color="primary"
-            size="large"
-            className={classes.button}
-            startIcon={<AddIcon />}
-          >
-            avatar
-          </Button>
-
-          <Box className={classes.buttonBox}>
-            <Button
-              type="submit"
+          <form className={classes.form} noValidate>
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
               fullWidth
+              id="email"
+              label="Email Address"
+              name="email"
+              autoComplete="email"
+              autoFocus
+              value={form.email}
+              onChange={handleFrormChange}
+              className={classes.email}
+            />
+            <Typography
+              component="h1"
+              variant="subtitle2"
+              align="left"
+              className={classes.info}
+            >
+              Use the real one
+            </Typography>
+            <FormControl className={classes.passwordField} variant="outlined">
+              <InputLabel
+                value={form.password}
+                htmlFor="outlined-adornment-password"
+              >
+                Password
+              </InputLabel>
+              <OutlinedInput
+                id="outlined-adornment-password"
+                type={values.showPassword ? "text" : "password"}
+                value={values.password}
+                onChange={handleChange("password")}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                      edge="end"
+                    >
+                      {values.showPassword ? <Visibility /> : <VisibilityOff />}
+                    </IconButton>
+                  </InputAdornment>
+                }
+                labelWidth={70}
+              />
+            </FormControl>
+            <Typography
+              component="h1"
+              variant="subtitle2"
+              align="left"
+              className={classes.info}
+            >
+              No stupid restrictions
+            </Typography>
+
+            <Button
               variant="contained"
               color="primary"
-              className={classes.submit}
+              size="large"
+              className={classes.button}
+              startIcon={<AddIcon />}
             >
-              Register
+              avatar
             </Button>
-            <Button className={classes.register}>
-              <Link className={classes.link} to={"/login"}>
-                Login
-              </Link>
-            </Button>
-          </Box>
-        </form>
-      </div>
-      <Box mt={8}></Box>
+
+            <Box className={classes.buttonBox}>
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="primary"
+                className={classes.submit}
+              >
+                Register
+              </Button>
+              <Button className={classes.register}>
+                <Link className={classes.link} to={"/signIn"}>
+                  Login
+                </Link>
+              </Button>
+            </Box>
+          </form>
+        </div>
+      </Container>
+      <img className={classes.image} src={images.log} alt="rs" />
     </Container>
   );
 }

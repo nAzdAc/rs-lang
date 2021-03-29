@@ -1,6 +1,6 @@
 import React from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
-import SignIn from '../components/SignIn';
+// import SignIn from '../components/SignIn';
 import { SettingsPage } from '../pages/SettingsPage';
 import SignUpPage from '../pages/SignUpPage'
 import SignInPage from '../pages/SignInPage'
@@ -14,8 +14,11 @@ export const useRoutes = (isAuthenticated) => {
 			<Route path="/" exact>
 				<SignInPage />
 			</Route>
-			<Route path="/signup" exact>
+			<Route path="/signup" >
 				<SignUpPage />
+			</Route>
+			<Route path="/signin" >
+				<SignInPage />
 			</Route>
 			<Route path="/settings">
 				<SettingsPage />
