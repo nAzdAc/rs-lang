@@ -9,21 +9,27 @@ import Paper from '@material-ui/core/Paper';
 import Popper from '@material-ui/core/Popper';
 import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
-import { BrowserRouter, Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import { bookLinks, gamesLinks } from './routeData';
+import { SecondaryButton } from './ButtonSec500';
+import SettingsIcon from '@material-ui/icons/Settings';
 
 const useStyles = makeStyles({
-  btn: {
-    width: '10px',
-  },
+  settings: {
+    '&:hover, &:focus': {
+      transform: 'rotate(180deg)',
+      transition: '0.5s'
+    }
+  }
 });
 
-const NavItem = ({to, text, onClick, handleClose}) => {
+const NavItem = ({to, text, onClick, handleClose, Icon}) => {
+  const classes = useStyles();
   return (
     <MenuItem component={RouterLink} to={to} onClick={onClick ? (e => handleClose(e, onClick)) : null}>
-      <Typography variant='body2' gutterBottom>{text}</Typography>
+      {Icon ? <Icon className={classes.settings}/> : <Typography variant='body2' gutterBottom>{text}</Typography>}
     </MenuItem>
   );
 }
@@ -121,13 +127,12 @@ const Menu = () => {
           </div>
           <NavItem to="/dictionary" text="Словарь"/>
           <NavItem to="/stats" text="Статистика"/>
-          <NavItem to="/settings" text="Настройки"/>
+          <NavItem to="/settings" Icon={SettingsIcon}/>
         </List>
       </MenuStyled>
-      <Button
-        component={RouterLink}
-        to="/login"
-      >Войти</Button>
+      <RouterLink to="/login">
+        <SecondaryButton text='Войти' />
+      </RouterLink>
     </>
   )
 } 
