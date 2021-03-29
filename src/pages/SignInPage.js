@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -22,6 +22,9 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import FormControl from "@material-ui/core/FormControl";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import images from "../assets/images";
+import { AuthContext } from "../context/AuthContext";
+import { useHttp } from "../hooks/http.hook";
+import { backRoutes } from "../utils/backRoutes";
 
 const useStyles = makeStyles((theme) => ({
   mainBox: {
@@ -41,7 +44,6 @@ const useStyles = makeStyles((theme) => ({
     height: "100%",
   },
   avatar: {
-    // margin: theme.spacing(1),
     backgroundColor: theme.palette.secondary.main,
   },
   form: {
@@ -65,7 +67,7 @@ const useStyles = makeStyles((theme) => ({
     fontSize: "14px",
   },
   title: {
-    marginBottom: '30px',
+    marginBottom: "30px",
     marginRight: "auto",
   },
   info: {
@@ -91,10 +93,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SignIn() {
+export default function SignInPage() {
+  const { loading, error, request, clearError } = useHttp();
+  const auth = useContext(AuthContext);
   const classes = useStyles();
   const [form, setForm] = useState({
-    name: "",
     email: "",
     password: "",
   });
@@ -112,9 +115,18 @@ export default function SignIn() {
   const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value });
   };
-  const handleFrormChange = (e) => {
+  const handleFormChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
+  async function handleSubmit(e) {
+    e.preventDefault();
+    try {
+      console.log(form);
+      const data = await request(backRoutes.signIn, "POST", { ...form });
+      auth.login(data.token, data.refreshToken, data.userId, data.name);
+      console.log(data);
+    } catch (e) {}
+  }
 
   return (
     <Container className={classes.main}>
@@ -129,7 +141,7 @@ export default function SignIn() {
           >
             Login
           </Typography>
-          <form className={classes.form} noValidate>
+          <form className={classes.form} noValidate onSubmit={handleSubmit}>
             <TextField
               variant="outlined"
               margin="normal"
@@ -141,7 +153,7 @@ export default function SignIn() {
               autoComplete="email"
               autoFocus
               value={form.email}
-              onChange={handleFrormChange}
+              onChange={handleFormChange}
               className={classes.email}
             />
             <Typography
@@ -152,7 +164,12 @@ export default function SignIn() {
             >
               Use the real one
             </Typography>
-            <FormControl className={classes.passwordField} variant="outlined">
+            <FormControl
+              className={classes.passwordField}
+              variant="outlined"
+              value={form.password}
+              onChange={handleFormChange}
+            >
               <InputLabel
                 value={form.password}
                 htmlFor="outlined-adornment-password"
@@ -160,6 +177,7 @@ export default function SignIn() {
                 Password
               </InputLabel>
               <OutlinedInput
+                name="password"
                 id="outlined-adornment-password"
                 type={values.showPassword ? "text" : "password"}
                 value={values.password}

@@ -23,6 +23,8 @@ import FormControl from "@material-ui/core/FormControl";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import AddIcon from "@material-ui/icons/Add";
 import images from "../assets/images/index";
+import { useHttp } from "../hooks/http.hook";
+import { backRoutes } from "../utils/backRoutes";
 
 const useStyles = makeStyles((theme) => ({
   main: {
@@ -68,7 +70,7 @@ const useStyles = makeStyles((theme) => ({
     textDecoration: "none",
   },
   title: {
-    marginBottom: '30px',
+    marginBottom: "30px",
     marginRight: "auto",
   },
   info: {
@@ -97,7 +99,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SignIn() {
+export default function SignUpPage() {
+  const {  loading, error, request, clearError } = useHttp();
   const classes = useStyles();
   const [form, setForm] = useState({
     name: "",
@@ -119,9 +122,21 @@ export default function SignIn() {
     setValues({ ...values, [prop]: event.target.value });
   };
 
-  const handleFrormChange = (e) => {
+  const handleFormChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
+  async function handleSubmit(e) {
+    e.preventDefault();
+    try {
+      const data = await request(backRoutes.signUp, "POST", { ...form });
+      console.log(data);
+      setForm({
+        name: "",
+        email: "",
+        password: "",
+      });
+    } catch (e) {}
+  }
 
   return (
     <Container className={classes.main}>
@@ -136,7 +151,20 @@ export default function SignIn() {
           >
             Registration
           </Typography>
-          <form className={classes.form} noValidate>
+          <form className={classes.form} noValidate onSubmit={handleSubmit}>
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              name="name"
+              label="Name"
+              type="text"
+              id="name"
+              autoComplete="name"
+              value={form.name}
+              onChange={handleFormChange}
+            />
             <TextField
               variant="outlined"
               margin="normal"
@@ -148,7 +176,7 @@ export default function SignIn() {
               autoComplete="email"
               autoFocus
               value={form.email}
-              onChange={handleFrormChange}
+              onChange={handleFormChange}
               className={classes.email}
             />
             <Typography
@@ -159,14 +187,17 @@ export default function SignIn() {
             >
               Use the real one
             </Typography>
-            <FormControl className={classes.passwordField} variant="outlined">
-              <InputLabel
-                value={form.password}
-                htmlFor="outlined-adornment-password"
-              >
+            <FormControl
+              className={classes.passwordField}
+              value={form.password}
+              onChange={handleFormChange}
+              variant="outlined"
+            >
+              <InputLabel htmlFor="outlined-adornment-password">
                 Password
               </InputLabel>
               <OutlinedInput
+                name="password"
                 id="outlined-adornment-password"
                 type={values.showPassword ? "text" : "password"}
                 value={values.password}
