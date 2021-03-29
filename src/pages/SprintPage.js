@@ -134,7 +134,7 @@ export const SprintPage = () => {
 				setCurrentRussianhWord((prev) => {
 					const num = Math.random();
 					// console.log(num);
-					if (num > 0.5) {
+					if (num > 0.45) {
 						prev = wordsArray[currentNumber].russian;
 					} else {
 						const number = getRandomInt(0, wordsArray.length);
