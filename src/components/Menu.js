@@ -139,7 +139,7 @@ const Menu = () => {
           <NavItem to="/settings" Icon={SettingsIcon}/>
         </List>
       </MenuStyled>
-      <RouterLink to="/signin>">
+      <RouterLink to="/signin">
         <Button variant="contained" size="small" className={classes.button} >Войти</Button>
       </RouterLink>
     </>
