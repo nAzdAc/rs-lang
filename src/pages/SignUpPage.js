@@ -89,7 +89,7 @@ const useStyles = makeStyles((theme) => ({
     fontSize: "14px",
   },
   email: {
-    marginBottom: "0",
+    marginTop: "30px",
   },
   image: {
     width: "400px",
