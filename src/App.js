@@ -8,6 +8,8 @@ import { GamesPage } from './pages/GamesPage';
 import { SprintPage } from './pages/SprintPage';
 import { frontRoutes } from './utils/frontRoutes';
 import { Footer } from './components/Footer';
+import SignUpPage from './pages/SignUpPage'
+import SignInPage from './pages/SignInPage'
 
 const RouteComponent = ({ text }) => <div>{text}</div>;
 
@@ -49,8 +51,11 @@ function App() {
 					<Route path="/settings">
 						<SettingsPage />
 					</Route>
-					<Route path="/login">
-						<RouteComponent text="Login" />
+					<Route path="/signin">
+						<SignInPage/>
+					</Route>
+					<Route path="/signup">
+						<SignUpPage/>
 					</Route>
 				</Switch>
         <Footer/>
