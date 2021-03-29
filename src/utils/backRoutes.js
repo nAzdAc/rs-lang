@@ -5,5 +5,6 @@ const getRoute = (trailing) => `${origin}/${trailing}`;
 export const backRoutes = {
 	signUp: getRoute('users'),
 	signIn: getRoute('signin'),
-	upload: getRoute('upload')
+	upload: getRoute('upload'),
+	words: getRoute('words'),
 };
