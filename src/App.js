@@ -8,6 +8,8 @@ import { GamesPage } from './pages/GamesPage';
 import { SprintPage } from './pages/SprintPage';
 import { frontRoutes } from './utils/frontRoutes';
 import { Footer } from './components/Footer';
+import { MatchPage } from './pages/MatchPage';
+import { AudioPage } from './pages/AudioPage';
 
 const RouteComponent = ({ text }) => <div>{text}</div>;
 
@@ -32,13 +34,13 @@ function App() {
 							<SprintPage />
 						</Route>
 						<Route path={frontRoutes.audio}>
-							<SprintPage />
+							<AudioPage />
 						</Route>
 						<Route path={frontRoutes.sprint}>
 							<SprintPage />
 						</Route>
 						<Route path={frontRoutes.match}>
-							<SprintPage />
+							<MatchPage />
 						</Route>
 					<Route path="/dictionary">
 						<RouteComponent text="Словарь" />

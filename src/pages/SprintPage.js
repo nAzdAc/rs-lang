@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-// import { Button } from '@material-ui/core';
 import TransitionsModal from '../components/EndGameModal';
 import useSound from 'use-sound';
 import { LOCAL_STORAGE_KEY } from '../utils/storageKey';
@@ -76,6 +75,8 @@ export const SprintPage = () => {
 	const [ correct, setCorrect ] = useState(0);
 	const [ seconds, setSeconds ] = useState(60);
 	const [ wordsArray, setWordsArray ] = useState([]);
+  const [ rightArray, setRightArray ] = useState([]);
+  const [ leftArray, setLeftArray ] = useState([]);
 	const [ currentEnglishWord, setCurrentEnglishWord ] = useState('');
 	const [ currentRussianhWord, setCurrentRussianhWord ] = useState('');
 	const [ currentNumber, setCurrentNumber ] = useState(0);
@@ -149,8 +150,9 @@ export const SprintPage = () => {
 
 	function answer(value) {
 		// console.log(value);
-		// const english = wordsArray[currentNumber].english;
+		const english = wordsArray[currentNumber].english;
 		const russian = wordsArray[currentNumber].russian;
+    const rightPair = `${english} = ${russian}`
 		setCurrentNumber((prev) => prev + 1);
 		console.log(russian === currentRussianhWord);
 		console.log(`original: ${russian}   current : ${currentRussianhWord}`);
@@ -159,9 +161,11 @@ export const SprintPage = () => {
 			(value === 'false' && russian !== currentRussianhWord)
 		) {
 			playSuccess();
+      setRightArray((prev) => prev = [...prev, rightPair])
 			setCorrect((prev) => prev + 1);
 		} else {
 			playFail();
+      setLeftArray((prev) => prev = [...prev, rightPair])
 			setFail((prev) => prev + 1);
 		}
 	}
@@ -199,7 +203,7 @@ export const SprintPage = () => {
 				<div className={classes.gameContainer}>
 					<Typography variant="h5">Осталось: </Typography>
 					<Typography variant="h2">{seconds}</Typography>
-					<Typography variant="h5">{`${currentEnglishWord || ''} = ${currentRussianhWord || ''}`}</Typography>
+					<Typography variant="h4">{`${currentEnglishWord || ''} = ${currentRussianhWord || ''}`}</Typography>
 					<div className={classes.buttonsWrap}>
 						<button className={classes.badButton} onClick={(event) => answer(event.target.value)} value={false}>
 							НЕ ВЕРНО
@@ -208,9 +212,9 @@ export const SprintPage = () => {
 							ВЕРНО
 						</button>
 					</div>
-					<Typography variant="subtitle1" className={classes.question}>{`Правильные ответы: ${correct}`}</Typography>
-					<Typography variant="subtitle1" className={classes.question}>{`Ошибки: ${fail}`}</Typography>
-					{endGame && <TransitionsModal correct={correct} fail={fail} />}
+					<Typography variant="subtitle1" className={classes.answer}>{`Правильные ответы: ${correct}`}</Typography>
+					<Typography color='secondary' variant="subtitle1" className={classes.answer}>{`Ошибки: ${fail}`}</Typography>
+					{endGame && <TransitionsModal correct={correct} fail={fail} rightArray={rightArray} leftArray={leftArray} />}
 				</div>
 			) : (
 				<CircularProgress className={classes.loader} />
@@ -218,10 +222,3 @@ export const SprintPage = () => {
 		</div>
 	);
 };
-
-// <Button key={false} disableElevation onClick={(event) => (answer(event.target))} defaultValue={false} variant="contained" size="medium" className={classes.badButton}>
-// 				НЕ ВЕРНО
-// 			</Button>
-// 			<Button key={true} onClick={(event) => (answer(event.target.key))} defaultValue={true} variant="contained" size="medium" className={classes.goodButton}>
-// 				ВЕРНО
-// 			</Button>

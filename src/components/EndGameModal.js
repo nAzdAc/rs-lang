@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
 	}
 }));
 
-export default function TransitionsModal({ correct, fail }) {
+export default function TransitionsModal({ correct, fail, rightArray, leftArray }) {
 	const classes = useStyles();
 	const volume = localStorage.getItem(LOCAL_STORAGE_KEY.volume) || INIT_CONSTS.volume;
 	const [ open, setOpen ] = useState(true);
@@ -92,9 +92,18 @@ export default function TransitionsModal({ correct, fail }) {
 						<Typography variant="h3" id="transition-modal-title">
 							{title}
 						</Typography>
-						<Typography variant="h4" id="transition-modal-title">{`Верных ответов: ${correct}`}</Typography>
-						<Typography color="secondary" variant="h4" id="transition-modal-title">{`Ошибок: ${fail}`}</Typography>
-						{/* <p id="transition-modal-description">react-transition-group animates me.</p> */}
+						<Typography variant="h4">{`Верных ответов: ${correct}`}</Typography>
+						<div>
+							{rightArray && rightArray.map((item, index) => {
+								return <Typography key={index} variant="subtitle2">{item}</Typography>;
+							})}
+						</div>
+						<Typography color="secondary" variant="h4">{`Ошибок: ${fail}`}</Typography>
+						<div>
+							{leftArray && leftArray.map((item, index) => {
+								return <Typography key={index} variant="subtitle2">{item}</Typography>;
+							})}
+						</div>
 					</div>
 				</Fade>
 			</Modal>

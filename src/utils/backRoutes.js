@@ -1,6 +1,7 @@
-const origin = 'http://localhost:8080';
+// export const origin = 'http://localhost:8080';
+export const originURL = 'https://react-learnwords.herokuapp.com';
 
-const getRoute = (trailing) => `${origin}/${trailing}`;
+const getRoute = (trailing) => `${originURL}/${trailing}`;
 
 export const backRoutes = {
 	signUp: getRoute('users'),
@@ -8,3 +9,5 @@ export const backRoutes = {
 	upload: getRoute('upload'),
 	words: getRoute('words'),
 };
+
+// ?group=1&page=1
