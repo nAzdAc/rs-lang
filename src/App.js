@@ -10,6 +10,7 @@ import { frontRoutes } from './utils/frontRoutes';
 import { Footer } from './components/Footer';
 import SignUpPage from './pages/SignUpPage'
 import SignInPage from './pages/SignInPage'
+import WordsPage from './pages/WordsPage'
 
 const RouteComponent = ({ text }) => <div>{text}</div>;
 
@@ -24,9 +25,12 @@ function App() {
 					</Route>
 					{bookLinks.map((link, index) => (
 						<Route path={link.to} key={index}>
-							<RouteComponent text={link.text} />
+						<WordsPage/>
 						</Route>
 					))}
+					<Route path="/book/level_1">
+						<RouteComponent text="level" />
+					</Route>
 					<Route path="/games">
 						<GamesPage />
 					</Route>
@@ -44,6 +48,9 @@ function App() {
 						</Route>
 					<Route path="/dictionary">
 						<RouteComponent text="Словарь" />
+					</Route>
+					<Route path="/words">
+						<WordsPage/>
 					</Route>
 					<Route path="/stats">
 						<RouteComponent text="Статистика" />

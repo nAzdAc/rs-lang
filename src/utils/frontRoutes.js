@@ -7,4 +7,5 @@ export const frontRoutes = {
   audio: '/audio',
   sprint: '/sprint',
   match: '/match',
+  words:'/words'
 };

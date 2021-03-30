@@ -4,6 +4,7 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 import { SettingsPage } from '../pages/SettingsPage';
 import SignUpPage from '../pages/SignUpPage'
 import SignInPage from '../pages/SignInPage'
+import WordsPage from '../pages/SignInPage'
 
 export const useRoutes = (isAuthenticated) => {
 	return (
@@ -13,6 +14,9 @@ export const useRoutes = (isAuthenticated) => {
 			</Route> */}
 			<Route path="/" exact>
 				<SignInPage />
+			</Route>
+			<Route path="/words" exact>
+				<WordsPage />
 			</Route>
 			<Route path="/signup" >
 				<SignUpPage />
