@@ -10,6 +10,7 @@ import { frontRoutes } from './utils/frontRoutes';
 import { Footer } from './components/Footer';
 import { MatchPage } from './pages/MatchPage';
 import { AudioPage } from './pages/AudioPage';
+import SignUpPage from './pages/SignUpPage';
 
 const RouteComponent = ({ text }) => <div>{text}</div>;
 
@@ -51,8 +52,11 @@ function App() {
 					<Route path="/settings">
 						<SettingsPage />
 					</Route>
-					<Route path="/login">
-						<RouteComponent text="Login" />
+					<Route path="/signin">
+						<SignInPage/>
+					</Route>
+					<Route path="/signup">
+						<SignUpPage/>
 					</Route>
 				</Switch>
         <Footer/>
