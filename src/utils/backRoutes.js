@@ -1,4 +1,4 @@
-const origin = 'http://localhost:8080';
+export const origin = 'http://localhost:8080';
 
 const getRoute = (trailing) => `${origin}/${trailing}`;
 const getWordsPage = (group=0,page=0) => `${origin}/words/?group=${group}&page=${page}`;

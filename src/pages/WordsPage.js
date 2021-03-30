@@ -1,23 +1,22 @@
-import React,{useState, useEffect,useCallback} from 'react';
+import React, { useState, useEffect, useCallback } from "react";
 import { useHttp } from "../hooks/http.hook";
-import { backRoutes } from "../utils/backRoutes";
-import WordCard from "../components/WordCard"
+import { backRoutes, origin } from "../utils/backRoutes";
+import WordCard from "../components/WordCard";
 import {
   BrowserRouter as Router,
   Switch,
   Route,
   Link,
   useRouteMatch,
-  useParams
+  useParams,
 } from "react-router-dom";
-import { ListItemAvatar } from '@material-ui/core';
-
+import { ListItemAvatar } from "@material-ui/core";
 
 export default function WordsPage() {
   let match = useRouteMatch().path;
-  let group = match[match.length-1]
-  const [wordsArr,setWordsArr] = useState([])
-  const {  loading, error, request, clearError } = useHttp();
+  let group = match[match.length - 1];
+  const [wordsArr, setWordsArr] = useState([]);
+  const { loading, error, request, clearError } = useHttp();
 
   // async function getWords() {
   //   const data = await request(backRoutes.WordsPage, "GET");
@@ -25,27 +24,26 @@ export default function WordsPage() {
   //   setArr(data);
   // }
 
-  const fetchWords = useCallback(
-		async () => {
-      console.log(backRoutes.wordsPage);
-			const data = await request(backRoutes.wordsPage, "GET");
-      // console.log(data);
-      setWordsArr(data);
-			},
-		[request]
-	);
-	useEffect(
-		() => {
-			fetchWords();
-      console.log(wordsArr);
-		},
-		[ fetchWords ]
-	);
-  
+  const fetchWords = useCallback(async () => {
+    console.log(backRoutes.wordsPage);
+    const data = await request(backRoutes.wordsPage, "GET");
+    console.log(data);
+    setWordsArr(data);
+  }, [request]);
+  useEffect(() => {
+    fetchWords();
+  }, [fetchWords]);
 
-  return (
-    wordsArr.map((item) => 
-      <WordCard word={item.word}></WordCard>
-    )
-  )
+  return wordsArr.map((item) => (
+    <WordCard
+      word={item.word}
+      image={item.image}
+      textExample={item.textExample}
+      textExampleTranslate={item.textExampleTranslate}
+      transcription={item.transcription}
+      wordTranslate={item.wordTranslate}
+      textMeaning={item.textMeaning}
+      textMeaningTranslate={item.textMeaningTranslate}
+    ></WordCard>
+  ));
 }
