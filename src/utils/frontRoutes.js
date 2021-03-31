@@ -1,5 +1,4 @@
 export const frontRoutes = {
-  
 	games: '/games',
 	settings: '/settings',
 	statistics: '/statistics',
