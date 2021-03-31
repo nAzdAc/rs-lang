@@ -7,6 +7,9 @@ import Box from "@material-ui/core/Box";
 import DeleteIcon from '@material-ui/icons/Delete';
 import GradeIcon from '@material-ui/icons/Grade';
 import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
+import { Howl } from 'howler';
+import { LOCAL_STORAGE_KEY } from '../utils/storageKey';
+import { INIT_CONSTS } from '../utils/initConsts';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -76,7 +79,25 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function WordCard(props) {
+  const volume = localStorage.getItem(LOCAL_STORAGE_KEY.volume) || INIT_CONSTS.volume;
   const classes = useStyles();
+  const audio = new Howl({
+		src: [ `${origin}/${props.audio}`],
+		// volume: 0.001 * volume
+    onend: function() {
+      new Howl({
+      src: [`${origin}/${props.audioMeaning}`],
+      onend: function() {
+        new Howl({
+          src: [`${origin}/${props.audioExample}`],
+        }).play()
+      }
+    }).play()
+    }
+	});
+  const playWordsAudio = () =>{
+    audio.play()
+  }
 
   function FormRow() {
     return (
@@ -110,9 +131,9 @@ export default function WordCard(props) {
         <Grid className={classes.item} item xs={4}>
           <Paper className={classes.paper}>
             <Box className={classes.boxIcons}>
-              <DeleteIcon className={classes.icons}></DeleteIcon>
+              <PlayCircleFilledIcon onClick={playWordsAudio} className={classes.icons} ></PlayCircleFilledIcon>
               <GradeIcon className={classes.icons}></GradeIcon>
-              <PlayCircleFilledIcon className={classes.icons} ></PlayCircleFilledIcon>
+              <DeleteIcon className={classes.icons}></DeleteIcon>
             </Box>
             <Box className={classes.textEx}>{props.textExample}</Box>
             <Box className={classes.textExTr} >{props.textExampleTranslate}</Box>

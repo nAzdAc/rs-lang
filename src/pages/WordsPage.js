@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
     lineHeight: '80px',
     // letterSpacing: '-0.5px',
     textAlign: 'left',
-    color:'#BB86FC',
+    color: group => group === 1? '#BB86FC': group === 2? '#985EFF': group === 3? '#7F39FB': group === 4? '#6200EE': group === 5? '#5600E8': group === 6? '#3700B3': '#3700B3',
     verticalAlign:'middle',
   },
   titleBox: {
@@ -48,17 +48,18 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function WordsPage() {
-  const classes = useStyles();
   let match = useRouteMatch().path;
   let group = match[match.length - 1]-1;
   const [page, setPage] = useState(1)
   const [wordsArr, setWordsArr] = useState([]);
   const {request} = useHttp();
+  const classes = useStyles(group);
 
   const fetchWords = useCallback(async () => {
-    console.log(backRoutes.getWordsPage(group,page));
+    
     const data = await request(backRoutes.getWordsPage(group,page), "GET");
     setWordsArr(data);
+    console.log(data);
   }, [request,group,page]);
   useEffect(() => {
     fetchWords();
@@ -75,6 +76,9 @@ export default function WordsPage() {
       wordTranslate={item.wordTranslate}
       textMeaning={item.textMeaning}
       textMeaningTranslate={item.textMeaningTranslate}
+      audio={item.audio}
+      audioExample={item.audioExample}
+      audioMeaning={item.audioMeaning}
     >
     </WordCard>
   ))
