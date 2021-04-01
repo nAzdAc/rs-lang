@@ -1,70 +1,52 @@
-# Getting Started with Create React App
+**Базовая работа с redux**
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+В чем прикол — можно на любой странице приложения, хоть в играх, хоть в удаленных словах, что-то положить в state редакса, и потом из любого места приложения это значение достать. Типа локал стораджа, только на компе ничего не хранит.
 
-## Available Scripts
+Как работать
+1. Поставить расширение для chrome.
+Название Redux DevTools
+Автор: remotedevio
+https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd?hl=ru
+![Снимок экрана 2021-03-30 в 18 16 14](https://user-images.githubusercontent.com/24583617/113013040-075a4880-9184-11eb-91f0-7afc8ee3a4c3.png)
 
-In the project directory, you can run:
 
-### `npm start`
+2. добавить свой slice
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+– в папку store добавить файл вида
+***Slise.js
+![Снимок экрана 2021-03-30 в 18 15 33](https://user-images.githubusercontent.com/24583617/113012990-f8739600-9183-11eb-87ef-3bef2c332b3f.png)
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+я для примера создал testSlice. 
+![Снимок экрана 2021-03-30 в 18 17 01](https://user-images.githubusercontent.com/24583617/113013574-7fc10980-9184-11eb-8386-8123588d9479.png)
 
-### `npm test`
+внутри этого файла 2 сущности:
+исходное значение и функция, которая с этим значением работает. В моем примере
+name: 'test',
+  initialState: {
+    value: '',
+  },
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `npm run build`
+и reducer, который будет изменять исходное значение:
+в моем случае changeTest
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+в остальной части просто перепешите имена под свои названия.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+3. добавьте в store.js упоминания вашего слайса, по аналогии с тем, как там указан test
+![Снимок экрана 2021-03-30 в 18 21 30](https://user-images.githubusercontent.com/24583617/113013870-c3b40e80-9184-11eb-8cbb-95e8cbbff0f8.png)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+4. Последний штрих, отслеживать действия пользователей и менять state в соответсвии с этим.
+ Для примера я повесил на логотип в шапке обработчик событий, который при клике на лого кладет в стор слово logo
+ ![Снимок экрана 2021-03-30 в 18 34 36](https://user-images.githubusercontent.com/24583617/113015843-98322380-9186-11eb-85b2-9b91dc1c26bc.png)
+ 
+5. Смотрите в девтулы, что сейчас лежит в сторе. Для этого нужен был шаг 1. 
+![Снимок экрана 2021-03-30 в 18 36 21](https://user-images.githubusercontent.com/24583617/113016286-02e35f00-9187-11eb-8c3a-e12cd2d88360.png)
 
-### `npm run eject`
+![Снимок экрана 2021-03-30 в 18 36 26](https://user-images.githubusercontent.com/24583617/113016296-05de4f80-9187-11eb-9ecf-570219313d05.png)
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+В девтулах много всего интересного есть, тыкайте по вкладкам
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+6. обратиться к тому что лежит в state можно из любого места можно так:
+импртнуть 
+import { useSelector } from 'react-redux';
+взять значение, например тестовое state.test.value
