@@ -82,15 +82,14 @@ const useStyles = makeStyles({
 		cursor: 'pointer'
 	},
 	volumeContainer: {
-		width: '294px',
-		height: '188px',
+		width: '320px',
 		border: '2px solid #000',
 		display: 'flex',
 		flexDirection: 'column',
 		alignItems: 'center',
-		justifyContent: 'space-evenly',
+		justifyContent: 'space-around',
 		marginLeft: '60px',
-
+		paddingTop: '10px',
 		'&:hover': {
 			transform: 'translateY(-5px)',
 			boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.5)'
@@ -171,14 +170,27 @@ const VolumeSlider = withStyles({
 export const SettingsPage = () => {
 	const classes = useStyles();
 	const { avatar, uploadAvatar } = useContext(AuthContext);
-	const [ volume, setVolume ] = useState(
-		parseInt(localStorage.getItem(LOCAL_STORAGE_KEY.volume)) || INIT_CONSTS.volume
+	const [ musicVolume, setMusicVolume ] = useState(
+		parseInt(localStorage.getItem(LOCAL_STORAGE_KEY.musicVolume)) || INIT_CONSTS.musicVolume
+	);
+	const [ soundVolume, setSoundVolume ] = useState(
+		parseInt(localStorage.getItem(LOCAL_STORAGE_KEY.soundVolume)) || INIT_CONSTS.soundVolume
+	);
+	const [ wordVolume, setWordVolume ] = useState(
+		parseInt(localStorage.getItem(LOCAL_STORAGE_KEY.wordVolume)) || INIT_CONSTS.wordVolume
 	);
 
-	function handleVolume(event, newValue) {
-		console.log(newValue);
-		setVolume(newValue);
-		localStorage.setItem(LOCAL_STORAGE_KEY.volume, newValue);
+	function handleMusicVolume(event, newValue) {
+		setMusicVolume(newValue);
+		localStorage.setItem(LOCAL_STORAGE_KEY.musicVolume, newValue);
+	}
+	function handleSoundVolume(event, newValue) {
+		setSoundVolume(newValue);
+		localStorage.setItem(LOCAL_STORAGE_KEY.soundVolume, newValue);
+	}
+	function handleWordVolume(event, newValue) {
+		setWordVolume(newValue);
+		localStorage.setItem(LOCAL_STORAGE_KEY.wordVolume, newValue);
 	}
 
 	return (
@@ -239,15 +251,35 @@ export const SettingsPage = () => {
 				</div>
 
 				<div className={classes.volumeContainer}>
-					<Typography variant="h4" className={classes.subtitle} style={{ marginBottom: '40px' }}>
-						Громкость
+					<Typography variant="h6" className={classes.subtitle}>
+						Громкость музыки
 					</Typography>
 					<VolumeSlider
 						marks={marks}
 						valueLabelDisplay="auto"
 						aria-label="pretto slider"
-						value={volume}
-						onChange={handleVolume}
+						value={musicVolume}
+						onChange={handleMusicVolume}
+					/>
+					<Typography variant="h6" className={classes.subtitle}>
+						Громкость звуков
+					</Typography>
+					<VolumeSlider
+						marks={marks}
+						valueLabelDisplay="auto"
+						aria-label="pretto slider"
+						value={soundVolume}
+						onChange={handleSoundVolume}
+					/>
+					<Typography variant="h6" className={classes.subtitle}>
+						Громкость произношения слов
+					</Typography>
+					<VolumeSlider
+						marks={marks}
+						valueLabelDisplay="auto"
+						aria-label="pretto slider"
+						value={wordVolume}
+						onChange={handleWordVolume}
 					/>
 				</div>
 			</div>

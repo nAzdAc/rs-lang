@@ -30,18 +30,18 @@ function App() {
 					<Route path="/games">
 						<GamesPage />
 					</Route>
-						<Route path={frontRoutes.savanna}>
-							<SprintPage />
-						</Route>
-						<Route path={frontRoutes.audio}>
-							<AudioPage />
-						</Route>
-						<Route path={frontRoutes.sprint}>
-							<SprintPage />
-						</Route>
-						<Route path={frontRoutes.match}>
-							<MatchPage />
-						</Route>
+					<Route path={frontRoutes.savanna}>
+						<SprintPage />
+					</Route>
+					<Route path={frontRoutes.audio}>
+						<AudioPage />
+					</Route>
+					<Route path={frontRoutes.sprint}>
+						<SprintPage />
+					</Route>
+					<Route path={frontRoutes.match}>
+						<MatchPage />
+					</Route>
 					<Route path="/dictionary">
 						<RouteComponent text="Словарь" />
 					</Route>
@@ -55,7 +55,7 @@ function App() {
 						<RouteComponent text="Login" />
 					</Route>
 				</Switch>
-        <Footer/>
+				<Footer />
 			</div>
 		</Router>
 	);

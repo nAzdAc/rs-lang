@@ -1,6 +1,5 @@
-
-
 export const LOCAL_STORAGE_KEY = {
-  volume: 'volume',
-
-}
+	musicVolume: 'musicVolume',
+	soundVolume: 'soundVolume',
+	wordVolume: 'wordVolume'
+};

@@ -1,18 +1,17 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import TransitionsModal from '../components/EndGameModal';
-import useSound from 'use-sound';
 import { LOCAL_STORAGE_KEY } from '../utils/storageKey';
 import { INIT_CONSTS } from '../utils/initConsts';
 import successSong from '../sounds/success.mp3';
 import failSong from '../sounds/no.wav';
-import { Howl } from 'howler';
 import { backRoutes } from '../utils/backRoutes';
 import { CircularProgress } from '@material-ui/core';
 import SpeakerIcon from '@material-ui/icons/Speaker';
-import { shuffleAllElements, getRandomInt } from '../utils/helpers';
+import { createSound, shuffleAllElements } from '../utils/helpers';
 import { originURL } from '../utils/backRoutes';
+import { GameStatsPage } from './GameStatsPage';
+import { Howl } from 'howler';
 
 const useStyles = makeStyles({
 	root: {
@@ -33,7 +32,7 @@ const useStyles = makeStyles({
 		width: '150px',
 		height: '120px',
 		marginBottom: '100px',
-    cursor: 'pointer',
+		cursor: 'pointer'
 	},
 	buttonsWrap: {
 		width: '100%',
@@ -91,26 +90,22 @@ const useStyles = makeStyles({
 
 export const AudioPage = () => {
 	const classes = useStyles();
-	const volume = localStorage.getItem(LOCAL_STORAGE_KEY.volume) || INIT_CONSTS.volume;
+	const soundVolume = useMemo(() => localStorage.getItem(LOCAL_STORAGE_KEY.soundVolume) || INIT_CONSTS.soundVolume, []);
+	const wordVolume = useMemo(() => localStorage.getItem(LOCAL_STORAGE_KEY.wordVolume) || INIT_CONSTS.wordVolume, []);
 	const [ endGame, setEndGame ] = useState(false);
-	const [ fail, setFail ] = useState(0);
-	const [ correct, setCorrect ] = useState(0);
+	const [ allCorrectArray, setAllCorrectArray ] = useState([]);
+	const [ allFailArray, setAllFailArray ] = useState([]);
 	const [ currentNumber, setCurrentNumber ] = useState(0);
 	const [ currentWord, setCurrentWord ] = useState({});
 	const [ wordsArray, setWordsArray ] = useState([]);
 	const [ allWordsArray, setAllWordsArray ] = useState([]);
-	const [ fourButtons, setFourImages ] = useState([]);
+	const [ fourButtons, setFourButtons ] = useState([]);
 
-	const [ playSuccess ] = useSound(successSong, {
-		volume: 0.01 * volume
-	});
-	const [ playFail ] = useSound(failSong, {
-		volume: 0.01 * volume
-	});
-
-  const sound = new Howl({
+	const audioSuccess = useMemo(() => createSound(successSong, soundVolume), [ soundVolume ]);
+	const audioFail = useMemo(() => createSound(failSong, soundVolume), [ soundVolume ]);
+	const audioWord = new Howl({
     src: `${originURL}/${currentWord.audio}`,
-    volume: 0.01 * volume
+    volume: 0.01 * wordVolume
   });
 
 	const fetchWords = useCallback(async () => {
@@ -125,19 +120,21 @@ export const AudioPage = () => {
 			console.log(data);
 			const arr = [];
 			const wordsArr = [];
-			data.map((item) => {
+			data.forEach((item) => {
 				// console.log(item);
+				const audio = `${originURL}/${item.audio}`;
 				const english = item.word;
-				const audio = item.audio;
-				const obj = { english, audio };
+				const transcription = item.transcription;
+				const russian = item.wordTranslate;
+				const obj = { audio, english, transcription, russian };
 				arr.push(obj);
 				wordsArr.push(english);
 			});
-			const shuffledArr = arr.sort(shuffleAllElements);
-			const shuffledWordsArr = wordsArr.sort(shuffleAllElements);
-			setWordsArray(shuffledArr);
-			setAllWordsArray(shuffledWordsArr);
-			console.log(shuffledArr);
+			arr.sort(shuffleAllElements);
+			wordsArr.sort(shuffleAllElements);
+			setWordsArray(arr);
+			setAllWordsArray(wordsArr);
+			console.log(arr);
 		} catch (e) {
 			console.log(e);
 		}
@@ -162,47 +159,57 @@ export const AudioPage = () => {
 	useEffect(
 		() => {
 			if (wordsArray.length > 1 && allWordsArray.length > 1 && currentNumber < wordsArray.length) {
-				setCurrentWord((prev) => (prev = wordsArray[currentNumber]));
+				setCurrentWord(wordsArray[currentNumber]);
 			}
 		},
 		[ currentNumber, wordsArray, allWordsArray ]
 	);
 
-	useEffect(() => {
-    setTimeout(() => {
-      sound.play();
-    }, 1000)
-  }, [currentWord])
+	useEffect(
+		() => {
+			if (currentWord) {
+				console.log(currentWord)
+				setTimeout(() => {
+					audioWord.play();
+				}, 1000);
+			}
+			return () => {
+				clearTimeout();
+			};
+		},
+		[ currentWord ]
+	);
 
 	useEffect(
 		() => {
 			if (wordsArray.length > 1 && allWordsArray.length > 1 && currentNumber < wordsArray.length) {
 				const arr = allWordsArray.filter((english) => english !== currentWord.english).sort(shuffleAllElements);
 				arr.unshift(currentWord.english);
-				arr.length = 4;
-				arr.sort(shuffleAllElements);
-				arr.sort(shuffleAllElements);
-				console.log(arr);
-				setFourImages((prev) => (prev = arr));
+				const fourArr = arr.slice(0, 4);
+				fourArr.sort(shuffleAllElements);
+				fourArr.sort(shuffleAllElements);
+				console.log(fourArr);
+				setFourButtons(fourArr);
 			}
 		},
 		[ currentWord, wordsArray, allWordsArray, currentNumber ]
 	);
 
 	function answer(event) {
+		const obj = { ...currentWord };
 		setCurrentNumber((prev) => prev + 1);
 		const value = event.target.value;
 		if (value === currentWord.english) {
-			playSuccess();
-			setCorrect((prev) => prev + 1);
+			audioSuccess.play();
+			setAllCorrectArray((prev) => [ ...prev, obj ]);
 		} else {
-			playFail();
-			setFail((prev) => prev + 1);
+			audioFail.play();
+			setAllFailArray((prev) => [ ...prev, obj ]);
 		}
 	}
 
 	function repeat() {
-		sound.play();
+		audioWord.play();
 	}
 
 	return (
@@ -220,9 +227,11 @@ export const AudioPage = () => {
 								);
 							})}
 					</div>
-					<Typography variant="subtitle1" className={classes.correct}>{`Правильные ответы: ${correct}`}</Typography>
-					<Typography color="secondary" variant="subtitle1" className={classes.fail}>{`Ошибки: ${fail}`}</Typography>
-					{endGame && <TransitionsModal correct={correct} fail={fail} />}
+					<Typography variant="subtitle1" className={classes.correct}>{`Правильные ответы: ${allCorrectArray.length ||
+						0}`}</Typography>
+					<Typography color="secondary" variant="subtitle1" className={classes.fail}>{`Ошибки: ${allFailArray.length ||
+						0}`}</Typography>
+					{endGame && <GameStatsPage allCorrectArray={allCorrectArray} allFailArray={allFailArray} />}
 				</div>
 			) : (
 				<CircularProgress className={classes.loader} />

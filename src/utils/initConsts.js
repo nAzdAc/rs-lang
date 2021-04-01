@@ -1,7 +1,9 @@
 import { frontRoutes } from './frontRoutes';
 
 export const INIT_CONSTS = {
-	volume: 0
+	musicVolume: 0,
+	soundVolume: 0,
+	wordVolume: 0,
 };
 
 export const gameCardsContent = [

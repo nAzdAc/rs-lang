@@ -1,8 +1,6 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import TransitionsModal from '../components/EndGameModal';
-import useSound from 'use-sound';
 import { LOCAL_STORAGE_KEY } from '../utils/storageKey';
 import { INIT_CONSTS } from '../utils/initConsts';
 import fonSong from '../sounds/fon.mp3';
@@ -11,8 +9,9 @@ import failSong from '../sounds/no.wav';
 import { Howl } from 'howler';
 import { backRoutes } from '../utils/backRoutes';
 import { CircularProgress } from '@material-ui/core';
-import { shuffleAllElements, getRandomInt } from '../utils/helpers';
+import { shuffleAllElements } from '../utils/helpers';
 import { originURL } from '../utils/backRoutes';
+import { GameStatsPage } from './GameStatsPage';
 
 const regexpForText = /<\b>|<\/\b>|<i>|<\/i>/gi;
 
@@ -64,7 +63,8 @@ const useStyles = makeStyles({
 
 export const MatchPage = () => {
 	const classes = useStyles();
-	const volume = localStorage.getItem(LOCAL_STORAGE_KEY.volume) || INIT_CONSTS.volume;
+	const soundVolume = useMemo(() => localStorage.getItem(LOCAL_STORAGE_KEY.soundVolume) || INIT_CONSTS.soundVolume, []);
+	const musicVolume = useMemo(() => localStorage.getItem(LOCAL_STORAGE_KEY.musicVolume) || INIT_CONSTS.musicVolume, []);
 	const [ endGame, setEndGame ] = useState(false);
 	const [ fail, setFail ] = useState(0);
 	const [ correct, setCorrect ] = useState(0);
@@ -74,16 +74,19 @@ export const MatchPage = () => {
 	const [ allImagesArray, setAllImagesArray ] = useState([]);
 	const [ fourImages, setFourImages ] = useState([]);
 
-	const [ playSuccess ] = useSound(successSong, {
-		volume: 0.01 * volume
+	const audioSuccess = new Howl({
+		src: successSong,
+		volume: 0.01 * soundVolume
 	});
-	const [ playFail ] = useSound(failSong, {
-		volume: 0.01 * volume
+	const audioFail = new Howl({
+		src: failSong,
+		volume: 0.01 * soundVolume
 	});
-	const fonSound = new Howl({
+
+	const audioFon = new Howl({
 		src: [ fonSong ],
 		loop: true,
-		volume: 0.001 * volume
+		volume: 0.001 * musicVolume
 	});
 
 	const fetchWords = useCallback(async () => {
@@ -98,7 +101,7 @@ export const MatchPage = () => {
 			console.log(data);
 			const arr = [];
 			const imagesArr = [];
-			data.map((item) => {
+			data.forEach((item) => {
 				// console.log(item);
 				const english = item.word;
 				const russian = item.wordTranslate;
@@ -128,21 +131,21 @@ export const MatchPage = () => {
 
 	useEffect(
 		() => {
-			if (!endGame && volume) {
-				fonSound.play();
+			if (!endGame && musicVolume) {
+				audioFon.play();
 			}
 			return () => {
-				fonSound.stop();
+				audioFon.stop();
 			};
 		},
-		[ endGame, volume ]
+		[ endGame, musicVolume ]
 	);
 
 	useEffect(
 		() => {
 			if (currentNumber && currentNumber >= wordsArray.length) {
 				setEndGame(true);
-				fonSound.stop();
+				audioFon.stop();
 			}
 		},
 		[ wordsArray, currentNumber ]
@@ -176,10 +179,10 @@ export const MatchPage = () => {
 		setCurrentNumber((prev) => prev + 1);
 		const value = event.target.alt;
 		if (value === currentWord.src) {
-			playSuccess();
+			audioSuccess.play();
 			setCorrect((prev) => prev + 1)
 		} else {
-			playFail();
+			audioFail.play();
 			setFail((prev) => prev + 1)
 		}
 		console.log(value);
@@ -207,7 +210,7 @@ export const MatchPage = () => {
 					<Typography className={classes.meaning} variant="h5">{`${currentWord.meaning || ''}`}</Typography>
 					<Typography variant="subtitle1" className={classes.correct}>{`Правильные ответы: ${correct}`}</Typography>
 					<Typography color="secondary" variant="subtitle1" className={classes.fail}>{`Ошибки: ${fail}`}</Typography>
-					{endGame && <TransitionsModal correct={correct} fail={fail} />}
+					{endGame && <GameStatsPage correct={correct} fail={fail} />}
 				</div>
 			) : (
 				<CircularProgress className={classes.loader} />
