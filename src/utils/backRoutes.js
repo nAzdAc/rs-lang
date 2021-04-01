@@ -8,5 +8,8 @@ export const backRoutes = {
 	upload: getRoute('upload'),
 	getWordsPage(group=0,page=0) {
 		return `${origin}/words/?group=${group}&page=${page}`;
-	}
+	},
+	createUserWord(userId,wordId) {
+		return `${origin}/users/${userId}/words/${wordId}`;
+	},
 };

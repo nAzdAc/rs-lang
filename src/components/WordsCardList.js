@@ -8,6 +8,7 @@ import CardIcons from "./CardIcons";
 export default function WordsCardList(props) {
   const [wordsArr, setWordsArr] = useState([]);
   const { request } = useHttp();
+  const difficulty = props.difficulty
 
   const fetchWords = useCallback(async () => {
     const data = await request(props.fetchUrl, "GET");
@@ -17,6 +18,7 @@ export default function WordsCardList(props) {
   useEffect(() => {
     fetchWords();
   }, [fetchWords]);
+
   let infoPanel = props.infoPanel
 
   const cards = wordsArr.map((item) => (
@@ -31,7 +33,7 @@ export default function WordsCardList(props) {
       textMeaning={item.textMeaning}
       textMeaningTranslate={item.textMeaningTranslate}
       infoPanel={
-        infoPanel === 'CardIcons'? <CardIcons audio={item.audio} audioExample={item.audioExample} audioMeaning={item.audioMeaning}></CardIcons>:null
+        infoPanel === 'CardIcons'? <CardIcons difficulty={difficulty}  wordId={item.id} audio={item.audio} audioExample={item.audioExample} audioMeaning={item.audioMeaning}></CardIcons>:null
       }
     ></WordCard>
   ));

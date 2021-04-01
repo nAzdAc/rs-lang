@@ -76,7 +76,7 @@ export default function WordsPage() {
         </Typography>
         <LevelButton group={group + 1}></LevelButton>
       </Box>
-      <WordsCardList fetchUrl={fetchUrl} infoPanel="CardIcons"></WordsCardList>
+      <WordsCardList difficulty={group} fetchUrl={fetchUrl} infoPanel="CardIcons"></WordsCardList>
       <Pagination
         page={page}
         className={classes.pagination}
