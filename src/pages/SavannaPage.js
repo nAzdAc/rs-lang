@@ -5,11 +5,10 @@ import { LOCAL_STORAGE_KEY } from '../utils/storageKey';
 import { INIT_CONSTS } from '../utils/initConsts';
 import successSong from '../sounds/success.mp3';
 import failSong from '../sounds/no.wav';
+import fonSong from '../sounds/fon.mp3';
 import { backRoutes } from '../utils/backRoutes';
 import { CircularProgress } from '@material-ui/core';
-import SpeakerIcon from '@material-ui/icons/Speaker';
 import { createSound, shuffleAllElements } from '../utils/helpers';
-import { originURL } from '../utils/backRoutes';
 import { GameStatsPage } from './GameStatsPage';
 import { useHttp } from '../hooks/http.hook';
 
@@ -21,19 +20,21 @@ const useStyles = makeStyles({
 	},
 	gameContainer: {
 		width: '90%',
+    height: '100%',
 		display: 'flex',
 		flexDirection: 'column',
 		flexWrap: 'wrap',
 		alignItems: 'center',
 		justifyContent: 'space-between',
-		padding: '40px 20px 20px 20px'
+		padding: '60px 0px 40px 0px'
 	},
-	speaker: {
-		width: '150px',
-		height: '120px',
-		marginBottom: '100px',
-		cursor: 'pointer'
-	},
+  contentWrap: {
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    flexWrap: 'wrap',
+    alignItems: 'center',
+  },
 	buttonsWrap: {
 		width: '100%',
 		display: 'flex',
@@ -72,12 +73,6 @@ const useStyles = makeStyles({
 			background: '#00D9CE'
 		}
 	},
-	word: {
-		marginBottom: '10px'
-	},
-	meaning: {
-		marginBottom: '110px'
-	},
 	fail: {
 		marginBottom: '10px'
 	},
@@ -88,11 +83,11 @@ const useStyles = makeStyles({
 	}
 });
 
-export const AudioPage = () => {
+export const SavannaPage = () => {
 	const classes = useStyles();
 	const { request } = useHttp();
 	const soundVolume = useMemo(() => localStorage.getItem(LOCAL_STORAGE_KEY.soundVolume) || INIT_CONSTS.soundVolume, []);
-	const wordVolume = useMemo(() => localStorage.getItem(LOCAL_STORAGE_KEY.wordVolume) || INIT_CONSTS.wordVolume, []);
+	const musicVolume = useMemo(() => localStorage.getItem(LOCAL_STORAGE_KEY.musicVolume) || INIT_CONSTS.musicVolume, []);
 	const [ endGame, setEndGame ] = useState(false);
 	const [ correctAnswers, setCorrectAnswers ] = useState([]);
 	const [ failAnswers, setFailAnswers ] = useState([]);
@@ -104,27 +99,27 @@ export const AudioPage = () => {
 
 	const audioSuccess = useMemo(() => createSound(successSong, soundVolume), [ soundVolume ]);
 	const audioFail = useMemo(() => createSound(failSong, soundVolume), [ soundVolume ]);
-	const audioWord = useMemo(() => createSound(`${currentWord.audio}`, wordVolume), [ wordVolume, currentWord ]);
+	const audioFon = useMemo(() => createSound(fonSong, musicVolume * 0.1, 1, true), [ musicVolume ]);
 
 	const fetchWords = useCallback(
 		async () => {
 			try {
 				const data = await request(backRoutes.words, 'GET');
-				console.log(data);
+				// console.log(data);
 				const arr = [];
 				const wordsArr = [];
 				data.forEach((item) => {
 					// console.log(item);
-					const audio = `${originURL}/${item.audio}`;
 					const english = item.word;
-					const transcription = item.transcription;
 					const russian = item.wordTranslate;
-					const obj = { audio, english, transcription, russian };
+					const obj = { english, russian };
 					arr.push(obj);
 					wordsArr.push(english);
 				});
-				setWordsArray(arr.sort(shuffleAllElements));
-				setAllWordsArray(wordsArr.sort(shuffleAllElements));
+				arr.sort(shuffleAllElements);
+				wordsArr.sort(shuffleAllElements);
+				setWordsArray(arr);
+				setAllWordsArray(wordsArr);
 				console.log(arr);
 			} catch (e) {
 				console.log(e);
@@ -132,7 +127,6 @@ export const AudioPage = () => {
 		},
 		[ request ]
 	);
-
 	useEffect(
 		() => {
 			fetchWords();
@@ -142,11 +136,24 @@ export const AudioPage = () => {
 
 	useEffect(
 		() => {
+			if (!endGame && musicVolume) {
+				audioFon.play();
+			}
+			return () => {
+				audioFon.stop();
+			};
+		},
+		[ endGame, audioFon, musicVolume ]
+	);
+
+	useEffect(
+		() => {
 			if (currentNumber && currentNumber >= wordsArray.length) {
 				setEndGame(true);
+				audioFon.stop();
 			}
 		},
-		[ wordsArray, currentNumber ]
+		[ wordsArray, currentNumber, audioFon ]
 	);
 
 	useEffect(
@@ -156,22 +163,6 @@ export const AudioPage = () => {
 			}
 		},
 		[ currentNumber, wordsArray, allWordsArray ]
-	);
-
-	useEffect(
-		() => {
-			if (currentWord) {
-				console.log(currentWord);
-				setTimeout(() => {
-					audioWord.play();
-				}, 1000);
-			}
-			return () => {
-				clearTimeout();
-				audioWord.stop();
-			};
-		},
-		[ currentWord, audioWord ]
 	);
 
 	useEffect(
@@ -201,34 +192,33 @@ export const AudioPage = () => {
 		}
 	}
 
-	function repeat() {
-		audioWord.play();
-	}
-
 	return (
 		<div className={classes.root}>
-			{endGame ? <GameStatsPage correctAnswers={correctAnswers} failAnswers={failAnswers} /> : (
-				(wordsArray.length && allWordsArray.length && fourButtons.length && currentWord) ? (
-					<div className={classes.gameContainer}>
-						<SpeakerIcon onClick={repeat} className={classes.speaker} />
-						<div className={classes.buttonsWrap}>
-							{fourButtons.length &&
-								fourButtons.map((english, index) => {
-									return (
-										<button key={index} onClick={answer} value={english} className={classes.goodButton}>
-											{english}
-										</button>
-									);
-								})}
-						</div>
-						<Typography variant="subtitle1" className={classes.correct}>{`Правильные ответы: ${correctAnswers.length ||
-							0}`}</Typography>
-						<Typography color="secondary" variant="subtitle1" className={classes.fail}>{`Ошибки: ${failAnswers.length ||
-							0}`}</Typography>
+			{endGame ? (
+				<GameStatsPage correctAnswers={correctAnswers} failAnswers={failAnswers} />
+			) : (wordsArray.length && allWordsArray.length && currentWord && fourButtons.length) ? (
+				<div className={classes.gameContainer}>
+					<Typography variant="h3" >{currentWord.russian}</Typography>
+          <div className={classes.contentWrap}>
+					<div className={classes.buttonsWrap}>
+						{fourButtons.length &&
+							fourButtons.map((english, index) => {
+								return (
+									<button key={index} onClick={answer} value={english} className={classes.goodButton}>
+										{english}
+									</button>
+								);
+							})}
 					</div>
-				) : (
-					<CircularProgress className={classes.loader} />
-				)
+            <Typography variant="subtitle1" className={classes.correct}>{`Правильные ответы: ${correctAnswers.length ||
+						0}`}</Typography>
+					<Typography color="secondary" variant="subtitle1" className={classes.fail}>{`Ошибки: ${failAnswers.length ||
+						0}`}</Typography>
+          </div>
+					
+				</div>
+			) : (
+				<CircularProgress className={classes.loader} />
 			)}
 		</div>
 	);

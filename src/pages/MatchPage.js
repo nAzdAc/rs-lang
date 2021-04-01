@@ -6,12 +6,12 @@ import { INIT_CONSTS } from '../utils/initConsts';
 import fonSong from '../sounds/fon.mp3';
 import successSong from '../sounds/success.mp3';
 import failSong from '../sounds/no.wav';
-import { Howl } from 'howler';
 import { backRoutes } from '../utils/backRoutes';
 import { CircularProgress } from '@material-ui/core';
-import { shuffleAllElements } from '../utils/helpers';
+import { createSound, shuffleAllElements } from '../utils/helpers';
 import { originURL } from '../utils/backRoutes';
 import { GameStatsPage } from './GameStatsPage';
+import { useHttp } from '../hooks/http.hook';
 
 const regexpForText = /<\b>|<\/\b>|<i>|<\/i>/gi;
 
@@ -63,64 +63,49 @@ const useStyles = makeStyles({
 
 export const MatchPage = () => {
 	const classes = useStyles();
+	const { request } = useHttp();
 	const soundVolume = useMemo(() => localStorage.getItem(LOCAL_STORAGE_KEY.soundVolume) || INIT_CONSTS.soundVolume, []);
 	const musicVolume = useMemo(() => localStorage.getItem(LOCAL_STORAGE_KEY.musicVolume) || INIT_CONSTS.musicVolume, []);
 	const [ endGame, setEndGame ] = useState(false);
-	const [ fail, setFail ] = useState(0);
-	const [ correct, setCorrect ] = useState(0);
+	const [ correctAnswers, setCorrectAnswers ] = useState([]);
+	const [ failAnswers, setFailAnswers ] = useState([]);
 	const [ currentNumber, setCurrentNumber ] = useState(0);
 	const [ currentWord, setCurrentWord ] = useState({});
 	const [ wordsArray, setWordsArray ] = useState([]);
 	const [ allImagesArray, setAllImagesArray ] = useState([]);
 	const [ fourImages, setFourImages ] = useState([]);
 
-	const audioSuccess = new Howl({
-		src: successSong,
-		volume: 0.01 * soundVolume
-	});
-	const audioFail = new Howl({
-		src: failSong,
-		volume: 0.01 * soundVolume
-	});
+	const audioSuccess = useMemo(() => createSound(successSong, soundVolume), [ soundVolume ]);
+	const audioFail = useMemo(() => createSound(failSong, soundVolume), [ soundVolume ]);
+	const audioFon = useMemo(() => createSound(fonSong, musicVolume * 0.1, 1, true), [ musicVolume ]);
 
-	const audioFon = new Howl({
-		src: [ fonSong ],
-		loop: true,
-		volume: 0.001 * musicVolume
-	});
-
-	const fetchWords = useCallback(async () => {
-		try {
-			const result = await fetch(`${backRoutes.words}?group=1`, {
-				method: 'GET',
-				headers: {
-					'Content-Type': 'application/json'
-				}
-			});
-			const data = await result.json();
-			console.log(data);
-			const arr = [];
-			const imagesArr = [];
-			data.forEach((item) => {
-				// console.log(item);
-				const english = item.word;
-				const russian = item.wordTranslate;
-				const meaning = item.textMeaning.replace(regexpForText, '');
-				const src = `../../${item.image}`;
-				const obj = { english, russian, meaning, src };
-				arr.push(obj);
-				imagesArr.push(src);
-			});
-			const shuffledArr = arr.sort(shuffleAllElements);
-			const shuffledImagesArr = imagesArr.sort(shuffleAllElements);
-			setWordsArray(shuffledArr);
-			setAllImagesArray(shuffledImagesArr);
-			console.log(shuffledArr);
-			// console.log(arr[0].english);
-		} catch (e) {
-			console.log(e);
-		}
-	}, []);
+	const fetchWords = useCallback(
+		async () => {
+			try {
+				const data = await request(backRoutes.words, 'GET');
+				console.log(data);
+				const arr = [];
+				const imagesArr = [];
+				data.forEach((item) => {
+					// console.log(item);
+					const english = item.word;
+					const russian = item.wordTranslate;
+					const meaning = item.textMeaning.replace(regexpForText, '');
+					const src = `${originURL}/${item.image}`;
+					const obj = { english, russian, meaning, src };
+					arr.push(obj);
+					imagesArr.push(src);
+				});
+				arr.sort(shuffleAllElements);
+				imagesArr.sort(shuffleAllElements);
+				setWordsArray(arr);
+				setAllImagesArray(imagesArr);
+			} catch (e) {
+				console.log(e);
+			}
+		},
+		[ request ]
+	);
 
 	useEffect(
 		() => {
@@ -138,7 +123,7 @@ export const MatchPage = () => {
 				audioFon.stop();
 			};
 		},
-		[ endGame, musicVolume ]
+		[ endGame, musicVolume, audioFon ]
 	);
 
 	useEffect(
@@ -148,69 +133,67 @@ export const MatchPage = () => {
 				audioFon.stop();
 			}
 		},
-		[ wordsArray, currentNumber ]
+		[ wordsArray, currentNumber, audioFon ]
 	);
 
 	useEffect(
 		() => {
-			if (wordsArray.length > 1 && allImagesArray.length > 1 && currentNumber < wordsArray.length) {
-				setCurrentWord((prev) => (prev = wordsArray[currentNumber]));
+			if (wordsArray.length && allImagesArray.length && currentNumber < wordsArray.length) {
+				setCurrentWord(wordsArray[currentNumber]);
 			}
 		},
-		[ currentNumber, wordsArray, fourImages ]
+		[ currentNumber, wordsArray, fourImages, allImagesArray.length ]
 	);
 
 	useEffect(
 		() => {
-			if (wordsArray.length > 1 && allImagesArray.length > 1 && currentNumber < wordsArray.length) {
+			if (wordsArray.length && allImagesArray.length && currentNumber < wordsArray.length) {
 				const arr = allImagesArray.filter((src) => src !== currentWord.src).sort(shuffleAllElements);
 				arr.unshift(currentWord.src);
-				arr.length = 4;
-				arr.sort(shuffleAllElements)
-				arr.sort(shuffleAllElements)
-				console.log(arr);
-				setFourImages((prev) => (prev = arr));
+				const fourArr = arr.slice(0, 4);
+				fourArr.sort(shuffleAllElements);
+				fourArr.sort(shuffleAllElements);
+				setFourImages(fourArr);
 			}
 		},
-		[ currentWord, wordsArray, allImagesArray ]
+		[ currentWord, wordsArray, allImagesArray, currentNumber ]
 	);
 
 	function answer(event) {
+		const obj = { ...currentWord };
 		setCurrentNumber((prev) => prev + 1);
-		const value = event.target.alt;
-		if (value === currentWord.src) {
+		if (event.target.alt === currentWord.src) {
 			audioSuccess.play();
-			setCorrect((prev) => prev + 1)
+			setCorrectAnswers((prev) => [ ...prev, obj ]);
 		} else {
 			audioFail.play();
-			setFail((prev) => prev + 1)
+			setFailAnswers((prev) => [ ...prev, obj ]);
 		}
-		console.log(value);
 	}
 
 	return (
 		<div className={classes.root}>
-			{wordsArray && allImagesArray ? (
+			{endGame ? (
+				<GameStatsPage correctAnswers={correctAnswers} failAnswers={failAnswers} />
+			) : wordsArray && allImagesArray ? (
 				<div className={classes.gameContainer}>
 					<div className={classes.imageWrap}>
-						{fourImages.length && (
+						{fourImages.length &&
 							fourImages.map((image, index) => {
-								return (
-									<img
-										key={index}
-										onClick={answer}
-										className={classes.image}
-										src={`${originURL}/${image}`}
-										alt={image}
-									/>
-								);
-							}))}
+								return <img key={index} onClick={answer} className={classes.image} src={image} alt={image} />;
+							})}
 					</div>
 					<Typography className={classes.word} variant="h4">{`${currentWord.english || ''}`}</Typography>
 					<Typography className={classes.meaning} variant="h5">{`${currentWord.meaning || ''}`}</Typography>
-					<Typography variant="subtitle1" className={classes.correct}>{`Правильные ответы: ${correct}`}</Typography>
-					<Typography color="secondary" variant="subtitle1" className={classes.fail}>{`Ошибки: ${fail}`}</Typography>
-					{endGame && <GameStatsPage correct={correct} fail={fail} />}
+					<Typography
+						variant="subtitle1"
+						className={classes.correct}
+					>{`Правильные ответы: ${correctAnswers.length}`}</Typography>
+					<Typography
+						color="secondary"
+						variant="subtitle1"
+						className={classes.fail}
+					>{`Ошибки: ${failAnswers.length}`}</Typography>
 				</div>
 			) : (
 				<CircularProgress className={classes.loader} />

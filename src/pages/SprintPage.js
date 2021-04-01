@@ -6,11 +6,11 @@ import { INIT_CONSTS } from '../utils/initConsts';
 import fonSong from '../sounds/fon.mp3';
 import successSong from '../sounds/success.mp3';
 import failSong from '../sounds/no.wav';
-import { Howl } from 'howler';
 import { backRoutes } from '../utils/backRoutes';
 import { CircularProgress } from '@material-ui/core';
-import { shuffleAllElements, getRandomInt } from '../utils/helpers';
+import { createSound, shuffleAllElements, getRandomInt } from '../utils/helpers';
 import { GameStatsPage } from './GameStatsPage';
+import { useHttp } from '../hooks/http.hook';
 
 const useStyles = makeStyles({
 	root: {
@@ -68,61 +68,40 @@ const useStyles = makeStyles({
 
 export const SprintPage = () => {
 	const classes = useStyles();
+	const { request } = useHttp();
 	const soundVolume = useMemo(() => localStorage.getItem(LOCAL_STORAGE_KEY.soundVolume) || INIT_CONSTS.soundVolume, []);
 	const musicVolume = useMemo(() => localStorage.getItem(LOCAL_STORAGE_KEY.musicVolume) || INIT_CONSTS.musicVolume, []);
 	const [ endGame, setEndGame ] = useState(false);
-	const [ fail, setFail ] = useState(0);
-	const [ correct, setCorrect ] = useState(0);
 	const [ seconds, setSeconds ] = useState(60);
 	const [ wordsArray, setWordsArray ] = useState([]);
-  const [ allCorrectArray, setAllCorrectArray ] = useState([]);
-  const [ allFailArray, setAllFailArray ] = useState([]);
-	const [ currentEnglishWord, setCurrentEnglishWord ] = useState('');
+	const [ correctAnswers, setCorrectAnswers ] = useState([]);
+	const [ failAnswers, setFailAnswers ] = useState([]);
+	const [ currentWord, setCurrentWord ] = useState({});
 	const [ currentRussianhWord, setCurrentRussianhWord ] = useState('');
 	const [ currentNumber, setCurrentNumber ] = useState(0);
 	const timer = useRef();
 
-	const audioSuccess = new Howl({
-		src: successSong,
-		volume: 0.01 * soundVolume
-	});
-	const audioFail = new Howl({
-		src: failSong,
-		volume: 0.01 * soundVolume
-	});
-
-	const audioFon = new Howl({
-		src: [ fonSong ],
-		loop: true,
-		volume: 0.001 * musicVolume
-	});
+	const audioSuccess = useMemo(() => createSound(successSong, soundVolume), [ soundVolume ]);
+	const audioFail = useMemo(() => createSound(failSong, soundVolume), [ soundVolume ]);
+	const audioFon = useMemo(() => createSound(fonSong, musicVolume * 0.1, 1, true), [ musicVolume ]);
 
 	const fetchWords = useCallback(async () => {
 		try {
-			const result = await fetch(backRoutes.words, {
-				method: 'GET',
-				headers: {
-					'Content-Type': 'application/json'
-				}
-			});
-			const data = await result.json();
+			const data = await request(backRoutes.words, 'GET');
 			console.log(data);
 			const arr = [];
 			data.forEach((item) => {
-				// console.log(item);
 				const english = item.word;
 				const russian = item.wordTranslate;
 				const obj = { english, russian };
 				arr.push(obj);
 			});
-			const shuffledArr = arr.sort(shuffleAllElements);
-			setWordsArray(shuffledArr);
-			console.log(shuffledArr);
-			// console.log(arr[0].english);
+			arr.sort(shuffleAllElements);
+			setWordsArray(arr);
 		} catch (e) {
 			console.log(e);
 		}
-	}, []);
+	}, [request]);
 
 	useEffect(
 		() => {
@@ -133,18 +112,18 @@ export const SprintPage = () => {
 
 	useEffect(
 		() => {
-			if (wordsArray.length > 1 && currentNumber < wordsArray.length) {
-				setCurrentEnglishWord((prev) => (prev = wordsArray[currentNumber].english));
-				setCurrentRussianhWord((prev) => {
+			if (wordsArray.length && currentNumber < wordsArray.length) {
+				setCurrentWord(wordsArray[currentNumber]);
+				setCurrentRussianhWord(() => {
+					let word;
 					const num = Math.random();
 					// console.log(num);
 					if (num > 0.45) {
-						prev = wordsArray[currentNumber].russian;
+						word = wordsArray[currentNumber].russian;
 					} else {
-						const number = getRandomInt(0, wordsArray.length);
-						prev = wordsArray[number].russian;
+						word = wordsArray[getRandomInt(0, wordsArray.length)].russian;
 					}
-					return prev;
+					return word;
 				});
 			}
 		},
@@ -152,24 +131,17 @@ export const SprintPage = () => {
 	);
 
 	function answer(value) {
-		// console.log(value);
-		const english = wordsArray[currentNumber].english;
-		const russian = wordsArray[currentNumber].russian;
-    const rightPair = `${english} = ${russian}`
+		const obj = { ...currentWord };
 		setCurrentNumber((prev) => prev + 1);
-		console.log(russian === currentRussianhWord);
-		console.log(`original: ${russian}   current : ${currentRussianhWord}`);
 		if (
-			(value === 'true' && russian === currentRussianhWord) ||
-			(value === 'false' && russian !== currentRussianhWord)
+			(value === 'true' && currentWord.russian === currentRussianhWord) ||
+			(value === 'false' && currentWord.russian !== currentRussianhWord)
 		) {
 			audioSuccess.play();
-      setAllCorrectArray((prev) => [...prev, rightPair])
-			setCorrect((prev) => prev + 1);
+      setCorrectAnswers((prev) => [ ...prev, obj ]);
 		} else {
 			audioFail.play();
-      setAllFailArray((prev) => [...prev, rightPair])
-			setFail((prev) => prev + 1);
+      setFailAnswers((prev) => [ ...prev, obj ]);
 		}
 	}
 
@@ -186,7 +158,7 @@ export const SprintPage = () => {
 				audioFon.stop();
 			};
 		},
-		[ endGame ]
+		[ endGame, audioFon ]
 	);
 
 	useEffect(
@@ -197,30 +169,31 @@ export const SprintPage = () => {
 				audioFon.stop();
 			}
 		},
-		[ seconds, wordsArray, currentNumber ]
+		[ seconds, wordsArray, currentNumber, audioFon ]
 	);
 
 	return (
 		<div className={classes.root}>
-			{wordsArray ? (
-				<div className={classes.gameContainer}>
-					<Typography variant="h5">Осталось: </Typography>
-					<Typography variant="h2">{seconds}</Typography>
-					<Typography variant="h4">{`${currentEnglishWord || ''} = ${currentRussianhWord || ''}`}</Typography>
-					<div className={classes.buttonsWrap}>
-						<button className={classes.badButton} onClick={(event) => answer(event.target.value)} value={false}>
-							НЕ ВЕРНО
-						</button>
-						<button className={classes.goodButton} onClick={(event) => answer(event.target.value)} value={true}>
-							ВЕРНО
-						</button>
+			{endGame ? <GameStatsPage correctAnswers={correctAnswers} failAnswers={failAnswers} /> : (
+				(wordsArray.length && currentWord) ? (
+					<div className={classes.gameContainer}>
+						<Typography variant="h5">Осталось: </Typography>
+						<Typography variant="h2">{seconds}</Typography>
+						<Typography variant="h4">{`${currentWord.english || ''} = ${currentRussianhWord || ''}`}</Typography>
+						<div className={classes.buttonsWrap}>
+							<button className={classes.badButton} onClick={(event) => answer(event.target.value)} value={false}>
+								НЕ ВЕРНО
+							</button>
+							<button className={classes.goodButton} onClick={(event) => answer(event.target.value)} value={true}>
+								ВЕРНО
+							</button>
+						</div>
+						<Typography variant="subtitle1" className={classes.answer}>{`Правильные ответы: ${correctAnswers.length}`}</Typography>
+						<Typography color='secondary' variant="subtitle1" className={classes.answer}>{`Ошибки: ${failAnswers.length}`}</Typography>
 					</div>
-					<Typography variant="subtitle1" className={classes.answer}>{`Правильные ответы: ${correct}`}</Typography>
-					<Typography color='secondary' variant="subtitle1" className={classes.answer}>{`Ошибки: ${fail}`}</Typography>
-					{endGame && <GameStatsPage correct={correct} fail={fail} allCorrectArray={allCorrectArray} allFailArray={allFailArray} />}
-				</div>
-			) : (
-				<CircularProgress className={classes.loader} />
+				) : (
+					<CircularProgress className={classes.loader} />
+				)
 			)}
 		</div>
 	);

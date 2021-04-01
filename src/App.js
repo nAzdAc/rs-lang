@@ -10,7 +10,9 @@ import { frontRoutes } from './utils/frontRoutes';
 import { Footer } from './components/Footer';
 import { MatchPage } from './pages/MatchPage';
 import { AudioPage } from './pages/AudioPage';
+import SignInPage from './pages/SignInPage';
 import SignUpPage from './pages/SignUpPage';
+import { SavannaPage } from './pages/SavannaPage';
 
 const RouteComponent = ({ text }) => <div>{text}</div>;
 
@@ -32,7 +34,7 @@ function App() {
 						<GamesPage />
 					</Route>
 					<Route path={frontRoutes.savanna}>
-						<SprintPage />
+						<SavannaPage />
 					</Route>
 					<Route path={frontRoutes.audio}>
 						<AudioPage />
