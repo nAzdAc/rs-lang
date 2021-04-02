@@ -76,3 +76,24 @@ code {
     height: max-content;
   }
 }
+
+
+.slide-word {
+  /* opacity: 0; */
+}
+
+.slide-word.entering {
+  animation: slideDown 5s forwards;
+}
+
+
+@keyframes slideDown {
+  0% {
+    transform: translateY(0px);
+    /* opacity: 1; */
+  }
+  100% {
+    transform: translateY(300px);
+    /* opacity: 0; */
+  }
+}

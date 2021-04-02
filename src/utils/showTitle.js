@@ -2,17 +2,19 @@
 
 
 
-export const showTitle = (fail) => {
+export const showTitle = (fails, lifes) => {
 	let title = '';
-	if (fail < 2) {
+	console.log(lifes)
+	if (lifes <= 0) return 'Ты смог потерять все жизни. Это ещё никому не удавалось. Молодец!:)'
+	if (fails < 2) {
 		title = 'Ты крутой!)';
-	} else if (fail < 4) {
+	} else if (fails < 4) {
 		title = 'Очень хорошо!)';
-	} else if (fail < 6) {
+	} else if (fails < 6) {
 		title = 'Ты можешь лучше!)';
-	} else if (fail < 8) {
+	} else if (fails < 8) {
 		title = 'Давай иди повтори и возвращайся)';
-	} else if (fail < 10) {
+	} else if (fails < 10) {
 		title = 'Ну такое :(';
 	} else {
 		title = 'Ты расстроил своего школьного учителя :(';

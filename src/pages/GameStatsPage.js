@@ -1,10 +1,10 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Typography } from '@material-ui/core';
-// import SpeakerIcon from '@material-ui/icons/Speaker';
+import SpeakerIcon from '@material-ui/icons/Speaker';
 import { showTitle } from '../utils/showTitle';
-import winSong from '../sounds/win.mp3';
-import defeatSong from '../sounds/defeat.mp3';
+import winSong from '../assets/sounds/win.mp3';
+import defeatSong from '../assets/sounds/defeat.mp3';
 import { LOCAL_STORAGE_KEY } from '../utils/storageKey';
 import { INIT_CONSTS } from '../utils/initConsts';
 import { createSound } from '../utils/helpers';
@@ -60,7 +60,7 @@ const useStyles = makeStyles({
 	}
 });
 
-export const GameStatsPage = ({ correctAnswers, failAnswers }) => {
+export const GameStatsPage = ({ correctAnswers, failAnswers, lifes }) => {
 	const classes = useStyles();
 	const soundVolume = useMemo(() => localStorage.getItem(LOCAL_STORAGE_KEY.soundVolume) || INIT_CONSTS.soundVolume, []);
 	const wordVolume = useMemo(() => localStorage.getItem(LOCAL_STORAGE_KEY.wordVolume) || INIT_CONSTS.wordVolume, []);
@@ -71,24 +71,27 @@ export const GameStatsPage = ({ correctAnswers, failAnswers }) => {
 
 	useEffect(
 		() => {
-			console.log(correctAnswers)
-			console.log(failAnswers)
-			if (failAnswers.length < 6) {
-				audioWin.play();
-			} else {
+			if (!lifes) {
 				audioDefeat.play();
+			} else {
+				if (failAnswers.length < 6) {
+					audioWin.play();
+				} else {
+					audioDefeat.play();
+				}
 			}
-			setTitle(showTitle(failAnswers.length));
+			setTitle(showTitle(failAnswers.length, lifes));
 			return () => {
 				audioWin.stop();
 				audioDefeat.stop();
 			};
 		},
-		[ failAnswers, audioWin, audioDefeat, correctAnswers ]
+		[ failAnswers, audioWin, audioDefeat, correctAnswers, lifes ]
 	);
 
 	function repeat(event) {
-		const src = event.target.value;
+		console.log(event.currentTarget.value);
+		const src = event.currentTarget.value;
 		const audioWord = createSound(`${src}`, wordVolume, 0.9);
 		audioWord.play();
 	}
@@ -105,7 +108,9 @@ export const GameStatsPage = ({ correctAnswers, failAnswers }) => {
 						return (
 							<div key={index} className={classes.row}>
 								{item.audio ? (
-									<button key={item.audio} value={item.audio} onClick={repeat} className={classes.goodButton} />
+									<button key={item.audio} value={item.audio} onClick={repeat} className={classes.goodButton}>
+										<SpeakerIcon />
+									</button>
 								) : (
 									''
 								)}
@@ -143,7 +148,7 @@ export const GameStatsPage = ({ correctAnswers, failAnswers }) => {
 				{failAnswers &&
 					failAnswers.map((item, index) => {
 						return (
-							<div className={classes.row}>
+							<div key={index} className={classes.row}>
 								{item.audio ? (
 									<button key={item.audio} value={item.audio} onClick={repeat} className={classes.goodButton} />
 								) : (

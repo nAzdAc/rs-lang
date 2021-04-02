@@ -3,8 +3,10 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import { LOCAL_STORAGE_KEY } from '../utils/storageKey';
 import { INIT_CONSTS } from '../utils/initConsts';
-import successSong from '../sounds/success.mp3';
-import failSong from '../sounds/no.wav';
+import successSong from '../assets/sounds/success.mp3';
+import failSong from '../assets/sounds/no.wav';
+import failSong2 from '../assets/sounds/fail.mp3';
+import failSong3 from '../assets/sounds/fail2.wav';
 import { backRoutes } from '../utils/backRoutes';
 import { CircularProgress } from '@material-ui/core';
 import SpeakerIcon from '@material-ui/icons/Speaker';
@@ -104,6 +106,8 @@ export const AudioPage = () => {
 
 	const audioSuccess = useMemo(() => createSound(successSong, soundVolume), [ soundVolume ]);
 	const audioFail = useMemo(() => createSound(failSong, soundVolume), [ soundVolume ]);
+	const audioFail2 = useMemo(() => createSound(failSong2, soundVolume), [ soundVolume ]);
+	const audioFail3 = useMemo(() => createSound(failSong3, soundVolume), [ soundVolume ]);
 	const audioWord = useMemo(() => createSound(`${currentWord.audio}`, wordVolume), [ wordVolume, currentWord ]);
 
 	const fetchWords = useCallback(
