@@ -7,7 +7,8 @@ import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import Table from '../components/table';
-import { Graph } from '../components/graph';
+// import { Graph } from '../components/graph';
+import { Chart } from '../components/chart';
 
 export function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -85,7 +86,14 @@ export default function SimpleTabs() {
         <Table />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <Graph />
+        <Typography variant="h4" className={classes.title}>
+          Прогресс изучения слов по дням
+        </Typography>
+        <Chart />
+        <Typography variant="h4" className={classes.title}>
+          Сколько всего слов вы выучили
+        </Typography>
+        <Chart />
       </TabPanel>
     </div>
   );

@@ -1,10 +1,7 @@
 import React from 'react';
 import { Typography } from '@material-ui/core';
-import AppBar from '@material-ui/core/AppBar';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
 import TabPanel from '../components/statsTabs';
-import { makeStyles, withStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import illustration from '../assets/images/stats.png';
 
 const useStyles = makeStyles({
@@ -40,7 +37,7 @@ export const StatsPage = () => {
         <TabPanel />
       </div>
       <div className={classes.illustration}>
-        <img src={illustration} />
+        <img src={illustration} alt="a man looking at chart" />
       </div>
     </div>
   );
