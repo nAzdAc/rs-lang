@@ -6,7 +6,7 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
-import { Table } from '../components/table';
+import Table from '../components/table';
 import { Graph } from '../components/graph';
 
 export function TabPanel(props) {
@@ -47,6 +47,11 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     backgroundColor: theme.palette.background.paper,
   },
+
+  title: {
+    marginTop: '40px',
+    marginBottom: '20px',
+  },
 }));
 
 export default function SimpleTabs() {
@@ -70,7 +75,13 @@ export default function SimpleTabs() {
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0}>
+        <Typography variant="h4" className={classes.title}>
+          Всего
+        </Typography>
         <Table />
+        <Typography variant="h4" className={classes.title}>
+          Самая длинная серия
+        </Typography>
         <Table />
       </TabPanel>
       <TabPanel value={value} index={1}>

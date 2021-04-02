@@ -5,12 +5,13 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import TabPanel from '../components/statsTabs';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
-import illustration from '../assets/images/project-costs.png';
+import illustration from '../assets/images/stats.png';
 
 const useStyles = makeStyles({
   wrapper: {
     backgroundColor: '#FCFCFF',
     display: 'flex',
+    gap: '1rem',
   },
   content: {
     width: '60%',
@@ -22,6 +23,7 @@ const useStyles = makeStyles({
     display: 'flex',
     alignItems: 'flex-end',
     justifyContent: 'end',
+    paddingBottom: '40px',
   },
   title: {
     marginBottom: '40px',
