@@ -4,7 +4,7 @@ import React from 'react';
 import { BrowserRouter as Router, Switch, Route, withRouter  } from 'react-router-dom';
 import { bookLinks } from './components/routeData';
 import { SettingsPage } from './pages/SettingsPage';
-import { GamesPage } from './pages/GamesPage';
+import GamesPage from './pages/GamesPage';
 import { SprintPage } from './pages/SprintPage';
 import { frontRoutes } from './utils/frontRoutes';
 import { Footer } from './components/Footer';

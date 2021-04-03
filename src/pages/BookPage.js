@@ -1,4 +1,4 @@
-import { NavLink, useHistory, Switch, Route, useRouteMatch } from 'react-router-dom';
+import { useHistory, Switch, Route, useRouteMatch } from 'react-router-dom';
 import { bookLinks } from '../components/routeData';
 
 const RouteComponent = ({ text }) => <div>{text}</div>;
