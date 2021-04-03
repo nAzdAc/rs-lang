@@ -59,14 +59,15 @@ const useStyles = makeStyles((theme) => ({
 export default function WordsPage() {
   let match = useRouteMatch().path;
   let group = match[match.length - 1] - 1;
-  console.log(group)
   const [page, setPage] = useState(1);
   const classes = useStyles(group);
+  
   const fetchUrl = backRoutes.getWordsPage(group, page)
 
   const handlePaginationChange = (e, value) => {
     setPage(value);
   };
+  
 
   return (
     <Container className={classes.container}>
@@ -75,8 +76,8 @@ export default function WordsPage() {
           Difficulty level
         </Typography>
         <LevelButton group={group + 1}></LevelButton>
-      </Box>
-      <WordsCardList difficulty={group} fetchUrl={fetchUrl} infoPanel="CardIcons"></WordsCardList>
+      </Box>  
+      <WordsCardList page={page}  difficulty={group} fetchUrl={fetchUrl} infoPanel="CardIcons"></WordsCardList>
       <Pagination
         page={page}
         className={classes.pagination}

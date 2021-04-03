@@ -37,18 +37,7 @@ export default function CardIcons(props) {
   const classes = useStyles();
   const userId = auth.userId
   const wordId = props.wordId
-
-  const fetchUrl = backRoutes.createUserWord(userId,wordId)
-  const { request } = useHttp();
-  const [wordInfo] = useState({
-    "difficulty": props.difficulty,
-    "optional": {}
-  });
-
-  const saveWord = useCallback(async () => {
-    const data = await request(fetchUrl, "POST",{...wordInfo});
-    console.log(data);
-  }, [fetchUrl, request, wordInfo]);
+  // console.log('difficalty ',props.difficulty)
 
   const audio = new Howl({
 		src: [ `${origin}/${props.audio}`],
@@ -69,15 +58,27 @@ export default function CardIcons(props) {
     audio.play()
   }
   const addWordToDictionary = () =>{
-    console.log(userId,wordId)
-    saveWord()
+    backRoutes.createUserWord({
+      userId: userId,
+      wordId: wordId,
+      word: { "difficulty": "difficult", "optional": {group:props.difficulty, page:props.page, deleted:false} },
+      token: auth.token,
+    })
+  }
+  const addWordToDictionaryDelete = () =>{
+    backRoutes.createUserWord({
+      userId: userId,
+      wordId: wordId,
+      word: { "difficulty": "weak", "optional": {group:props.difficulty, page:props.page, deleted:true} },
+      token: auth.token,
+    })
   }
 
   return (
     <Box className={classes.boxIcons}>
       <PlayCircleFilledIcon onClick={playWordsAudio} className={classes.icons} ></PlayCircleFilledIcon>
       <GradeIcon className={classes.icons} onClick={addWordToDictionary}></GradeIcon>
-      <DeleteIcon className={classes.icons}></DeleteIcon>
+      <DeleteIcon className={classes.icons} onClick={addWordToDictionaryDelete} ></DeleteIcon>
     </Box>
   );
 }

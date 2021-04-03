@@ -11,7 +11,7 @@ const useStyles = makeStyles((theme) => ({
     boxSizing: "border-box",
   },
   item: {
-    height: "100%",
+    minWidth:'360px',
     width: "100%",
   },
   paper: {
@@ -48,6 +48,8 @@ const useStyles = makeStyles((theme) => ({
     objectFit: 'contain',
   },
   conteiner: {
+    display:'flex',
+    flexWrap: 'wrap',
     margin: "0",
     marginTop: "40px",
     justifyContent: "center",
@@ -103,10 +105,8 @@ export default function WordCard(props) {
 
   return (
     <div className={classes.root}>
-      <Grid container spacing={1}>
-        <Grid className={classes.conteiner} container item xs={12} spacing={3}>
-          <FormRow />
-        </Grid>
+      <Grid className={classes.conteiner} container item xs={12} spacing={3}>
+        <FormRow />
       </Grid>
     </div>
   );
