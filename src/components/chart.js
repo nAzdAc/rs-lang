@@ -1,15 +1,5 @@
-import React, { PureComponent } from 'react';
-import {
-  BarChart,
-  Bar,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-} from 'recharts';
+import React from 'react';
+import { BarChart, Bar, XAxis, YAxis } from 'recharts';
 import { data } from '../const/everyDayChart';
 
 export function Chart() {

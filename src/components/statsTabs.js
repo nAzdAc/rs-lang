@@ -9,7 +9,9 @@ import Box from '@material-ui/core/Box';
 import Table from '../components/table';
 // import { Graph } from '../components/graph';
 import { Chart } from '../components/chart';
+import { totalWordsCount } from '../utils/totalWords';
 
+totalWordsCount();
 export function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
