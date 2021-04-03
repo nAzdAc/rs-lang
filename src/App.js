@@ -13,6 +13,9 @@ import SignInPage from './pages/SignInPage'
 import WordsPage from './pages/WordsPage'
 import { AuthContext } from './context/AuthContext';
 import { useAuth } from './hooks/auth.hook';
+import DictionaryPage from './pages/DictionaryPage'
+import BookPage from './pages/BookPage'
+
 
 const RouteComponent = ({ text }) => <div>{text}</div>;
 
@@ -35,7 +38,7 @@ function App() {
 					<Header />
 					<Switch>
 						<Route path="/book">
-							<RouteComponent text="Book" />
+						<BookPage></BookPage>
 						</Route>
 						{bookLinks.map((link, index) => (
 							<Route path={link.to} key={index}>
@@ -61,7 +64,7 @@ function App() {
 								<SprintPage />
 							</Route>
 						<Route path="/dictionary">
-							<RouteComponent text="Словарь" />
+							<DictionaryPage></DictionaryPage>
 						</Route>
 						<Route path="/words">
 							<WordsPage/>

@@ -9,6 +9,7 @@ const useStyles = makeStyles({
     },
   },
   button: {
+    marginRight: "40px",
     width:'72px',
     height:'72px',
     fontSize: '52px',
