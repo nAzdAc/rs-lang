@@ -7,11 +7,11 @@ import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import Table from '../components/table';
-// import { Graph } from '../components/graph';
 import { Chart } from '../components/chart';
 import { totalWordsCount } from '../utils/totalWords';
+import { data } from '../const/everyDayChart';
 
-totalWordsCount();
+const totalWords = totalWordsCount(data);
 export function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -91,11 +91,11 @@ export default function SimpleTabs() {
         <Typography variant="h4" className={classes.title}>
           Прогресс изучения слов по дням
         </Typography>
-        <Chart />
+        <Chart data={data} />
         <Typography variant="h4" className={classes.title}>
           Сколько всего слов вы выучили
         </Typography>
-        <Chart />
+        <Chart data={totalWords} />
       </TabPanel>
     </div>
   );
