@@ -1,7 +1,7 @@
 import './App.css';
 import Header from './components/Header';
 import React from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, withRouter  } from 'react-router-dom';
 import { bookLinks } from './components/routeData';
 import { SettingsPage } from './pages/SettingsPage';
 import { GamesPage } from './pages/GamesPage';
@@ -11,6 +11,7 @@ import { Footer } from './components/Footer';
 import SignUpPage from './pages/SignUpPage';
 import SignInPage from './pages/SignInPage';
 import ManePage from './pages/MainPage';
+import BookPage from './pages/BookPage';
 
 const RouteComponent = ({ text }) => <div>{text}</div>;
 
@@ -23,14 +24,9 @@ function App() {
           <Route exact path="/">
             <ManePage/>
           </Route>
-          <Route path="/book">
-            <RouteComponent text="Book" />
+          <Route path='/book'>
+            <BookPage/>
           </Route>
-          {bookLinks.map((link, index) => (
-            <Route path={link.to} key={index}>
-              <RouteComponent text={link.text} />
-            </Route>
-          ))}
           <Route path="/games">
             <GamesPage />
           </Route>

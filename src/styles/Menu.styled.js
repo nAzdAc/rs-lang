@@ -7,11 +7,36 @@ export const MenuStyled = styled.nav`
   align-items: center;
   color: #FFFFFF;
 
+  @media (max-width: 800px) {
+    width: 50%;
+  }
+
   > ul {
     display: flex;
+
+    & > .MuiListItem-gutters {
+      @media (max-width: 800px) {
+        padding: 6px;
+      }
+    }
   }
 
   > ul > div {
     display: flex;
+
+    & > .MuiButton-root {
+      min-width: 20px;
+    }
+
+    & > .MuiButton-text {
+      padding: 0;
+      margin-right: 10px;
+    }
+
+    & > .MuiListItem-gutters {
+      @media (max-width: 800px) {
+        padding: 6px;
+      }
+    }
   }
 `;

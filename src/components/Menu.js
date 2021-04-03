@@ -1,7 +1,7 @@
 import React from 'react';
 import { MenuStyled } from '../styles/Menu.styled';
 import List from '@material-ui/core/List';
-import { ExpandLess, ExpandMore } from '@material-ui/icons';
+import { ExpandLess, ExpandMore, MenuBook, Settings, Bookmarks, VideogameAsset, ShowChart } from '@material-ui/icons';
 import Button from '@material-ui/core/Button';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Grow from '@material-ui/core/Grow';
@@ -13,7 +13,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import { bookLinks, gamesLinks } from './routeData';
-import SettingsIcon from '@material-ui/icons/Settings';
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles({
   settings: {
@@ -32,12 +32,23 @@ const useStyles = makeStyles({
       background: '#00D9CE',
     },
   },
+  full: {
+    '@media (max-width: 800px)': {
+      display: 'none',
+    }
+  },
+  icon: {
+    '@media (min-width: 800px)': {
+      display: 'none',
+    }
+  }
 });
 
-const NavItem = ({ to, text, onClick, handleClose, Icon }) => {
+const NavItem = ({ to, text, onClick, handleClose, Icon, navClass }) => {
   const classes = useStyles();
   return (
     <MenuItem
+      className={navClass}
       component={RouterLink}
       to={to}
       onClick={onClick ? (e) => handleClose(e, onClick) : null}
@@ -59,6 +70,7 @@ const Menu = () => {
   const anchorRefBook = React.useRef(null);
   const anchorRefGames = React.useRef(null);
   const classes = useStyles();
+  const { location : { pathname } } = useHistory();
 
   const handleClickBook = () => {
     setOpenBook((prevOpen) => !prevOpen);
@@ -85,10 +97,12 @@ const Menu = () => {
 
   return (
     <>
+    {console.log(pathname)}
       <MenuStyled>
         <List>
           <div>
-            <NavItem to="/book" text="Книга" />
+            <NavItem to="/book" text="Книга" navClass={classes.full}/>
+            <NavItem to="/book" Icon={MenuBook} navClass={classes.icon}/>
             <Button
               ref={anchorRefBook}
               aria-controls={openBook ? 'menu-list-grow' : undefined}
@@ -129,7 +143,7 @@ const Menu = () => {
                         {bookLinks.map((link, i) => (
                           <NavItem
                             key={i}
-                            to={link.to}
+                            to={`/book${link.to}`}
                             text={link.text}
                             onClick={handleClickBook}
                             handleClose={handleClose}
@@ -143,7 +157,8 @@ const Menu = () => {
             </Popper>
           </div>
           <div>
-            <NavItem to="/games" text="Игры" />
+            <NavItem to="/games" text="Игры" navClass={classes.full}/>
+            <NavItem to="/games" Icon={VideogameAsset} navClass={classes.icon}/>
             <Button
               ref={anchorRefGames}
               aria-controls={openGames ? 'menu-list-grow' : undefined}
@@ -183,7 +198,7 @@ const Menu = () => {
                         {gamesLinks.map((link, i) => (
                           <NavItem
                             key={i}
-                            to={link.to}
+                            to={`/games${link.to}`}
                             text={link.text}
                             onClick={handleClickGames}
                             handleClose={handleClose}
@@ -196,9 +211,11 @@ const Menu = () => {
               )}
             </Popper>
           </div>
-          <NavItem to="/dictionary" text="Словарь" />
-          <NavItem to="/stats" text="Статистика" />
-          <NavItem to="/settings" Icon={SettingsIcon} />
+          <NavItem to="/dictionary" text="Словарь" navClass={classes.full}/>
+          <NavItem to="/dictionary" Icon={Bookmarks} navClass={classes.icon}/>
+          <NavItem to="/stats" text="Статистика" navClass={classes.full}/>
+          <NavItem to="/stats" Icon={ShowChart} navClass={classes.icon}/>
+          <NavItem to="/settings" Icon={Settings} />
         </List>
       </MenuStyled>
       <RouterLink to="/signin">

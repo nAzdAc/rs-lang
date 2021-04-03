@@ -7,37 +7,64 @@ export const useStyles = makeStyles({
     'font-size': '96px',
     'line-height': '112px',
     'font-weight': '400',
-    color: '#5600E8'
+    color: '#5600E8',
+
+    '@media (max-width: 800px)': {
+      'font-size': '60px',
+    }
 	},
   title: {
     margin: '20px',
+
+    '@media (max-width: 800px)': {
+      'font-size': '30px',
+    }
   },
   text: {
     margin: '20px',
   },
   textImgWrapper: {
     display: 'flex',
-    gap: '20%'
+    gap: '20%',
+
+    '@media (max-width: 800px)': {
+      flexDirection: 'column',
+      gap: '20px',
+    }
   },
   mainTextImgWrapper: {
     alignSelf: 'flex-end',
   },
   advantagesSection: {
     background: '#C8FFF4',
-    padding: '40px 120px 60px 120px',
+    padding: '30px 120px 30px 120px',
 
     '& > h2': {
       margin: '0 0 20px 0',
+    },
+
+    '@media (max-width: 960px)': {
+      padding: '20px 80px 30px 80px',
+    },
+
+    '@media (max-width: 580px)': {
+      padding: '20px 35px 30px 35px',
     }
   },
   advantagesWrapper: {
     display: 'flex',
     justifyContent: 'space-between',
+
+    '@media (max-width: 960px)': {
+      flexWrap: 'wrap',
+      gap: '20px',
+    }
   },
   advantage: {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+    minWidth: '200px',
   },
   advantageImgWrapper: {
     display: 'flex',
