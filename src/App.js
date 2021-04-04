@@ -6,6 +6,7 @@ import { bookLinks } from './components/routeData';
 import { SettingsPage } from './pages/SettingsPage';
 import GamesPage from './pages/GamesPage';
 import { SprintPage } from './pages/SprintPage';
+import { StatsPage } from './pages/StatsPage';
 import { frontRoutes } from './utils/frontRoutes';
 import { Footer } from './components/Footer';
 import SignUpPage from './pages/SignUpPage';
@@ -16,6 +17,7 @@ import BookPage from './pages/BookPage';
 const RouteComponent = ({ text }) => <div>{text}</div>;
 
 function App() {
+
 	return (
 		<Router>
 			<div className="App">
@@ -46,12 +48,15 @@ function App() {
             <RouteComponent text="Словарь" />
           </Route>
           <Route path="/stats">
-            <RouteComponent text="Статистика" />
+
+            <StatsPage />
+
           </Route>
           <Route path="/settings">
             <SettingsPage />
           </Route>
           <Route path="/signin">
+
             <SignInPage/>
           </Route>
           <Route path="/signup">
