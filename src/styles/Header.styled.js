@@ -18,9 +18,13 @@ export const HeaderStyled = styled.header`
     & > p {
       font-family: 'Permanent Marker', cursive;
       font-size: 48px;
-      line-height: 56px;
+      line-height: 80px;
       color: #F2F2F2;
       margin: 0;
+
+      @media (max-width: 800px) {
+        font-size: 30px;
+      }
     }
   }
 `;

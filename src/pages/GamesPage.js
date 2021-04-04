@@ -4,6 +4,8 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import { gameCardsContent } from '../utils/initConsts';
+import { useHistory, Switch, Route, useRouteMatch } from 'react-router-dom';
+import { SprintPage } from './SprintPage';
 
 const useStyles = makeStyles({
 	root: {
@@ -41,7 +43,9 @@ const useStyles = makeStyles({
 	}
 });
 
-export const GamesPage = () => {
+const RouteComponent = ({ text }) => <div>{text}</div>;
+
+const Games = () => {
 	const classes = useStyles();
 
 	return (
@@ -58,7 +62,7 @@ export const GamesPage = () => {
 						<Typography variant="subtitle1" className={classes.title}>
 							{card.todo}
 						</Typography>
-						<NavLink style={{ textDecoration: 'none' }} to={card.to}>
+						<NavLink style={{ textDecoration: 'none' }} to={`/games${card.to}`}>
 							<Button variant="contained" size="medium" className={classes.button}>
 								Начать
 							</Button>
@@ -69,3 +73,31 @@ export const GamesPage = () => {
 		</div>
 	);
 };
+
+const GamesPage = () => {
+  const { location : { pathname } } = useHistory();
+  const isGamesRoute = pathname.slice(1).split('/').length === 1;
+  const { path } = useRouteMatch();
+
+  return (
+    <>
+      {isGamesRoute ? <Games /> : null}
+      <Switch>
+        <Route path={`${path}/savanna`}>
+          <RouteComponent text='Саванна' />
+        </Route>
+        <Route path={`${path}/audio`}>
+          <RouteComponent text='Аудиовызов' />
+        </Route>
+        <Route path={`${path}/sprint`}>
+          <SprintPage/>
+        </Route>
+        <Route path={`${path}/match`}>
+          <RouteComponent text='Мемори' />
+        </Route>
+      </Switch>
+    </>
+  );
+}
+
+export default GamesPage;
