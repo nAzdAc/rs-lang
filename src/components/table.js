@@ -18,7 +18,10 @@ function createData(name, mistakes, totalWords) {
   return { name, mistakes, totalWords };
 }
 
-const rows = [createData('Сегодня', 159, 6.0), createData('За все время', 159)];
+const rows = [
+  createData('Сегодня', '51%', 6),
+  createData('За все время', '19%', 45),
+];
 
 export default function DenseTable() {
   const classes = useStyles();
