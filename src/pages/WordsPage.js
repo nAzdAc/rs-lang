@@ -84,7 +84,6 @@ export default function WordsPage() {
         <WordsCardList page={page}  difficulty={group} fetchUrl={fetchUrl} infoPanel="CardIcons"></WordsCardList>
         <Route>
           {({ location }) => {
-            {/* console.log(location.pathname) */}
             {/* const query = new URLSearchParams(location.search);
             const page = parseInt(query.get('page') || '1', 10); */}
             return (

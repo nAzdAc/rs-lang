@@ -4,6 +4,7 @@ import WordCard from "./WordCard";
 import "fontsource-roboto";
 import CardIcons from "./CardIcons";
 import { backRoutes } from "../utils/backRoutes";
+import {regexpForText} from "../utils/initConsts"
 
 
 export default function WordsCardList({userWords, difficulty, fetchUrl, infoPanel}) {
@@ -42,11 +43,11 @@ export default function WordsCardList({userWords, difficulty, fetchUrl, infoPane
         key={item.id}
         word={item.word}
         image={item.image}
-        textExample={item.textExample}
+        textExample={item.textExample.replace(regexpForText, '')}
         textExampleTranslate={item.textExampleTranslate}
         transcription={item.transcription}
         wordTranslate={item.wordTranslate}
-        textMeaning={item.textMeaning}
+        textMeaning={item.textMeaning.replace(regexpForText, '')}
         textMeaningTranslate={item.textMeaningTranslate}
         infoPanel={
           infoPanel === 'CardIcons'? <CardIcons difficulty={difficulty}  wordId={item.id} audio={item.audio} audioExample={item.audioExample} audioMeaning={item.audioMeaning}></CardIcons>:null
