@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { SettingsPage } from './pages/SettingsPage';
 import GamesPage from './pages/GamesPage';
 import { SprintPage } from './pages/SprintPage';
+import { StatsPage } from './pages/StatsPage';
 import { frontRoutes } from './utils/frontRoutes';
 import { Footer } from './components/Footer';
 import SignUpPage from './pages/SignUpPage'
@@ -61,7 +62,7 @@ function App() {
 							<DictionaryPage></DictionaryPage>
 						</Route>
 						<Route path="/stats">
-							<RouteComponent text="Статистика" />
+						<StatsPage />
 						</Route>
 						<Route path="/settings">
 							<SettingsPage />
