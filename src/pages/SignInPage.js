@@ -94,13 +94,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SignInPage() {
-	const { request } = useHttp();
-	const auth = useContext(AuthContext);
-	const classes = useStyles();
-	const [ form, setForm ] = useState({
-		email: '',
-		password: ''
-	});
+  const {request} = useHttp();
+  const auth = useContext(AuthContext);
+  const classes = useStyles();
+  const [form, setForm] = useState({
+    email: "",
+    password: "",
+  });
 
 	const [ values, setValues ] = React.useState({
 		password: '',

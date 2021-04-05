@@ -100,7 +100,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SignUpPage() {
-  const { request } = useHttp();
+  const {request} = useHttp();
   const classes = useStyles();
   const [form, setForm] = useState({
     name: "",

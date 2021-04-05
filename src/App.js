@@ -15,55 +15,84 @@ import SignUpPage from './pages/SignUpPage';
 import { SavannaPage } from './pages/SavannaPage';
 import ManePage from './pages/MainPage';
 import BookPage from './pages/BookPage';
+import WordsPage from './pages/WordsPage';
+import { AuthContext } from './context/AuthContext';
+import { useAuth } from './hooks/auth.hook';
+import DictionaryPage from './pages/DictionaryPage';
+import { bookLinks } from './components/routeData';
 
 const RouteComponent = ({ text }) => <div>{text}</div>;
 
 function App() {
+	const { token, login, logout, userId, userName } = useAuth();
+	const isAuthenticated = !!token;
 	return (
-		<Router>
-			<div className="App">
-				<Header />
-				<Switch>
+		<AuthContext.Provider
+			value={{
+				token,
+				login,
+				logout,
+				userId,
+				isAuthenticated,
+				userName
+			}}
+		>
+			<Router>
+				<div className="App">
+					<Header />
+					<Switch>
 					<Route exact path="/">
 						<ManePage />
 					</Route>
-					<Route path={frontRoutes.book}>
-						<BookPage />
-					</Route>
-					<Route path={frontRoutes.games}>
-						<GamesPage />
-					</Route>
-					<Route path={frontRoutes.savanna}>
-						<SavannaPage />
-					</Route>
-					<Route path={frontRoutes.audio}>
-						<AudioPage />
-					</Route>
-					<Route path={frontRoutes.savanna}>
-						<SprintPage />
-					</Route>
-					<Route path={frontRoutes.match}>
-						<MatchPage />
-					</Route>
-					<Route path={frontRoutes.dictionary}>
-						<RouteComponent text="Словарь" />
-					</Route>
-					<Route path={frontRoutes.stats}>
-						<StatsPage />
-					</Route>
-					<Route path={frontRoutes.settings}>
-						<SettingsPage />
-					</Route>
-					<Route path={frontRoutes.signIn}>
-						<SignInPage />
-					</Route>
-					<Route path={frontRoutes.signUp}>
-						<SignUpPage />
-					</Route>
-				</Switch>
-				<Footer />
-			</div>
-		</Router>
+						<Route path={frontRoutes.book}>
+							<BookPage />
+						</Route>
+						{bookLinks.map((link, index) => (
+							<Route path={link.to} key={index}>
+								<WordsPage />
+							</Route>
+						))}
+						<Route path="/book/level_1">
+							<RouteComponent text="level" />
+						</Route>
+						<Route path={frontRoutes.games}>
+							<GamesPage />
+						</Route>
+						<Route path={frontRoutes.savanna}>
+							<SavannaPage />
+						</Route>
+						<Route path={frontRoutes.audio}>
+							<AudioPage />
+						</Route>
+						<Route path={frontRoutes.sprint}>
+							<SprintPage />
+						</Route>
+						<Route path={frontRoutes.match}>
+							<MatchPage />
+						</Route>
+						<Route path={frontRoutes.dictionary}>
+							<DictionaryPage />
+						</Route>
+						<Route path={frontRoutes.words}>
+							<WordsPage />
+						</Route>
+						<Route path={frontRoutes.stats}>
+							<StatsPage />
+						</Route>
+						<Route path={frontRoutes.settings}>
+							<SettingsPage />
+						</Route>
+						<Route path={frontRoutes.signIn}>
+							<SignInPage />
+						</Route>
+						<Route path={frontRoutes.signUp}>
+							<SignUpPage />
+						</Route>
+					</Switch>
+					<Footer />
+				</div>
+			</Router>
+		</AuthContext.Provider>
 	);
 }
 

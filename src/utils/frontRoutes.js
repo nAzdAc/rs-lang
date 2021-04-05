@@ -10,4 +10,5 @@ export const frontRoutes = {
   dictionary: '/dictionary',
   signIn: '/signin',
   signUp: '/signup',
+  words:'/words'
 };
