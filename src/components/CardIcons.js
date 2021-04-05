@@ -1,6 +1,6 @@
 import React,{useContext, useCallback, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { origin } from "../utils/backRoutes";
+import { originURL } from "../utils/backRoutes";
 import Box from "@material-ui/core/Box";
 import DeleteIcon from '@material-ui/icons/Delete';
 import GradeIcon from '@material-ui/icons/Grade';
@@ -40,14 +40,14 @@ export default function CardIcons(props) {
   // console.log('difficalty ',props.difficulty)
 
   const audio = new Howl({
-		src: [ `${origin}/${props.audio}`],
+		src: [ `${originURL}/${props.audio}`],
 		// volume: 0.001 * volume
     onend: function() {
       new Howl({
-      src: [`${origin}/${props.audioMeaning}`],
+      src: [`${originURL}/${props.audioMeaning}`],
       onend: function() {
         new Howl({
-          src: [`${origin}/${props.audioExample}`],
+          src: [`${originURL}/${props.audioExample}`],
         }).play()
       }
     }).play()

@@ -1,10 +1,10 @@
-// export const origin = 'http://localhost:8080';
+// export const originURL = 'http://localhost:8080';
 export const originURL = 'https://react-learnwords.herokuapp.com';
 
 //  ?group=1&page=1
 
 
-const token = JSON.parse(localStorage.getItem('userData')).token;
+const token = (JSON.parse(localStorage.getItem('userData')).token) || '';
 
 const getRoute = (trailing) => `${originURL}/${trailing}`;
 
@@ -14,11 +14,11 @@ export const backRoutes = {
 	upload: getRoute('upload'),
 	words: getRoute('words'),
 	getWordsPage(group=0,page=0) {
-		return `${origin}/words?group=${group}&page=${page}`;
+		return `${originURL}/words?group=${group}&page=${page}`;
 	},
 	createUserWord : async ({ userId, wordId, word, token }) => {
 		console.log(token)
-		const rawResponse = await fetch(`${origin}/users/${userId}/words/${wordId}`, {
+		const rawResponse = await fetch(`${originURL}/users/${userId}/words/${wordId}`, {
 			method: 'POST',
 			withCredentials: true,
 			headers: {
@@ -33,7 +33,7 @@ export const backRoutes = {
 		console.log(content);
 	},
 	getUserWord : async ({ userId, wordId }) => {
-		const rawResponse = await fetch(`${origin}/users/${userId}/words/${wordId}`, {
+		const rawResponse = await fetch(`${originURL}/users/${userId}/words/${wordId}`, {
 			method: 'GET',
 			withCredentials: true,
 			headers: {
@@ -47,7 +47,7 @@ export const backRoutes = {
 	},
 	getUserWords : async ({ userId,token}) => {
 		try{
-			const rawResponse = await fetch(`${origin}/users/${userId}/words`, {
+			const rawResponse = await fetch(`${originURL}/users/${userId}/words`, {
 				method: 'GET',
 				withCredentials: true,
 				headers: {
@@ -63,6 +63,6 @@ export const backRoutes = {
 		
 	},
 	getWord(wordId) {
-		return `${origin}/words/${wordId}`;
+		return `${originURL}/words/${wordId}`;
 	},
 };

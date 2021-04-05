@@ -2,7 +2,7 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
-import { origin } from "../utils/backRoutes";
+import { originURL } from "../utils/backRoutes";
 import Box from "@material-ui/core/Box";
 
 const useStyles = makeStyles((theme) => ({
@@ -70,7 +70,7 @@ export default function WordCard(props) {
           <Paper className={classes.paper}>
             <img
               className={classes.img}
-              src={`${origin}/${props.image}`}
+              src={`${originURL}/${props.image}`}
               alt="img"
             ></img>
           </Paper>

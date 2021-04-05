@@ -51,12 +51,12 @@ export function WordsPage() {
         Select difficulty
       </Typography>
       <Box className={classes.buttonBox}>
-        <NavLink className={classes.link}  to={'/level_1'}><LevelButton group={1}></LevelButton></NavLink>
-        <NavLink className={classes.link}  to={'/level_2'}><LevelButton group={2}></LevelButton></NavLink>
-        <NavLink className={classes.link}  to={'/level_3'}><LevelButton group={3}></LevelButton></NavLink>
-        <NavLink className={classes.link}  to={'/level_4'}><LevelButton group={4}></LevelButton></NavLink>
-        <NavLink className={classes.link}  to={'/level_5'}><LevelButton group={5}></LevelButton></NavLink>
-        <NavLink className={classes.link}  to={'/level_6'}><LevelButton group={6}></LevelButton></NavLink>
+        <NavLink className={classes.link}  to={'/level_1'}><LevelButton group={1} /></NavLink>
+        <NavLink className={classes.link}  to={'/level_2'}><LevelButton group={2} /></NavLink>
+        <NavLink className={classes.link}  to={'/level_3'}><LevelButton group={3} /></NavLink>
+        <NavLink className={classes.link}  to={'/level_4'}><LevelButton group={4} /></NavLink>
+        <NavLink className={classes.link}  to={'/level_5'}><LevelButton group={5} /></NavLink>
+        <NavLink className={classes.link}  to={'/level_6'}><LevelButton group={6} /></NavLink>
       </Box>
     </Container>
   );
