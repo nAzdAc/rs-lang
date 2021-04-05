@@ -8,6 +8,7 @@ import defeatSong from '../assets/sounds/defeat.mp3';
 import { LOCAL_STORAGE_KEY } from '../utils/storageKey';
 import { INIT_CONSTS } from '../utils/initConsts';
 import { createSound } from '../utils/helpers';
+import { SavannaStatsCard } from './SavannaStatsCard';
 
 const useStyles = makeStyles({
 	root: {
@@ -15,7 +16,8 @@ const useStyles = makeStyles({
 		flexDirection: 'column',
 		flexWrap: 'wrap',
 		alignItems: 'center',
-		paddingTop: '30px'
+		paddingTop: '30px',
+		width: '100%',
 	},
 	title: {
 		marginBottom: '20px'
@@ -40,27 +42,40 @@ const useStyles = makeStyles({
 	rowItem: {
 		marginRight: '10px'
 	},
-	speaker: {
-		display: 'inline-block',
-		marginRight: '10px'
-	},
-	goodButton: {
+	
+	button: {
 		marginRight: '10px',
-		borderRadius: '5px',
 		border: 'none',
+		outline: 'none',
 		cursor: 'pointer',
 		fontWeight: 'bold',
-		width: '20px',
-		height: '30px',
-		background: '#01A299',
+		width: '30px',
+		height: '40px',
+		background: 'white',
 		color: '#FFF',
+	},
+	goodSpeaker: {
+		cursor: 'pointer',
+		color: '#01A299',
 		'&:hover': {
-			background: '#00D9CE'
+			color: '#00D9CE'
 		}
-	}
+	},
+	badSpeaker: {
+		cursor: 'pointer',
+		color: '#f50057',
+		'&:hover': {
+			color: '#f74383'
+		}
+	},
+	cardsContainer: {
+		display: 'flex',
+		flexWrap: 'wrap',
+		
+	},
 });
 
-export const GameStatsPage = ({ correctAnswers, failAnswers, lifes }) => {
+export const GameStats = ({ correctAnswers, failAnswers, lifes }) => {
 	const classes = useStyles();
 	const soundVolume = useMemo(() => localStorage.getItem(LOCAL_STORAGE_KEY.soundVolume) || INIT_CONSTS.soundVolume, []);
 	const wordVolume = useMemo(() => localStorage.getItem(LOCAL_STORAGE_KEY.wordVolume) || INIT_CONSTS.wordVolume, []);
@@ -71,7 +86,8 @@ export const GameStatsPage = ({ correctAnswers, failAnswers, lifes }) => {
 
 	useEffect(
 		() => {
-			if (!lifes) {
+			console.log(lifes)
+			if (lifes === 0) {
 				audioDefeat.play();
 			} else {
 				if (failAnswers.length < 6) {
@@ -106,10 +122,14 @@ export const GameStatsPage = ({ correctAnswers, failAnswers, lifes }) => {
 				{correctAnswers &&
 					correctAnswers.map((item, index) => {
 						return (
-							<div key={index} className={classes.row}>
+							<React.Fragment>
+								{item.src ? (
+									<SavannaStatsCard item={item} fail={false} />
+								) : (
+									<div key={index} className={classes.row}>
 								{item.audio ? (
-									<button key={item.audio} value={item.audio} onClick={repeat} className={classes.goodButton}>
-										<SpeakerIcon />
+									<button key={item.audio} value={item.audio} onClick={repeat} className={classes.button}>
+										<SpeakerIcon key={item.audio} value={item.audio} onClick={repeat} className={classes.goodSpeaker} />
 									</button>
 								) : (
 									''
@@ -136,6 +156,8 @@ export const GameStatsPage = ({ correctAnswers, failAnswers, lifes }) => {
 									''
 								)}
 							</div>
+								)}
+							</React.Fragment>
 						);
 					})}
 			</div>
@@ -148,34 +170,42 @@ export const GameStatsPage = ({ correctAnswers, failAnswers, lifes }) => {
 				{failAnswers &&
 					failAnswers.map((item, index) => {
 						return (
-							<div key={index} className={classes.row}>
+							<React.Fragment>
+								{item.src ? (
+										<SavannaStatsCard item={item} fail={true} />
+								) : (
+									<div key={index} className={classes.row}>
 								{item.audio ? (
-									<button key={item.audio} value={item.audio} onClick={repeat} className={classes.goodButton} />
+									<button key={item.audio} value={item.audio} onClick={repeat} className={classes.button}>
+										<SpeakerIcon key={item.audio} value={item.audio} onClick={repeat} className={classes.badSpeaker} />
+									</button>
 								) : (
 									''
 								)}
 								{item.transcription ? (
-									<Typography color="secondary" className={classes.rowItem} key={item.transcription} variant="h6">
+									<Typography className={classes.rowItem} key={item.transcription} variant="h6">
 										{item.transcription}
 									</Typography>
 								) : (
 									''
 								)}
 								{item.english ? (
-									<Typography color="secondary" className={classes.rowItem} key={item.english} variant="h6">
+									<Typography className={classes.rowItem} key={item.english} variant="h6">
 										{`${item.english} - `}
 									</Typography>
 								) : (
 									''
 								)}
 								{item.russian ? (
-									<Typography color="secondary" key={item.russian} variant="h6">
+									<Typography key={item.russian} variant="h6">
 										{item.russian}
 									</Typography>
 								) : (
 									''
 								)}
 							</div>
+								)}
+							</React.Fragment>
 						);
 					})}
 			</div>

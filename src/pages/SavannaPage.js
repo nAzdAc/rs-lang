@@ -1,28 +1,22 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Typography from '@material-ui/core/Typography';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import Rating from '@material-ui/lab/Rating';
-import { makeStyles, withStyles } from '@material-ui/core/styles';
+import FullscreenIcon from '@material-ui/icons/Fullscreen';
+import FullscreenExitIcon from '@material-ui/icons/FullscreenExit';
+import { makeStyles } from '@material-ui/core/styles';
 import { LOCAL_STORAGE_KEY } from '../utils/storageKey';
 import { INIT_CONSTS } from '../utils/initConsts';
 import successSong from '../assets/sounds/success.mp3';
-import failSong from '../assets/sounds/no.wav';
 import failSong2 from '../assets/sounds/fail.mp3';
-import failSong3 from '../assets/sounds/fail2.wav';
 import fonSong from '../assets/sounds/fon.mp3';
 import { backRoutes } from '../utils/backRoutes';
-import { Box, CircularProgress } from '@material-ui/core';
+import { CircularProgress } from '@material-ui/core';
 import { createSound, shuffleAllElements } from '../utils/helpers';
-import { GameStatsPage } from './GameStatsPage';
+import { GameStats } from '../components/GameStats';
 import { useHttp } from '../hooks/http.hook';
-import classNames from 'classnames/bind';
 import { Transition } from 'react-transition-group';
+import { toggleScreen } from '../utils/fullScreen';
+import { LifesInGames } from '../components/LifesInGames'
 
-const StyledRating = withStyles({
-	iconFilled: {
-		color: '#ff6d75'
-	}
-})(Rating);
 
 const useStyles = makeStyles({
 	root: {
@@ -38,10 +32,12 @@ const useStyles = makeStyles({
 		flexWrap: 'wrap',
 		alignItems: 'center',
 		justifyContent: 'space-between',
-		padding: '60px 0px 40px 0px'
+		background: 'white',
+		position: 'relative',
 	},
 	heart: {
-		fontSize: '2.5rem'
+		fontSize: '50px',
+		color: 'red'
 	},
 	contentWrap: {
 		width: '100%',
@@ -56,7 +52,7 @@ const useStyles = makeStyles({
 		flexWrap: 'wrap',
 		alignItems: 'center',
 		justifyContent: 'space-around',
-		marginBottom: '50px'
+		marginBottom: '30px'
 	},
 	button: {
 		marginRight: '10px',
@@ -92,12 +88,43 @@ const useStyles = makeStyles({
 		position: 'absolute',
 		top: '50%',
 		left: '50%'
+	},
+	fullScreenBtn: {
+		position: 'absolute',
+		right: '0',
+		bottom: '0',
+		border: 'none',
+		outline: 'none',
+		cursor: 'pointer',
+		fontWeight: 'bold',
+		width: '50px',
+		height: '50px',
+		background: 'white',
+		color: '#FFF'
+	},
+	fullScreenIcon: {
+		cursor: 'pointer',
+		fontSize: '50px',
+		color: '#01A299',
+		'&:hover': {
+			color: '#00D9CE'
+		}
 	}
 });
 
+const keyCodeArray = {
+	top1: 49,
+	top2: 50,
+	top3: 51,
+	top4: 52,
+	num1: 35,
+	num2: 40,
+	num3: 34,
+	num4: 37
+};
+
 export const SavannaPage = () => {
 	const classes = useStyles();
-	const styles = classNames.bind(classes);
 	const { request } = useHttp();
 	const soundVolume = useMemo(() => localStorage.getItem(LOCAL_STORAGE_KEY.soundVolume) || INIT_CONSTS.soundVolume, []);
 	const musicVolume = useMemo(() => localStorage.getItem(LOCAL_STORAGE_KEY.musicVolume) || INIT_CONSTS.musicVolume, []);
@@ -109,22 +136,18 @@ export const SavannaPage = () => {
 	const [ wordsArray, setWordsArray ] = useState([]);
 	const [ fourButtons, setFourButtons ] = useState([]);
 	const [ lifes, setLifes ] = useState(5);
-	const [ fail, setFail ] = useState(false);
-	const [ correct, setCorrect ] = useState(false);
-	const [ slide, setSlide ] = useState(false);
 	const [ block, setBlock ] = useState(true);
-	const buttonStyles = styles('button');
 	const audioSuccess = useMemo(() => createSound(successSong, soundVolume), [ soundVolume ]);
-	const audioFail = useMemo(() => createSound(failSong, soundVolume), [ soundVolume ]);
 	const audioFail2 = useMemo(() => createSound(failSong2, soundVolume), [ soundVolume ]);
-	const audioFail3 = useMemo(() => createSound(failSong3, soundVolume), [ soundVolume ]);
 	const audioFon = useMemo(() => createSound(fonSong, musicVolume * 0.1, 1, true), [ musicVolume ]);
 	const four = useRef([]);
+	const [ fullScreen, setFullScreen ] = useState(false);
+	const gameBoard = useRef();
 
 	const fetchWords = useCallback(
 		async () => {
 			try {
-				const data = await request(backRoutes.words, 'GET');
+				const data = await request(`${backRoutes.words}?group=0&page=5`, 'GET');
 				const arr = data.map((item) => {
 					return { english: item.word, russian: item.wordTranslate };
 				});
@@ -139,6 +162,55 @@ export const SavannaPage = () => {
 		},
 		[ request ]
 	);
+
+	const answer = useCallback(
+		(value, click) => {
+			if (block || endGame || !value) return;
+			if (click) {
+				if (value === currentWord.english) {
+					setCorrectAnswers((prev) => [ ...prev, currentWord ]);
+					audioSuccess.play();
+					const goodButton = four.current.find((button) => button.value === value);
+					goodButton.classList.add(classes.goodButton);
+					setBlock(true);
+					setTimeout(() => {
+						goodButton.classList.remove(classes.goodButton);
+						setCurrentNumber((prev) => prev + 1);
+						setBlock(false);
+					}, 2000);
+				} else {
+					setFailAnswers((prev) => [ ...prev, currentWord ]);
+					audioFail2.play();
+					setLifes((prev) => prev - 1);
+					const goodButton = four.current.find((button) => button.value === currentWord.english);
+					const badButton = four.current.find((button) => button.value === value);
+					goodButton.classList.add(classes.goodButton);
+					badButton.classList.add(classes.badButton);
+					setBlock(true);
+					setTimeout(() => {
+						goodButton.classList.remove(classes.goodButton);
+						badButton.classList.remove(classes.badButton);
+						setCurrentNumber((prev) => prev + 1);
+						setBlock(false);
+					}, 2000);
+				}
+			} else {
+				setFailAnswers((prev) => [ ...prev, currentWord ]);
+				audioFail2.play();
+				setLifes((prev) => prev - 1);
+				const goodButton = four.current.find((button) => button.value === value);
+				goodButton.classList.add(classes.goodButton);
+				setBlock(true);
+				setTimeout(() => {
+					goodButton.classList.remove(classes.goodButton);
+					setCurrentNumber((prev) => prev + 1);
+					setBlock(false);
+				}, 2000);
+			}
+		},
+		[ audioFail2, audioSuccess, block, classes.badButton, classes.goodButton, currentWord, endGame ]
+	);
+
 	useEffect(
 		() => {
 			fetchWords();
@@ -166,6 +238,9 @@ export const SavannaPage = () => {
 					audioFon.stop();
 				}, 2000);
 			}
+			return () => {
+				clearTimeout();
+			};
 		},
 		[ wordsArray, currentNumber, audioFon, lifes ]
 	);
@@ -181,129 +256,89 @@ export const SavannaPage = () => {
 
 	useEffect(
 		() => {
-			if (wordsArray.length && currentNumber < wordsArray.length) {
-				const arr = wordsArray.filter((item) => item.english !== currentWord.english).sort(shuffleAllElements);
+			if (wordsArray.length && currentNumber < wordsArray.length && currentWord) {
+				const arr = wordsArray.filter((word) => word.english !== currentWord.english).sort(shuffleAllElements);
 				arr.unshift(currentWord);
 				const fourArr = arr.slice(0, 4);
 				fourArr.sort(shuffleAllElements);
 				fourArr.sort(shuffleAllElements);
-
 				setFourButtons(fourArr);
 			}
 		},
 		[ currentWord, wordsArray, currentNumber ]
 	);
 
-	function answer(event) {
-		// console.log(four.current)
-		const obj = { ...currentWord };
-		if (event.target) {
-			console.log(event.target.innerHTML);
-			next();
-			if (event.target.innerHTML === currentWord.english) {
-				const goodButton = four.current.find((button) => button.innerHTML === event.target.innerHTML);
-				goodButton.classList.add(classes.goodButton);
-				setBlock(true);
-				setTimeout(() => {
-					goodButton.classList.remove(classes.goodButton);
-					setCurrentNumber((prev) => prev + 1);
-					setBlock(false);
-				}, 2000);
-				audioSuccess.play();
-				setCorrectAnswers((prev) => [ ...prev, obj ]);
-			} else {
-				const goodButton = four.current.find((button) => button.innerHTML === currentWord.english);
-				const badButton = four.current.find((button) => button.innerHTML === event.target.innerHTML);
-				goodButton.classList.add(classes.goodButton);
-				badButton.classList.add(classes.badButton);
-				setTimeout(() => {
-					goodButton.classList.remove(classes.goodButton);
-					badButton.classList.remove(classes.badButton);
-					setCurrentNumber((prev) => prev + 1);
-					setBlock(false);
-				}, 2000);
-				audioFail2.play();
-				setFailAnswers((prev) => [ ...prev, obj ]);
-				setLifes((prev) => prev - 1);
-			}
-		} else {
-			console.log(event.innerHTML);
-			const goodButton = four.current.find((button) => button.value === event.innerHTML);
-			goodButton.classList.add(classes.goodButton);
-			console.log(goodButton);
-			setBlock(true);
-			setTimeout(() => {
-				goodButton.classList.remove(classes.goodButton);
-				setCurrentNumber((prev) => prev + 1);
-				setBlock(false);
-			}, 2000);
-			audioFail2.play();
-			setFailAnswers((prev) => [ ...prev, obj ]);
-			setLifes((prev) => prev - 1);
-		}
-	}
-
-	function next() {
-		setBlock(true);
-		setTimeout(() => {
-			setCurrentNumber((prev) => prev + 1);
-			setBlock(false);
-		}, 2000);
-	}
+	useEffect(
+		() => {
+			if (endGame) return;
+			const keyboardClick = (event) => {
+				if (!Object.values(keyCodeArray).includes(event.keyCode)) return;
+				let elem;
+				if (event.keyCode === keyCodeArray.top1 || event.keyCode === keyCodeArray.num1) {
+					elem = four.current[0];
+				} else if (event.keyCode === keyCodeArray.top2 || event.keyCode === keyCodeArray.num2) {
+					elem = four.current[1];
+				} else if (event.keyCode === keyCodeArray.top3 || event.keyCode === keyCodeArray.num3) {
+					elem = four.current[2];
+				} else if (event.keyCode === keyCodeArray.top4 || event.keyCode === keyCodeArray.num4) {
+					elem = four.current[3];
+				}
+				answer(elem.value, true);
+			};
+			document.addEventListener('keydown', keyboardClick);
+			return () => {
+				document.removeEventListener('keydown', keyboardClick);
+			};
+		},
+		[ answer, endGame ]
+	);
 
 	const setFourRef = (btn, index) => {
 		if (!btn) return;
 		four.current[index] = btn;
 	};
-
+	function goFullScreen(elem) {
+		setFullScreen((prev) => !prev);
+		toggleScreen(elem);
+	}
 	return (
 		<div className={classes.root}>
 			{endGame ? (
-				<GameStatsPage lifes={lifes} correctAnswers={correctAnswers} failAnswers={failAnswers} />
+				<GameStats lifes={lifes} correctAnswers={correctAnswers} failAnswers={failAnswers} />
 			) : wordsArray.length && currentWord && fourButtons.length === 4 ? (
-				<div className={classes.gameContainer}>
-					<Transition
-						in={!block}
-						timeout={5000}
-						// onEnter={() => console.log('onEnter')}
-						// onEntering={() => console.log('onEntering')}
-						onEntered={answer}
-						// onExiting={() => console.log('onExiting')}
-						// onExited={() => console.log('onExited')}
-						// onExit={() => console.log('onExit')}
-					>
+				<div ref={gameBoard} className={classes.gameContainer}>
+					<button onClick={() => goFullScreen(gameBoard.current)} className={classes.fullScreenBtn}>
+						{fullScreen ? (
+							<FullscreenExitIcon className={classes.fullScreenIcon} />
+						) : (
+							<FullscreenIcon className={classes.fullScreenIcon} />
+						)}
+					</button>
+					<Transition in={!block} timeout={5000} onEntered={(event) => answer(event.dataset.name, false)}>
 						{(state) => (
-							<Typography value={currentWord.russian} className={`slide-word ${state}`} variant="h3">
+							<Typography data-name={currentWord.english} className={`slide-word ${state}`} variant="h3">
 								{currentWord.russian}
 							</Typography>
 						)}
 					</Transition>
 					<div className={classes.contentWrap}>
 						<div className={classes.buttonsWrap}>
-							{fourButtons.length &&
-								fourButtons.map((item, index) => {
-									return (
-										<button
-											ref={(btn) => setFourRef(btn, index)}
-											disabled={block}
-											key={index}
-											onClick={answer}
-											value={item.russian}
-											className={buttonStyles}
-										>
-											{item.english}
-										</button>
-									);
-								})}
+							{fourButtons.map((item, index) => {
+								return (
+									<button
+										ref={(btn) => setFourRef(btn, index)}
+										disabled={block}
+										key={index}
+										onClick={(event) => answer(event.target.value, true)}
+										value={item.english}
+										className={classes.button}
+									>
+										{item.english}
+									</button>
+								);
+							})}
 						</div>
-						<Box component="fieldset" mb={3} borderColor="transparent">
-							<StyledRating
-								name="customized-color"
-								readOnly={true}
-								value={lifes || 0}
-								icon={<FavoriteIcon className={classes.heart} />}
-							/>
-						</Box>
+						<LifesInGames lifes={lifes} />
 						<Typography variant="subtitle1" className={classes.correct}>{`Правильные ответы: ${correctAnswers.length ||
 							0}`}</Typography>
 						<Typography color="secondary" variant="subtitle1" className={classes.fail}>{`Ошибки: ${failAnswers.length ||

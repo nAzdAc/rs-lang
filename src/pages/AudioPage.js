@@ -1,19 +1,21 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Typography from '@material-ui/core/Typography';
+import FullscreenIcon from '@material-ui/icons/Fullscreen';
+import FullscreenExitIcon from '@material-ui/icons/FullscreenExit';
 import { makeStyles } from '@material-ui/core/styles';
 import { LOCAL_STORAGE_KEY } from '../utils/storageKey';
 import { INIT_CONSTS } from '../utils/initConsts';
 import successSong from '../assets/sounds/success.mp3';
-import failSong from '../assets/sounds/no.wav';
 import failSong2 from '../assets/sounds/fail.mp3';
-import failSong3 from '../assets/sounds/fail2.wav';
 import { backRoutes } from '../utils/backRoutes';
 import { CircularProgress } from '@material-ui/core';
 import SpeakerIcon from '@material-ui/icons/Speaker';
 import { createSound, shuffleAllElements } from '../utils/helpers';
 import { originURL } from '../utils/backRoutes';
-import { GameStatsPage } from './GameStatsPage';
+import { GameStats } from '../components/GameStats';
 import { useHttp } from '../hooks/http.hook';
+import { toggleScreen } from '../utils/fullScreen';
+import { LifesInGames } from '../components/LifesInGames';
 
 const useStyles = makeStyles({
 	root: {
@@ -28,13 +30,19 @@ const useStyles = makeStyles({
 		flexWrap: 'wrap',
 		alignItems: 'center',
 		justifyContent: 'space-between',
-		padding: '40px 20px 20px 20px'
+		padding: '20px 0px 10px 0px',
+		background: 'white',
+		position: 'relative'
 	},
 	speaker: {
 		width: '150px',
 		height: '120px',
 		marginBottom: '100px',
-		cursor: 'pointer'
+		cursor: 'pointer',
+		color: '#01A299',
+		'&:hover': {
+			color: '#00D9CE'
+		}
 	},
 	buttonsWrap: {
 		width: '100%',
@@ -44,22 +52,7 @@ const useStyles = makeStyles({
 		justifyContent: 'space-around',
 		marginBottom: '100px'
 	},
-	badButton: {
-		borderRadius: '5px',
-		border: 'none',
-		cursor: 'pointer',
-		marginRight: '10px',
-		fontWeight: 'bold',
-		width: '109px',
-		maxWidth: '150px',
-		height: '50px',
-		background: '#B00020',
-		color: '#FFF',
-		'&:hover': {
-			background: '#E6002A'
-		}
-	},
-	goodButton: {
+	button: {
 		marginRight: '10px',
 		borderRadius: '5px',
 		border: 'none',
@@ -72,6 +65,18 @@ const useStyles = makeStyles({
 		color: '#FFF',
 		'&:hover': {
 			background: '#00D9CE'
+		}
+	},
+	badButton: {
+		background: '#B00020',
+		'&:hover': {
+			background: '#E6002A'
+		}
+	},
+	goodButton: {
+		background: '#16a600',
+		'&:hover': {
+			background: '#28fc03'
 		}
 	},
 	word: {
@@ -87,8 +92,40 @@ const useStyles = makeStyles({
 		position: 'absolute',
 		top: '50%',
 		left: '50%'
+	},
+	fullScreenBtn: {
+		position: 'absolute',
+		right: '0',
+		bottom: '0',
+		border: 'none',
+		outline: 'none',
+		cursor: 'pointer',
+		fontWeight: 'bold',
+		width: '50px',
+		height: '50px',
+		background: 'white',
+		color: '#FFF'
+	},
+	fullScreenIcon: {
+		cursor: 'pointer',
+		fontSize: '50px',
+		color: '#01A299',
+		'&:hover': {
+			color: '#00D9CE'
+		}
 	}
 });
+
+const keyCodeArray = {
+	top1: 49,
+	top2: 50,
+	top3: 51,
+	top4: 52,
+	num1: 35,
+	num2: 40,
+	num3: 34,
+	num4: 37
+};
 
 export const AudioPage = () => {
 	const classes = useStyles();
@@ -101,40 +138,73 @@ export const AudioPage = () => {
 	const [ currentNumber, setCurrentNumber ] = useState(0);
 	const [ currentWord, setCurrentWord ] = useState({});
 	const [ wordsArray, setWordsArray ] = useState([]);
-	const [ allWordsArray, setAllWordsArray ] = useState([]);
 	const [ fourButtons, setFourButtons ] = useState([]);
+	const [ block, setBlock ] = useState(true);
+	const [ lifes, setLifes ] = useState(5);
+	const four = useRef([]);
+	const [ fullScreen, setFullScreen ] = useState(false);
+	const gameBoard = useRef();
 
 	const audioSuccess = useMemo(() => createSound(successSong, soundVolume), [ soundVolume ]);
-	const audioFail = useMemo(() => createSound(failSong, soundVolume), [ soundVolume ]);
 	const audioFail2 = useMemo(() => createSound(failSong2, soundVolume), [ soundVolume ]);
-	const audioFail3 = useMemo(() => createSound(failSong3, soundVolume), [ soundVolume ]);
 	const audioWord = useMemo(() => createSound(`${currentWord.audio}`, wordVolume), [ wordVolume, currentWord ]);
 
 	const fetchWords = useCallback(
 		async () => {
 			try {
 				const data = await request(backRoutes.words, 'GET');
-				console.log(data);
-				const arr = [];
-				const wordsArr = [];
-				data.forEach((item) => {
-					// console.log(item);
-					const audio = `${originURL}/${item.audio}`;
-					const english = item.word;
-					const transcription = item.transcription;
-					const russian = item.wordTranslate;
-					const obj = { audio, english, transcription, russian };
-					arr.push(obj);
-					wordsArr.push(english);
+				const arr = data.map((item) => {
+					return {
+						english: item.word,
+						russian: item.wordTranslate,
+						audio: `${originURL}/${item.audio}`,
+						transcription: item.transcription
+					};
 				});
-				setWordsArray(arr.sort(shuffleAllElements));
-				setAllWordsArray(wordsArr.sort(shuffleAllElements));
-				console.log(arr);
+				arr.sort(shuffleAllElements);
+				setWordsArray(arr);
+				setTimeout(() => {
+					setBlock(false);
+				}, 500);
 			} catch (e) {
 				console.log(e);
 			}
 		},
 		[ request ]
+	);
+
+	const answer = useCallback(
+		(word) => {
+			if (block || !word || endGame) return;
+			if (word === currentWord.english) {
+				setCorrectAnswers((prev) => [ ...prev, currentWord ]);
+				const goodButton = four.current.find((button) => button.value === word);
+				goodButton.classList.add(classes.goodButton);
+				setBlock(true);
+				setTimeout(() => {
+					goodButton.classList.remove(classes.goodButton);
+					setCurrentNumber((prev) => prev + 1);
+					setBlock(false);
+				}, 2000);
+				audioSuccess.play();
+			} else {
+				setFailAnswers((prev) => [ ...prev, currentWord ]);
+				const goodButton = four.current.find((button) => button.value === currentWord.english);
+				const badButton = four.current.find((button) => button.value === word);
+				goodButton.classList.add(classes.goodButton);
+				badButton.classList.add(classes.badButton);
+				setBlock(true);
+				setTimeout(() => {
+					goodButton.classList.remove(classes.goodButton);
+					badButton.classList.remove(classes.badButton);
+					setCurrentNumber((prev) => prev + 1);
+					setBlock(false);
+				}, 2000);
+				audioFail2.play();
+				setLifes((prev) => prev - 1);
+			}
+		},
+		[ audioFail2, audioSuccess, block, classes.badButton, classes.goodButton, currentWord, endGame ]
 	);
 
 	useEffect(
@@ -146,93 +216,131 @@ export const AudioPage = () => {
 
 	useEffect(
 		() => {
-			if (currentNumber && currentNumber >= wordsArray.length) {
-				setEndGame(true);
+			if ((currentNumber && currentNumber >= wordsArray.length) || !lifes) {
+				setTimeout(() => {
+					setEndGame(true);
+				}, 2000);
 			}
 		},
-		[ wordsArray, currentNumber ]
+		[ wordsArray, currentNumber, lifes ]
 	);
 
 	useEffect(
 		() => {
-			if (wordsArray.length && allWordsArray.length && currentNumber < wordsArray.length) {
+			if (wordsArray.length && currentNumber < wordsArray.length) {
 				setCurrentWord(wordsArray[currentNumber]);
 			}
 		},
-		[ currentNumber, wordsArray, allWordsArray ]
+		[ currentNumber, wordsArray ]
 	);
 
 	useEffect(
 		() => {
-			if (currentWord) {
-				console.log(currentWord);
+			if (endGame) return
+			if (currentWord && !block) {
 				setTimeout(() => {
 					audioWord.play();
-				}, 1000);
+				}, 200);
 			}
 			return () => {
 				clearTimeout();
 				audioWord.stop();
 			};
 		},
-		[ currentWord, audioWord ]
+		[ currentWord, audioWord, block, endGame ]
 	);
 
 	useEffect(
 		() => {
-			if (wordsArray.length && allWordsArray.length && currentNumber < wordsArray.length) {
-				const arr = allWordsArray.filter((english) => english !== currentWord.english).sort(shuffleAllElements);
-				arr.unshift(currentWord.english);
+			if (wordsArray.length && currentNumber < wordsArray.length) {
+				const arr = wordsArray.filter((word) => word.english !== currentWord.english).sort(shuffleAllElements);
+				arr.unshift(currentWord);
 				const fourArr = arr.slice(0, 4);
 				fourArr.sort(shuffleAllElements);
 				fourArr.sort(shuffleAllElements);
-				console.log(fourArr);
-				setFourButtons(fourArr.sort(shuffleAllElements));
+				setFourButtons(fourArr);
 			}
 		},
-		[ currentWord, wordsArray, allWordsArray, currentNumber ]
+		[ currentWord, wordsArray, currentNumber ]
 	);
 
-	function answer(event) {
-		const obj = { ...currentWord };
-		setCurrentNumber((prev) => prev + 1);
-		if (event.target.value === currentWord.english) {
-			audioSuccess.play();
-			setCorrectAnswers((prev) => [ ...prev, obj ]);
-		} else {
-			audioFail.play();
-			setFailAnswers((prev) => [ ...prev, obj ]);
-		}
-	}
+	useEffect(
+		() => {
+			if (endGame) return;
+			const keyboardClick = (event) => {
+				if (!Object.values(keyCodeArray).includes(event.keyCode)) return;
+				let elem;
+				if (event.keyCode === keyCodeArray.top1 || event.keyCode === keyCodeArray.num1) {
+					elem = four.current[0];
+				} else if (event.keyCode === keyCodeArray.top2 || event.keyCode === keyCodeArray.num2) {
+					elem = four.current[1];
+				} else if (event.keyCode === keyCodeArray.top3 || event.keyCode === keyCodeArray.num3) {
+					elem = four.current[2];
+				} else if (event.keyCode === keyCodeArray.top4 || event.keyCode === keyCodeArray.num4) {
+					elem = four.current[3];
+				}
+				answer(elem.value);
+			};
+			document.addEventListener('keydown', keyboardClick);
+			return () => {
+				document.removeEventListener('keydown', keyboardClick);
+			};
+		},
+		[ answer, endGame ]
+	);
 
 	function repeat() {
 		audioWord.play();
 	}
 
+	const setFourRef = (btn, index) => {
+		if (!btn) return;
+		four.current[index] = btn;
+	};
+
+	function goFullScreen(elem) {
+		setFullScreen((prev) => !prev);
+		toggleScreen(elem);
+	}
+
 	return (
 		<div className={classes.root}>
-			{endGame ? <GameStatsPage correctAnswers={correctAnswers} failAnswers={failAnswers} /> : (
-				(wordsArray.length && allWordsArray.length && fourButtons.length && currentWord) ? (
-					<div className={classes.gameContainer}>
-						<SpeakerIcon onClick={repeat} className={classes.speaker} />
-						<div className={classes.buttonsWrap}>
-							{fourButtons.length &&
-								fourButtons.map((english, index) => {
-									return (
-										<button key={index} onClick={answer} value={english} className={classes.goodButton}>
-											{english}
-										</button>
-									);
-								})}
-						</div>
-						<Typography variant="subtitle1" className={classes.correct}>{`Правильные ответы: ${correctAnswers.length ||
-							0}`}</Typography>
-						<Typography color="secondary" variant="subtitle1" className={classes.fail}>{`Ошибки: ${failAnswers.length ||
-							0}`}</Typography>
+			{endGame ? (
+				<GameStats lifes={lifes} correctAnswers={correctAnswers} failAnswers={failAnswers} />
+			) : wordsArray.length && fourButtons.length === 4 && currentWord ? (
+				<div ref={gameBoard} className={classes.gameContainer}>
+					<button onClick={() => goFullScreen(gameBoard.current)} className={classes.fullScreenBtn}>
+						{fullScreen ? (
+							<FullscreenExitIcon className={classes.fullScreenIcon} />
+						) : (
+							<FullscreenIcon className={classes.fullScreenIcon} />
+						)}
+					</button>
+					<SpeakerIcon onClick={repeat} className={classes.speaker} />
+					<div className={classes.buttonsWrap}>
+						{fourButtons.map((item, index) => {
+							return (
+								<button
+									disabled={block}
+									ref={(btn) => setFourRef(btn, index)}
+									key={index}
+									onClick={(event) => answer(event.target.value)}
+									value={item.english}
+									className={classes.button}
+								>
+									{item.english}
+								</button>
+							);
+						})}
 					</div>
-				) : (
-					<CircularProgress className={classes.loader} />
-				)
+					<LifesInGames lifes={lifes} />
+					<Typography variant="subtitle1" className={classes.correct}>{`Правильные ответы: ${correctAnswers.length ||
+						0}`}</Typography>
+					<Typography color="secondary" variant="subtitle1" className={classes.fail}>{`Ошибки: ${failAnswers.length ||
+						0}`}</Typography>
+				</div>
+			) : (
+				<CircularProgress className={classes.loader} />
 			)}
 		</div>
 	);
