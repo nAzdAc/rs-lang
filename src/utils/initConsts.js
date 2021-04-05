@@ -30,3 +30,5 @@ export const gameCardsContent = [
 		to: frontRoutes.match
 	}
 ];
+
+export const regexpForText = /<b>|<\/b>|<i>|<\/i>/gi;

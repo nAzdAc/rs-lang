@@ -19,9 +19,6 @@ import WordsPage from './pages/WordsPage';
 import { AuthContext } from './context/AuthContext';
 import { useAuth } from './hooks/auth.hook';
 import DictionaryPage from './pages/DictionaryPage';
-import { bookLinks } from './components/routeData';
-
-const RouteComponent = ({ text }) => <div>{text}</div>;
 
 function App() {
 	const { token, login, logout, userId, userName } = useAuth();
@@ -41,19 +38,11 @@ function App() {
 				<div className="App">
 					<Header />
 					<Switch>
-					<Route exact path="/">
-						<ManePage />
-					</Route>
-						<Route path={frontRoutes.book}>
-							<BookPage />
+						<Route exact path="/">
+							<ManePage/>
 						</Route>
-						{bookLinks.map((link, index) => (
-							<Route path={link.to} key={index}>
-								<WordsPage />
-							</Route>
-						))}
-						<Route path="/book/level_1">
-							<RouteComponent text="level" />
+						<Route path='/book'>
+							<BookPage/>
 						</Route>
 						<Route path={frontRoutes.games}>
 							<GamesPage />

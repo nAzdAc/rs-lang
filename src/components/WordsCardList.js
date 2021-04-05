@@ -4,9 +4,10 @@ import WordCard from "./WordCard";
 import "fontsource-roboto";
 import CardIcons from "./CardIcons";
 import { backRoutes } from "../utils/backRoutes";
+import {regexpForText} from "../utils/initConsts"
 
 
-export default function WordsCardList({userWords,difficulty,fetchUrl,infoPanel}) {
+export default function WordsCardList({userWords, difficulty, fetchUrl, infoPanel}) {
   const [wordsArr, setWordsArr] = useState([]);
   const { request } = useHttp();
 
@@ -15,23 +16,16 @@ export default function WordsCardList({userWords,difficulty,fetchUrl,infoPanel})
     setWordsArr(data);
   }, [fetchUrl, request]);
   
-  let cards = []
-  const fetchUserWords = useCallback(() => { 
-    
 
-    userWords.forEach( async (item) => {
-    console.log(item.wordId)
+  const fetchUserWords = useCallback(async () => { 
+    const cards = await Promise.all(userWords.map( async (item) => {
+    // console.log(backRoutes.getWord(item.wordId))
     const result = await request(backRoutes.getWord(item.wordId),"GET")
-    console.log(result)
-    cards.push(result)
-    // setWordsArr(result)
-  })
-  console.log('cards ',cards)
-
+    return result
+  }))
   setWordsArr(cards)
-  console.log('WordsArr ',wordsArr)
-  
-  }, [userWords, cards, request]);
+  console.log('cards ',cards)
+  }, [userWords, request]);
 
   useEffect(() => {
      if(userWords){
@@ -39,8 +33,7 @@ export default function WordsCardList({userWords,difficulty,fetchUrl,infoPanel})
      }else{
       fetchWords()
      }
-   
-  }, [fetchUserWords, fetchWords, userWords]);
+    }, [fetchUserWords, fetchWords, userWords]);
 
   return (
     <ul>
@@ -50,11 +43,11 @@ export default function WordsCardList({userWords,difficulty,fetchUrl,infoPanel})
         key={item.id}
         word={item.word}
         image={item.image}
-        textExample={item.textExample}
+        textExample={item.textExample.replace(regexpForText, '')}
         textExampleTranslate={item.textExampleTranslate}
         transcription={item.transcription}
         wordTranslate={item.wordTranslate}
-        textMeaning={item.textMeaning}
+        textMeaning={item.textMeaning.replace(regexpForText, '')}
         textMeaningTranslate={item.textMeaningTranslate}
         infoPanel={
           infoPanel === 'CardIcons'? <CardIcons difficulty={difficulty}  wordId={item.id} audio={item.audio} audioExample={item.audioExample} audioMeaning={item.audioMeaning}></CardIcons>:null
