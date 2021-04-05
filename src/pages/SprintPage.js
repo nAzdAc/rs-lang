@@ -1,18 +1,19 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Typography from '@material-ui/core/Typography';
+import FullscreenIcon from '@material-ui/icons/Fullscreen';
+import FullscreenExitIcon from '@material-ui/icons/FullscreenExit';
 import { makeStyles } from '@material-ui/core/styles';
-// import { Button } from '@material-ui/core';
-import TransitionsModal from '../components/EndGameModal';
-import useSound from 'use-sound';
 import { LOCAL_STORAGE_KEY } from '../utils/storageKey';
 import { INIT_CONSTS } from '../utils/initConsts';
-import fonSong from '../sounds/fon.mp3';
-import successSong from '../sounds/success.mp3';
-import failSong from '../sounds/no.wav';
-import { Howl } from 'howler';
+import fonSong from '../assets/sounds/fon.mp3';
+import successSong from '../assets/sounds/success.mp3';
+import failSong from '../assets/sounds/no.wav';
 import { backRoutes } from '../utils/backRoutes';
 import { CircularProgress } from '@material-ui/core';
-import { shuffleAllElements, getRandomInt } from '../utils/helpers';
+import { createSound, shuffleAllElements, getRandomInt } from '../utils/helpers';
+import { GameStats } from '../components/GameStats';
+import { useHttp } from '../hooks/http.hook';
+import { toggleScreen } from '../utils/fullScreen';
 
 const useStyles = makeStyles({
 	root: {
@@ -21,13 +22,15 @@ const useStyles = makeStyles({
 		justifyContent: 'center'
 	},
 	gameContainer: {
+		position: 'relative',
 		width: '90%',
 		display: 'flex',
 		flexDirection: 'column',
 		flexWrap: 'wrap',
 		alignItems: 'center',
 		justifyContent: 'space-around',
-		padding: '20px'
+		padding: '20px 0px 10px 0px',
+		background: 'white',
 	},
 	buttonsWrap: {
 		display: 'flex',
@@ -65,60 +68,91 @@ const useStyles = makeStyles({
 		position: 'absolute',
 		top: '50%',
 		left: '50%'
+	},
+	fullScreenBtn: {
+		position: 'absolute',
+		right: '0',
+		bottom: '0',
+		border: 'none',
+		outline: 'none',
+		cursor: 'pointer',
+		fontWeight: 'bold',
+		width: '50px',
+		height: '50px',
+		background: 'white',
+		color: '#FFF'
+	},
+	fullScreenIcon: {
+		cursor: 'pointer',
+		fontSize: '50px',
+		color: '#01A299',
+		'&:hover': {
+			color: '#00D9CE'
+		}
 	}
 });
 
+const keyCodeArray = {
+	enter: 13,
+	space: 32,
+	num1: 35,
+	num2: 40
+};
+
 export const SprintPage = () => {
 	const classes = useStyles();
-	const volume = localStorage.getItem(LOCAL_STORAGE_KEY.volume) || INIT_CONSTS.volume;
+	const { request } = useHttp();
+	const soundVolume = useMemo(() => localStorage.getItem(LOCAL_STORAGE_KEY.soundVolume) || INIT_CONSTS.soundVolume, []);
+	const musicVolume = useMemo(() => localStorage.getItem(LOCAL_STORAGE_KEY.musicVolume) || INIT_CONSTS.musicVolume, []);
 	const [ endGame, setEndGame ] = useState(false);
-	const [ fail, setFail ] = useState(0);
-	const [ correct, setCorrect ] = useState(0);
 	const [ seconds, setSeconds ] = useState(60);
 	const [ wordsArray, setWordsArray ] = useState([]);
-	const [ currentEnglishWord, setCurrentEnglishWord ] = useState('');
+	const [ correctAnswers, setCorrectAnswers ] = useState([]);
+	const [ failAnswers, setFailAnswers ] = useState([]);
+	const [ currentWord, setCurrentWord ] = useState({});
 	const [ currentRussianhWord, setCurrentRussianhWord ] = useState('');
 	const [ currentNumber, setCurrentNumber ] = useState(0);
 	const timer = useRef();
+	const [ fullScreen, setFullScreen ] = useState(false);
+	const gameBoard = useRef();
 
-	const [ playSuccess ] = useSound(successSong, {
-		volume: 0.01 * volume
-	});
-	const [ playFail ] = useSound(failSong, {
-		volume: 0.01 * volume
-	});
-	const fonSound = new Howl({
-		src: [ fonSong ],
-		loop: true,
-		volume: 0.001 * volume
-	});
+	const audioSuccess = useMemo(() => createSound(successSong, soundVolume), [ soundVolume ]);
+	const audioFail = useMemo(() => createSound(failSong, soundVolume * 5), [ soundVolume ]);
+	const audioFon = useMemo(() => createSound(fonSong, musicVolume * 0.1, 1, true), [ musicVolume ]);
 
-	const fetchWords = useCallback(async () => {
-		try {
-			const result = await fetch(backRoutes.words, {
-				method: 'GET',
-				headers: {
-					'Content-Type': 'application/json'
-				}
-			});
-			const data = await result.json();
-			console.log(data);
-			const arr = [];
-			data.map((item) => {
-				// console.log(item);
-				const english = item.word;
-				const russian = item.wordTranslate;
-				const obj = { english, russian };
-				arr.push(obj);
-			});
-			const shuffledArr = arr.sort(shuffleAllElements);
-			setWordsArray(shuffledArr);
-			console.log(shuffledArr);
-			// console.log(arr[0].english);
-		} catch (e) {
-			console.log(e);
-		}
-	}, []);
+	const fetchWords = useCallback(
+		async () => {
+			try {
+				const data = await request(`${backRoutes.words}?group=3&page=4`, 'GET');
+				const arr = data.map((item) => {
+					return { english: item.word, russian: item.wordTranslate };
+				});
+				arr.sort(shuffleAllElements);
+				setWordsArray(arr);
+			} catch (e) {
+				console.log(e);
+			}
+		},
+		[ request ]
+	);
+
+	const answer = useCallback(
+		(value) => {
+			if (endGame) return;
+			if (
+				(value === 'true' && currentWord.russian === currentRussianhWord) ||
+				(value === 'false' && currentWord.russian !== currentRussianhWord)
+			) {
+				setCorrectAnswers((prev) => [ ...prev, currentWord ]);
+				audioSuccess.play();
+			} else {
+				setFailAnswers((prev) => [ ...prev, currentWord ]);
+				audioFail.play();
+			}
+			setCurrentNumber((prev) => prev + 1);
+		},
+		[ audioFail, audioSuccess, currentRussianhWord, currentWord, endGame ]
+	);
 
 	useEffect(
 		() => {
@@ -129,57 +163,37 @@ export const SprintPage = () => {
 
 	useEffect(
 		() => {
-			if (wordsArray.length > 1 && currentNumber < wordsArray.length) {
-				setCurrentEnglishWord((prev) => (prev = wordsArray[currentNumber].english));
-				setCurrentRussianhWord((prev) => {
+			if (wordsArray.length && currentNumber < wordsArray.length) {
+				setCurrentWord(wordsArray[currentNumber]);
+				setCurrentRussianhWord(() => {
+					let word;
 					const num = Math.random();
-					// console.log(num);
 					if (num > 0.45) {
-						prev = wordsArray[currentNumber].russian;
+						word = wordsArray[currentNumber].russian;
 					} else {
-						const number = getRandomInt(0, wordsArray.length);
-						prev = wordsArray[number].russian;
+						word = wordsArray[getRandomInt(0, wordsArray.length)].russian;
 					}
-					return prev;
+					return word;
 				});
 			}
 		},
 		[ currentNumber, wordsArray ]
 	);
 
-	function answer(value) {
-		// console.log(value);
-		// const english = wordsArray[currentNumber].english;
-		const russian = wordsArray[currentNumber].russian;
-		setCurrentNumber((prev) => prev + 1);
-		console.log(russian === currentRussianhWord);
-		console.log(`original: ${russian}   current : ${currentRussianhWord}`);
-		if (
-			(value === 'true' && russian === currentRussianhWord) ||
-			(value === 'false' && russian !== currentRussianhWord)
-		) {
-			playSuccess();
-			setCorrect((prev) => prev + 1);
-		} else {
-			playFail();
-			setFail((prev) => prev + 1);
-		}
-	}
-
 	useEffect(
 		() => {
-			if (!endGame) {
-				fonSound.play();
+			if (!endGame && wordsArray.length && currentWord) {
+				audioFon.play();
 				timer.current = setInterval(() => {
 					setSeconds((prev) => prev - 1);
 				}, 1000);
 			}
 			return () => {
 				clearInterval(timer.current);
-				fonSound.stop();
+				audioFon.stop();
 			};
 		},
-		[ endGame, volume ]
+		[ endGame, audioFon, wordsArray, currentWord ]
 	);
 
 	useEffect(
@@ -187,19 +201,54 @@ export const SprintPage = () => {
 			if (seconds === 0 || (currentNumber && currentNumber >= wordsArray.length)) {
 				setEndGame(true);
 				clearInterval(timer.current);
-				fonSound.stop();
+				audioFon.stop();
 			}
 		},
-		[ seconds, wordsArray, currentNumber ]
+		[ seconds, wordsArray, currentNumber, audioFon ]
 	);
+
+	useEffect(
+		() => {
+			if (endGame) return;
+			const keyboardClick = (event) => {
+				if (!Object.values(keyCodeArray).includes(event.keyCode)) return;
+				let value;
+				if (event.keyCode === keyCodeArray.enter || event.keyCode === keyCodeArray.num2) {
+					value = 'true';
+				} else if (event.keyCode === keyCodeArray.space || event.keyCode === keyCodeArray.num1) {
+					value = 'false';
+				}
+				answer(value);
+			};
+			document.addEventListener('keydown', keyboardClick);
+			return () => {
+				document.removeEventListener('keydown', keyboardClick);
+			};
+		},
+		[ answer, endGame ]
+	);
+
+	function goFullScreen(elem) {
+		setFullScreen((prev) => !prev);
+		toggleScreen(elem);
+	}
 
 	return (
 		<div className={classes.root}>
-			{wordsArray ? (
-				<div className={classes.gameContainer}>
+			{endGame ? (
+				<GameStats correctAnswers={correctAnswers} failAnswers={failAnswers} />
+			) : wordsArray.length && currentWord && currentRussianhWord ? (
+				<div ref={gameBoard} className={classes.gameContainer}>
+					<button onClick={() => goFullScreen(gameBoard.current)} className={classes.fullScreenBtn}>
+						{fullScreen ? (
+							<FullscreenExitIcon className={classes.fullScreenIcon} />
+						) : (
+							<FullscreenIcon className={classes.fullScreenIcon} />
+						)}
+					</button>
 					<Typography variant="h5">Осталось: </Typography>
 					<Typography variant="h2">{seconds}</Typography>
-					<Typography variant="h5">{`${currentEnglishWord || ''} = ${currentRussianhWord || ''}`}</Typography>
+					<Typography variant="h4">{`${currentWord.english || ''} = ${currentRussianhWord || ''}`}</Typography>
 					<div className={classes.buttonsWrap}>
 						<button className={classes.badButton} onClick={(event) => answer(event.target.value)} value={false}>
 							НЕ ВЕРНО
@@ -208,9 +257,15 @@ export const SprintPage = () => {
 							ВЕРНО
 						</button>
 					</div>
-					<Typography variant="subtitle1" className={classes.question}>{`Правильные ответы: ${correct}`}</Typography>
-					<Typography variant="subtitle1" className={classes.question}>{`Ошибки: ${fail}`}</Typography>
-					{endGame && <TransitionsModal correct={correct} fail={fail} />}
+					<Typography
+						variant="subtitle1"
+						className={classes.answer}
+					>{`Правильные ответы: ${correctAnswers.length}`}</Typography>
+					<Typography
+						color="secondary"
+						variant="subtitle1"
+						className={classes.answer}
+					>{`Ошибки: ${failAnswers.length}`}</Typography>
 				</div>
 			) : (
 				<CircularProgress className={classes.loader} />
@@ -218,10 +273,3 @@ export const SprintPage = () => {
 		</div>
 	);
 };
-
-// <Button key={false} disableElevation onClick={(event) => (answer(event.target))} defaultValue={false} variant="contained" size="medium" className={classes.badButton}>
-// 				НЕ ВЕРНО
-// 			</Button>
-// 			<Button key={true} onClick={(event) => (answer(event.target.key))} defaultValue={true} variant="contained" size="medium" className={classes.goodButton}>
-// 				ВЕРНО
-// 			</Button>

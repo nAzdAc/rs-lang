@@ -60,7 +60,7 @@ export const useAuth = () => {
 			const data = JSON.parse(localStorage.getItem(storageName));
 
 			if (data && data.token) {
-				login(data.token, data.refreshToken, data.useId, data.userName);
+				login(data.token, data.refreshToken, data.userId, data.userName);
 			}
 			setReady(true);
 		},

@@ -1,0 +1,360 @@
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import Typography from '@material-ui/core/Typography';
+import FullscreenIcon from '@material-ui/icons/Fullscreen';
+import FullscreenExitIcon from '@material-ui/icons/FullscreenExit';
+import { makeStyles } from '@material-ui/core/styles';
+import { LOCAL_STORAGE_KEY } from '../utils/storageKey';
+import { INIT_CONSTS } from '../utils/initConsts';
+import fonSong from '../assets/sounds/fon.mp3';
+import successSong from '../assets/sounds/success.mp3';
+import failSong2 from '../assets/sounds/fail.mp3';
+import { backRoutes } from '../utils/backRoutes';
+import { CircularProgress } from '@material-ui/core';
+import { createSound, shuffleAllElements } from '../utils/helpers';
+import { originURL } from '../utils/backRoutes';
+import { GameStats } from '../components/GameStats';
+import { useHttp } from '../hooks/http.hook';
+import { toggleScreen } from '../utils/fullScreen';
+import { LifesInGames } from '../components/LifesInGames';
+
+const useStyles = makeStyles({
+	root: {
+		display: 'flex',
+		alignItems: 'center',
+		justifyContent: 'center'
+	},
+	gameContainer: {
+		width: '90%',
+		display: 'flex',
+		flexDirection: 'column',
+		flexWrap: 'wrap',
+		alignItems: 'center',
+		justifyContent: 'center',
+		background: 'white',
+		position: 'relative'
+	},
+	imagesContainer: {
+		width: '100%',
+		display: 'flex',
+		flexWrap: 'wrap',
+		alignItems: 'center',
+		justifyContent: 'center',
+		marginBottom: '20px'
+	},
+	imageWrap: {
+		cursor: 'pointer',
+		position: 'relative',
+		width: '180px',
+		height: '180px',
+		margin: '10px'
+	},
+	overlay: {
+		display: 'block',
+		position: 'absolute',
+		top: '0px',
+		left: '0px',
+		right: '0px',
+		bottom: '0px',
+		opacity: '0',
+		background: 'white'
+	},
+	badOverlay: {
+		zIndex: '1',
+		opacity: '0.4',
+		background: '#B00020',
+		'&:hover': {
+			background: '#E6002A'
+		}
+	},
+	goodOverlay: {
+		zIndex: '1',
+		opacity: '0.4',
+		background: '#16a600',
+		'&:hover': {
+			background: '#28fc03'
+		}
+	},
+	image: {
+		position: 'absolute',
+		top: '0px',
+		left: '0px',
+		width: '100%',
+		height: '100%',
+		cursor: 'pointer'
+	},
+	word: {
+		marginBottom: '10px'
+	},
+	meaning: {
+		marginBottom: '30px'
+	},
+	fail: {
+		marginBottom: '10px'
+	},
+	loader: {
+		position: 'absolute',
+		top: '50%',
+		left: '50%'
+	},
+	fullScreenBtn: {
+		position: 'absolute',
+		right: '0',
+		bottom: '0',
+		border: 'none',
+		outline: 'none',
+		cursor: 'pointer',
+		fontWeight: 'bold',
+		width: '50px',
+		height: '50px',
+		background: 'white',
+		color: '#FFF'
+	},
+	fullScreenIcon: {
+		cursor: 'pointer',
+		fontSize: '50px',
+		color: '#01A299',
+		'&:hover': {
+			color: '#00D9CE'
+		}
+	}
+});
+
+const regexpForText = /<\b>|<\/\b>|<i>|<\/i>/gi;
+
+const keyCodeArray = {
+	top1: 49,
+	top2: 50,
+	top3: 51,
+	top4: 52,
+	num1: 35,
+	num2: 40,
+	num3: 34,
+	num4: 37
+};
+
+export const MatchPage = () => {
+	const classes = useStyles();
+	const { request } = useHttp();
+	const soundVolume = useMemo(() => localStorage.getItem(LOCAL_STORAGE_KEY.soundVolume) || INIT_CONSTS.soundVolume, []);
+	const musicVolume = useMemo(() => localStorage.getItem(LOCAL_STORAGE_KEY.musicVolume) || INIT_CONSTS.musicVolume, []);
+	const [ endGame, setEndGame ] = useState(false);
+	const [ correctAnswers, setCorrectAnswers ] = useState([]);
+	const [ failAnswers, setFailAnswers ] = useState([]);
+	const [ currentNumber, setCurrentNumber ] = useState(0);
+	const [ currentWord, setCurrentWord ] = useState({});
+	const [ wordsArray, setWordsArray ] = useState([]);
+	const [ fourImages, setFourImages ] = useState([]);
+	const [ lifes, setLifes ] = useState(5);
+	const [ block, setBlock ] = useState(true);
+
+	const audioSuccess = useMemo(() => createSound(successSong, soundVolume), [ soundVolume ]);
+	const audioFail = useMemo(() => createSound(failSong2, soundVolume), [ soundVolume ]);
+	const audioFon = useMemo(() => createSound(fonSong, musicVolume * 0.1, 1, true), [ musicVolume ]);
+	const four = useRef([]);
+	const [ fullScreen, setFullScreen ] = useState(false);
+	const gameBoard = useRef();
+
+	const fetchWords = useCallback(
+		async () => {
+			try {
+				const data = await request(`${backRoutes.words}?group=3&page=4`, 'GET');
+				const arr = data.map((item) => {
+					return {
+						english: item.word,
+						russian: item.wordTranslate,
+						meaning: item.textMeaning.replace(regexpForText, ''),
+						src: `${originURL}/${item.image}`
+					};
+				});
+				arr.sort(shuffleAllElements);
+				setWordsArray(arr);
+				setTimeout(() => {
+					setBlock(false);
+				}, 500);
+			} catch (e) {
+				console.log(e);
+			}
+		},
+		[ request ]
+	);
+
+	const answer = useCallback(
+		(src) => {
+			if (block || !src || endGame) return;
+			if (src === currentWord.src) {
+				setCorrectAnswers((prev) => [ ...prev, currentWord ]);
+				const goodOverlay = four.current.find((elem) => elem.dataset.name === src);
+				goodOverlay.classList.add(classes.goodOverlay);
+				setBlock(true);
+				setTimeout(() => {
+					goodOverlay.classList.remove(classes.goodOverlay);
+					setCurrentNumber((prev) => prev + 1);
+					setBlock(false);
+				}, 2000);
+				audioSuccess.play();
+			} else {
+				setFailAnswers((prev) => [ ...prev, currentWord ]);
+				setLifes((prev) => prev - 1);
+				const goodOverlay = four.current.find((elem) => elem.dataset.name === currentWord.src);
+				const badOverlay = four.current.find((elem) => elem.dataset.name === src);
+				goodOverlay.classList.add(classes.goodOverlay);
+				badOverlay.classList.add(classes.badOverlay);
+				setBlock(true);
+				setTimeout(() => {
+					goodOverlay.classList.remove(classes.goodOverlay);
+					badOverlay.classList.remove(classes.badOverlay);
+					setCurrentNumber((prev) => prev + 1);
+					setBlock(false);
+				}, 2000);
+				audioFail.play();
+			}
+		},
+		[ audioFail, audioSuccess, block, classes.badOverlay, classes.goodOverlay, currentWord, endGame ]
+	);
+
+	useEffect(
+		() => {
+			fetchWords();
+		},
+		[ fetchWords ]
+	);
+
+	useEffect(
+		() => {
+			if (!endGame && musicVolume) {
+				audioFon.play();
+			}
+			return () => {
+				audioFon.stop();
+			};
+		},
+		[ endGame, musicVolume, audioFon ]
+	);
+
+	useEffect(
+		() => {
+			if ((currentNumber && currentNumber >= wordsArray.length) || !lifes) {
+				setTimeout(() => {
+					setEndGame(true);
+					audioFon.stop();
+				}, 2000);
+			}
+			return () => {
+				clearTimeout();
+			};
+		},
+		[ wordsArray, currentNumber, audioFon, lifes ]
+	);
+
+	useEffect(
+		() => {
+			if (wordsArray.length && currentNumber < wordsArray.length) {
+				setCurrentWord(wordsArray[currentNumber]);
+			}
+		},
+		[ currentNumber, wordsArray ]
+	);
+
+	useEffect(
+		() => {
+			if (endGame) return;
+			const keyboardClick = (event) => {
+				if (!Object.values(keyCodeArray).includes(event.keyCode)) return;
+				let elem;
+				if (event.keyCode === keyCodeArray.top1 || event.keyCode === keyCodeArray.num1) {
+					elem = four.current[0];
+				} else if (event.keyCode === keyCodeArray.top2 || event.keyCode === keyCodeArray.num2) {
+					elem = four.current[1];
+				} else if (event.keyCode === keyCodeArray.top3 || event.keyCode === keyCodeArray.num3) {
+					elem = four.current[2];
+				} else if (event.keyCode === keyCodeArray.top4 || event.keyCode === keyCodeArray.num4) {
+					elem = four.current[3];
+				}
+				answer(elem.dataset.name);
+			};
+			document.addEventListener('keydown', keyboardClick);
+			return () => {
+				document.removeEventListener('keydown', keyboardClick);
+			};
+		},
+		[ answer, endGame ]
+	);
+
+	useEffect(
+		() => {
+			if (wordsArray.length && currentNumber < wordsArray.length) {
+				const arr = wordsArray.filter((word) => word.src !== currentWord.src).sort(shuffleAllElements);
+				arr.unshift(currentWord);
+				const fourArr = arr.slice(0, 4);
+				fourArr.sort(shuffleAllElements);
+				fourArr.sort(shuffleAllElements);
+				setFourImages(fourArr);
+			}
+		},
+		[ currentWord, wordsArray, currentNumber ]
+	);
+
+	const setFourRef = (elem, index) => {
+		if (!elem) return;
+		four.current[index] = elem;
+	};
+
+	function goFullScreen(elem) {
+		setFullScreen((prev) => !prev);
+		toggleScreen(elem);
+	}
+
+	return (
+		<div className={classes.root}>
+			{endGame ? (
+				<GameStats lifes={lifes} correctAnswers={correctAnswers} failAnswers={failAnswers} />
+			) : wordsArray.length && currentWord && fourImages.length === 4 ? (
+				<div ref={gameBoard} className={classes.gameContainer}>
+					<button onClick={() => goFullScreen(gameBoard.current)} className={classes.fullScreenBtn}>
+						{fullScreen ? (
+							<FullscreenExitIcon className={classes.fullScreenIcon} />
+						) : (
+							<FullscreenIcon className={classes.fullScreenIcon} />
+						)}
+					</button>
+					<div className={classes.imagesContainer}>
+						{fourImages.map((image, index) => {
+							return (
+								<div className={classes.imageWrap}>
+									<div
+										key={image.src}
+										data-name={image.src}
+										ref={(elem) => setFourRef(elem, index)}
+										className={classes.overlay}
+									/>
+									<img
+										key={index}
+										className={classes.image}
+										onClick={(event) => answer(event.target.dataset.name)}
+										data-name={image.src}
+										src={image.src}
+										alt={image.src}
+									/>
+								</div>
+							);
+						})}
+					</div>
+					<Typography className={classes.word} variant="h3">{`${currentWord.english || ''}`}</Typography>
+					<Typography className={classes.meaning} variant="h5">{`${currentWord.meaning || ''}`}</Typography>
+					<LifesInGames lifes={lifes} />
+					<Typography
+						variant="subtitle1"
+						className={classes.correct}
+					>{`Правильные ответы: ${correctAnswers.length}`}</Typography>
+					<Typography
+						color="secondary"
+						variant="subtitle1"
+						className={classes.fail}
+					>{`Ошибки: ${failAnswers.length}`}</Typography>
+				</div>
+			) : (
+				<CircularProgress className={classes.loader} />
+			)}
+		</div>
+	);
+};

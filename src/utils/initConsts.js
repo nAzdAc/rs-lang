@@ -1,13 +1,15 @@
 import { frontRoutes } from './frontRoutes';
 
 export const INIT_CONSTS = {
-	volume: 0
+	musicVolume: 0,
+	soundVolume: 0,
+	wordVolume: 0,
 };
 
 export const gameCardsContent = [
 	{
 		name: 'Саванна',
-		todo: 'Сверху падает английское слово, надо выбрать его русский аналог',
+		todo: 'Сверху падает русское слово, необходимо выбрать его английский аналог',
 		to: frontRoutes.savanna
 	},
 	{
@@ -28,3 +30,5 @@ export const gameCardsContent = [
 		to: frontRoutes.match
 	}
 ];
+
+export const regexpForText = /<b>|<\/b>|<i>|<\/i>/gi;

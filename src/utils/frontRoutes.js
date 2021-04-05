@@ -1,10 +1,14 @@
 export const frontRoutes = {
-  
-	games: '/games',
+  book: '/book',
 	settings: '/settings',
-	statistics: '/statistics',
-  savanna: '/savanna',
-  audio: '/audio',
-  sprint: '/sprint',
-  match: '/match',
+	stats: '/stats',
+  games: '/games',
+  savanna: '/games/savanna',
+  audio: '/games/audio',
+  sprint: '/games/sprint',
+  match: '/games/match',
+  dictionary: '/dictionary',
+  signIn: '/signin',
+  signUp: '/signup',
+  words:'/words'
 };

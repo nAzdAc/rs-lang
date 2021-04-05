@@ -14,6 +14,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import { bookLinks, gamesLinks } from './routeData';
 import { useHistory } from 'react-router-dom';
+import { frontRoutes } from '../utils/frontRoutes';
 
 const useStyles = makeStyles({
   settings: {
@@ -101,8 +102,8 @@ const Menu = () => {
       <MenuStyled>
         <List>
           <div>
-            <NavItem to="/book" text="Книга" navClass={classes.full}/>
-            <NavItem to="/book" Icon={MenuBook} navClass={classes.icon}/>
+            <NavItem to={frontRoutes.book} text="Книга" navClass={classes.full}/>
+            <NavItem to={frontRoutes.book} Icon={MenuBook} navClass={classes.icon}/>
             <Button
               ref={anchorRefBook}
               aria-controls={openBook ? 'menu-list-grow' : undefined}
@@ -157,8 +158,8 @@ const Menu = () => {
             </Popper>
           </div>
           <div>
-            <NavItem to="/games" text="Игры" navClass={classes.full}/>
-            <NavItem to="/games" Icon={VideogameAsset} navClass={classes.icon}/>
+            <NavItem to={frontRoutes.games} text="Игры" navClass={classes.full}/>
+            <NavItem to={frontRoutes.games} Icon={VideogameAsset} navClass={classes.icon}/>
             <Button
               ref={anchorRefGames}
               aria-controls={openGames ? 'menu-list-grow' : undefined}
@@ -198,7 +199,7 @@ const Menu = () => {
                         {gamesLinks.map((link, i) => (
                           <NavItem
                             key={i}
-                            to={`/games${link.to}`}
+                            to={link.to}
                             text={link.text}
                             onClick={handleClickGames}
                             handleClose={handleClose}
@@ -211,14 +212,14 @@ const Menu = () => {
               )}
             </Popper>
           </div>
-          <NavItem to="/dictionary" text="Словарь" navClass={classes.full}/>
-          <NavItem to="/dictionary" Icon={Bookmarks} navClass={classes.icon}/>
-          <NavItem to="/stats" text="Статистика" navClass={classes.full}/>
-          <NavItem to="/stats" Icon={ShowChart} navClass={classes.icon}/>
-          <NavItem to="/settings" Icon={Settings} />
+          <NavItem to={frontRoutes.dictionary} text="Словарь" navClass={classes.full}/>
+          <NavItem to={frontRoutes.dictionary} Icon={Bookmarks} navClass={classes.icon}/>
+          <NavItem to={frontRoutes.stats} text="Статистика" navClass={classes.full}/>
+          <NavItem to={frontRoutes.stats} Icon={ShowChart} navClass={classes.icon}/>
+          <NavItem to={frontRoutes.settings} Icon={Settings} />
         </List>
       </MenuStyled>
-      <RouterLink to="/signin">
+      <RouterLink to={frontRoutes.signIn}>
         <Button variant="contained" size="small" className={classes.button}>
           Войти
         </Button>

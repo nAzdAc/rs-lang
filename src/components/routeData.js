@@ -42,6 +42,6 @@ export const gamesLinks = [
   },
   {
     to: frontRoutes.match,
-    text: 'Мемори',
+    text: 'Match',
   }
 ];
