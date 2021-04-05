@@ -24,7 +24,7 @@ export default function WordsCardList({userWords, difficulty, fetchUrl, infoPane
     return result
   }))
   setWordsArr(cards)
-  // console.log('cards ',cards)
+  console.log('cards ',cards)
   }, [userWords, request]);
 
   useEffect(() => {

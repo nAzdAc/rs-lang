@@ -87,7 +87,7 @@ export default function DictionaryPage() {
   const [page, setPage] = useState(1);
   const [data, setData] = useState();
   const classes = useStyles();
-  // console.log(userId)
+  console.log(userId)
  
   // const fetchUrl = backRoutes.words
   const func = useCallback( async () => {
