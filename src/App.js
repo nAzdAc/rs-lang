@@ -39,10 +39,10 @@ function App() {
 					<Header />
 					<Switch>
 						<Route exact path="/">
-							<ManePage/>
+							<ManePage />
 						</Route>
-						<Route path='/book'>
-							<BookPage/>
+						<Route path="/book">
+							<BookPage />
 						</Route>
 						<Route path={frontRoutes.games}>
 							<GamesPage />
