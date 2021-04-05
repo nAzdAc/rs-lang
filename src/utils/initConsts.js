@@ -9,7 +9,7 @@ export const INIT_CONSTS = {
 export const gameCardsContent = [
 	{
 		name: 'Саванна',
-		todo: 'Сверху падает английское слово, надо выбрать его русский аналог',
+		todo: 'Сверху падает русское слово, необходимо выбрать его английский аналог',
 		to: frontRoutes.savanna
 	},
 	{

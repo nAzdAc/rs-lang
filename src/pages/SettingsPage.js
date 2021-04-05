@@ -90,14 +90,14 @@ const useStyles = makeStyles({
 		cursor: 'pointer'
 	},
 	volumeContainer: {
-		width: '294px',
-		height: '188px',
+		width: '320px',
 		border: '2px solid #000',
 		display: 'flex',
 		flexDirection: 'column',
 		alignItems: 'center',
-		justifyContent: 'space-evenly',
+		justifyContent: 'space-around',
 		marginLeft: '60px',
+		paddingTop: '10px',
 		'&:hover': {
 			transform: 'translateY(-5px)',
 			boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.5)'

@@ -27,10 +27,10 @@ function App() {
 					<Route exact path="/">
 						<ManePage />
 					</Route>
-					<Route path="/book">
+					<Route path={frontRoutes.book}>
 						<BookPage />
 					</Route>
-					<Route path="/games">
+					<Route path={frontRoutes.games}>
 						<GamesPage />
 					</Route>
 					<Route path={frontRoutes.savanna}>
@@ -39,25 +39,25 @@ function App() {
 					<Route path={frontRoutes.audio}>
 						<AudioPage />
 					</Route>
-					<Route path={frontRoutes.sprint}>
+					<Route path={frontRoutes.savanna}>
 						<SprintPage />
 					</Route>
 					<Route path={frontRoutes.match}>
 						<MatchPage />
 					</Route>
-					<Route path="/dictionary">
+					<Route path={frontRoutes.dictionary}>
 						<RouteComponent text="Словарь" />
 					</Route>
-					<Route path="/stats">
+					<Route path={frontRoutes.stats}>
 						<StatsPage />
 					</Route>
-					<Route path="/settings">
+					<Route path={frontRoutes.settings}>
 						<SettingsPage />
 					</Route>
-					<Route path="/signin">
+					<Route path={frontRoutes.signIn}>
 						<SignInPage />
 					</Route>
-					<Route path="/signup">
+					<Route path={frontRoutes.signUp}>
 						<SignUpPage />
 					</Route>
 				</Switch>

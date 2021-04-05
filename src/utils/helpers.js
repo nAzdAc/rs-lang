@@ -11,11 +11,5 @@ export function getRandomInt(min, max) {
 	//Максимум не включается, минимум включается
 }
 
-// export function createSound(src, volume) {
-// 	return new Howl({
-// 		src: src,
-// 		volume: 0.01 * volume
-// 	});
-// }
 
 export const createSound = (src, volume, rate = 1, loop = false) => new Howl({ src, volume: 0.01 * volume, rate, loop });

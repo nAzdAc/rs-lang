@@ -320,7 +320,7 @@ export const MatchPage = () => {
 					<div className={classes.imagesContainer}>
 						{fourImages.map((image, index) => {
 							return (
-								<div key={image.meaning} className={classes.imageWrap}>
+								<div className={classes.imageWrap}>
 									<div
 										key={image.src}
 										data-name={image.src}
