@@ -1,15 +1,16 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState} from "react";
 import { backRoutes } from "../utils/backRoutes";
 import { makeStyles } from "@material-ui/core/styles";
 import Pagination from "@material-ui/lab/Pagination";
-import { useRouteMatch } from "react-router-dom";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import "fontsource-roboto";
 import Box from "@material-ui/core/Box";
 import LevelButton from "../components/LevelButton";
-import CardIcons from "../components/CardIcons";
-import WordsCardList from "../components/WordsCardList"
+import WordsCardList from "../components/WordsCardList";
+import {Route, useRouteMatch, MemoryRouter,Link } from "react-router-dom";
+import PaginationItem from '@material-ui/lab/PaginationItem';
+import { LocalActivityOutlined } from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -61,7 +62,7 @@ export default function WordsPage() {
   let group = match[match.length - 1] - 1;
   const [page, setPage] = useState(1);
   const classes = useStyles(group);
-  
+
   const fetchUrl = backRoutes.getWordsPage(group, page)
 
   const handlePaginationChange = (e, value) => {
@@ -71,20 +72,40 @@ export default function WordsPage() {
 
   return (
     <Container className={classes.container}>
-      <Box className={classes.titleBox}>
-        <Typography className={classes.title} variant="h1" component="h2">
-          Difficulty level
-        </Typography>
-        <LevelButton group={group + 1}></LevelButton>
-      </Box>  
-      <WordsCardList page={page}  difficulty={group} fetchUrl={fetchUrl} infoPanel="CardIcons"></WordsCardList>
-      <Pagination
-        page={page}
-        className={classes.pagination}
-        onChange={handlePaginationChange}
-        count={20}
-        color="primary"
-      />
+      
+
+      <MemoryRouter initialEntries={[`${match}`]} initialIndex={0}>
+        <Box className={classes.titleBox}>
+          <Typography className={classes.title} variant="h1" component="h2">
+            Difficulty level
+          </Typography>
+          <LevelButton group={group + 1}></LevelButton>
+        </Box>  
+        <WordsCardList page={page}  difficulty={group} fetchUrl={fetchUrl} infoPanel="CardIcons"></WordsCardList>
+        <Route>
+          {({ location }) => {
+            {/* console.log(location.pathname) */}
+            {/* const query = new URLSearchParams(location.search);
+            const page = parseInt(query.get('page') || '1', 10); */}
+            return (
+              <Pagination
+                page={page}
+                className={classes.pagination}
+                onChange={handlePaginationChange}
+                count={30}
+                color="primary"
+                renderItem={(item) => (
+                  <PaginationItem
+                    component={Link}
+                    to={`${match}${item.page === 1 ? '' : `?page=${item.page}`}`}
+                    {...item}
+                  />
+                )}
+              />
+            );
+          }}
+        </Route>
+      </MemoryRouter>
     </Container>
   );
 }

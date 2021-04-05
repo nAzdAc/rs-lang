@@ -54,7 +54,6 @@ const useStyles = makeStyles((theme) => ({
     marginTop: "40px",
     justifyContent: "center",
     minHeight: "232px",
-    // border: '1px solid',
     width: "100%",
     boxShadow: "2px 0px 14px 2px rgba(0,0,0,0.09)",
   },

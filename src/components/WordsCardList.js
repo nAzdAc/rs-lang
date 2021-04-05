@@ -18,13 +18,12 @@ export default function WordsCardList({userWords, difficulty, fetchUrl, infoPane
 
   const fetchUserWords = useCallback(async () => { 
     const cards = await Promise.all(userWords.map( async (item) => {
-    console.log(backRoutes.getWord(item.wordId))
+    // console.log(backRoutes.getWord(item.wordId))
     const result = await request(backRoutes.getWord(item.wordId),"GET")
-    console.log(result)
     return result
   }))
   setWordsArr(cards)
-  console.log('cards ',cards)
+  // console.log('cards ',cards)
   }, [userWords, request]);
 
   useEffect(() => {
