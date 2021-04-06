@@ -10,6 +10,10 @@ import Table from '../components/table';
 import { Chart } from '../components/chart';
 import { totalWordsCount } from '../utils/totalWords';
 import { data } from '../const/everyDayChart';
+import { gameStats, appStats } from '../const/tableData';
+import { changeStatsTab, changeStatsGraph } from '../store/statsSlice';
+import { useSelector } from 'react-redux';
+// import { gameStats, appStats } from '../const/tableData';
 
 const totalWords = totalWordsCount(data);
 export function TabPanel(props) {
@@ -79,11 +83,11 @@ export default function SimpleTabs() {
       </AppBar>
       <TabPanel value={value} index={0}>
         <Typography variant="h4" className={classes.title}>
-          Всего
+          Успехи в играх
         </Typography>
         <Table />
         <Typography variant="h4" className={classes.title}>
-          Самая длинная серия
+          За сегодня
         </Typography>
         <Table />
       </TabPanel>

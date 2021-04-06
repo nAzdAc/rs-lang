@@ -1,10 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
-import settingSliceReducer from './settingSlice';
-import testReducer from './testSlice';
+import settingReducer from './settingSlice';
+import statsReduser from './statsSlice';
 
 export const store = configureStore({
   reducer: {
-    test: testReducer,
-    settings: settingSliceReducer,
+    settings: settingReducer,
+    stats: statsReduser,
   },
 });

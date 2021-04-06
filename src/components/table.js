@@ -7,21 +7,12 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-
+import { gameStats, appStats } from '../const/tableData';
 const useStyles = makeStyles({
   table: {
     minWidth: 650,
   },
 });
-
-function createData(name, mistakes, totalWords) {
-  return { name, mistakes, totalWords };
-}
-
-const rows = [
-  createData('Сегодня', '51%', 6),
-  createData('За все время', '19%', 45),
-];
 
 export default function DenseTable() {
   const classes = useStyles();
@@ -31,21 +22,35 @@ export default function DenseTable() {
       <Table className={classes.table} size="small" aria-label="a dense table">
         <TableHead>
           <TableRow>
-            <TableCell></TableCell>
-            <TableCell align="right">Ошибки</TableCell>
-            <TableCell align="right">Всего слов</TableCell>
+            {gameStats.games.map((row) => (
+              <TableCell key={row} align="right">
+                {row}
+              </TableCell>
+            ))}
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
-            <TableRow key={row.name}>
-              <TableCell component="th" scope="row">
-                {row.name}
+          <TableRow>
+            {gameStats.totalWords.map((row) => (
+              <TableCell key={row} align="right">
+                {row}
               </TableCell>
-              <TableCell align="right">{row.mistakes}</TableCell>
-              <TableCell align="right">{row.totalWords}</TableCell>
-            </TableRow>
-          ))}
+            ))}
+          </TableRow>
+          <TableRow>
+            {gameStats.mistakesPercent.map((row) => (
+              <TableCell key={row} align="right">
+                {row}
+              </TableCell>
+            ))}
+          </TableRow>
+          <TableRow>
+            {gameStats.logestSeries.map((row) => (
+              <TableCell key={row} align="right">
+                {row}
+              </TableCell>
+            ))}
+          </TableRow>
         </TableBody>
       </Table>
     </TableContainer>
