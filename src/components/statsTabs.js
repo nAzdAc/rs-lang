@@ -6,14 +6,16 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
-import Table from '../components/table';
+import { DenseTable } from '../components/table';
 import { Chart } from '../components/chart';
 import { totalWordsCount } from '../utils/totalWords';
 import { data } from '../const/everyDayChart';
 import { gameStats, appStats } from '../const/tableData';
 import { changeStatsTab, changeStatsGraph } from '../store/statsSlice';
 import { useSelector } from 'react-redux';
-// import { gameStats, appStats } from '../const/tableData';
+
+const params = Object.keys(gameStats);
+console.log(params[0]);
 
 const totalWords = totalWordsCount(data);
 export function TabPanel(props) {
@@ -85,11 +87,11 @@ export default function SimpleTabs() {
         <Typography variant="h4" className={classes.title}>
           Успехи в играх
         </Typography>
-        <Table />
+        <DenseTable stats={gameStats} />
         <Typography variant="h4" className={classes.title}>
           За сегодня
         </Typography>
-        <Table />
+        <DenseTable stats={gameStats} />
       </TabPanel>
       <TabPanel value={value} index={1}>
         <Typography variant="h4" className={classes.title}>
