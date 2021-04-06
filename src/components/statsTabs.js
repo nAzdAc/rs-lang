@@ -11,11 +11,6 @@ import { Chart } from '../components/chart';
 import { totalWordsCount } from '../utils/totalWords';
 import { data } from '../const/everyDayChart';
 import { gameStats, appStats } from '../const/tableData';
-import { changeStatsTab, changeStatsGraph } from '../store/statsSlice';
-import { useSelector } from 'react-redux';
-
-const params = Object.keys(gameStats);
-console.log(params[0]);
 
 const totalWords = totalWordsCount(data);
 export function TabPanel(props) {
@@ -91,7 +86,7 @@ export default function SimpleTabs() {
         <Typography variant="h4" className={classes.title}>
           За сегодня
         </Typography>
-        <DenseTable stats={gameStats} />
+        <DenseTable stats={appStats} />
       </TabPanel>
       <TabPanel value={value} index={1}>
         <Typography variant="h4" className={classes.title}>

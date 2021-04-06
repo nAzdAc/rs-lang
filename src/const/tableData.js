@@ -6,7 +6,6 @@ export const gameStats = {
 };
 
 export const appStats = {
-  headings: ['Всего слов за день', 'Ошибок за день'],
-  totalWordsDay: 99,
-  mistakesPercentDay: '15%',
+  totalWordsDay: ['Всего слов за день', 99],
+  mistakesPercentDay: ['Ошибок за день', '15%'],
 };

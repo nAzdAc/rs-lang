@@ -9,7 +9,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 const useStyles = makeStyles({
   table: {
-    minWidth: 650,
+    minWidth: '300px',
   },
 });
 
@@ -19,37 +19,14 @@ export function DenseTable(props) {
   return (
     <TableContainer component={Paper}>
       <Table className={classes.table} size="small" aria-label="a dense table">
-        <TableHead>
-          <TableRow>
-            {props.stats.games.map((row) => (
-              <TableCell key={row} align="right">
-                {row}
-              </TableCell>
-            ))}
-          </TableRow>
-        </TableHead>
         <TableBody>
-          <TableRow>
-            {props.stats.totalWords.map((row) => (
-              <TableCell key={row} align="right">
-                {row}
-              </TableCell>
-            ))}
-          </TableRow>
-          <TableRow>
-            {props.stats.mistakesPercent.map((row) => (
-              <TableCell key={row} align="right">
-                {row}
-              </TableCell>
-            ))}
-          </TableRow>
-          <TableRow>
-            {props.stats.logestSeries.map((row) => (
-              <TableCell key={row} align="right">
-                {row}
-              </TableCell>
-            ))}
-          </TableRow>
+          {Object.keys(props.stats).map((item) => (
+            <TableRow>
+              {props.stats[item].map((row) => (
+                <TableCell key={row}>{row}</TableCell>
+              ))}
+            </TableRow>
+          ))}
         </TableBody>
       </Table>
     </TableContainer>
