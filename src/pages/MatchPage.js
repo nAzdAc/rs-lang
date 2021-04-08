@@ -116,6 +116,19 @@ const useStyles = makeStyles({
 		'&:hover': {
 			color: '#00D9CE'
 		}
+	},
+	series: {
+		minHeight: '100px',
+		display: 'flex',
+		flexWrap: 'wrap',
+		alignItems: 'center',
+		justifyContent: 'flex-start',
+		marginBottom: '30px',
+		width: '90%'
+	},
+	starIcon: {
+		fontSize: '50px',
+		color: 'gold'
 	}
 });
 
@@ -146,6 +159,9 @@ export const MatchPage = () => {
 	const [ fourImages, setFourImages ] = useState([]);
 	const [ lifes, setLifes ] = useState(5);
 	const [ block, setBlock ] = useState(true);
+	const [ currentSeries, setCurrentSeries ] = useState(0);
+	const [ allSeries, setAllSeries ] = useState([]);
+	const seriesContainer = useRef('');
 
 	const audioSuccess = useMemo(() => createSound(successSong, soundVolume), [ soundVolume ]);
 	const audioFail = useMemo(() => createSound(failSong2, soundVolume), [ soundVolume ]);
@@ -178,10 +194,51 @@ export const MatchPage = () => {
 		[ request ]
 	);
 
+	const putStats = useCallback(
+		async () => {
+			try {
+				const userId = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY.userData)).userId;
+				const token = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY.userData)).token;
+				const totalWords = correctAnswers.length + failAnswers.length;
+				const correctPercent = Math.round(100 * correctAnswers.length / (correctAnswers.length + failAnswers.length));
+				const longestSeries = Math.max.apply(null, allSeries);
+
+				const gameStats = {
+					gameName: 'match',
+					totalWords,
+					correctPercent,
+					longestSeries,
+					date: new Date().toLocaleDateString()
+				};
+				const data = await backRoutes.putStatistics({
+					userId,
+					token,
+					data: gameStats
+				});
+				console.log(data);
+			} catch (e) {
+				console.log(e);
+				console.log(e.message);
+			}
+		},
+		[ allSeries, correctAnswers.length, failAnswers.length ]
+	);
+
+	useEffect(
+		() => {
+			if (endGame) {
+				putStats();
+			}
+		},
+		[ endGame, putStats ]
+	);
+
 	const answer = useCallback(
 		(src) => {
 			if (block || !src || endGame) return;
 			if (src === currentWord.src) {
+				seriesContainer.current.innerHTML += ' <img src="https://img.icons8.com/color/48/000000/hand-drawn-star.png"/>';
+				setCurrentSeries((prev) => prev + 1);
 				setCorrectAnswers((prev) => [ ...prev, currentWord ]);
 				const goodOverlay = four.current.find((elem) => elem.dataset.name === src);
 				goodOverlay.classList.add(classes.goodOverlay);
@@ -193,6 +250,9 @@ export const MatchPage = () => {
 				}, 2000);
 				audioSuccess.play();
 			} else {
+				setAllSeries((prev) => [ ...prev, currentSeries ]);
+				setCurrentSeries(0);
+				seriesContainer.current.innerHTML = '';
 				setFailAnswers((prev) => [ ...prev, currentWord ]);
 				setLifes((prev) => prev - 1);
 				const goodOverlay = four.current.find((elem) => elem.dataset.name === currentWord.src);
@@ -209,7 +269,7 @@ export const MatchPage = () => {
 				audioFail.play();
 			}
 		},
-		[ audioFail, audioSuccess, block, classes.badOverlay, classes.goodOverlay, currentWord, endGame ]
+		[audioFail, audioSuccess, block, classes.badOverlay, classes.goodOverlay, currentSeries, currentWord, endGame]
 	);
 
 	useEffect(
@@ -320,15 +380,13 @@ export const MatchPage = () => {
 					<div className={classes.imagesContainer}>
 						{fourImages.map((image, index) => {
 							return (
-								<div className={classes.imageWrap}>
+								<div key={image.src} className={classes.imageWrap}>
 									<div
-										key={image.src}
 										data-name={image.src}
 										ref={(elem) => setFourRef(elem, index)}
 										className={classes.overlay}
 									/>
 									<img
-										key={index}
 										className={classes.image}
 										onClick={(event) => answer(event.target.dataset.name)}
 										data-name={image.src}
@@ -341,6 +399,7 @@ export const MatchPage = () => {
 					</div>
 					<Typography className={classes.word} variant="h3">{`${currentWord.english || ''}`}</Typography>
 					<Typography className={classes.meaning} variant="h5">{`${currentWord.meaning || ''}`}</Typography>
+					<div ref={seriesContainer} className={classes.series} />
 					<LifesInGames lifes={lifes} />
 					<Typography
 						variant="subtitle1"

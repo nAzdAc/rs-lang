@@ -15,7 +15,7 @@ import { gameStats, appStats } from '../const/tableData';
 const totalWords = totalWordsCount(data);
 export function TabPanel(props) {
   const { children, value, index, ...other } = props;
-
+  
   return (
     <div
       role="tabpanel"

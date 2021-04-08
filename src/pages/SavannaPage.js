@@ -15,8 +15,7 @@ import { GameStats } from '../components/GameStats';
 import { useHttp } from '../hooks/http.hook';
 import { Transition } from 'react-transition-group';
 import { toggleScreen } from '../utils/fullScreen';
-import { LifesInGames } from '../components/LifesInGames'
-
+import { LifesInGames } from '../components/LifesInGames';
 
 const useStyles = makeStyles({
 	root: {
@@ -33,7 +32,7 @@ const useStyles = makeStyles({
 		alignItems: 'center',
 		justifyContent: 'space-between',
 		background: 'white',
-		position: 'relative',
+		position: 'relative'
 	},
 	heart: {
 		fontSize: '50px',
@@ -109,6 +108,19 @@ const useStyles = makeStyles({
 		'&:hover': {
 			color: '#00D9CE'
 		}
+	},
+	series: {
+		minHeight: '100px',
+		display: 'flex',
+		flexWrap: 'wrap',
+		alignItems: 'center',
+		justifyContent: 'flex-start',
+		marginBottom: '30px',
+		width: '90%'
+	},
+	starIcon: {
+		fontSize: '50px',
+		color: 'gold'
 	}
 });
 
@@ -143,6 +155,9 @@ export const SavannaPage = () => {
 	const four = useRef([]);
 	const [ fullScreen, setFullScreen ] = useState(false);
 	const gameBoard = useRef();
+	const [ currentSeries, setCurrentSeries ] = useState(0);
+	const [ allSeries, setAllSeries ] = useState([]);
+	const seriesContainer = useRef('');
 
 	const fetchWords = useCallback(
 		async () => {
@@ -163,11 +178,59 @@ export const SavannaPage = () => {
 		[ request ]
 	);
 
+	const putStats = useCallback(
+		async () => {
+			try {
+				const userId = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY.userData)).userId;
+				const token = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY.userData)).token;
+				const totalWords = correctAnswers.length + failAnswers.length;
+				const correctPercent = Math.round(100 * correctAnswers.length / (correctAnswers.length + failAnswers.length));
+				const longestSeries = Math.max.apply(null, allSeries);
+
+				const gameStats = {
+					gameName: 'savanna',
+					totalWords,
+					correctPercent,
+					longestSeries,
+					date: new Date().toLocaleDateString()
+				};
+				// console.log(token);
+				// console.log(userId);
+				// console.log(gameStats);
+				// const data = await request(`${backRoutes.signUp}/${userId}/statistics`, 'PUT', gameStats, {
+				// 	Authorization: `Bearer ${token}`
+				// });
+				const data = await backRoutes.putStatistics({
+					userId,
+					token,
+					data: gameStats
+				});
+				console.log(data);
+			} catch (e) {
+				console.log(e);
+				console.log(e.message);
+			}
+		},
+		[ allSeries, correctAnswers.length, failAnswers.length ]
+	);
+
+	useEffect(
+		() => {
+			if (endGame) {
+				putStats();
+			}
+		},
+		[ endGame, putStats ]
+	);
+
 	const answer = useCallback(
 		(value, click) => {
 			if (block || endGame || !value) return;
 			if (click) {
 				if (value === currentWord.english) {
+					seriesContainer.current.innerHTML +=
+						' <img src="https://img.icons8.com/color/48/000000/hand-drawn-star.png"/>';
+					setCurrentSeries((prev) => prev + 1);
 					setCorrectAnswers((prev) => [ ...prev, currentWord ]);
 					audioSuccess.play();
 					const goodButton = four.current.find((button) => button.value === value);
@@ -179,6 +242,9 @@ export const SavannaPage = () => {
 						setBlock(false);
 					}, 2000);
 				} else {
+					setAllSeries((prev) => [ ...prev, currentSeries ]);
+					setCurrentSeries(0);
+					seriesContainer.current.innerHTML = '';
 					setFailAnswers((prev) => [ ...prev, currentWord ]);
 					audioFail2.play();
 					setLifes((prev) => prev - 1);
@@ -195,6 +261,9 @@ export const SavannaPage = () => {
 					}, 2000);
 				}
 			} else {
+				setAllSeries((prev) => [ ...prev, currentSeries ]);
+				setCurrentSeries(0);
+				seriesContainer.current.innerHTML = '';
 				setFailAnswers((prev) => [ ...prev, currentWord ]);
 				audioFail2.play();
 				setLifes((prev) => prev - 1);
@@ -208,7 +277,7 @@ export const SavannaPage = () => {
 				}, 2000);
 			}
 		},
-		[ audioFail2, audioSuccess, block, classes.badButton, classes.goodButton, currentWord, endGame ]
+		[audioFail2, audioSuccess, block, classes.badButton, classes.goodButton, currentSeries, currentWord, endGame]
 	);
 
 	useEffect(
@@ -322,6 +391,7 @@ export const SavannaPage = () => {
 						)}
 					</Transition>
 					<div className={classes.contentWrap}>
+						<div ref={seriesContainer} className={classes.series} />
 						<div className={classes.buttonsWrap}>
 							{fourButtons.map((item, index) => {
 								return (

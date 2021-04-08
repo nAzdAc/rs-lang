@@ -1,4 +1,5 @@
 export function totalWordsCount(data) {
+  console.log(data)
   const amount = data.reduce(function (acc, value, i) {
     if (i === 0) {
       acc.push({
@@ -14,5 +15,6 @@ export function totalWordsCount(data) {
     // console.log(acc);
     return acc;
   }, []);
+  console.log(amount)
   return amount;
 }

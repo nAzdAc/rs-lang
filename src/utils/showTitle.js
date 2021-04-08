@@ -4,7 +4,6 @@
 
 export const showTitle = (fails, lifes) => {
 	let title = '';
-	console.log(lifes)
 	if (lifes <= 0) return 'Ты смог потерять все жизни. Это ещё никому не удавалось. Молодец!:)'
 	if (fails < 2) {
 		title = 'Ты крутой!)';
