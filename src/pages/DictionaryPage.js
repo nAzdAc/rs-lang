@@ -8,7 +8,7 @@ import "fontsource-roboto";
 import Box from "@material-ui/core/Box";
 import WordsCardList from "../components/WordsCardList";
 import { AuthContext } from "../context/AuthContext";
-import Button from '@material-ui/core/Button';
+import Button from "@material-ui/core/Button";
 import LevelButton from "../components/LevelButton";
 
 const useStyles = makeStyles((theme) => ({
@@ -18,11 +18,11 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   container: {
-    width: '100%',
+    width: "100%",
     display: "flex",
     flexWrap: "wrap",
     justifyContent: "center",
-    aligneItems:'flex-start',
+    aligneItems: "flex-start",
   },
   title: {
     marginRight: "40px",
@@ -31,51 +31,49 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: "300",
     lineHeight: "80px",
     textAlign: "left",
-    color: '#000000',
+    color: "#000000",
     verticalAlign: "middle",
   },
   titleBox: {
-    height:'72px',
+    height: "72px",
     display: "flex",
     marginTop: "80px",
     marginRight: "auto",
-    width: '100%',
+    width: "100%",
   },
   typeBox: {
-    width: '100%',
-    height:'48px',
+    width: "100%",
+    height: "48px",
     display: "flex",
     marginTop: "40px",
     // backgroundColor:'#6200EE',
-    justifyContent: 'space-around',
+    justifyContent: "space-around",
     // marginRight: "auto",
   },
   typeButton: {
-    width: '100%',
+    width: "100%",
     fontSize: "14px",
     fontWeight: "500",
-    color:'white',
-    backgroundColor:'#6200EE',
-    borderRadius:'0',
+    color: "white",
+    backgroundColor: "#6200EE",
+    borderRadius: "0",
   },
   typeButtonActive: {
-    borderBottom: '4px solid white',
-    margiBottom: '-4px',
-    color:'white',
-    backgroundColor:'#6200EE',
-    
+    borderBottom: "4px solid white",
+    margiBottom: "-4px",
+    color: "white",
+    backgroundColor: "#6200EE",
   },
   buttonBox: {
-    width: '100%',
+    width: "100%",
     display: "flex",
     marginTop: "40px",
     marginRight: "auto",
     flexWrap: "wrap",
   },
   link: {
-    textDecoration: 'none',
+    textDecoration: "none",
   },
-
   pagination: {
     margin: "40px",
     fontSize: "40px",
@@ -83,30 +81,64 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function DictionaryPage() {
-  const {userId,token} = useContext(AuthContext);
+  const { userId, token } = useContext(AuthContext);
   const [page, setPage] = useState(1);
+  const [activeWordButton, setActiveWordButton] = useState(0);
+  const [activeLevel, setActiveLevel] = useState(null);
   const [data, setData] = useState();
+  const [listUserWords, setlistUserWords]=useState()
   const classes = useStyles();
-  console.log(userId)
- 
+  // console.log(userId);
+
   // const fetchUrl = backRoutes.words
-  const func = useCallback( async () => {
-    const result = await backRoutes.getUserWords({userId, token}); 
-    setData(result)
-  }, [token, userId])
+  const func = useCallback(async () => {
+    const result = await backRoutes.getUserWords({ userId, token });
+    setData(result.filter((item)=>!item.optional.deleted))
+    setlistUserWords(result)
+
+  }, [token, userId]);
 
   useEffect(() => {
-    if(userId && token ){
-      func()
+    if (userId && token) {
+      func();
     }
-  }, [func, token, userId])
+  }, [func, token, userId]);
 
   const handlePaginationChange = (e, value) => {
     setPage(value);
   };
-  const handleButtonBoxClick = (e) => {
-    // console.log('hello')
-  }
+  
+  const handleWordsButtonClick = (index) => {
+    setActiveWordButton(index)
+    if(index === 1){
+      console.log(listUserWords)
+      setData(listUserWords.filter((item)=> item.difficulty === "difficult"))
+    }
+    else if(index === 0){
+      setData(listUserWords.filter((item)=>!item.optional.deleted))
+    }
+    else if(index === 2){
+      setData(listUserWords.filter((item)=>item.optional.deleted))
+    }
+  };
+  const handleLevelsClick = (index) => {
+    if(index === activeLevel) {
+      console.log(index === activeLevel)
+      setActiveLevel(null)
+    }
+    setActiveLevel(index)
+    setData(listUserWords.filter((item)=>item.optional.group === index))
+
+
+    
+    // return index
+  };
+  const wordsButtons = [
+    { text: "Изучаемые слова"},
+    { text: "Сложные слова"},
+    { text: "Удаленные слова"},
+  ];
+  const levels = [1,2,3,4,5,6]
 
   return (
     <Container className={classes.container}>
@@ -114,34 +146,49 @@ export default function DictionaryPage() {
         <Typography className={classes.title} variant="h1" component="h2">
           Словарь
         </Typography>
-
       </Box>
-      <Box className={classes.typeBox}>
-        <Button variant="contained" className={`${classes.typeButton} ${classes.typeButtonActive} `}>Изучаемые слова</Button>
-        <Button variant="contained"  className={classes.typeButton}>Сложные слова</Button>
-        <Button variant="contained" className={classes.typeButton}>Удаленные слова</Button>
-      </Box>
-      <Box className={classes.buttonBox} >
-        <LevelButton click={handleButtonBoxClick} state={'active'} group={1}></LevelButton>
-        <LevelButton click={handleButtonBoxClick} group={2}></LevelButton>
-        <LevelButton click={handleButtonBoxClick} group={3}></LevelButton>
-        <LevelButton click={handleButtonBoxClick} group={4}></LevelButton>
-        <LevelButton click={handleButtonBoxClick} group={5}></LevelButton>
-        <LevelButton click={handleButtonBoxClick} group={6}></LevelButton>
-      </Box>
+      <ul className={classes.typeBox}>
+        {wordsButtons.map((item, index) => (
+          <Button
+            key={index}
+            onClick={() => handleWordsButtonClick(index)}
+            variant="contained"
+            className={
+              index === activeWordButton
+                ? `${classes.typeButton} ${classes.typeButtonActive}`
+                : `${classes.typeButton}`
+            }
+          >
+            {item.text}
+          </Button>
+        ))}
+      </ul>
+      <ul className={classes.buttonBox}>
+      {
+        levels.map((item,index) => (
+        <LevelButton
+          key={index}
+          click={() => handleLevelsClick(index)}
+          group={item}
+          isActive={index === activeLevel? true: false}
+        ></LevelButton>
+        ))}
+      </ul>
       <WordsCardList
-        // difficulty={group}
-        // fetchUrl={fetchUrl}
         userWords={data}
-        infoPanel="CardIcons"
+        infoPanel="WordInfo"
       ></WordsCardList>
-       <Pagination
+      {
+        data && Math.ceil(data.length/20) > 2 &&
+        <Pagination
         page={page}
         className={classes.pagination}
         onChange={handlePaginationChange}
-        count={20}
+        count={data? Math.ceil(data.length/20):30}
         color="primary"
       />
+    }
+      
     </Container>
   );
 }

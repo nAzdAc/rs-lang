@@ -5,7 +5,6 @@ export const originURL = 'http://localhost:8080';
 
 //  ?group=1&page=1
 
-
 const token = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY.userData)) ? JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY.userData)).token : '';
 
 const getRoute = (trailing) => `${originURL}/${trailing}`;
