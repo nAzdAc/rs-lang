@@ -4,12 +4,21 @@ import WordCard from "./WordCard";
 import "fontsource-roboto";
 import CardIcons from "./CardIcons";
 import { backRoutes } from "../utils/backRoutes";
-import {regexpForText} from "../utils/initConsts"
+import {regexpForText} from "../utils/initConsts";
+import { makeStyles } from "@material-ui/core/styles";
+
+const useStyles = makeStyles((theme) => ({
+  list: {
+    marginBottom: "40px",
+  },
+
+}))
 
 
 export default function WordsCardList({userWords, difficulty, fetchUrl, infoPanel}) {
   const [wordsArr, setWordsArr] = useState([]);
   const { request } = useHttp();
+  const classes = useStyles();
 
   const fetchWords = useCallback(async () => {
     const data = await request(fetchUrl, "GET");
@@ -24,7 +33,7 @@ export default function WordsCardList({userWords, difficulty, fetchUrl, infoPane
     return result
   }))
   setWordsArr(cards)
-  console.log('cards ',cards)
+  // console.log('cards ',cards)
   }, [userWords, request]);
 
   useEffect(() => {
@@ -36,7 +45,7 @@ export default function WordsCardList({userWords, difficulty, fetchUrl, infoPane
     }, [fetchUserWords, fetchWords, userWords]);
 
   return (
-    <ul>
+    <ul className={classes.list}>
     {
       wordsArr.map((item) => (
       <WordCard

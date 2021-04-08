@@ -1,7 +1,7 @@
 export const origin = 'http://localhost:8080';
 
 
-const token = JSON.parse(localStorage.getItem('userData')).token;
+const token = (JSON.parse(localStorage.getItem('userData')))? JSON.parse(localStorage.getItem('userData')).token: '' ;
 
 const getRoute = (trailing) => `${origin}/${trailing}`;
 
