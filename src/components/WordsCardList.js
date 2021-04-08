@@ -4,18 +4,22 @@ import WordCard from "./WordCard";
 import "fontsource-roboto";
 import CardIcons from "./CardIcons";
 import { backRoutes } from "../utils/backRoutes";
-import {regexpForText} from "../utils/initConsts";
+import { regexpForText } from "../utils/initConsts";
 import { makeStyles } from "@material-ui/core/styles";
+import WordInfo from "./WordInfo"
 
 const useStyles = makeStyles((theme) => ({
   list: {
     marginBottom: "40px",
   },
+}));
 
-}))
-
-
-export default function WordsCardList({userWords, difficulty, fetchUrl, infoPanel}) {
+export default function WordsCardList({
+  userWords,
+  difficulty,
+  fetchUrl,
+  infoPanel,
+}) {
   const [wordsArr, setWordsArr] = useState([]);
   const { request } = useHttp();
   const classes = useStyles();
@@ -24,46 +28,61 @@ export default function WordsCardList({userWords, difficulty, fetchUrl, infoPane
     const data = await request(fetchUrl, "GET");
     setWordsArr(data);
   }, [fetchUrl, request]);
-  
 
-  const fetchUserWords = useCallback(async () => { 
-    const cards = await Promise.all(userWords.map( async (item) => {
-    // console.log(backRoutes.getWord(item.wordId))
-    const result = await request(backRoutes.getWord(item.wordId),"GET")
-    return result
-  }))
-  setWordsArr(cards)
-  // console.log('cards ',cards)
+  const fetchUserWords = useCallback(async () => {
+    const cards = await Promise.all(
+      userWords.map(async (item) => {
+        // console.log(backRoutes.getWord(item.wordId))
+        const result = await request(backRoutes.getWord(item.wordId), "GET");
+        return result;
+      })
+    );
+    setWordsArr(cards);
+    // console.log('cards ',cards)
   }, [userWords, request]);
 
   useEffect(() => {
-     if(userWords){
+    if (userWords) {
       fetchUserWords();
-     }else{
-      fetchWords()
-     }
-    }, [fetchUserWords, fetchWords, userWords]);
+    } else {
+      fetchWords();
+    }
+  }, [fetchUserWords, fetchWords, userWords]);
 
   return (
     <ul className={classes.list}>
-    {
-      wordsArr.map((item) => (
-      <WordCard
-        key={item.id}
-        word={item.word}
-        image={item.image}
-        textExample={item.textExample.replace(regexpForText, '')}
-        textExampleTranslate={item.textExampleTranslate}
-        transcription={item.transcription}
-        wordTranslate={item.wordTranslate}
-        textMeaning={item.textMeaning.replace(regexpForText, '')}
-        textMeaningTranslate={item.textMeaningTranslate}
-        infoPanel={
-          infoPanel === 'CardIcons'? <CardIcons difficulty={difficulty}  wordId={item.id} audio={item.audio} audioExample={item.audioExample} audioMeaning={item.audioMeaning}></CardIcons>:null
-        }
-      ></WordCard>
-  ))
-  }
+      {wordsArr.map((item) => (
+        <WordCard
+          key={item.id}
+          word={item.word}
+          image={item.image}
+          textExample={item.textExample.replace(regexpForText, "")}
+          textExampleTranslate={item.textExampleTranslate}
+          transcription={item.transcription}
+          wordTranslate={item.wordTranslate}
+          textMeaning={item.textMeaning.replace(regexpForText, "")}
+          textMeaningTranslate={item.textMeaningTranslate}
+          infoPanel={
+            infoPanel === "CardIcons" ? (
+              <CardIcons
+                difficulty={difficulty}
+                wordId={item.id}
+                audio={item.audio}
+                audioExample={item.audioExample}
+                audioMeaning={item.audioMeaning}
+              ></CardIcons>
+            ) : (
+              infoPanel === "WordInfo"?(
+                <WordInfo
+                  difficulty={difficulty}
+                  wordId={item.id}
+                  group={item.group}
+              ></WordInfo>
+              ):null
+            )
+          }
+        ></WordCard>
+      ))}
     </ul>
   );
 }

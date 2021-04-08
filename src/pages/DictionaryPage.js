@@ -127,10 +127,7 @@ export default function DictionaryPage() {
       setActiveLevel(null)
     }
     setActiveLevel(index)
-    // console.log(index)
     setData(listUserWords.filter((item)=>item.optional.group === index))
-    // console.log(listUserWords.filter((item)=>item.optional.group === index+1))
-    // console.log(data)
 
 
     
@@ -179,7 +176,7 @@ export default function DictionaryPage() {
       </ul>
       <WordsCardList
         userWords={data}
-        infoPanel="CardIcons"
+        infoPanel="WordInfo"
       ></WordsCardList>
       {
         data && Math.ceil(data.length/20) > 2 &&
