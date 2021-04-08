@@ -16,6 +16,7 @@ import { GameStats } from '../components/GameStats';
 import { useHttp } from '../hooks/http.hook';
 import { toggleScreen } from '../utils/fullScreen';
 import { LifesInGames } from '../components/LifesInGames';
+import { Howler } from 'howler';
 
 const useStyles = makeStyles({
 	root: {
@@ -37,7 +38,7 @@ const useStyles = makeStyles({
 	speaker: {
 		width: '150px',
 		height: '120px',
-		marginBottom: '100px',
+		marginBottom: '60px',
 		cursor: 'pointer',
 		color: '#01A299',
 		'&:hover': {
@@ -113,6 +114,19 @@ const useStyles = makeStyles({
 		'&:hover': {
 			color: '#00D9CE'
 		}
+	},
+	series: {
+		minHeight: '100px',
+		display: 'flex',
+		flexWrap: 'wrap',
+		alignItems: 'center',
+		justifyContent: 'flex-start',
+		marginBottom: '30px',
+		width: '90%'
+	},
+	starIcon: {
+		fontSize: '50px',
+		color: 'gold'
 	}
 });
 
@@ -126,6 +140,14 @@ const keyCodeArray = {
 	num3: 34,
 	num4: 37
 };
+
+// const labels = {
+// 	1: 'Useless+',
+// 	2: 'Poor+',
+// 	3: 'Ok+',
+// 	4: 'Good+',
+// 	5: 'Excellent+'
+// };
 
 export const AudioPage = () => {
 	const classes = useStyles();
@@ -143,7 +165,10 @@ export const AudioPage = () => {
 	const [ lifes, setLifes ] = useState(5);
 	const four = useRef([]);
 	const [ fullScreen, setFullScreen ] = useState(false);
+	const [ currentSeries, setCurrentSeries ] = useState(0);
+	const [ allSeries, setAllSeries ] = useState([]);
 	const gameBoard = useRef();
+	const seriesContainer = useRef('');
 
 	const audioSuccess = useMemo(() => createSound(successSong, soundVolume), [ soundVolume ]);
 	const audioFail2 = useMemo(() => createSound(failSong2, soundVolume), [ soundVolume ]);
@@ -173,11 +198,52 @@ export const AudioPage = () => {
 		[ request ]
 	);
 
+	const putStats = useCallback(
+		async () => {
+			try {
+				const userId = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY.userData)).userId;
+				const token = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY.userData)).token;
+				const totalWords = correctAnswers.length + failAnswers.length;
+				const correctPercent = Math.round(100 * correctAnswers.length / (correctAnswers.length + failAnswers.length));
+				const longestSeries = Math.max.apply(null, allSeries);
+
+				const gameStats = {
+					gameName: 'audio',
+					totalWords,
+					correctPercent,
+					longestSeries,
+					date: new Date().toLocaleDateString()
+				};
+				const data = await backRoutes.putStatistics({
+					userId,
+					token,
+					data: gameStats
+				});
+				console.log(data);
+			} catch (e) {
+				console.log(e);
+				console.log(e.message);
+			}
+		},
+		[ allSeries, correctAnswers.length, failAnswers.length ]
+	);
+
+	useEffect(
+		() => {
+			if (endGame) {
+				putStats();
+			}
+		},
+		[ endGame, putStats ]
+	);
+
 	const answer = useCallback(
 		(word) => {
 			if (block || !word || endGame) return;
 			if (word === currentWord.english) {
 				setCorrectAnswers((prev) => [ ...prev, currentWord ]);
+				seriesContainer.current.innerHTML += ' <img src="https://img.icons8.com/color/48/000000/hand-drawn-star.png"/>';
+				setCurrentSeries((prev) => prev + 1);
 				const goodButton = four.current.find((button) => button.value === word);
 				goodButton.classList.add(classes.goodButton);
 				setBlock(true);
@@ -189,6 +255,9 @@ export const AudioPage = () => {
 				audioSuccess.play();
 			} else {
 				setFailAnswers((prev) => [ ...prev, currentWord ]);
+				setAllSeries((prev) => [ ...prev, currentSeries ]);
+				setCurrentSeries(0);
+				seriesContainer.current.innerHTML = '';
 				const goodButton = four.current.find((button) => button.value === currentWord.english);
 				const badButton = four.current.find((button) => button.value === word);
 				goodButton.classList.add(classes.goodButton);
@@ -204,7 +273,7 @@ export const AudioPage = () => {
 				setLifes((prev) => prev - 1);
 			}
 		},
-		[ audioFail2, audioSuccess, block, classes.badButton, classes.goodButton, currentWord, endGame ]
+		[ audioFail2, audioSuccess, block, classes.badButton, classes.goodButton, currentSeries, currentWord, endGame ]
 	);
 
 	useEffect(
@@ -217,12 +286,13 @@ export const AudioPage = () => {
 	useEffect(
 		() => {
 			if ((currentNumber && currentNumber >= wordsArray.length) || !lifes) {
+				setBlock(true);
 				setTimeout(() => {
 					setEndGame(true);
 				}, 2000);
 			}
 		},
-		[ wordsArray, currentNumber, lifes ]
+		[ wordsArray, currentNumber, lifes, correctAnswers, allSeries, failAnswers ]
 	);
 
 	useEffect(
@@ -236,15 +306,15 @@ export const AudioPage = () => {
 
 	useEffect(
 		() => {
-			if (endGame) return
+			if (endGame) return;
 			if (currentWord && !block) {
+				Howler.stop();
 				setTimeout(() => {
 					audioWord.play();
 				}, 200);
 			}
 			return () => {
 				clearTimeout();
-				audioWord.stop();
 			};
 		},
 		[ currentWord, audioWord, block, endGame ]
@@ -290,6 +360,7 @@ export const AudioPage = () => {
 	);
 
 	function repeat() {
+		Howler.stop();
 		audioWord.play();
 	}
 
@@ -317,6 +388,7 @@ export const AudioPage = () => {
 						)}
 					</button>
 					<SpeakerIcon onClick={repeat} className={classes.speaker} />
+					<div ref={seriesContainer} className={classes.series} />
 					<div className={classes.buttonsWrap}>
 						{fourButtons.map((item, index) => {
 							return (

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import Typography from '@material-ui/core/Typography';
 import Switch from '@material-ui/core/Switch';
 import Slider from '@material-ui/core/Slider';
@@ -15,6 +15,8 @@ import {
 	changeVolume
 } from '../store/settingSlice';
 import { useSelector } from 'react-redux';
+import { useHttp } from '../hooks/http.hook';
+import { backRoutes } from '../utils/backRoutes';
 
 const useStyles = makeStyles({
 	root: {
@@ -175,9 +177,55 @@ const VolumeSlider = withStyles({
 	}
 })(Slider);
 
+function getStatsPerGame(arr, filterElem) {
+	const array = arr;
+	const game = filterElem;
+	let longestSeries = 0;
+	let correctPercent = 0;
+	const filteredArray = array.filter((item) => item.gameName === game);
+	if (filteredArray.length) {
+		longestSeries = Math.max.apply(null, filteredArray.map((item) => item.longestSeries));
+		correctPercent = Math.round(
+			filteredArray.map((game) => game.correctPercent).reduce((acc, val) => acc + val) / filteredArray.length
+		);
+	}
+	return { gameName: game, longestSeries, correctPercent };
+}
+
+function getCorrectPercentToday(arr, filterElem) {
+	const array = arr;
+	const date = filterElem;
+	const filteredArray = array.filter((item) => item.date === date);
+	let percentByDay = 0;
+	if (filteredArray.length) {
+		percentByDay = Math.round(
+			filteredArray.map((item) => item.correctPercent).reduce((acc, val) => acc + val) / filteredArray.length
+		);
+	}
+	return { date, percentByDay };
+}
+
+function getLearnedWordsPerDate(arr) {
+	const dates = [ ...new Set(arr.map((item) => item.date)) ];
+
+	const allDates = dates.map((date, index) => {
+		const filteredArr = arr.filter((game) => game.date === date);
+		return filteredArr;
+	});
+
+	const perDate = allDates.map((arr) => {
+		const date = arr.map((game) => game.date)[0];
+		const learnedWords = arr.map((game) => game.totalWords).reduce((acc, val) => acc + val);
+		return { date, learnedWords };
+	});
+
+	return perDate;
+}
+
 export const SettingsPage = () => {
 	const classes = useStyles();
-	const { avatar, uploadAvatar } = useContext(AuthContext);
+	const { request } = useHttp();
+	const { avatar, uploadAvatar, token } = useContext(AuthContext);
 	const [ musicVolume, setMusicVolume ] = useState(
 		parseInt(localStorage.getItem(LOCAL_STORAGE_KEY.musicVolume)) || INIT_CONSTS.musicVolume
 	);
@@ -186,6 +234,53 @@ export const SettingsPage = () => {
 	);
 	const [ wordVolume, setWordVolume ] = useState(
 		parseInt(localStorage.getItem(LOCAL_STORAGE_KEY.wordVolume)) || INIT_CONSTS.wordVolume
+	);
+
+	const getStats = useCallback(async () => {
+		const userId = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY.userData)).userId;
+		const token = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY.userData)).token;
+
+		const stats = await backRoutes.getStats({ userId, token });
+		const allGames = stats.statistics.games;
+		console.log(allGames);
+
+		const savannaGameStats = getStatsPerGame(allGames, 'savanna');
+
+		const matchGameStats = getStatsPerGame(allGames, 'match');
+
+		const sprintGameStats = getStatsPerGame(allGames, 'sprint');
+
+		const audioGameStats = getStatsPerGame(allGames, 'audio');
+
+		const percentToday = getCorrectPercentToday(allGames, `${new Date().toLocaleDateString()}`);
+
+		const dates = [ ...new Set(allGames.map((item) => item.date)) ];
+
+		const allDates = dates.map((date, index) => {
+			return allGames.filter((game) => game.date === date);
+		});
+
+		const perDate = allDates.map((arr) => {
+			const date = arr.map((game) => game.date)[0];
+			const learnedWords = arr.map((game) => game.totalWords).reduce((acc, val) => acc + val);
+			return { date, learnedWords };
+		});
+
+
+		const learnedWordsPerDate = getLearnedWordsPerDate(allGames)
+		console.log(perDate);
+
+		console.log(dates);
+		console.log(allDates);
+		const parsedStats = { learnedWordsPerDate, percentToday, savannaGameStats, matchGameStats, sprintGameStats, audioGameStats };
+		console.log(parsedStats);
+	}, []);
+
+	useEffect(
+		() => {
+			getStats();
+		},
+		[ getStats ]
 	);
 
 	function handleMusicVolume(event, newValue) {

@@ -17,7 +17,7 @@ const useStyles = makeStyles({
 		flexWrap: 'wrap',
 		alignItems: 'center',
 		paddingTop: '30px',
-		width: '100%',
+		width: '100%'
 	},
 	title: {
 		marginBottom: '20px'
@@ -42,7 +42,7 @@ const useStyles = makeStyles({
 	rowItem: {
 		marginRight: '10px'
 	},
-	
+
 	button: {
 		marginRight: '10px',
 		border: 'none',
@@ -52,7 +52,7 @@ const useStyles = makeStyles({
 		width: '30px',
 		height: '40px',
 		background: 'white',
-		color: '#FFF',
+		color: '#FFF'
 	},
 	goodSpeaker: {
 		cursor: 'pointer',
@@ -70,9 +70,8 @@ const useStyles = makeStyles({
 	},
 	cardsContainer: {
 		display: 'flex',
-		flexWrap: 'wrap',
-		
-	},
+		flexWrap: 'wrap'
+	}
 });
 
 export const GameStats = ({ correctAnswers, failAnswers, lifes }) => {
@@ -86,7 +85,6 @@ export const GameStats = ({ correctAnswers, failAnswers, lifes }) => {
 
 	useEffect(
 		() => {
-			console.log(lifes)
 			if (lifes === 0) {
 				audioDefeat.play();
 			} else {
@@ -124,38 +122,42 @@ export const GameStats = ({ correctAnswers, failAnswers, lifes }) => {
 						return (
 							<React.Fragment>
 								{item.src ? (
-									<SavannaStatsCard item={item} fail={false} />
+									<SavannaStatsCard key={item.src} item={item} fail={false} />
 								) : (
 									<div key={index} className={classes.row}>
-								{item.audio ? (
-									<button key={item.audio} value={item.audio} onClick={repeat} className={classes.button}>
-										<SpeakerIcon key={item.audio} value={item.audio} onClick={repeat} className={classes.goodSpeaker} />
-									</button>
-								) : (
-									''
-								)}
-								{item.transcription ? (
-									<Typography className={classes.rowItem} key={item.transcription} variant="h6">
-										{item.transcription}
-									</Typography>
-								) : (
-									''
-								)}
-								{item.english ? (
-									<Typography className={classes.rowItem} key={item.english} variant="h6">
-										{`${item.english} - `}
-									</Typography>
-								) : (
-									''
-								)}
-								{item.russian ? (
-									<Typography key={item.russian} variant="h6">
-										{item.russian}
-									</Typography>
-								) : (
-									''
-								)}
-							</div>
+										{item.audio ? (
+											<button  value={item.audio} onClick={repeat} className={classes.button}>
+												<SpeakerIcon
+													value={item.audio}
+													onClick={repeat}
+													className={classes.goodSpeaker}
+												/>
+											</button>
+										) : (
+											''
+										)}
+										{item.transcription ? (
+											<Typography className={classes.rowItem} variant="h6">
+												{item.transcription}
+											</Typography>
+										) : (
+											''
+										)}
+										{item.english ? (
+											<Typography className={classes.rowItem} variant="h6">
+												{`${item.english} - `}
+											</Typography>
+										) : (
+											''
+										)}
+										{item.russian ? (
+											<Typography variant="h6">
+												{item.russian}
+											</Typography>
+										) : (
+											''
+										)}
+									</div>
 								)}
 							</React.Fragment>
 						);
@@ -172,38 +174,42 @@ export const GameStats = ({ correctAnswers, failAnswers, lifes }) => {
 						return (
 							<React.Fragment>
 								{item.src ? (
-										<SavannaStatsCard item={item} fail={true} />
+									<SavannaStatsCard key={item.src} item={item} fail={true} />
 								) : (
 									<div key={index} className={classes.row}>
-								{item.audio ? (
-									<button key={item.audio} value={item.audio} onClick={repeat} className={classes.button}>
-										<SpeakerIcon key={item.audio} value={item.audio} onClick={repeat} className={classes.badSpeaker} />
-									</button>
-								) : (
-									''
-								)}
-								{item.transcription ? (
-									<Typography className={classes.rowItem} key={item.transcription} variant="h6">
-										{item.transcription}
-									</Typography>
-								) : (
-									''
-								)}
-								{item.english ? (
-									<Typography className={classes.rowItem} key={item.english} variant="h6">
-										{`${item.english} - `}
-									</Typography>
-								) : (
-									''
-								)}
-								{item.russian ? (
-									<Typography key={item.russian} variant="h6">
-										{item.russian}
-									</Typography>
-								) : (
-									''
-								)}
-							</div>
+										{item.audio ? (
+											<button value={item.audio} onClick={repeat} className={classes.button}>
+												<SpeakerIcon
+													value={item.audio}
+													onClick={repeat}
+													className={classes.badSpeaker}
+												/>
+											</button>
+										) : (
+											''
+										)}
+										{item.transcription ? (
+											<Typography className={classes.rowItem} variant="h6">
+												{item.transcription}
+											</Typography>
+										) : (
+											''
+										)}
+										{item.english ? (
+											<Typography className={classes.rowItem} variant="h6">
+												{`${item.english} - `}
+											</Typography>
+										) : (
+											''
+										)}
+										{item.russian ? (
+											<Typography variant="h6">
+												{item.russian}
+											</Typography>
+										) : (
+											''
+										)}
+									</div>
 								)}
 							</React.Fragment>
 						);

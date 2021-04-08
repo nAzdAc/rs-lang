@@ -30,7 +30,7 @@ const useStyles = makeStyles({
 		alignItems: 'center',
 		justifyContent: 'space-around',
 		padding: '20px 0px 10px 0px',
-		background: 'white',
+		background: 'white'
 	},
 	buttonsWrap: {
 		display: 'flex',
@@ -89,6 +89,19 @@ const useStyles = makeStyles({
 		'&:hover': {
 			color: '#00D9CE'
 		}
+	},
+	series: {
+		minHeight: '100px',
+		display: 'flex',
+		flexWrap: 'wrap',
+		alignItems: 'center',
+		justifyContent: 'flex-start',
+		marginBottom: '30px',
+		width: '90%'
+	},
+	starIcon: {
+		fontSize: '50px',
+		color: 'gold'
 	}
 });
 
@@ -114,6 +127,9 @@ export const SprintPage = () => {
 	const [ currentNumber, setCurrentNumber ] = useState(0);
 	const timer = useRef();
 	const [ fullScreen, setFullScreen ] = useState(false);
+	const [ currentSeries, setCurrentSeries ] = useState(0);
+	const [ allSeries, setAllSeries ] = useState([]);
+	const seriesContainer = useRef('');
 	const gameBoard = useRef();
 
 	const audioSuccess = useMemo(() => createSound(successSong, soundVolume), [ soundVolume ]);
@@ -136,6 +152,51 @@ export const SprintPage = () => {
 		[ request ]
 	);
 
+	const putStats = useCallback(
+		async () => {
+			try {
+				const userId = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY.userData)).userId;
+				const token = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY.userData)).token;
+				const totalWords = correctAnswers.length + failAnswers.length;
+				const correctPercent = Math.round(100 * correctAnswers.length / (correctAnswers.length + failAnswers.length));
+				const longestSeries = Math.max.apply(null, allSeries);
+
+				const gameStats = {
+					gameName: 'sprint',
+					totalWords,
+					correctPercent,
+					longestSeries,
+					date: new Date().toLocaleDateString()
+				};
+				// console.log(token);
+				// console.log(userId);
+				// console.log(gameStats);
+				// const data = await request(`${backRoutes.signUp}/${userId}/statistics`, 'PUT', gameStats, {
+				// 	Authorization: `Bearer ${token}`
+				// });
+				const data = await backRoutes.putStatistics({
+					userId,
+					token,
+					data: gameStats
+				});
+				console.log(data);
+			} catch (e) {
+				console.log(e);
+				console.log(e.message);
+			}
+		},
+		[ allSeries, correctAnswers.length, failAnswers.length ]
+	);
+
+	useEffect(
+		() => {
+			if (endGame) {
+				putStats();
+			}
+		},
+		[ endGame, putStats ]
+	);
+
 	const answer = useCallback(
 		(value) => {
 			if (endGame) return;
@@ -143,15 +204,20 @@ export const SprintPage = () => {
 				(value === 'true' && currentWord.russian === currentRussianhWord) ||
 				(value === 'false' && currentWord.russian !== currentRussianhWord)
 			) {
+				seriesContainer.current.innerHTML += ' <img src="https://img.icons8.com/color/48/000000/hand-drawn-star.png"/>';
+				setCurrentSeries((prev) => prev + 1);
 				setCorrectAnswers((prev) => [ ...prev, currentWord ]);
 				audioSuccess.play();
 			} else {
+				setAllSeries((prev) => [ ...prev, currentSeries ]);
+				setCurrentSeries(0);
+				seriesContainer.current.innerHTML = '';
 				setFailAnswers((prev) => [ ...prev, currentWord ]);
 				audioFail.play();
 			}
 			setCurrentNumber((prev) => prev + 1);
 		},
-		[ audioFail, audioSuccess, currentRussianhWord, currentWord, endGame ]
+		[ audioFail, audioSuccess, currentRussianhWord, currentSeries, currentWord, endGame ]
 	);
 
 	useEffect(
@@ -249,6 +315,7 @@ export const SprintPage = () => {
 					<Typography variant="h5">Осталось: </Typography>
 					<Typography variant="h2">{seconds}</Typography>
 					<Typography variant="h4">{`${currentWord.english || ''} = ${currentRussianhWord || ''}`}</Typography>
+					<div ref={seriesContainer} className={classes.series} />
 					<div className={classes.buttonsWrap}>
 						<button className={classes.badButton} onClick={(event) => answer(event.target.value)} value={false}>
 							НЕ ВЕРНО

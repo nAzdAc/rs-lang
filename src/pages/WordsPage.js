@@ -10,7 +10,6 @@ import LevelButton from "../components/LevelButton";
 import WordsCardList from "../components/WordsCardList";
 import {Route, useRouteMatch, MemoryRouter,Link } from "react-router-dom";
 import PaginationItem from '@material-ui/lab/PaginationItem';
-import { LocalActivityOutlined } from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => ({
   root: {
