@@ -6,12 +6,24 @@ import CardIcons from "./CardIcons";
 import { backRoutes } from "../utils/backRoutes";
 import { regexpForText } from "../utils/initConsts";
 import { makeStyles } from "@material-ui/core/styles";
-import WordInfo from "./WordInfo"
+import WordInfo from "./WordInfo";
+import { CircularProgress } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   list: {
+    display:'Flex',
+    justifyContent:"center",
+    flexDirection:"column",
     marginBottom: "40px",
+    marginTop: "40px",
   },
+  loader: {
+		position: 'relative',
+    margin: '40px',
+		alignSelf:"center",
+    justifySelf:"center",
+  
+	},
 }));
 
 export default function WordsCardList({
@@ -50,39 +62,42 @@ export default function WordsCardList({
   }, [fetchUserWords, fetchWords, userWords]);
 
   return (
+    
     <ul className={classes.list}>
-      {wordsArr.map((item) => (
-        <WordCard
-          key={item.id}
-          word={item.word}
-          image={item.image}
-          textExample={item.textExample.replace(regexpForText, "")}
-          textExampleTranslate={item.textExampleTranslate}
-          transcription={item.transcription}
-          wordTranslate={item.wordTranslate}
-          textMeaning={item.textMeaning.replace(regexpForText, "")}
-          textMeaningTranslate={item.textMeaningTranslate}
-          infoPanel={
-            infoPanel === "CardIcons" ? (
-              <CardIcons
-                difficulty={difficulty}
-                wordId={item.id}
-                audio={item.audio}
-                audioExample={item.audioExample}
-                audioMeaning={item.audioMeaning}
-              ></CardIcons>
-            ) : (
-              infoPanel === "WordInfo"?(
+      {wordsArr.length ? (
+        wordsArr.map((item) => (
+          <WordCard
+            key={item.id}
+            word={item.word}
+            image={item.image}
+            textExample={item.textExample.replace(regexpForText, "")}
+            textExampleTranslate={item.textExampleTranslate}
+            transcription={item.transcription}
+            wordTranslate={item.wordTranslate}
+            textMeaning={item.textMeaning.replace(regexpForText, "")}
+            textMeaningTranslate={item.textMeaningTranslate}
+            infoPanel={
+              infoPanel === "CardIcons" ? (
+                <CardIcons
+                  difficulty={difficulty}
+                  wordId={item.id}
+                  audio={item.audio}
+                  audioExample={item.audioExample}
+                  audioMeaning={item.audioMeaning}
+                ></CardIcons>
+              ) : infoPanel === "WordInfo" ? (
                 <WordInfo
                   difficulty={difficulty}
                   wordId={item.id}
                   group={item.group}
-              ></WordInfo>
-              ):null
-            )
-          }
-        ></WordCard>
-      ))}
+                ></WordInfo>
+              ) : null
+            }
+          ></WordCard>
+        ))
+      ) : (
+        <CircularProgress className={classes.loader} />
+      )}
     </ul>
   );
 }

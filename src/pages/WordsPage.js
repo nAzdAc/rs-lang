@@ -21,6 +21,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexWrap: "wrap",
     justifyContent: "center",
+    flexDirection: "column",
   },
   title: {
     marginRight: "40px",
@@ -53,6 +54,8 @@ const useStyles = makeStyles((theme) => ({
   pagination: {
     margin: "40px",
     fontSize: "40px",
+    marginLeft: 'auto',
+    marginRight: 'auto',
   },
 }));
 
