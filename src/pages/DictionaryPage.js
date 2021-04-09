@@ -120,6 +120,7 @@ export default function DictionaryPage() {
 
 	const handleWordsButtonClick = (index) => {
 		setActiveWordButton(index);
+    setActiveLevel(null);
     let filteredArr = [];
 		if (index === 0) {
 			filteredArr = listUserWords.filter((item) => !item.optional.deleted)
@@ -132,12 +133,16 @@ export default function DictionaryPage() {
 	};
 
 	const handleLevelsClick = (index) => {
-		if (index === activeLevel) {
-			setActiveLevel(null);
+		let filteredArr;
+    if (index === activeLevel) {
+        setActiveLevel(null);
+      filteredArr = listUserWords.filter((item) => !item.optional.deleted);
 		}
-		setActiveLevel(index);
-    const filteredArr = listUserWords.filter((item) => item.optional.group === index)
-		setData(filteredArr);
+    else{
+      setActiveLevel(index);
+      filteredArr = listUserWords.filter((item) => item.optional.group === index);
+    }
+    setData(filteredArr);
 	};
 
 	return (
