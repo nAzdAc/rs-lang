@@ -71,7 +71,7 @@ export default function WordInfo({group,difficulty,page,userId,wordId}) {
   return (
     <Box className={classes.box}>
       <Typography className={classes.title} variant="h1" component="h4">
-        Difficulty: {group}
+        Difficulty: {group + 1}
       </Typography>
       <Button variant="contained" className={classes.button} onClick={handleButtonClick}>
         удалить из списка
