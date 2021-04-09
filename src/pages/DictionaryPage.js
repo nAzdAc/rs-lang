@@ -81,7 +81,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const wordsButtons = [ { text: 'Изучаемые слова' }, { text: 'Сложные слова' }, { text: 'Удаленные слова' } ];
-	const levels = [ 1, 2, 3, 4, 5, 6 ];
+const levels = [ 1, 2, 3, 4, 5, 6 ];
 
 export default function DictionaryPage() {
 	const { userId, token } = useContext(AuthContext);
@@ -120,25 +120,44 @@ export default function DictionaryPage() {
 
 	const handleWordsButtonClick = (index) => {
 		setActiveWordButton(index);
-    let filteredArr = [];
-		if (index === 0) {
-			filteredArr = listUserWords.filter((item) => !item.optional.deleted)
-		} else if (index === 1) {
-      filteredArr = listUserWords.filter((item) => item.difficulty === 'difficult')
-		} else if (index === 2) {
-      filteredArr = listUserWords.filter((item) => item.optional.deleted)
-		}
-    setData(filteredArr)
 	};
 
 	const handleLevelsClick = (index) => {
 		if (index === activeLevel) {
 			setActiveLevel(null);
+		} else {
+			setActiveLevel(index);
 		}
-		setActiveLevel(index);
-    const filteredArr = listUserWords.filter((item) => item.optional.group === index)
-		setData(filteredArr);
 	};
+
+	useEffect(
+		() => {
+			console.log(`level: ${activeLevel} ; button:  ${activeWordButton}`);
+			let sectionArr = [];
+			let levelArr = [];
+			if (activeLevel === null) {
+				if (activeWordButton === 0) {
+					sectionArr = listUserWords.filter((item) => !item.optional.deleted);
+				} else if (activeWordButton === 1) {
+					sectionArr = listUserWords.filter((item) => item.difficulty === 'difficult');
+				} else if (activeWordButton === 2) {
+					sectionArr = listUserWords.filter((item) => item.optional.deleted);
+				}
+				levelArr = sectionArr;
+			} else {
+				if (activeWordButton === 0) {
+					sectionArr = listUserWords.filter((item) => !item.optional.deleted);
+				} else if (activeWordButton === 1) {
+					sectionArr = listUserWords.filter((item) => item.difficulty === 'difficult');
+				} else if (activeWordButton === 2) {
+					sectionArr = listUserWords.filter((item) => item.optional.deleted);
+				}
+				levelArr = sectionArr.filter((item) => item.optional.group === activeLevel);
+			}
+			setData(levelArr);
+		},
+		[ activeLevel, activeWordButton, listUserWords ]
+	);
 
 	return (
 		<Container className={classes.container}>
