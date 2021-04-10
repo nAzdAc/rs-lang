@@ -123,7 +123,7 @@ export default function SignInPage() {
 		try {
 			console.log(form);
 			const data = await request(backRoutes.signIn, 'POST', { ...form });
-			auth.login(data.token, data.refreshToken, data.userId, data.name);
+			auth.login(data.token, data.refreshToken, data.userId, data.name, data.avatarURL);
 			console.log(data);
 		} catch (e) {}
 	}

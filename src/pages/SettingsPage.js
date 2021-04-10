@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import Typography from '@material-ui/core/Typography';
 import Switch from '@material-ui/core/Switch';
 import Slider from '@material-ui/core/Slider';
@@ -188,6 +188,16 @@ export const SettingsPage = () => {
 		parseInt(localStorage.getItem(LOCAL_STORAGE_KEY.wordVolume)) || INIT_CONSTS.wordVolume
 	);
 
+	useEffect(() => {
+		console.log(avatar)
+	}, [avatar])
+	// const uploadImg = useCallback(async (file) => {
+	// 	console.log(file);
+	// 	const userId = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY.userData)).userId;
+	// 	const avatar = await backRoutes.uploadAvatar(userId, file);
+	// 	console.log(avatar);
+	// }, []);
+
 	function handleMusicVolume(event, newValue) {
 		setMusicVolume(newValue);
 		localStorage.setItem(LOCAL_STORAGE_KEY.musicVolume, newValue);
@@ -265,20 +275,14 @@ export const SettingsPage = () => {
 					<Typography variant="h4" className={classes.subtitle}>
 						Аватар
 					</Typography>
-					<img
-						alt="avatar"
-						className={classes.avatarImage}
-						src={
-							avatar ||
-							'http://res.cloudinary.com/nazdac/image/upload/v1616652013/travelAppFolder/dmlfcuvyr79gpkbgg639.jpg'
-						}
-					/>
+					<img alt="avatar" className={classes.avatarImage} src={avatar || 'http://res.cloudinary.com/nazdac/image/upload/v1616652013/travelAppFolder/dmlfcuvyr79gpkbgg639.jpg'} />
 					<label htmlFor="file" className={classes.upload}>
 						+ ИЗМЕНИТЬ
 					</label>
 					<input
 						style={{ display: 'none' }}
 						type="file"
+						id="file"
 						accept="image/*"
 						onChange={(event) => uploadAvatar(event.target.files[0])}
 					/>

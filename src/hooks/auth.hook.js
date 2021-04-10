@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect } from 'react';
 import { backRoutes } from '../utils/backRoutes';
+import { LOCAL_STORAGE_KEY } from '../utils/storageKey';
 
 const storageName = 'userData';
 
@@ -11,34 +12,40 @@ export const useAuth = () => {
 	const [ avatar, setAvatar ] = useState(null);
 	const [ ready, setReady ] = useState(false);
 
-	const login = useCallback((jwtToken, jwtRefreshToken, id, name) => {
+	const login = useCallback((jwtToken, jwtRefreshToken, id, name, avatarURL) => {
 		setToken(jwtToken);
 		setRefreshToken(jwtRefreshToken);
 		setUserId(id);
 		setUserName(name);
+		setAvatar(avatarURL);
 		localStorage.setItem(
 			storageName,
 			JSON.stringify({
 				token: jwtToken,
 				refreshToken: jwtRefreshToken,
 				userId: id,
-				userName: name
+				userName: name,
+				avatar: avatarURL
 			})
 		);
 	}, []);
 
 	const uploadAvatar = useCallback(
 		async (file) => {
+			const userId = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY.userData)) ? JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY.userData)).userId : '';
+			console.log(file)
 			const formData = new FormData();
 			formData.append('avatar', file);
-			const res = await fetch(backRoutes.upload, {
-				method: 'POST',
+			console.log(formData)
+			const res = await fetch(`${backRoutes.signUp}/${userId}`, {
+				method: 'PUT',
 				body: formData,
 				headers: {
 					Authorization: `Bearer ${token}`
 				}
 			});
 			const data = await res.json();
+			console.log(data)
 			setAvatar(data.avatarURL);
 			const local = JSON.parse(localStorage.getItem(storageName));
 			const updateLocal = { ...local, avatar: data.avatarURL };

@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignIn() {
 	const classes = useStyles();
-	const { loading, error, request, clearError } = useHttp();
+	const { request } = useHttp();
 	const auth = useContext(AuthContext);
 	const [ isAccount, setIsAccount ] = useState(true);
 	const [ form, setForm ] = useState({
@@ -94,8 +94,8 @@ export default function SignIn() {
 			} else {
 				console.log(form);
 				const data = await request(backRoutes.signIn, 'POST', { ...form });
-				auth.login(data.token, data.refreshToken, data.userId, data.name);
-				console.log(data);
+				auth.login(data.token, data.refreshToken, data.userId, data.name, data.avatarURL);
+				console.log(data.avatarURL);
 			}
 		} catch (e) {}
 	}
