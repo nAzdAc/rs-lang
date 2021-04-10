@@ -107,7 +107,7 @@ export default function DictionaryPage() {
   // const fetchUrl = backRoutes.words
   const func = useCallback(async () => {
     const result = await backRoutes.getUserWords({ userId, token });
-    if (result.length) {
+    if (result) {
       setData(result.filter((item) => !item.optional.deleted));
       setlistUserWords(result);
     }
@@ -202,8 +202,11 @@ export default function DictionaryPage() {
       </ul>
       {data.length ? (
         <WordsCardList
+          token={token}
+          userId={userId}
           userWords={data}
           infoPanel={activeWordButton === 0 ? "Answers" : "WordInfo"}
+          activeWordButton={activeWordButton}
         />
       ) : (
         <Typography className={classes.message} variant="h1" component="h2">

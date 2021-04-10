@@ -34,28 +34,29 @@ export default function WordsCardList({
   wrong,
   correct,
   curentUserWords,
+  activeWordButton,
+  token,
+  userId,
 }) {
   // console.log(curentUserWords)
   const [wordsArr, setWordsArr] = useState([]);
   const { request } = useHttp();
   const classes = useStyles();
 
-
   const fetchWords = useCallback(async () => {
-    const deleteUserWords = []
-    if(curentUserWords){
-    const data = await request(fetchUrl, "GET");
-     curentUserWords.forEach((item) => {
-      if (item.optional.deleted) {
-        deleteUserWords.push(item.wordId);
-      }
-    });
-    // console.log(deleteUserWords)
-    // console.log(data)
+    const deleteUserWords = [];
+    if (curentUserWords) {
+      const data = await request(fetchUrl, "GET");
+      curentUserWords.forEach((item) => {
+        if (item.optional.deleted) {
+          deleteUserWords.push(item.wordId);
+        }
+      });
+      // console.log(deleteUserWords)
+      // console.log(data)
 
-    setWordsArr(data.filter((item) => !deleteUserWords.includes(item.id)));
+      setWordsArr(data.filter((item) => !deleteUserWords.includes(item.id)));
     }
-    
   }, [curentUserWords, fetchUrl, request]);
 
   const fetchUserWords = useCallback(async () => {
@@ -73,7 +74,7 @@ export default function WordsCardList({
   useEffect(() => {
     if (userWords) {
       fetchUserWords();
-    } else if(curentUserWords && curentUserWords.length > 0) {
+    } else if (curentUserWords && curentUserWords.length > 0) {
       fetchWords();
     }
   }, [curentUserWords, fetchUserWords, fetchWords, userWords]);
@@ -106,10 +107,19 @@ export default function WordsCardList({
                 <WordInfo
                   difficulty={difficulty}
                   wordId={item.id}
+                  userId={userId}
                   group={item.group}
+                  activeWordButton={activeWordButton}
+                  token={token}
                 ></WordInfo>
               ) : infoPanel === "Answers" ? (
-                <Answers wrong={item.wrong} correct={item.correct}></Answers>
+                <Answers
+                  wrong={item.wrong}
+                  correct={item.correct}
+                  wordId={item.id}
+                  userId={userId}
+                  token={token}
+                ></Answers>
               ) : null
             }
           ></WordCard>

@@ -2,7 +2,7 @@ import React,{useContext} from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Box from "@material-ui/core/Box";
 import { AuthContext } from "../context/AuthContext";
-import { backRoutes } from "../utils/backRoutes"
+import { backRoutes } from "../utils/backRoutes";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 
@@ -52,19 +52,31 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-export default function WordInfo({group,difficulty,page,userId,wordId}) {
+export default function WordInfo({group,difficulty,page,userId,wordId,activeWordButton}) {
   const auth = useContext(AuthContext);
 
   const classes = useStyles(group);
 
   const handleButtonClick = () =>{
     console.log('click')
-    backRoutes.updateUserWord({
-      userId: userId,
-      wordId: wordId,
-      word: { "difficulty": "weak", "optional": {group:difficulty, page:page, deleted:false} },
-      token: auth.token,
-    })
+    if(activeWordButton === 1){
+      backRoutes.updateUserWord({
+        userId: userId,
+        wordId: wordId,
+        word: { "difficulty": "weak", "optional": {group:difficulty, page:page, deleted:false} },
+        token: auth.token,
+      })
+    }
+    else{
+      backRoutes.updateUserWord({
+        userId: userId,
+        wordId: wordId,
+        word: { "difficulty": "weak", "optional": {group:difficulty, page:page, deleted:false} },
+        token: auth.token,
+      })
+
+    }
+    
   }
  
 
