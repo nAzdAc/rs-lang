@@ -21,7 +21,7 @@ import { useAuth } from './hooks/auth.hook';
 import DictionaryPage from './pages/DictionaryPage';
 
 function App() {
-	const { token, login, logout, userId, userName } = useAuth();
+	const { token, login, logout, userId, userName, avatar, uploadAvatar } = useAuth();
 	const isAuthenticated = !!token;
 	return (
 		<AuthContext.Provider
@@ -31,7 +31,9 @@ function App() {
 				logout,
 				userId,
 				isAuthenticated,
-				userName
+				userName,
+				avatar,
+				uploadAvatar
 			}}
 		>
 			<Router>

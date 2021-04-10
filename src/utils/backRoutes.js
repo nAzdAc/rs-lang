@@ -5,7 +5,6 @@ export const originURL = 'http://localhost:8080';
 
 //  ?group=1&page=1
 
-
 const token = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY.userData)) ? JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY.userData)).token : '';
 
 const getRoute = (trailing) => `${originURL}/${trailing}`;
@@ -16,6 +15,22 @@ export const backRoutes = {
 	upload: getRoute('upload'),
 	words: getRoute('words'),
 	statistics: getRoute('statistics'),
+	uploadAvatar : async (userId, file) => {
+		console.log(file)
+		console.log(userId)
+		const formData = new FormData();
+		formData.append('avatar', file);
+		const res = await fetch(`${originURL}/users/${userId}`, {
+			method: 'PUT',
+			body: formData,
+			headers: {
+				Authorization: `Bearer ${token}`
+			}
+		});
+		const data = await res.json();
+		console.log(data)
+		return data;
+	},
 	putStatistics : async ({userId, token, data}) => {
 		console.log(userId)
 		console.log(token)

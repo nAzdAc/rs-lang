@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -51,23 +51,23 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SignIn() {
-  const classes = useStyles();
-  const { loading, error, request, clearError } = useHttp();
-  const auth = useContext(AuthContext);
-  const [isAccount, setIsAccount] = useState(true);
-  const [form, setForm] = useState({
-    name: '',
-    email: '',
-    password: '',
-  });
-  const [sign, setSign] = useState('Sign in');
-  const handleSignClick = () => {
-    setIsAccount(false);
-    setSign('Sign up');
-  };
-  const handleFrormChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
+	const classes = useStyles();
+	const { request } = useHttp();
+	const auth = useContext(AuthContext);
+	const [ isAccount, setIsAccount ] = useState(true);
+	const [ form, setForm ] = useState({
+		name: '',
+		email: '',
+		password: ''
+	});
+	const [ sign, setSign ] = useState('Sign in');
+	const handleSignClick = () => {
+		setIsAccount(false);
+		setSign('Sign up');
+	};
+	const handleFrormChange = (e) => {
+		setForm({ ...form, [e.target.name]: e.target.value });
+	};
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -83,22 +83,22 @@ export default function SignIn() {
         // })
         const data = await request(backRoutes.signUp, 'POST', { ...form });
         // const data = await res.json();
-        console.log(data);
-        setIsAccount(true);
-        setForm({
-          name: '',
-          email: '',
-          password: '',
-        });
-        setSign('Sign in');
-      } else {
-        console.log(form);
-        const data = await request(backRoutes.signIn, 'POST', { ...form });
-        auth.login(data.token, data.refreshToken, data.userId, data.name);
-        console.log(data);
-      }
-    } catch (e) {}
-  }
+				console.log(data);
+				setIsAccount(true);
+				setForm({
+					name: '',
+					email: '',
+					password: ''
+				});
+				setSign('Sign in');
+			} else {
+				console.log(form);
+				const data = await request(backRoutes.signIn, 'POST', { ...form });
+				auth.login(data.token, data.refreshToken, data.userId, data.name, data.avatarURL);
+				console.log(data.avatarURL);
+			}
+		} catch (e) {}
+	}
 
   let nameField;
   if (!isAccount) {
