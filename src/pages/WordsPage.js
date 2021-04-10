@@ -76,7 +76,7 @@ export default function WordsPage() {
   const func = useCallback(async () => {
     const result = await backRoutes.getUserWords({ userId, token });
     if (result.length) {
-      setData(result.filter((item) => !item.optional.deleted));
+      setData(result);
     }
   }, [token, userId]);
   useEffect(() => {
@@ -85,7 +85,7 @@ export default function WordsPage() {
     }
   }, [func, token, userId]);
 
-  // console.log(data?data:null)
+  
   
 
   return (

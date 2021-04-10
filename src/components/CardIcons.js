@@ -136,6 +136,15 @@ export default function CardIcons({
         token: token,
       });
     } else {
+      backRoutes.updateUserWord({
+        userId: userId,
+        wordId: wordId,
+        word: {
+          difficulty: "weak",
+          optional: { group: difficulty, page: page, deleted: true },
+        },
+        token: token,
+      });
       console.log("word is in your dictionary");
     }
   };

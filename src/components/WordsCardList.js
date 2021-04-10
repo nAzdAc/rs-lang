@@ -12,19 +12,18 @@ import { CircularProgress } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   list: {
-    display:'Flex',
-    justifyContent:"center",
-    flexDirection:"column",
+    display: "Flex",
+    justifyContent: "center",
+    flexDirection: "column",
     marginBottom: "40px",
     marginTop: "40px",
   },
   loader: {
-		position: 'relative',
-    margin: '40px',
-		alignSelf:"center",
-    justifySelf:"center",
-  
-	},
+    position: "relative",
+    margin: "40px",
+    alignSelf: "center",
+    justifySelf: "center",
+  },
 }));
 
 export default function WordsCardList({
@@ -36,39 +35,50 @@ export default function WordsCardList({
   correct,
   curentUserWords,
 }) {
+  // console.log(curentUserWords)
   const [wordsArr, setWordsArr] = useState([]);
   const { request } = useHttp();
   const classes = useStyles();
 
+
   const fetchWords = useCallback(async () => {
+    const deleteUserWords = []
+    if(curentUserWords){
     const data = await request(fetchUrl, "GET");
-    setWordsArr(data);
-  }, [fetchUrl, request]);
+     curentUserWords.forEach((item) => {
+      if (item.optional.deleted) {
+        deleteUserWords.push(item.wordId);
+      }
+    });
+    // console.log(deleteUserWords)
+    // console.log(data)
+
+    setWordsArr(data.filter((item) => !deleteUserWords.includes(item.id)));
+    }
+    
+  }, [curentUserWords, fetchUrl, request]);
 
   const fetchUserWords = useCallback(async () => {
     const cards = await Promise.all(
       userWords.map(async (item) => {
-        // console.log(backRoutes.getWord(item.wordId))
         const result = await request(backRoutes.getWord(item.wordId), "GET");
-        result.correct = item.optional.correct? item.optional.correct:123;
-        result.wrong = item.optional.wrong? item.optional.wrong:10;
+        result.correct = item.optional.correct ? item.optional.correct : 123;
+        result.wrong = item.optional.wrong ? item.optional.wrong : 10;
         return result;
       })
     );
     setWordsArr(cards);
-    // console.log('cards ',cards)
   }, [userWords, request]);
 
   useEffect(() => {
     if (userWords) {
       fetchUserWords();
-    } else {
+    } else if(curentUserWords && curentUserWords.length > 0) {
       fetchWords();
     }
-  }, [fetchUserWords, fetchWords, userWords]);
+  }, [curentUserWords, fetchUserWords, fetchWords, userWords]);
 
   return (
-    
     <ul className={classes.list}>
       {wordsArr.length ? (
         wordsArr.map((item) => (
@@ -99,10 +109,7 @@ export default function WordsCardList({
                   group={item.group}
                 ></WordInfo>
               ) : infoPanel === "Answers" ? (
-                <Answers
-                  wrong={item.wrong}
-                  correct={item.correct}
-                ></Answers>
+                <Answers wrong={item.wrong} correct={item.correct}></Answers>
               ) : null
             }
           ></WordCard>
