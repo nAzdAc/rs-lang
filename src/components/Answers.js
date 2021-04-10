@@ -9,10 +9,10 @@ const useStyles = makeStyles((theme) => ({
     boxSizing: "border-box",
   },
   box: {
-    paddingLeft:'40px',
+    paddingLeft:'0px',
     display:'flex',
     flexWrap:'wrap',
-    justifyContent: 'space-between',
+    justifyContent: 'left',
     fontSize: '34px',
     gap:'20px',
     marginBottom:'10px',
@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
   title: {
     fontSize: "20px",
     fontStyle: "normal",
-    fontWeight: "300",
+    fontWeight: "700",
     lineHeight: "100%",
     textAlign: "left",
     color: '#000000',
@@ -47,10 +47,10 @@ export default function WordInfo({wrong,correct}) {
   return (
     <Box className={classes.box}>
       <Typography className={classes.title} variant="h1" component="h4">
-        Правильные ответы: <span className={classes.correct}>{0}</span>
+        Правильные ответы: <span className={classes.correct}>{correct? correct : 0}</span>
       </Typography>
       <Typography className={classes.title} variant="h1" component="h4">
-        Ошибки: <span className={classes.wrong}>{0}</span>
+        Ошибки: <span className={classes.wrong}>{wrong? wrong : 0}</span>
       </Typography>
     </Box>
   );

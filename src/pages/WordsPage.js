@@ -1,4 +1,4 @@
-import React, { useState} from "react";
+import React, { useState, useContext,useCallback,useEffect} from "react";
 import { backRoutes } from "../utils/backRoutes";
 import { makeStyles } from "@material-ui/core/styles";
 import Pagination from "@material-ui/lab/Pagination";
@@ -10,6 +10,7 @@ import LevelButton from "../components/LevelButton";
 import WordsCardList from "../components/WordsCardList";
 import {Route, useRouteMatch, MemoryRouter,Link } from "react-router-dom";
 import PaginationItem from '@material-ui/lab/PaginationItem';
+import { AuthContext } from "../context/AuthContext";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -60,16 +61,31 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function WordsPage() {
+  const { userId, token } = useContext(AuthContext);
   let match = useRouteMatch().path;
   let group = match[match.length - 1] - 1;
   const [page, setPage] = useState(1);
   const classes = useStyles(group);
-
+  const [data, setData] = useState();
   const fetchUrl = backRoutes.getWordsPage(group, page)
 
   const handlePaginationChange = (e, value) => {
     setPage(value);
   };
+
+  const func = useCallback(async () => {
+    const result = await backRoutes.getUserWords({ userId, token });
+    if (result.length) {
+      setData(result.filter((item) => !item.optional.deleted));
+    }
+  }, [token, userId]);
+  useEffect(() => {
+    if (userId && token) {
+      func();
+    }
+  }, [func, token, userId]);
+
+  // console.log(data?data:null)
   
 
   return (
@@ -83,7 +99,7 @@ export default function WordsPage() {
           </Typography>
           <LevelButton group={group + 1}></LevelButton>
         </Box>  
-        <WordsCardList page={page}  difficulty={group} fetchUrl={fetchUrl} infoPanel="CardIcons"></WordsCardList>
+        <WordsCardList page={page} curentUserWords={data} difficulty={group} fetchUrl={fetchUrl} infoPanel="CardIcons"></WordsCardList>
         <Route>
           {({ location }) => {
             {/* const query = new URLSearchParams(location.search);

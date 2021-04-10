@@ -7,6 +7,7 @@ import { backRoutes } from "../utils/backRoutes";
 import { regexpForText } from "../utils/initConsts";
 import { makeStyles } from "@material-ui/core/styles";
 import WordInfo from "./WordInfo";
+import Answers from "./Answers";
 import { CircularProgress } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
@@ -31,6 +32,9 @@ export default function WordsCardList({
   difficulty,
   fetchUrl,
   infoPanel,
+  wrong,
+  correct,
+  curentUserWords,
 }) {
   const [wordsArr, setWordsArr] = useState([]);
   const { request } = useHttp();
@@ -46,6 +50,8 @@ export default function WordsCardList({
       userWords.map(async (item) => {
         // console.log(backRoutes.getWord(item.wordId))
         const result = await request(backRoutes.getWord(item.wordId), "GET");
+        result.correct = item.optional.correct? item.optional.correct:123;
+        result.wrong = item.optional.wrong? item.optional.wrong:10;
         return result;
       })
     );
@@ -79,9 +85,10 @@ export default function WordsCardList({
             infoPanel={
               infoPanel === "CardIcons" ? (
                 <CardIcons
+                  userWords={curentUserWords}
                   difficulty={difficulty}
                   wordId={item.id}
-                  audio={item.audio}
+                  audioWord={item.audio}
                   audioExample={item.audioExample}
                   audioMeaning={item.audioMeaning}
                 ></CardIcons>
@@ -91,6 +98,11 @@ export default function WordsCardList({
                   wordId={item.id}
                   group={item.group}
                 ></WordInfo>
+              ) : infoPanel === "Answers" ? (
+                <Answers
+                  wrong={item.wrong}
+                  correct={item.correct}
+                ></Answers>
               ) : null
             }
           ></WordCard>

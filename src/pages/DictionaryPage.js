@@ -37,8 +37,8 @@ const useStyles = makeStyles((theme) => ({
   message: {
     // marginRight: "40px",
     fontSize: "30px",
-    fontStyle: 'italic',
-    fontWeight: "300",   
+    fontStyle: "italic",
+    fontWeight: "300",
     verticalAlign: "middle",
   },
   titleBox: {
@@ -102,7 +102,7 @@ export default function DictionaryPage() {
   const [data, setData] = useState([]);
   const [listUserWords, setlistUserWords] = useState([]);
   const classes = useStyles();
-  // console.log(userId);
+  // console.log(data);
 
   // const fetchUrl = backRoutes.words
   const func = useCallback(async () => {
@@ -136,7 +136,7 @@ export default function DictionaryPage() {
   };
 
   useEffect(() => {
-    console.log(`level: ${activeLevel} ; button:  ${activeWordButton}`);
+    // console.log(`level: ${activeLevel} ; button:  ${activeWordButton}`);
     let sectionArr = [];
     let levelArr = [];
     if (activeLevel === null) {
@@ -201,7 +201,10 @@ export default function DictionaryPage() {
         ))}
       </ul>
       {data.length ? (
-        <WordsCardList userWords={data} infoPanel="WordInfo" />
+        <WordsCardList
+          userWords={data}
+          infoPanel={activeWordButton === 0 ? "Answers" : "WordInfo"}
+        />
       ) : (
         <Typography className={classes.message} variant="h1" component="h2">
           Здесь еще нет слов

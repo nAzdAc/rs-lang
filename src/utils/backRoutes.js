@@ -67,6 +67,38 @@ export const backRoutes = {
 	
 		console.log(content);
 	},
+	updateUserWord : async ({ userId, wordId, word, token }) => {
+		console.log(token)
+		const rawResponse = await fetch(`${originURL}/users/${userId}/words/${wordId}`, {
+			method: 'PUT',
+			withCredentials: true,
+			headers: {
+				'Authorization': `Bearer ${token}`,
+				'Accept': 'application/json',
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(word)
+		});
+		const content = await rawResponse.json();
+	
+		console.log(content);
+	},
+	deleteUserWord : async ({ userId, wordId, token }) => {
+		console.log(token)
+		const rawResponse = await fetch(`${originURL}/users/${userId}/words/${wordId}`, {
+			method: 'DELETE',
+			withCredentials: true,
+			headers: {
+				'Authorization': `Bearer ${token}`,
+				'Accept': 'application/json',
+				'Content-Type': 'application/json'
+			},
+			// body: JSON.stringify(word)
+		});
+		const content = await rawResponse.json();
+	
+		console.log(content);
+	},
 	getUserWord : async ({ userId, wordId }) => {
 		const rawResponse = await fetch(`${originURL}/users/${userId}/words/${wordId}`, {
 			method: 'GET',
