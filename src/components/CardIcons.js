@@ -46,7 +46,7 @@ export default function CardIcons({
 }) {
   const classes = useStyles();
   const { userId, token } = useContext(AuthContext);
-  // const [allUserWords, setAllUserWords]=useState(userWords)
+  const [allUserWords, setAllUserWords]=useState(userWords)
 
   const audio = new Howl({
     src: [`${originURL}/${audioWord}`],
@@ -66,17 +66,17 @@ export default function CardIcons({
     Howler.stop();
     audio.play();
   };
-  // const func = useCallback(async () => {
-  //   const result = await backRoutes.getUserWords({ userId, token });
-  //   if (result.length) {
-  //     setAllUserWords(result);
-  //   }
-  // }, [token, userId]);
+  const func = useCallback(async () => {
+    const result = await backRoutes.getUserWords({ userId, token });
+    if (result) {
+      setAllUserWords(result);
+    }
+  }, [token, userId]);
 
   const addWordToDictionary = () => {
     if (
-      userWords &&
-      !userWords.filter((item) => wordId === item.wordId).length > 0
+      allUserWords &&
+      !allUserWords.filter((item) => wordId === item.wordId).length > 0
     ) {
       backRoutes.createUserWord({
         userId: userId,
@@ -88,8 +88,8 @@ export default function CardIcons({
         token: token,
       });
     } else if (
-      userWords &&
-      userWords.filter(
+      allUserWords &&
+      allUserWords.filter(
         (item) => wordId === item.wordId && item.difficulty === "difficult"
       ).length > 0
     ) {
@@ -103,8 +103,8 @@ export default function CardIcons({
         token: token,
       });
     } else if (
-      userWords &&
-      userWords.filter(
+      allUserWords &&
+      allUserWords.filter(
         (item) => wordId === item.wordId && item.difficulty !== "difficult"
       ).length > 0
     ) {
@@ -119,12 +119,13 @@ export default function CardIcons({
       });
       console.log("word is in your dictionary");
     }
+    func()
   };
 
   const addWordToDictionaryDelete = () => {
     if (
-      userWords &&
-      !userWords.filter((item) => wordId === item.wordId).length > 0
+      allUserWords &&
+      !allUserWords.filter((item) => wordId === item.wordId).length > 0
     ) {
       backRoutes.createUserWord({
         userId: userId,
@@ -163,8 +164,8 @@ export default function CardIcons({
       ></PlayCircleFilledIcon>
       <GradeIcon
         className={
-          userWords
-            ? userWords.filter(
+          allUserWords
+            ? allUserWords.filter(
                 (item) =>
                   wordId === item.wordId && item.difficulty === "difficult"
               ).length
