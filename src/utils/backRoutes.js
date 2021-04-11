@@ -80,7 +80,7 @@ export const backRoutes = {
 			body: JSON.stringify(word)
 		});
 		const content = await rawResponse.json();
-	
+		
 		console.log(content);
 	},
 	updateUserWord : async ({ userId, wordId, word, token }) => {
@@ -139,6 +139,7 @@ export const backRoutes = {
 				}
 			});
 			const content = await rawResponse.json();
+			console.log(content)
 			return content
 		} catch(e){console.log(e)}
 		

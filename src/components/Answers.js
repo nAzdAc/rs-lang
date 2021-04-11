@@ -1,7 +1,9 @@
-import React from "react";
+import React, {useContext} from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
+import Button from "@material-ui/core/Button";
+import { backRoutes } from "../utils/backRoutes";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -42,8 +44,18 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-export default function WordInfo({wrong,correct}) {
+export default function Answers({wrong,correct,token,userId,wordId}) {
   const classes = useStyles();
+  const handleButtonClick = () =>{
+    console.log(token)
+    backRoutes.deleteUserWord({
+      userId: userId,
+      wordId: wordId,
+      token: token,
+    })
+    
+    
+  }
   return (
     <Box className={classes.box}>
       <Typography className={classes.title} variant="h1" component="h4">
@@ -52,6 +64,10 @@ export default function WordInfo({wrong,correct}) {
       <Typography className={classes.title} variant="h1" component="h4">
         Ошибки: <span className={classes.wrong}>{wrong? wrong : 0}</span>
       </Typography>
+      <Button variant="contained" className={classes.button} onClick={handleButtonClick}>
+        Удалить из словаря
+      </Button>
+
     </Box>
   );
 }
