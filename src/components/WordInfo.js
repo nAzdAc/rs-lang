@@ -46,18 +46,28 @@ const useStyles = makeStyles((theme) => ({
 	}
 }));
 
-export default function WordInfo({ group, difficulty, page, userId, wordId }) {
+export default function WordInfo({ group, difficulty, page, userId, wordId, activeWordButton }) {
 	const auth = useContext(AuthContext);
 
 	const classes = useStyles(group);
 
 	const handleButtonClick = () => {
-		backRoutes.createUserWord({
-			userId: userId,
-			wordId: wordId,
-			word: { difficulty: 'difficult', optional: { group: difficulty, page: page, deleted: false } },
-			token: auth.token
-		});
+		console.log('click');
+		if (activeWordButton === 1) {
+			backRoutes.updateUserWord({
+				userId: userId,
+				wordId: wordId,
+				word: { difficulty: 'weak', optional: { group: difficulty, page: page, deleted: false } },
+				token: auth.token
+			});
+		} else {
+			backRoutes.updateUserWord({
+				userId: userId,
+				wordId: wordId,
+				word: { difficulty: 'weak', optional: { group: difficulty, page: page, deleted: false } },
+				token: auth.token
+			});
+		}
 	};
 
 	return (
@@ -66,7 +76,7 @@ export default function WordInfo({ group, difficulty, page, userId, wordId }) {
 				Difficulty: {group + 1}
 			</Typography>
 			<Button variant="contained" className={classes.button} onClick={handleButtonClick}>
-				удалить из списка
+				Восстановить
 			</Button>
 		</Box>
 	);

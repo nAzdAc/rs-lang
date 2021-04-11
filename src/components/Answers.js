@@ -1,7 +1,9 @@
-import React from "react";
+import React, {useContext} from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
+import Button from "@material-ui/core/Button";
+import { backRoutes } from "../utils/backRoutes";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -9,10 +11,10 @@ const useStyles = makeStyles((theme) => ({
     boxSizing: "border-box",
   },
   box: {
-    paddingLeft:'40px',
+    paddingLeft:'0px',
     display:'flex',
     flexWrap:'wrap',
-    justifyContent: 'space-between',
+    justifyContent: 'left',
     fontSize: '34px',
     gap:'20px',
     marginBottom:'10px',
@@ -20,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
   title: {
     fontSize: "20px",
     fontStyle: "normal",
-    fontWeight: "300",
+    fontWeight: "700",
     lineHeight: "100%",
     textAlign: "left",
     color: '#000000',
@@ -42,16 +44,30 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-export default function WordInfo({wrong,correct}) {
+export default function Answers({wrong,correct,token,userId,wordId}) {
   const classes = useStyles();
+  const handleButtonClick = () =>{
+    console.log(token)
+    backRoutes.deleteUserWord({
+      userId: userId,
+      wordId: wordId,
+      token: token,
+    })
+    
+    
+  }
   return (
     <Box className={classes.box}>
       <Typography className={classes.title} variant="h1" component="h4">
-        Правильные ответы: <span className={classes.correct}>{0}</span>
+        Правильные ответы: <span className={classes.correct}>{correct? correct : 0}</span>
       </Typography>
       <Typography className={classes.title} variant="h1" component="h4">
-        Ошибки: <span className={classes.wrong}>{0}</span>
+        Ошибки: <span className={classes.wrong}>{wrong? wrong : 0}</span>
       </Typography>
+      <Button variant="contained" className={classes.button} onClick={handleButtonClick}>
+        Удалить из словаря
+      </Button>
+
     </Box>
   );
 }
