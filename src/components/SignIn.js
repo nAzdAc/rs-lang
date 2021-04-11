@@ -73,7 +73,6 @@ export default function SignIn() {
     e.preventDefault();
     try {
       if (!isAccount) {
-        console.log(form);
         // const res = await fetch(routes.signUp, {
         //   method: 'POST',
         //   body: form,
@@ -83,7 +82,6 @@ export default function SignIn() {
         // })
         const data = await request(backRoutes.signUp, 'POST', { ...form });
         // const data = await res.json();
-				console.log(data);
 				setIsAccount(true);
 				setForm({
 					name: '',
@@ -92,10 +90,8 @@ export default function SignIn() {
 				});
 				setSign('Sign in');
 			} else {
-				console.log(form);
 				const data = await request(backRoutes.signIn, 'POST', { ...form });
 				auth.login(data.token, data.refreshToken, data.userId, data.name, data.avatarURL);
-				console.log(data.avatarURL);
 			}
 		} catch (e) {}
 	}

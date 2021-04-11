@@ -15,6 +15,9 @@ import {
 	changeVolume
 } from '../store/settingSlice';
 import { useSelector } from 'react-redux';
+import { ToastContainer } from 'react-toastify';
+import { useMessage } from '../hooks/message.hook'
+import 'react-toastify/dist/ReactToastify.css';
 
 const useStyles = makeStyles({
 	root: {
@@ -177,6 +180,7 @@ const VolumeSlider = withStyles({
 
 export const SettingsPage = () => {
 	const classes = useStyles();
+	const message = useMessage();
 	const { avatar, uploadAvatar } = useContext(AuthContext);
 	const [ musicVolume, setMusicVolume ] = useState(
 		parseInt(localStorage.getItem(LOCAL_STORAGE_KEY.musicVolume)) || INIT_CONSTS.musicVolume
@@ -188,15 +192,12 @@ export const SettingsPage = () => {
 		parseInt(localStorage.getItem(LOCAL_STORAGE_KEY.wordVolume)) || INIT_CONSTS.wordVolume
 	);
 
-	useEffect(() => {
-		console.log(avatar)
-	}, [avatar])
-	// const uploadImg = useCallback(async (file) => {
-	// 	console.log(file);
-	// 	const userId = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY.userData)).userId;
-	// 	const avatar = await backRoutes.uploadAvatar(userId, file);
-	// 	console.log(avatar);
-	// }, []);
+	async function download(file) {
+		if (!file) return
+		const data = await uploadAvatar(file);
+		console.log(data);
+		message(data.status, data.message);
+	}
 
 	function handleMusicVolume(event, newValue) {
 		setMusicVolume(newValue);
@@ -270,12 +271,12 @@ export const SettingsPage = () => {
 						/>
 					</div>
 				</div>
-
+				<ToastContainer />
 				<div className={classes.avatarContainer}>
 					<Typography variant="h4" className={classes.subtitle}>
 						Аватар
 					</Typography>
-					<img alt="avatar" className={classes.avatarImage} src={avatar || 'http://res.cloudinary.com/nazdac/image/upload/v1616652013/travelAppFolder/dmlfcuvyr79gpkbgg639.jpg'} />
+					<img alt="avatar" className={classes.avatarImage} src={avatar} />
 					<label htmlFor="file" className={classes.upload}>
 						+ ИЗМЕНИТЬ
 					</label>
@@ -284,7 +285,7 @@ export const SettingsPage = () => {
 						type="file"
 						id="file"
 						accept="image/*"
-						onChange={(event) => uploadAvatar(event.target.files[0])}
+						onChange={(event) => download(event.target.files[0])}
 					/>
 				</div>
 				<div className={classes.volumeContainer}>

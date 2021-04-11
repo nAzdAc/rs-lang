@@ -1,7 +1,6 @@
 import { useState, useCallback, useEffect } from 'react';
 import { backRoutes } from '../utils/backRoutes';
 import { LOCAL_STORAGE_KEY } from '../utils/storageKey';
-
 const storageName = 'userData';
 
 export const useAuth = () => {
@@ -32,11 +31,13 @@ export const useAuth = () => {
 
 	const uploadAvatar = useCallback(
 		async (file) => {
-			const userId = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY.userData)) ? JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY.userData)).userId : '';
-			console.log(file)
+			if (!file) return;
+			const userId = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY.userData))
+				? JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY.userData)).userId
+				: '';
+			console.log(file);
 			const formData = new FormData();
 			formData.append('avatar', file);
-			console.log(formData)
 			const res = await fetch(`${backRoutes.signUp}/${userId}`, {
 				method: 'PUT',
 				body: formData,
@@ -46,10 +47,14 @@ export const useAuth = () => {
 			});
 			const data = await res.json();
 			console.log(data)
-			setAvatar(data.avatarURL);
-			const local = JSON.parse(localStorage.getItem(storageName));
-			const updateLocal = { ...local, avatar: data.avatarURL };
-			localStorage.setItem(storageName, JSON.stringify(updateLocal));
+			if (data.avatarURL) {
+				setAvatar(data.avatarURL);
+				const local = JSON.parse(localStorage.getItem(storageName));
+				const updateLocal = { ...local, avatar: data.avatarURL };
+				localStorage.setItem(storageName, JSON.stringify(updateLocal));
+			}
+
+			return { status: res.status, message: data.message };
 		},
 		[ token ]
 	);
@@ -67,7 +72,7 @@ export const useAuth = () => {
 			const data = JSON.parse(localStorage.getItem(storageName));
 
 			if (data && data.token) {
-				login(data.token, data.refreshToken, data.userId, data.userName);
+				login(data.token, data.refreshToken, data.userId, data.userName, data.avatar);
 			}
 			setReady(true);
 		},
