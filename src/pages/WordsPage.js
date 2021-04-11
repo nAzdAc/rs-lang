@@ -62,7 +62,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function WordsPage() {
   const { userId, token } = useContext(AuthContext);
-  console.log(token)
+  // console.log(token)
   let match = useRouteMatch().path;
   let group = match[match.length - 1] - 1;
   const [page, setPage] = useState(1);

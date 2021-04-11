@@ -139,7 +139,7 @@ export const backRoutes = {
 				}
 			});
 			const content = await rawResponse.json();
-			console.log(content)
+			// console.log(content)
 			return content
 		} catch(e){console.log(e)}
 		

@@ -43,6 +43,7 @@ export default function CardIcons({
   audioExample,
   difficulty,
   page,
+  clickDelete,
 }) {
   const classes = useStyles();
   const { userId, token } = useContext(AuthContext);
@@ -73,12 +74,12 @@ export default function CardIcons({
     }
   }, [token, userId]);
 
-  const addWordToDictionary = () => {
+  const addWordToDictionary = async () => {
     if (
       allUserWords.length===0 ||
-      !allUserWords.filter((item) => wordId === item.wordId).length > 0
+      !allUserWords.find((item) => wordId === item.wordId)
     ) {
-      backRoutes.createUserWord({
+      await backRoutes.createUserWord({
         userId: userId,
         wordId: wordId,
         word: {
@@ -89,11 +90,11 @@ export default function CardIcons({
       });
     } else if (
       allUserWords &&
-      allUserWords.filter(
+      allUserWords.find(
         (item) => wordId === item.wordId && item.difficulty === "difficult"
-      ).length > 0
+      )
     ) {
-      backRoutes.updateUserWord({
+      await backRoutes.updateUserWord({
         userId: userId,
         wordId: wordId,
         word: {
@@ -104,11 +105,11 @@ export default function CardIcons({
       });
     } else if (
       allUserWords &&
-      allUserWords.filter(
+      allUserWords.find(
         (item) => wordId === item.wordId && item.difficulty !== "difficult"
-      ).length > 0
+      )
     ) {
-      backRoutes.updateUserWord({
+      await backRoutes.updateUserWord({
         userId: userId,
         wordId: wordId,
         word: {
@@ -122,33 +123,33 @@ export default function CardIcons({
     func()
   };
 
-  const addWordToDictionaryDelete = () => {
-    if (
-      allUserWords &&
-      !allUserWords.filter((item) => wordId === item.wordId).length > 0
-    ) {
-      backRoutes.createUserWord({
-        userId: userId,
-        wordId: wordId,
-        word: {
-          difficulty: "weak",
-          optional: { group: difficulty, page: page, deleted: true },
-        },
-        token: token,
-      });
-    } else {
-      backRoutes.updateUserWord({
-        userId: userId,
-        wordId: wordId,
-        word: {
-          difficulty: "weak",
-          optional: { group: difficulty, page: page, deleted: true },
-        },
-        token: token,
-      });
-      console.log("word is in your dictionary");
-    }
-  };
+  // const addWordToDictionaryDelete = async () => {
+  //   if (
+  //     allUserWords &&
+  //     !allUserWords.find((item) => wordId === item.wordId)
+  //   ) {
+  //     await backRoutes.createUserWord({
+  //       userId: userId,
+  //       wordId: wordId,
+  //       word: {
+  //         difficulty: "weak",
+  //         optional: { group: difficulty, page: page, deleted: true },
+  //       },
+  //       token: token,
+  //     });
+  //   } else {
+  //     await backRoutes.updateUserWord({
+  //       userId: userId,
+  //       wordId: wordId,
+  //       word: {
+  //         difficulty: "weak",
+  //         optional: { group: difficulty, page: page, deleted: true },
+  //       },
+  //       token: token,
+  //     });
+  //     console.log("word is in your dictionary");
+  //   }
+  // };
 
   // useEffect(() => {
   //   if (userId && token) {
@@ -177,7 +178,7 @@ export default function CardIcons({
       ></GradeIcon>
       <DeleteIcon
         className={classes.icons}
-        onClick={addWordToDictionaryDelete}
+        onClick={clickDelete}
       ></DeleteIcon>
     </Box>
   );

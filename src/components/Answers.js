@@ -44,16 +44,16 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-export default function Answers({wrong,correct,token,userId,wordId}) {
+export default function Answers({wrong,correct,token,userId,wordId,difficulty,page}) {
   const classes = useStyles();
   const handleButtonClick = () =>{
-    console.log(token)
-    backRoutes.deleteUserWord({
+    backRoutes.updateUserWord({
       userId: userId,
       wordId: wordId,
-      token: token,
-    })
-    
+      word: { difficulty: 'weak', optional: { group: difficulty, page: page, deleted: true } },
+      token: token
+    });
+    console.log('сдово перемещено в удаленные')
     
   }
   return (

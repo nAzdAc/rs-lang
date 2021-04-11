@@ -52,7 +52,7 @@ export default function WordsCardList({
           deleteUserWords.push(item.wordId);
         }
       });
-      // console.log(deleteUserWords)
+      console.log(deleteUserWords)
       // console.log(data)
 
       setWordsArr(data.filter((item) => !deleteUserWords.includes(item.id)));
@@ -78,11 +78,49 @@ export default function WordsCardList({
     if (userWords) {
       fetchUserWords();
     }else{fetchWords()}
-    //  else if (curentUserWords && curentUserWords.length > 0) {
-    //   fetchWords();
-    // }
     
   }, [curentUserWords, fetchUserWords, fetchWords, userWords]);
+
+
+  const addWordToDictionaryDelete = async (wordId) => {
+    
+    if (
+      curentUserWords &&
+      !curentUserWords.find((item) => wordId === item.wordId)
+    ) {
+      await backRoutes.createUserWord({
+        userId: userId,
+        wordId: wordId,
+        word: {
+          difficulty: "weak",
+          optional: { group: difficulty, deleted: true },
+        },
+        token: token,
+      });
+    } else {
+      await backRoutes.updateUserWord({
+        userId: userId,
+        wordId: wordId,
+        word: {
+          difficulty: "weak",
+          optional: { group: difficulty, deleted: true },
+        },
+        token: token,
+      });
+
+      console.log("word is in your dictionary");
+      // setWordsArr()
+    }
+    let newArr = wordsArr
+    newArr.splice(newArr.findIndex((item)=>item.id===wordId),1)
+    console.log(newArr)
+    setWordsArr(newArr)
+    // console.log(wordsArr.splice(wordsArr.findIndex((item)=>item.id===wordId),1))
+
+    // console.log(curentUserWords)
+    // fetchWords()
+    // console.log(curentUserWords)
+  };
 
   return (
     <ul className={classes.list}>
@@ -101,6 +139,7 @@ export default function WordsCardList({
             infoPanel={
               infoPanel === "CardIcons" ? (
                 <CardIcons
+                  clickDelete={()=>{addWordToDictionaryDelete(item.id)}}
                   userWords={curentUserWords?curentUserWords:[]}
                   difficulty={difficulty}
                   wordId={item.id}
@@ -110,6 +149,7 @@ export default function WordsCardList({
                 ></CardIcons>
               ) : infoPanel === "WordInfo" ? (
                 <WordInfo
+                  page={item.page}
                   difficulty={difficulty}
                   wordId={item.id}
                   userId={userId}
@@ -119,6 +159,9 @@ export default function WordsCardList({
                 ></WordInfo>
               ) : infoPanel === "Answers" ? (
                 <Answers
+                  page={item.page}
+                  group={item.group}
+                  difficulty={difficulty}
                   wrong={item.wrong}
                   correct={item.correct}
                   wordId={item.id}
