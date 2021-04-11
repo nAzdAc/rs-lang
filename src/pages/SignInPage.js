@@ -29,6 +29,12 @@ import { backRoutes } from '../utils/backRoutes';
 import { useDispatch, useSelector } from 'react-redux';
 import { changeLoginStatus } from '../store/loginSlice';
 
+import { ToastContainer } from 'react-toastify';
+import { useMessage } from '../hooks/message.hook';
+import 'react-toastify/dist/ReactToastify.css';
+
+
+
 const useStyles = makeStyles((theme) => ({
   mainBox: {
     width: '400px',
@@ -94,9 +100,17 @@ const useStyles = makeStyles((theme) => ({
     marginTop: 'auto',
     marginLeft: 'auto',
   },
+  message: {
+    position: 'absolute',
+    top:'50%',
+    left:'50%',
+    // marginTop: 'auto',
+    // marginLeft: 'auto',
+  },
 }));
 
 export default function SignInPage() {
+  const message = useMessage()
   const { request } = useHttp();
   const auth = useContext(AuthContext);
   const classes = useStyles();
@@ -126,7 +140,9 @@ export default function SignInPage() {
       console.log(form);
       const data = await request(backRoutes.signIn, 'POST', { ...form });
       auth.login(data.token, data.refreshToken, data.userId, data.name, data.avatarURL);
-      console.log(data.avatarURL);
+      console.log(data);
+      console.log(data.status, data.message);
+      message(200, data.message)
     } catch (e) {}
   }
   const loggedin = useSelector((state) => state.login.LoggedIn);
@@ -140,6 +156,7 @@ export default function SignInPage() {
       <Container component="main" maxWidth="xs" className={classes.mainBox}>
         <CssBaseline />
         <div className={classes.paper}>
+          
           <Typography
             component="h1"
             variant="h2"
@@ -204,6 +221,7 @@ export default function SignInPage() {
                 labelWidth={70}
               />
             </FormControl>
+            <ToastContainer className={classes.info}/>
             <Typography
               component="h1"
               variant="subtitle2"
