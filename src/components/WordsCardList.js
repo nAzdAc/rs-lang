@@ -56,6 +56,9 @@ export default function WordsCardList({
       // console.log(data)
 
       setWordsArr(data.filter((item) => !deleteUserWords.includes(item.id)));
+    }else{
+      const data = await request(fetchUrl, "GET");
+      setWordsArr(data);
     }
   }, [curentUserWords, fetchUrl, request]);
 
@@ -74,9 +77,11 @@ export default function WordsCardList({
   useEffect(() => {
     if (userWords) {
       fetchUserWords();
-    } else if (curentUserWords && curentUserWords.length > 0) {
-      fetchWords();
-    }
+    }else{fetchWords()}
+    //  else if (curentUserWords && curentUserWords.length > 0) {
+    //   fetchWords();
+    // }
+    
   }, [curentUserWords, fetchUserWords, fetchWords, userWords]);
 
   return (
@@ -96,7 +101,7 @@ export default function WordsCardList({
             infoPanel={
               infoPanel === "CardIcons" ? (
                 <CardIcons
-                  userWords={curentUserWords}
+                  userWords={curentUserWords?curentUserWords:[]}
                   difficulty={difficulty}
                   wordId={item.id}
                   audioWord={item.audio}

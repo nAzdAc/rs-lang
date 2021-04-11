@@ -47,7 +47,7 @@ export default function CardIcons({
   const classes = useStyles();
   const { userId, token } = useContext(AuthContext);
   const [allUserWords, setAllUserWords]=useState(userWords)
-
+  // console.log(allUserWords,token)
   const audio = new Howl({
     src: [`${originURL}/${audioWord}`],
     // volume: 0.001 * volume
@@ -75,7 +75,7 @@ export default function CardIcons({
 
   const addWordToDictionary = () => {
     if (
-      allUserWords &&
+      allUserWords.length===0 ||
       !allUserWords.filter((item) => wordId === item.wordId).length > 0
     ) {
       backRoutes.createUserWord({
@@ -164,7 +164,7 @@ export default function CardIcons({
       ></PlayCircleFilledIcon>
       <GradeIcon
         className={
-          allUserWords
+          allUserWords.length>0
             ? allUserWords.filter(
                 (item) =>
                   wordId === item.wordId && item.difficulty === "difficult"
