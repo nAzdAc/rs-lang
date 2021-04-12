@@ -50,7 +50,7 @@ export default function WordInfo({ group, difficulty, page, userId, wordId, acti
 	const auth = useContext(AuthContext);
 
 	const classes = useStyles(group);
-
+	
 	const handleButtonClick = () => {
 		console.log('click');
 		if (activeWordButton === 1) {

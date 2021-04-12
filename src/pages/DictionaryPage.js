@@ -108,7 +108,7 @@ export default function DictionaryPage() {
   const func = useCallback(async () => {
     const result = await backRoutes.getUserWords({ userId, token });
     console.log('result', result)
-    if (result) {
+    if (result.length) {
       console.log('попали в if')
       const filteredArr = result.userWords.filter((item) => !item.optional.deleted)
       setData(filteredArr);

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import Typography from '@material-ui/core/Typography';
 import FullscreenIcon from '@material-ui/icons/Fullscreen';
 import FullscreenExitIcon from '@material-ui/icons/FullscreenExit';
@@ -14,6 +14,7 @@ import { createSound, shuffleAllElements, getRandomInt } from '../utils/helpers'
 import { GameStats } from '../components/GameStats';
 import { useHttp } from '../hooks/http.hook';
 import { toggleScreen } from '../utils/fullScreen';
+import { AuthContext } from '../context/AuthContext';
 
 const useStyles = makeStyles({
 	root: {
@@ -114,6 +115,7 @@ const keyCodeArray = {
 
 export const SprintPage = () => {
 	const classes = useStyles();
+	const { userId, token } = useContext(AuthContext);
 	const { request } = useHttp();
 	const soundVolume = useMemo(() => localStorage.getItem(LOCAL_STORAGE_KEY.soundVolume) || INIT_CONSTS.soundVolume, []);
 	const musicVolume = useMemo(() => localStorage.getItem(LOCAL_STORAGE_KEY.musicVolume) || INIT_CONSTS.musicVolume, []);
@@ -139,62 +141,139 @@ export const SprintPage = () => {
 	const fetchWords = useCallback(
 		async () => {
 			try {
-				const data = await request(`${backRoutes.words}?group=3&page=4`, 'GET');
-				const arr = data.map((item) => {
-					return { english: item.word, russian: item.wordTranslate };
+				const allWords = await request(`${backRoutes.words}?group=3&page=1`, 'GET');
+				const data = await backRoutes.getUserWords({ userId, token });
+
+				const arr = allWords.map((item) => {
+					// console.log(item.id)
+					return {
+						english: item.word,
+						russian: item.wordTranslate,
+						id: item.id,
+						group: item.group,
+						page: item.page,
+						deleted: false
+					};
 				});
-				arr.sort(shuffleAllElements);
-				setWordsArray(arr);
+				const deletedWords = data.userWords.filter((item) => item.deleted);
+				const deletedId = deletedWords.map((item) => item.wordId);
+				const withoutDeleted = arr.filter((item) => !deletedId.includes(item.id));
+				const difficultWords = data.userWords.filter((item) => item.difficult);
+				const difficultId = difficultWords.map((item) => item.wordId);
+				const filteredArr = withoutDeleted.map((item) => {
+					let word;
+					if (difficultId.includes(item.id)) {
+						word = { ...item, difficult: true };
+					} else {
+						word = { ...item, difficult: false };
+					}
+					return word;
+				});
+				console.log({ difficultWords });
+				console.log({ difficultId });
+				console.log({ allWords });
+				// console.log({ deletedWords });
+				// console.log({ deletedId });
+				console.log(data.userWords);
+				console.log({ filteredArr });
+				filteredArr.sort(shuffleAllElements);
+				console.log(filteredArr);
+				setWordsArray(filteredArr);
 			} catch (e) {
 				console.log(e);
 			}
 		},
-		[ request ]
+		[ request, token, userId ]
 	);
 
-	const putStats = useCallback(
-		async () => {
-			try {
-				const userId = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY.userData)).userId;
-				const token = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY.userData)).token;
-				const totalWords = correctAnswers.length + failAnswers.length;
-				const correctPercent = Math.round(100 * correctAnswers.length / (correctAnswers.length + failAnswers.length));
-				const longestSeries = Math.max.apply(null, allSeries);
+	async function postUserWords() {
+		try {
+			await Promise.all(
+				correctAnswers.map(async (item) => {
+					const wordId = item.id;
+					const word = {
+						difficult: item.difficult,
+						group: item.group,
+						page: item.page,
+						deleted: item.deleted,
+					};
+					console.log(word);
+					await backRoutes.createUserWord({ userId, wordId, word, token });
+				})
+			);
+			await Promise.all(
+				failAnswers.map(async (item) => {
+					const wordId = item.id;
+					const word = {
+						difficult: item.difficult,
+						group: item.group,
+						page: item.page,
+						deleted: item.deleted,
+					};
+					await backRoutes.createUserWord({ userId, wordId, word, token });
+				})
+			);
+		} catch (e) {
+			console.log(e);
+		}
+	}
 
-				const gameStats = {
-					gameName: 'sprint',
-					totalWords,
-					correctPercent,
-					longestSeries,
-					date: new Date().toLocaleDateString()
-				};
-				// console.log(token);
-				// console.log(userId);
-				// console.log(gameStats);
-				// const data = await request(`${backRoutes.signUp}/${userId}/statistics`, 'PUT', gameStats, {
-				// 	Authorization: `Bearer ${token}`
-				// });
-				const data = await backRoutes.putStatistics({
-					userId,
-					token,
-					data: gameStats
-				});
-				console.log(data);
-			} catch (e) {
-				console.log(e);
-				console.log(e.message);
-			}
-		},
-		[ allSeries, correctAnswers.length, failAnswers.length ]
-	);
+	async function putAnswers() {
+		try {
+			await Promise.all(
+				correctAnswers.map(async (item) => {
+					const wordId = item.id;
+					const word = { value: true };
+					await backRoutes.updateUserWord({ userId, wordId, word, token });
+				})
+			);
+			await Promise.all(
+				failAnswers.map(async (item) => {
+					const wordId = item.id;
+					const word = { value: false };
+					await backRoutes.updateUserWord({ userId, wordId, word, token });
+				})
+			);
+		} catch (e) {
+			console.log(e);
+		}
+	}
+
+	async function putStats() {
+		try {
+			const totalWords = correctAnswers.length + failAnswers.length;
+			const correctPercent =
+				Math.round(100 * correctAnswers.length / (correctAnswers.length + failAnswers.length)) || 0;
+			const longestSeries = Math.max.apply(null, allSeries) < 0 ? 0 : Math.max.apply(null, allSeries);
+
+			const gameStats = {
+				gameName: 'sprint',
+				totalWords,
+				correctPercent,
+				longestSeries,
+				date: new Date().toLocaleDateString()
+			};
+			const data = await backRoutes.putStatistics({
+				userId,
+				token,
+				data: gameStats
+			});
+			console.log(data);
+		} catch (e) {
+			console.log(e);
+			console.log(e.message);
+		}
+	}
 
 	useEffect(
 		() => {
 			if (endGame) {
-				putStats();
+				// putStats();
+				// postUserWords();
+				putAnswers();
 			}
 		},
-		[ endGame, putStats ]
+		[ endGame ]
 	);
 
 	const answer = useCallback(

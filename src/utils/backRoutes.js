@@ -83,6 +83,7 @@ export const backRoutes = {
 		return content
 	},
 	updateUserWord : async ({ userId, wordId, word, token }) => {
+		console.log(word)
 		const rawResponse = await fetch(`${originURL}/users/${userId}/words/${wordId}`, {
 			method: 'PUT',
 			withCredentials: true,
@@ -128,6 +129,8 @@ export const backRoutes = {
 	},
 	getUserWords : async ({ userId,token}) => {
 		try{
+			console.log(userId)
+			console.log(token)
 			const rawResponse = await fetch(`${originURL}/users/${userId}/words`, {
 				method: 'GET',
 				withCredentials: true,
