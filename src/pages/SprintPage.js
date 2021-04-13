@@ -10,11 +10,12 @@ import successSong from '../assets/sounds/success.mp3';
 import failSong from '../assets/sounds/no.wav';
 import { backRoutes } from '../utils/backRoutes';
 import { CircularProgress } from '@material-ui/core';
-import { createSound, shuffleAllElements, getRandomInt } from '../utils/helpers';
+import { createSound, getRandomInt, getWordsForPlay } from '../utils/helpers';
 import { GameStats } from '../components/GameStats';
 import { useHttp } from '../hooks/http.hook';
 import { toggleScreen } from '../utils/fullScreen';
 import { AuthContext } from '../context/AuthContext';
+import { useEndGame } from '../hooks/endGame.hook';
 
 const useStyles = makeStyles({
 	root: {
@@ -117,6 +118,7 @@ export const SprintPage = () => {
 	const classes = useStyles();
 	const { userId, token } = useContext(AuthContext);
 	const { request } = useHttp();
+	const { postUserWords, postStats, postAnswers } = useEndGame();
 	const soundVolume = useMemo(() => localStorage.getItem(LOCAL_STORAGE_KEY.soundVolume) || INIT_CONSTS.soundVolume, []);
 	const musicVolume = useMemo(() => localStorage.getItem(LOCAL_STORAGE_KEY.musicVolume) || INIT_CONSTS.musicVolume, []);
 	const [ endGame, setEndGame ] = useState(false);
@@ -141,11 +143,9 @@ export const SprintPage = () => {
 	const fetchWords = useCallback(
 		async () => {
 			try {
-				const allWords = await request(`${backRoutes.words}?group=3&page=1`, 'GET');
 				const data = await backRoutes.getUserWords({ userId, token });
-
-				const arr = allWords.map((item) => {
-					// console.log(item.id)
+				const arr = await request(`${backRoutes.words}?group=3&page=3`, 'GET');
+				const allWords = arr.map((item) => {
 					return {
 						english: item.word,
 						russian: item.wordTranslate,
@@ -155,30 +155,9 @@ export const SprintPage = () => {
 						deleted: false
 					};
 				});
-				const deletedWords = data.userWords.filter((item) => item.deleted);
-				const deletedId = deletedWords.map((item) => item.wordId);
-				const withoutDeleted = arr.filter((item) => !deletedId.includes(item.id));
-				const difficultWords = data.userWords.filter((item) => item.difficult);
-				const difficultId = difficultWords.map((item) => item.wordId);
-				const filteredArr = withoutDeleted.map((item) => {
-					let word;
-					if (difficultId.includes(item.id)) {
-						word = { ...item, difficult: true };
-					} else {
-						word = { ...item, difficult: false };
-					}
-					return word;
-				});
-				console.log({ difficultWords });
-				console.log({ difficultId });
-				console.log({ allWords });
-				// console.log({ deletedWords });
-				// console.log({ deletedId });
-				console.log(data.userWords);
-				console.log({ filteredArr });
-				filteredArr.sort(shuffleAllElements);
-				console.log(filteredArr);
-				setWordsArray(filteredArr);
+				const gamesArr = getWordsForPlay(allWords, data.userWords);
+				console.log(gamesArr);
+				setWordsArray(gamesArr);
 			} catch (e) {
 				console.log(e);
 			}
@@ -186,94 +165,15 @@ export const SprintPage = () => {
 		[ request, token, userId ]
 	);
 
-	async function postUserWords() {
-		try {
-			await Promise.all(
-				correctAnswers.map(async (item) => {
-					const wordId = item.id;
-					const word = {
-						difficult: item.difficult,
-						group: item.group,
-						page: item.page,
-						deleted: item.deleted,
-					};
-					console.log(word);
-					await backRoutes.createUserWord({ userId, wordId, word, token });
-				})
-			);
-			await Promise.all(
-				failAnswers.map(async (item) => {
-					const wordId = item.id;
-					const word = {
-						difficult: item.difficult,
-						group: item.group,
-						page: item.page,
-						deleted: item.deleted,
-					};
-					await backRoutes.createUserWord({ userId, wordId, word, token });
-				})
-			);
-		} catch (e) {
-			console.log(e);
-		}
-	}
-
-	async function putAnswers() {
-		try {
-			await Promise.all(
-				correctAnswers.map(async (item) => {
-					const wordId = item.id;
-					const word = { value: true };
-					await backRoutes.updateUserWord({ userId, wordId, word, token });
-				})
-			);
-			await Promise.all(
-				failAnswers.map(async (item) => {
-					const wordId = item.id;
-					const word = { value: false };
-					await backRoutes.updateUserWord({ userId, wordId, word, token });
-				})
-			);
-		} catch (e) {
-			console.log(e);
-		}
-	}
-
-	async function putStats() {
-		try {
-			const totalWords = correctAnswers.length + failAnswers.length;
-			const correctPercent =
-				Math.round(100 * correctAnswers.length / (correctAnswers.length + failAnswers.length)) || 0;
-			const longestSeries = Math.max.apply(null, allSeries) < 0 ? 0 : Math.max.apply(null, allSeries);
-
-			const gameStats = {
-				gameName: 'sprint',
-				totalWords,
-				correctPercent,
-				longestSeries,
-				date: new Date().toLocaleDateString()
-			};
-			const data = await backRoutes.putStatistics({
-				userId,
-				token,
-				data: gameStats
-			});
-			console.log(data);
-		} catch (e) {
-			console.log(e);
-			console.log(e.message);
-		}
-	}
-
 	useEffect(
 		() => {
 			if (endGame) {
-				// putStats();
-				// postUserWords();
-				putAnswers();
+				postStats('sprint', correctAnswers, failAnswers, allSeries);
+				postUserWords(correctAnswers, failAnswers);
+				postAnswers(correctAnswers, failAnswers);
 			}
 		},
-		[ endGame ]
+		[allSeries, correctAnswers, endGame, failAnswers, postAnswers, postStats, postUserWords]
 	);
 
 	const answer = useCallback(

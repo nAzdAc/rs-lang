@@ -122,16 +122,12 @@ export const GameStats = ({ correctAnswers, failAnswers, lifes }) => {
 						return (
 							<React.Fragment>
 								{item.src ? (
-									<SavannaStatsCard key={item.src} item={item} fail={false} />
+									<SavannaStatsCard key={index} item={item} fail={false} />
 								) : (
 									<div key={index} className={classes.row}>
 										{item.audio ? (
-											<button  value={item.audio} onClick={repeat} className={classes.button}>
-												<SpeakerIcon
-													value={item.audio}
-													onClick={repeat}
-													className={classes.goodSpeaker}
-												/>
+											<button value={item.audio} onClick={repeat} className={classes.button}>
+												<SpeakerIcon value={item.audio} onClick={repeat} className={classes.goodSpeaker} />
 											</button>
 										) : (
 											''
@@ -150,13 +146,7 @@ export const GameStats = ({ correctAnswers, failAnswers, lifes }) => {
 										) : (
 											''
 										)}
-										{item.russian ? (
-											<Typography variant="h6">
-												{item.russian}
-											</Typography>
-										) : (
-											''
-										)}
+										{item.russian ? <Typography variant="h6">{item.russian}</Typography> : ''}
 									</div>
 								)}
 							</React.Fragment>
@@ -174,16 +164,12 @@ export const GameStats = ({ correctAnswers, failAnswers, lifes }) => {
 						return (
 							<React.Fragment>
 								{item.src ? (
-									<SavannaStatsCard key={item.src} item={item} fail={true} />
+									<SavannaStatsCard key={index} item={item} fail={true} />
 								) : (
 									<div key={index} className={classes.row}>
 										{item.audio ? (
 											<button value={item.audio} onClick={repeat} className={classes.button}>
-												<SpeakerIcon
-													value={item.audio}
-													onClick={repeat}
-													className={classes.badSpeaker}
-												/>
+												<SpeakerIcon value={item.audio} onClick={repeat} className={classes.badSpeaker} />
 											</button>
 										) : (
 											''
@@ -202,13 +188,7 @@ export const GameStats = ({ correctAnswers, failAnswers, lifes }) => {
 										) : (
 											''
 										)}
-										{item.russian ? (
-											<Typography variant="h6">
-												{item.russian}
-											</Typography>
-										) : (
-											''
-										)}
+										{item.russian ? <Typography variant="h6">{item.russian}</Typography> : ''}
 									</div>
 								)}
 							</React.Fragment>

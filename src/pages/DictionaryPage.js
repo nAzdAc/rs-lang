@@ -102,14 +102,10 @@ export default function DictionaryPage() {
   const [data, setData] = useState([]);
   const [listUserWords, setlistUserWords] = useState([]);
   const classes = useStyles();
-  // console.log(data);
 
-  // const fetchUrl = backRoutes.words
   const func = useCallback(async () => {
     const result = await backRoutes.getUserWords({ userId, token });
-    console.log('result', result)
     if (result.length) {
-      console.log('попали в if')
       const filteredArr = result.userWords.filter((item) => !item.optional.deleted)
       setData(filteredArr);
       setlistUserWords(result.userWords);

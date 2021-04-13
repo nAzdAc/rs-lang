@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import Typography from '@material-ui/core/Typography';
 import FullscreenIcon from '@material-ui/icons/Fullscreen';
 import FullscreenExitIcon from '@material-ui/icons/FullscreenExit';
@@ -10,12 +10,14 @@ import failSong2 from '../assets/sounds/fail.mp3';
 import fonSong from '../assets/sounds/fon.mp3';
 import { backRoutes } from '../utils/backRoutes';
 import { CircularProgress } from '@material-ui/core';
-import { createSound, shuffleAllElements } from '../utils/helpers';
+import { createSound, getWordsForPlay, parsedStats, shuffleAllElements } from '../utils/helpers';
 import { GameStats } from '../components/GameStats';
 import { useHttp } from '../hooks/http.hook';
 import { Transition } from 'react-transition-group';
 import { toggleScreen } from '../utils/fullScreen';
 import { LifesInGames } from '../components/LifesInGames';
+import { AuthContext } from '../context/AuthContext';
+import { useEndGame } from '../hooks/endGame.hook';
 
 const useStyles = makeStyles({
 	root: {
@@ -138,6 +140,8 @@ const keyCodeArray = {
 export const SavannaPage = () => {
 	const classes = useStyles();
 	const { request } = useHttp();
+	const { postUserWords, postStats, postAnswers } = useEndGame();
+	const { userId, token } = useContext(AuthContext);
 	const soundVolume = useMemo(() => localStorage.getItem(LOCAL_STORAGE_KEY.soundVolume) || INIT_CONSTS.soundVolume, []);
 	const musicVolume = useMemo(() => localStorage.getItem(LOCAL_STORAGE_KEY.musicVolume) || INIT_CONSTS.musicVolume, []);
 	const [ endGame, setEndGame ] = useState(false);
@@ -162,12 +166,22 @@ export const SavannaPage = () => {
 	const fetchWords = useCallback(
 		async () => {
 			try {
-				const data = await request(`${backRoutes.words}?group=0&page=5`, 'GET');
-				const arr = data.map((item) => {
-					return { english: item.word, russian: item.wordTranslate };
+				const data = await backRoutes.getUserWords({ userId, token });
+				const arr = await request(`${backRoutes.words}?group=3&page=1`, 'GET');
+
+				const allWords = arr.map((item) => {
+					return {
+						english: item.word,
+						russian: item.wordTranslate,
+						id: item.id,
+						group: item.group,
+						page: item.page,
+						deleted: false
+					};
 				});
-				arr.sort(shuffleAllElements);
-				setWordsArray(arr);
+				const gamesArr = getWordsForPlay(allWords, data.userWords);
+				console.log(gamesArr);
+				setWordsArray(gamesArr);
 				setTimeout(() => {
 					setBlock(false);
 				}, 500);
@@ -175,52 +189,18 @@ export const SavannaPage = () => {
 				console.log(e);
 			}
 		},
-		[ request ]
-	);
-
-	const putStats = useCallback(
-		async () => {
-			try {
-				const userId = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY.userData)).userId;
-				const token = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY.userData)).token;
-				const totalWords = correctAnswers.length + failAnswers.length;
-				const correctPercent = Math.round(100 * correctAnswers.length / (correctAnswers.length + failAnswers.length));
-				const longestSeries = Math.max.apply(null, allSeries);
-
-				const gameStats = {
-					gameName: 'savanna',
-					totalWords,
-					correctPercent,
-					longestSeries,
-					date: new Date().toLocaleDateString()
-				};
-				// console.log(token);
-				// console.log(userId);
-				// console.log(gameStats);
-				// const data = await request(`${backRoutes.signUp}/${userId}/statistics`, 'PUT', gameStats, {
-				// 	Authorization: `Bearer ${token}`
-				// });
-				const data = await backRoutes.putStatistics({
-					userId,
-					token,
-					data: gameStats
-				});
-				console.log(data);
-			} catch (e) {
-				console.log(e);
-				console.log(e.message);
-			}
-		},
-		[ allSeries, correctAnswers.length, failAnswers.length ]
+		[ request, token, userId ]
 	);
 
 	useEffect(
 		() => {
 			if (endGame) {
-				putStats();
+				postStats('savanna', correctAnswers, failAnswers, allSeries);
+				postUserWords(correctAnswers, failAnswers);
+				postAnswers(correctAnswers, failAnswers);
 			}
 		},
-		[ endGame, putStats ]
+		[allSeries, correctAnswers, endGame, failAnswers, postAnswers, postStats, postUserWords]
 	);
 
 	const answer = useCallback(
@@ -277,7 +257,7 @@ export const SavannaPage = () => {
 				}, 2000);
 			}
 		},
-		[audioFail2, audioSuccess, block, classes.badButton, classes.goodButton, currentSeries, currentWord, endGame]
+		[ audioFail2, audioSuccess, block, classes.badButton, classes.goodButton, currentSeries, currentWord, endGame ]
 	);
 
 	useEffect(
@@ -374,7 +354,7 @@ export const SavannaPage = () => {
 		<div className={classes.root}>
 			{endGame ? (
 				<GameStats lifes={lifes} correctAnswers={correctAnswers} failAnswers={failAnswers} />
-			) : wordsArray.length && currentWord && fourButtons.length === 4 ? (
+			) : wordsArray.length && fourButtons.length ? (
 				<div ref={gameBoard} className={classes.gameContainer}>
 					<button onClick={() => goFullScreen(gameBoard.current)} className={classes.fullScreenBtn}>
 						{fullScreen ? (
