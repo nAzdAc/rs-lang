@@ -36,61 +36,74 @@ export default function WordsCardList({
 	curentUserWords,
 	activeWordButton,
 	token,
-	userId
+	userId,
+	userDifficultWords,
+
 }) {
 	const [ wordsArr, setWordsArr ] = useState([]);
 	const { request } = useHttp();
 	const classes = useStyles();
+	const [wordsReady,setWordsReady]= useState(false);
 
-	const fetchWords = useCallback(
+	const fetchWordsForBook = useCallback(
 		async () => {
+			console.log(curentUserWords)
 			const deleteUserWords = [];
-			if (curentUserWords) {
+			if (curentUserWords && curentUserWords.length) {
+				// fetchUrl = backRoutes.getWordsPage(group, page);
 				const data = await request(fetchUrl, 'GET');
 				curentUserWords.forEach((item) => {
-					if (item.optional.deleted) {
+					if (item.deleted) {
 						deleteUserWords.push(item.wordId);
 					}
 				});
 				const filteredArr = data.filter((item) => !deleteUserWords.includes(item.id));
+				// console.log(filteredArr)
+
 				setWordsArr(filteredArr);
-			} else {
+				setWordsReady(true)
+				// console.log(filteredArr)
+			} else if(!curentUserWords) {
 				const data = await request(fetchUrl, 'GET');
 				setWordsArr(data);
+				setWordsReady(true)
+				console.log(data)
 			}
 		},
 		[ curentUserWords, fetchUrl, request ]
 	);
 
-	const fetchUserWords = useCallback(
+	const fetchWordsForDictionary = useCallback(
 		async () => {
 			const cards = await Promise.all(
 				userWords.map(async (item) => {
 					const result = await request(backRoutes.getWord(item.wordId), 'GET');
-					result.correct = item.optional.correct ? item.optional.correct : 123;
-					result.wrong = item.optional.wrong ? item.optional.wrong : 10;
+					result.correct = item.correct;
+					result.fail = item.fail;
 					return result;
 				})
 			);
 			setWordsArr(cards);
+			setWordsReady(true)
 		},
 		[ userWords, request ]
 	);
+	
 
 	useEffect(
 		() => {
 			if (userWords) {
-				fetchUserWords();
+				fetchWordsForDictionary();
 			} else {
-				fetchWords();
+				fetchWordsForBook();
 			}
 		},
-		[ curentUserWords, fetchUserWords, fetchWords, userWords ]
+		[curentUserWords, fetchWordsForBook, fetchWordsForDictionary, userWords]
 	);
 
 	return (
 		<ul className={classes.list}>
-			{wordsArr.length ? (
+			{wordsReady ? (
 				wordsArr.map((item) => (
 					<WordCard
 						key={item.id}
@@ -111,6 +124,7 @@ export default function WordsCardList({
 									audioWord={item.audio}
 									audioExample={item.audioExample}
 									audioMeaning={item.audioMeaning}
+									userDifficultWords={userDifficultWords}
 								/>
 							) : infoPanel === 'WordInfo' ? (
 								<WordInfo
@@ -122,7 +136,7 @@ export default function WordsCardList({
 									token={token}
 								/>
 							) : infoPanel === 'Answers' ? (
-								<Answers wrong={item.wrong} correct={item.correct} wordId={item.id} userId={userId} token={token} />
+								<Answers fail={item.fail} correct={item.correct} wordId={item.id} userId={userId} token={token} />
 							) : null
 						}
 					/>

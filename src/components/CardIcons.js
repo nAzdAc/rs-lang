@@ -10,6 +10,7 @@ import { Howl, Howler } from 'howler';
 // import { INIT_CONSTS } from '../utils/initConsts';
 import { AuthContext } from '../context/AuthContext';
 import { backRoutes } from '../utils/backRoutes';
+import { filterableGridColumnsSelector } from '@material-ui/data-grid';
 // import { useHttp } from "../hooks/http.hook";
 
 const useStyles = makeStyles((theme) => ({
@@ -31,14 +32,19 @@ const useStyles = makeStyles((theme) => ({
 		cursor: 'pointer'
 	},
 	iconActive: {
-		color: '#FFD700'
+		color: '#FFD700',
+		marginRight: '10px',
+		fontSize: '34px',
+		cursor: 'pointer'
 	}
 }));
 
-export default function CardIcons({ userWords, wordId, audioWord, audioMeaning, audioExample, difficulty, page }) {
+export default function CardIcons({ userWords, wordId, audioWord, audioMeaning, audioExample, difficulty, page, userDifficultWords }) {
 	const classes = useStyles();
 	const { userId, token } = useContext(AuthContext);
 	const [ allUserWords, setAllUserWords ] = useState(userWords);
+	// console.log(userDifficultWords)
+
 	const audio = new Howl({
 		src: [ `${originURL}/${audioWord}` ],
 		// volume: 0.001 * volume
@@ -60,98 +66,104 @@ export default function CardIcons({ userWords, wordId, audioWord, audioMeaning, 
 	const func = useCallback(
 		async () => {
 			const result = await backRoutes.getUserWords({ userId, token });
-			if (result) {
+			if (result.length) {
 				setAllUserWords(result.userWords);
 			}
 		},
 		[ token, userId ]
 	);
 
-	async function addWordToDictionary() {
-		if (allUserWords.length === 0 || !allUserWords.filter((item) => wordId === item.wordId).length > 0) {
-			await backRoutes.createUserWord({
-				userId: userId,
-				wordId: wordId,
-				word: {
-					difficulty: 'difficult',
-					optional: { group: difficulty, page: page, deleted: false }
-				},
-				token: token
-			});
-		} else if (
-			allUserWords &&
-			allUserWords.filter((item) => wordId === item.wordId && item.difficulty === 'difficult').length > 0
-		) {
-			await backRoutes.createUserWord({
-				userId: userId,
-				wordId: wordId,
-				word: {
-					difficulty: 'weak',
-					optional: { group: difficulty, page: page, deleted: false }
-				},
-				token: token
-			});
-		} else if (
-			allUserWords &&
-			allUserWords.filter((item) => wordId === item.wordId && item.difficulty !== 'difficult').length > 0
-		) {
-			await backRoutes.createUserWord({
-				userId: userId,
-				wordId: wordId,
-				word: {
-					difficulty: 'difficult',
-					optional: { group: difficulty, page: page, deleted: false }
-				},
-				token: token
-			});
-		}
-		func();
+	// async function addWordToDictionary() {
+	// 	if (allUserWords.length === 0 && !allUserWords.filter((item) => wordId === item.wordId).length > 0) {
+	// 		await backRoutes.createUserWord({
+	// 			userId: userId,
+	// 			wordId: wordId,
+	// 			difficult: true,
+	// 			token:token,
+	// 		});
+	// 	} 
+	// 	else if (
+	// 		allUserWords &&
+	// 		allUserWords.filter((item) => wordId === item.wordId && item.difficulty).length > 0
+	// 	) {
+	// 		await backRoutes.createUserWord({
+	// 			userId: userId,
+	// 			wordId: wordId,
+	// 			token:token,
+	// 			word:{
+	// 				difficult: true,
+	// 			}
+	// 		});
+	// 	} 
+	// 	else if (
+	// 		allUserWords &&
+	// 		allUserWords.filter((item) => wordId === item.wordId && !item.difficulty).length > 0
+	// 	) {
+	// 		await backRoutes.createUserWord({
+	// 			userId: userId,
+	// 			wordId: wordId,
+	// 			difficult: true,
+	// 			token:token,
+	// 		});
+	// 	}
+	// 	func();
+	// }
+
+	const setGoldStar = async () => {
+		await backRoutes.createUserWord({
+			userId: userId,
+			wordId: wordId,
+			word: {
+				difficult: true,
+			},
+			token: token,
+		});
+		func()
+	}
+	const setBlackStar = async () => {
+		await backRoutes.createUserWord({
+			userId: userId,
+			wordId: wordId,
+			word: {
+				difficult: false,
+			},
+			token: token,
+		});
+		func()
 	}
 
 	async function addWordToDictionaryDelete() {
-    let data;
-		if (allUserWords && !allUserWords.filter((item) => wordId === item.wordId).length > 0) {
-			data = await backRoutes.createUserWord({
-				userId: userId,
-				wordId: wordId,
-				word: {
-					difficulty: 'weak',
-					optional: { group: difficulty, page: page, deleted: true }
-				},
-				token: token
-			});
-		} else {
-			data = await backRoutes.createUserWord({
-				userId: userId,
-				wordId: wordId,
-				word: {
-					difficulty: 'weak',
-					optional: { group: difficulty, page: page, deleted: true }
-				},
-				token: token
-			});
-		}
-    console.log(data)
+    await backRoutes.createUserWord({
+			userId: userId,
+			wordId: wordId,
+			word: {
+				deleted: true,
+			},
+			token: token,
+		});
+		func()
 	}
 
 	return (
 		<Box className={classes.boxIcons}>
 			<PlayCircleFilledIcon onClick={playWordsAudio} className={classes.icons} />
+			{userDifficultWords.includes(wordId)?(
 			<GradeIcon
-				className={
-					allUserWords.length ? allUserWords.filter(
-						(item) => wordId === item.wordId && item.difficulty === 'difficult'
-					).length ? (
-						`${classes.icons} ${classes.iconActive}`
-					) : (
-						`${classes.icons}`
-					) : (
-						`${classes.icons}`
-					)
-				}
-				onClick={addWordToDictionary}
-			/>
+				className={`${classes.iconActive}`}
+				onClick={setBlackStar}
+			></GradeIcon>
+		) : (
+			<GradeIcon
+				className={`${classes.icons}`}
+				onClick={setGoldStar}
+			></GradeIcon>
+		)}
 			<DeleteIcon className={classes.icons} onClick={addWordToDictionaryDelete} />
 		</Box>
 	);
 }
+
+
+
+
+

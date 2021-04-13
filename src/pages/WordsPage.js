@@ -58,10 +58,11 @@ export default function WordsPage() {
 	const { userId, token } = useContext(AuthContext);
 	let match = useRouteMatch().path;
 	let group = match[match.length - 1] - 1;
-	const [ page, setPage ] = useState(1);
+	const [ page, setPage ] = useState(0);
 	const classes = useStyles(group);
 	const [ data, setData ] = useState([]);
 	const fetchUrl = backRoutes.getWordsPage(group, page);
+	const [ userDifficultWords, setUserDifficultWords ] = useState([]);
 
 	const handlePaginationChange = (e, value) => {
 		setPage(value);
@@ -70,8 +71,14 @@ export default function WordsPage() {
 	const func = useCallback(
 		async () => {
 			const result = await backRoutes.getUserWords({ userId, token });
-			if (result.length) {
+			console.log(result)
+			if (result.userWords.length) {
 				setData(result.userWords);
+				const arr = result.userWords.map((item)=> item.difficult? item.wordId:null)
+				setUserDifficultWords(arr)
+			}
+			else{
+				setData(null)
 			}
 		},
 		[ token, userId ]
@@ -100,6 +107,7 @@ export default function WordsPage() {
 					token={token}
 					page={page}
 					curentUserWords={data}
+					userDifficultWords={userDifficultWords}
 					difficulty={group}
 					fetchUrl={fetchUrl}
 					infoPanel="CardIcons"
@@ -120,7 +128,7 @@ export default function WordsPage() {
 								renderItem={(item) => (
 									<PaginationItem
 										component={Link}
-										to={`${match}${item.page === 1 ? '' : `?page=${item.page}`}`}
+										to={`${match}${item.page === 0 ? '' : `?page=${item.page}`}`}
 										{...item}
 									/>
 								)}

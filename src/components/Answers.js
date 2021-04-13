@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
 	}
 }));
 
-export default function Answers({ wrong, correct, token, userId, wordId }) {
+export default function Answers({ fail, correct, token, userId, wordId }) {
 	const classes = useStyles();
 	const handleButtonClick = () => {
 		console.log(token);
@@ -60,7 +60,7 @@ export default function Answers({ wrong, correct, token, userId, wordId }) {
 				Правильные ответы: <span className={classes.correct}>{correct ? correct : 0}</span>
 			</Typography>
 			<Typography className={classes.title} variant="h1" component="h4">
-				Ошибки: <span className={classes.wrong}>{wrong ? wrong : 0}</span>
+				Ошибки: <span className={classes.wrong}>{fail ? fail : 0}</span>
 			</Typography>
 			<Button variant="contained" className={classes.button} onClick={handleButtonClick}>
 				Удалить из словаря

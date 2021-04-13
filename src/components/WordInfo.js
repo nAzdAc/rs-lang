@@ -48,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
 	}
 }));
 
-export default function WordInfo({ group, difficulty, page, userId, wordId, activeWordButton }) {
+export default function WordInfo({ group, difficulty, page, userId, wordId, activeWordButton,token }) {
 	const auth = useContext(AuthContext);
 
 	const classes = useStyles(group);
@@ -56,18 +56,22 @@ export default function WordInfo({ group, difficulty, page, userId, wordId, acti
 	const handleButtonClick = () => {
 		console.log('click');
 		if (activeWordButton === 1) {
-			backRoutes.updateUserWord({
+			backRoutes.createUserWord({
 				userId: userId,
-				wordId: wordId,
-				word: { difficulty: 'weak', optional: { group: difficulty, page: page, deleted: false } },
-				token: auth.token
+			wordId: wordId,
+			word: {
+				difficult: false,
+			},
+			token: token,
 			});
 		} else {
-			backRoutes.updateUserWord({
+			backRoutes.createUserWord({
 				userId: userId,
-				wordId: wordId,
-				word: { difficulty: 'weak', optional: { group: difficulty, page: page, deleted: false } },
-				token: auth.token
+			wordId: wordId,
+			word: {
+				deleted: false,
+			},
+			token: token,
 			});
 		}
 	};
