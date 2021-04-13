@@ -47,8 +47,6 @@ export default function WordsCardList({
 
 	const fetchWordsForBook = useCallback(
 		async () => {
-			console.log('Book')
-			console.log(userWords)
 			const deleteUserWords = [];
 			if (userWords && userWords.length) {
 				const data = await request(fetchUrl, 'GET');
@@ -72,7 +70,6 @@ export default function WordsCardList({
 
 	const fetchWordsForDictionary = useCallback(
 		async () => {
-			console.log('dictionary')
 			const cards = await Promise.all(
 				userWordsForDictionari.map(async (item) => {
 					const result = await request(backRoutes.getWord(item.wordId), 'GET');
@@ -88,11 +85,8 @@ export default function WordsCardList({
 	);
 
 	const getUserWords = useCallback(
-		
 		async () => {
-			console.log('func')
 			const result = await backRoutes.getUserWords({ userId, token });
-			console.log(result)
 			if (result.userWords.length) {
 				setUserWords(result.userWords);
 				const arr = result.userWords.map((item)=> item.difficult? item.wordId:null)

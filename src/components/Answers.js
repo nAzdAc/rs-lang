@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
@@ -48,7 +48,6 @@ export default function Answers({ fail, correct, token, userId, wordId }) {
 	const classes = useStyles();
 
 	const handleButtonClick = () => {
-		console.log(token);
 		backRoutes.createUserWord({
 			userId: userId,
 		wordId: wordId,
