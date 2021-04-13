@@ -1,7 +1,7 @@
 import { LOCAL_STORAGE_KEY } from "./storageKey";
 
-export const originURL = 'http://localhost:8080';
-// export const originURL = 'https://react-learnwords.herokuapp.com';
+// export const originURL = 'http://localhost:8080';
+export const originURL = 'https://react-learnwords.herokuapp.com';
 
 //  ?group=1&page=1
 
@@ -129,8 +129,8 @@ export const backRoutes = {
 	},
 	getUserWords : async ({ userId,token}) => {
 		try{
-			console.log(userId)
-			console.log(token)
+			// console.log(userId)
+			// console.log(token)
 			const rawResponse = await fetch(`${originURL}/users/${userId}/words`, {
 				method: 'GET',
 				withCredentials: true,
@@ -140,7 +140,7 @@ export const backRoutes = {
 				}
 			});
 			const content = await rawResponse.json();
-			console.log(content)
+			// console.log(content)
 			return content
 		} catch(e){console.log(e)}
 		

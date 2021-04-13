@@ -10,6 +10,8 @@ import WordsCardList from "../components/WordsCardList";
 import { AuthContext } from "../context/AuthContext";
 import Button from "@material-ui/core/Button";
 import LevelButton from "../components/LevelButton";
+import {wordCategories} from "../const/wordCategories"
+import {levels} from "../const/levels"
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -87,12 +89,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const wordsButtons = [
-  { text: "Изучаемые слова" },
-  { text: "Сложные слова" },
-  { text: "Удаленные слова" },
-];
-const levels = [1, 2, 3, 4, 5, 6];
+// const wordCategories = [
+//   { text: "Изучаемые слова" },
+//   { text: "Сложные слова" },
+//   { text: "Удаленные слова" },
+// ];
+// const levels = [1, 2, 3, 4, 5, 6];
 
 export default function DictionaryPage() {
   const { userId, token } = useContext(AuthContext);
@@ -102,11 +104,11 @@ export default function DictionaryPage() {
   const [data, setData] = useState([]);
   const [listUserWords, setlistUserWords] = useState([]);
   const classes = useStyles();
-
   const func = useCallback(async () => {
     const result = await backRoutes.getUserWords({ userId, token });
-    if (result.length) {
-      const filteredArr = result.userWords.filter((item) => !item.optional.deleted)
+    if (result) {
+      console.log('попали в if')
+      const filteredArr = result.userWords.filter((item) => !item.deleted)
       setData(filteredArr);
       setlistUserWords(result.userWords);
     }
@@ -140,27 +142,28 @@ export default function DictionaryPage() {
     let levelArr = [];
     if (activeLevel === null) {
       if (activeWordButton === 0) {
-        sectionArr = listUserWords.filter((item) => !item.optional.deleted);
+        sectionArr = listUserWords.filter((item) => !item.deleted);
       } else if (activeWordButton === 1) {
         sectionArr = listUserWords.filter(
-          (item) => item.difficulty === "difficult"
+          (item) => item.difficult && !item.deleted
         );
       } else if (activeWordButton === 2) {
-        sectionArr = listUserWords.filter((item) => item.optional.deleted);
+        sectionArr = listUserWords.filter((item) => item.deleted);
       }
       levelArr = sectionArr;
+      console.log(levelArr)
     } else {
       if (activeWordButton === 0) {
-        sectionArr = listUserWords.filter((item) => !item.optional.deleted);
+        sectionArr = listUserWords.filter((item) => !item.deleted);
       } else if (activeWordButton === 1) {
         sectionArr = listUserWords.filter(
-          (item) => item.difficulty === "difficult"
+          (item) => item.difficult
         );
       } else if (activeWordButton === 2) {
-        sectionArr = listUserWords.filter((item) => item.optional.deleted);
+        sectionArr = listUserWords.filter((item) => item.deleted);
       }
       levelArr = sectionArr.filter(
-        (item) => item.optional.group === activeLevel
+        (item) => item.group === activeLevel
       );
     }
     setData(levelArr);
@@ -174,7 +177,7 @@ export default function DictionaryPage() {
         </Typography>
       </Box>
       <ul className={classes.typeBox}>
-        {wordsButtons.map((item, index) => (
+        {wordCategories.map((item, index) => (
           <Button
             key={index}
             onClick={() => handleWordsButtonClick(index)}
@@ -203,7 +206,7 @@ export default function DictionaryPage() {
         <WordsCardList
           token={token}
           userId={userId}
-          userWords={data}
+          userWordsForDictionari={data}
           infoPanel={activeWordButton === 0 ? "Answers" : "WordInfo"}
           activeWordButton={activeWordButton}
         />

@@ -1,4 +1,4 @@
-import React, { useState, useContext, useCallback, useEffect } from 'react';
+import React, { useState, useContext} from 'react';
 import { backRoutes } from '../utils/backRoutes';
 import { makeStyles } from '@material-ui/core/styles';
 import Pagination from '@material-ui/lab/Pagination';
@@ -58,37 +58,18 @@ export default function WordsPage() {
 	const { userId, token } = useContext(AuthContext);
 	let match = useRouteMatch().path;
 	let group = match[match.length - 1] - 1;
-	const [ page, setPage ] = useState(1);
+	const [ page, setPage ] = useState(0);
 	const classes = useStyles(group);
-	const [ data, setData ] = useState([]);
 	const fetchUrl = backRoutes.getWordsPage(group, page);
 
 	const handlePaginationChange = (e, value) => {
 		setPage(value);
 	};
 
-	const func = useCallback(
-		async () => {
-			const result = await backRoutes.getUserWords({ userId, token });
-			if (result.length) {
-				setData(result.userWords);
-			}
-		},
-		[ token, userId ]
-	);
-
-	useEffect(
-		() => {
-			if (userId && token) {
-				func();
-			}
-		},
-		[ func, token, userId ]
-	);
 
 	return (
 		<Container className={classes.container}>
-			<MemoryRouter initialEntries={[ `${match}` ]} initialIndex={0}>
+			<MemoryRouter initialEntries={[ `${match}` ]} initialIndex={0}>}
 				<Box className={classes.titleBox}>
 					<Typography className={classes.title} variant="h1" component="h2">
 						Difficulty level
@@ -99,17 +80,12 @@ export default function WordsPage() {
 					userId={userId}
 					token={token}
 					page={page}
-					curentUserWords={data}
 					difficulty={group}
 					fetchUrl={fetchUrl}
 					infoPanel="CardIcons"
 				/>
 				<Route>
 					{({ location }) => {
-						{
-							/* const query = new URLSearchParams(location.search);
-            const page = parseInt(query.get('page') || '1', 10); */
-						}
 						return (
 							<Pagination
 								page={page}
@@ -120,7 +96,7 @@ export default function WordsPage() {
 								renderItem={(item) => (
 									<PaginationItem
 										component={Link}
-										to={`${match}${item.page === 1 ? '' : `?page=${item.page}`}`}
+										to={`${match}${item.page === 0 ? '' : `?page=${item.page}`}`}
 										{...item}
 									/>
 								)}
