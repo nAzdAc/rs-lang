@@ -137,12 +137,9 @@ export default function SignInPage() {
   async function handleSubmit(e) {
     e.preventDefault();
     try {
-      console.log(form);
       const data = await request(backRoutes.signIn, 'POST', { ...form });
       auth.login(data.token, data.refreshToken, data.userId, data.name, data.avatarURL);
-      console.log(data);
-      console.log(data.status, data.message);
-      message(200, data.message)
+      message(data.status, data.message)
     } catch (e) {}
   }
   const loggedin = useSelector((state) => state.login.LoggedIn);
