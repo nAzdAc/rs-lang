@@ -1,9 +1,9 @@
 import { makeStyles } from '@material-ui/core/styles';
 
 export const useStyles = makeStyles({
-	rs_lang: {
+  rs_lang: {
     margin: '40px 20px 20px 20px',
-		'font-family': '"Permanent Marker", cursive',
+    'font-family': '"Permanent Marker", cursive',
     'font-size': '96px',
     'line-height': '112px',
     'font-weight': '400',
@@ -11,14 +11,22 @@ export const useStyles = makeStyles({
 
     '@media (max-width: 800px)': {
       'font-size': '60px',
-    }
-	},
+    },
+  },
+
+  wrapper: {
+    maxWidth: '1440px',
+    margin: '0 auto',
+    paddingLeft: '20px',
+    paddingRight: '20px',
+  },
+
   title: {
     margin: '20px',
 
     '@media (max-width: 800px)': {
       'font-size': '30px',
-    }
+    },
   },
   text: {
     margin: '20px',
@@ -30,7 +38,7 @@ export const useStyles = makeStyles({
     '@media (max-width: 800px)': {
       flexDirection: 'column',
       gap: '20px',
-    }
+    },
   },
   mainTextImgWrapper: {
     alignSelf: 'flex-end',
@@ -49,7 +57,7 @@ export const useStyles = makeStyles({
 
     '@media (max-width: 580px)': {
       padding: '20px 35px 30px 35px',
-    }
+    },
   },
   advantagesWrapper: {
     display: 'flex',
@@ -58,7 +66,7 @@ export const useStyles = makeStyles({
     '@media (max-width: 960px)': {
       flexWrap: 'wrap',
       gap: '20px',
-    }
+    },
   },
   advantage: {
     display: 'flex',
@@ -79,7 +87,7 @@ export const useStyles = makeStyles({
 
     '& > h2': {
       margin: '0 0 40px 0',
-    }
+    },
   },
   developers: {
     display: 'flex',
@@ -94,7 +102,7 @@ export const useStyles = makeStyles({
 
     '& > img': {
       width: '100%',
-    }
+    },
   },
   developerWrapper: {
     position: 'relative',
@@ -105,7 +113,7 @@ export const useStyles = makeStyles({
   },
   devImg: {
     position: 'absolute',
-    top: '-100px'
+    top: '-100px',
   },
   gitWrapper: {
     display: 'flex',
@@ -114,8 +122,8 @@ export const useStyles = makeStyles({
     width: '120px',
 
     '&:hover': {
-			cursor: 'pointer',
-		}
+      cursor: 'pointer',
+    },
   },
   gitIconWrapper: {
     marginRight: '14px',

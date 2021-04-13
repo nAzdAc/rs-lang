@@ -1,4 +1,4 @@
-import React, { useContext, useCallback, useState, useEffect } from "react";
+import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { originURL } from "../utils/backRoutes";
 import Box from "@material-ui/core/Box";
@@ -6,11 +6,6 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import GradeIcon from "@material-ui/icons/Grade";
 import PlayCircleFilledIcon from "@material-ui/icons/PlayCircleFilled";
 import { Howl, Howler } from "howler";
-// import { LOCAL_STORAGE_KEY } from '../utils/storageKey';
-// import { INIT_CONSTS } from '../utils/initConsts';
-import { AuthContext } from "../context/AuthContext";
-import { backRoutes } from "../utils/backRoutes";
-// import { useHttp } from "../hooks/http.hook";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -32,6 +27,9 @@ const useStyles = makeStyles((theme) => ({
   },
   iconActive: {
     color: "#FFD700",
+    marginRight: "10px",
+    fontSize: "34px",
+    cursor: "pointer",
   },
 }));
 
@@ -43,11 +41,14 @@ export default function CardIcons({
   audioExample,
   difficulty,
   page,
+  userDifficultWords,
+	clickDelete,
+	setGoldStar,
+	setBlackStar
 }) {
   const classes = useStyles();
-  const { userId, token } = useContext(AuthContext);
-  const [allUserWords, setAllUserWords]=useState(userWords)
-  // console.log(allUserWords,token)
+  // console.log(userDifficultWords)
+
   const audio = new Howl({
     src: [`${originURL}/${audioWord}`],
     // volume: 0.001 * volume
@@ -66,119 +67,75 @@ export default function CardIcons({
     Howler.stop();
     audio.play();
   };
-  const func = useCallback(async () => {
-    const result = await backRoutes.getUserWords({ userId, token });
-    if (result) {
-      setAllUserWords(result);
-    }
-  }, [token, userId]);
+  // const func = useCallback(
+  // 	async () => {
+  // 		const result = await backRoutes.getUserWords({ userId, token });
+  // 		if (result.length) {
+  // 			setAllUserWords(result.userWords);
+  // 		}
+  // 	},
+  // 	[ token, userId ]
+  // );
 
-  const addWordToDictionary = () => {
-    if (
-      allUserWords.length===0 ||
-      !allUserWords.filter((item) => wordId === item.wordId).length > 0
-    ) {
-      backRoutes.createUserWord({
-        userId: userId,
-        wordId: wordId,
-        word: {
-          difficulty: "difficult",
-          optional: { group: difficulty, page: page, deleted: false },
-        },
-        token: token,
-      });
-    } else if (
-      allUserWords &&
-      allUserWords.filter(
-        (item) => wordId === item.wordId && item.difficulty === "difficult"
-      ).length > 0
-    ) {
-      backRoutes.updateUserWord({
-        userId: userId,
-        wordId: wordId,
-        word: {
-          difficulty: "weak",
-          optional: { group: difficulty, page: page, deleted: false },
-        },
-        token: token,
-      });
-    } else if (
-      allUserWords &&
-      allUserWords.filter(
-        (item) => wordId === item.wordId && item.difficulty !== "difficult"
-      ).length > 0
-    ) {
-      backRoutes.updateUserWord({
-        userId: userId,
-        wordId: wordId,
-        word: {
-          difficulty: "difficult",
-          optional: { group: difficulty, page: page, deleted: false },
-        },
-        token: token,
-      });
-      console.log("word is in your dictionary");
-    }
-    func()
-  };
+  // async function addWordToDictionary() {
+  // 	if (allUserWords.length === 0 && !allUserWords.filter((item) => wordId === item.wordId).length > 0) {
+  // 		await backRoutes.createUserWord({
+  // 			userId: userId,
+  // 			wordId: wordId,
+  // 			difficult: true,
+  // 			token:token,
+  // 		});
+  // 	}
+  // 	else if (
+  // 		allUserWords &&
+  // 		allUserWords.filter((item) => wordId === item.wordId && item.difficulty).length > 0
+  // 	) {
+  // 		await backRoutes.createUserWord({
+  // 			userId: userId,
+  // 			wordId: wordId,
+  // 			token:token,
+  // 			word:{
+  // 				difficult: true,
+  // 			}
+  // 		});
+  // 	}
+  // 	else if (
+  // 		allUserWords &&
+  // 		allUserWords.filter((item) => wordId === item.wordId && !item.difficulty).length > 0
+  // 	) {
+  // 		await backRoutes.createUserWord({
+  // 			userId: userId,
+  // 			wordId: wordId,
+  // 			difficult: true,
+  // 			token:token,
+  // 		});
+  // 	}
+  // 	func();
+  // }
 
-  const addWordToDictionaryDelete = () => {
-    if (
-      allUserWords &&
-      !allUserWords.filter((item) => wordId === item.wordId).length > 0
-    ) {
-      backRoutes.createUserWord({
-        userId: userId,
-        wordId: wordId,
-        word: {
-          difficulty: "weak",
-          optional: { group: difficulty, page: page, deleted: true },
-        },
-        token: token,
-      });
-    } else {
-      backRoutes.updateUserWord({
-        userId: userId,
-        wordId: wordId,
-        word: {
-          difficulty: "weak",
-          optional: { group: difficulty, page: page, deleted: true },
-        },
-        token: token,
-      });
-      console.log("word is in your dictionary");
-    }
-  };
 
-  // useEffect(() => {
-  //   if (userId && token) {
-  //     func();
-  //   }
-  // }, [func, token, userId]);
 
   return (
     <Box className={classes.boxIcons}>
       <PlayCircleFilledIcon
         onClick={playWordsAudio}
         className={classes.icons}
-      ></PlayCircleFilledIcon>
-      <GradeIcon
-        className={
-          allUserWords.length>0
-            ? allUserWords.filter(
-                (item) =>
-                  wordId === item.wordId && item.difficulty === "difficult"
-              ).length
-              ? `${classes.icons} ${classes.iconActive}`
-              : `${classes.icons}`
-            : `${classes.icons}`
-        }
-        onClick={addWordToDictionary}
-      ></GradeIcon>
+      />
+      {userDifficultWords.includes(wordId) ? (
+        <GradeIcon
+          className={`${classes.iconActive}`}
+          onClick={setBlackStar}
+        ></GradeIcon>
+      ) : (
+        <GradeIcon
+          className={`${classes.icons}`}
+          onClick={setGoldStar}
+        ></GradeIcon>
+      )}
       <DeleteIcon
         className={classes.icons}
-        onClick={addWordToDictionaryDelete}
-      ></DeleteIcon>
+        onClick={clickDelete}
+      />
     </Box>
   );
 }

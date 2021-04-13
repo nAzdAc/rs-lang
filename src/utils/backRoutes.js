@@ -68,7 +68,6 @@ export const backRoutes = {
 		return `${originURL}/words?group=${group}&page=${page}`;
 	},
 	createUserWord : async ({ userId, wordId, word, token }) => {
-		console.log(token)
 		const rawResponse = await fetch(`${originURL}/users/${userId}/words/${wordId}`, {
 			method: 'POST',
 			withCredentials: true,
@@ -80,11 +79,11 @@ export const backRoutes = {
 			body: JSON.stringify(word)
 		});
 		const content = await rawResponse.json();
-		
-		console.log(content);
+		console.log(content)
+		return content
 	},
 	updateUserWord : async ({ userId, wordId, word, token }) => {
-		console.log(token)
+		console.log(word)
 		const rawResponse = await fetch(`${originURL}/users/${userId}/words/${wordId}`, {
 			method: 'PUT',
 			withCredentials: true,
@@ -96,8 +95,8 @@ export const backRoutes = {
 			body: JSON.stringify(word)
 		});
 		const content = await rawResponse.json();
-	
-		console.log(content);
+		console.log(content)
+		return content
 	},
 	deleteUserWord : async ({ userId, wordId, token }) => {
 		console.log(token)
@@ -130,6 +129,8 @@ export const backRoutes = {
 	},
 	getUserWords : async ({ userId,token}) => {
 		try{
+			// console.log(userId)
+			// console.log(token)
 			const rawResponse = await fetch(`${originURL}/users/${userId}/words`, {
 				method: 'GET',
 				withCredentials: true,
@@ -139,7 +140,7 @@ export const backRoutes = {
 				}
 			});
 			const content = await rawResponse.json();
-			console.log(content)
+			// console.log(content)
 			return content
 		} catch(e){console.log(e)}
 		

@@ -46,6 +46,10 @@ const useStyles = makeStyles(() => ({
       background: '#00D9CE',
     },
   },
+
+  link: {
+    textDecoration: 'none',
+  },
 }));
 
 export const Enterpoint = (props) => {
@@ -63,15 +67,16 @@ export const Enterpoint = (props) => {
         <Typography variant="body2" className={classes.name}>
           English Queen
         </Typography>
-        <ExitToAppIcon className={classes.logout} onClick={handleLogin}>
-          {' '}
-        </ExitToAppIcon>
+        <ExitToAppIcon
+          className={classes.logout}
+          onClick={handleLogin}
+        ></ExitToAppIcon>
       </div>
     );
   }
   return (
     <div className={classes.root}>
-      <RouterLink to={props.to}>
+      <RouterLink to={props.to} className={classes.link}>
         <Button variant="contained" size="small" className={classes.button}>
           Войти
         </Button>
