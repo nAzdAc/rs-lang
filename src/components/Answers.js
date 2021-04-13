@@ -46,12 +46,16 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Answers({ fail, correct, token, userId, wordId }) {
 	const classes = useStyles();
+
 	const handleButtonClick = () => {
 		console.log(token);
-		backRoutes.deleteUserWord({
+		backRoutes.createUserWord({
 			userId: userId,
-			wordId: wordId,
-			token: token
+		wordId: wordId,
+		word: {
+			deleted: true,
+		},
+		token: token,
 		});
 	};
 	return (
@@ -63,7 +67,7 @@ export default function Answers({ fail, correct, token, userId, wordId }) {
 				Ошибки: <span className={classes.wrong}>{fail ? fail : 0}</span>
 			</Typography>
 			<Button variant="contained" className={classes.button} onClick={handleButtonClick}>
-				Удалить из словаря
+				Удалить
 			</Button>
 		</Box>
 	);
