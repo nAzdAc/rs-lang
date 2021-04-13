@@ -10,74 +10,53 @@ import { frontRoutes } from '../utils/frontRoutes';
 import { MatchPage } from './MatchPage';
 import { AudioPage } from './AudioPage';
 import { SavannaPage } from './SavannaPage';
+import { GameCard } from '../components/gameCard';
 
 const useStyles = makeStyles({
-	root: {
-		display: 'flex',
-		flexWrap: 'wrap',
-		alignItems: 'center',
-		padding: '30px 0px 20px 30px'
-	},
-	card: {
-		width: '350px',
-		height: '300px',
-		display: 'flex',
-		flexDirection: 'column',
-		flexWrap: 'wrap',
-		alignItems: 'flex-start',
-		justifyContent: 'space-around',
-		border: '2px solid #000',
-		marginRight: '50px',
-		marginBottom: '30px',
-		padding: '0px 20px 10px 20px',
-		'&:hover': {
-			transform: 'translateY(-5px)',
-			boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.5)'
-		}
-	},
-	button: {
-		fontWeight: 'bold',
-		width: '109px',
-		height: '36px',
-		background: '#01A299',
-		color: '#FFF',
-		'&:hover': {
-			background: '#00D9CE'
-		}
-	}
+  root: {
+    maxWidth: '1440px',
+    margin: '0 auto',
+  },
+  cards: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    rowGap: '1rem',
+  },
+  title: {
+    paddingTop: '80px',
+    marginBottom: '40px',
+  },
 });
 
 const Games = () => {
-	const classes = useStyles();
+  const classes = useStyles();
 
-	return (
-		<div className={classes.root}>
-			{gameCardsContent.map((card, index) => {
-				return (
-					<div className={classes.card} key={index}>
-						<Typography variant="h3" className={classes.title}>
-							{card.name}
-						</Typography>
-						<Typography variant="h5" className={classes.title}>
-							Как играть:
-						</Typography>
-						<Typography variant="subtitle1" className={classes.title}>
-							{card.todo}
-						</Typography>
-						<NavLink style={{ textDecoration: 'none' }} to={card.to}>
-							<Button variant="contained" size="medium" className={classes.button}>
-								Начать
-							</Button>
-						</NavLink>
-					</div>
-				);
-			})}
-		</div>
-	);
+  return (
+    <div className={classes.root}>
+      <Typography variant="h2" className={classes.title}>
+        Выберите игру
+      </Typography>
+      <div className={classes.cards}>
+        {gameCardsContent.map((card, index) => {
+          return (
+            <div key={index}>
+              <GameCard
+                name={card.name}
+                todo={card.todo}
+                to={card.to}
+              ></GameCard>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
 };
 
 const GamesPage = () => {
-  const { location : { pathname } } = useHistory();
+  const {
+    location: { pathname },
+  } = useHistory();
   const isGamesRoute = pathname.slice(1).split('/').length === 1;
   const { path } = useRouteMatch();
 
@@ -92,7 +71,7 @@ const GamesPage = () => {
           <AudioPage />
         </Route>
         <Route path={frontRoutes.sprint}>
-          <SprintPage/>
+          <SprintPage />
         </Route>
         <Route path={frontRoutes.match}>
           <MatchPage />
@@ -100,6 +79,6 @@ const GamesPage = () => {
       </Switch>
     </>
   );
-}
+};
 
 export default GamesPage;
