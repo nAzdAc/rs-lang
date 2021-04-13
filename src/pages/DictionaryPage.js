@@ -207,7 +207,7 @@ export default function DictionaryPage() {
         <WordsCardList
           token={token}
           userId={userId}
-          userWords={data}
+          userWordsForDictionari={data}
           infoPanel={activeWordButton === 0 ? "Answers" : "WordInfo"}
           activeWordButton={activeWordButton}
         />
