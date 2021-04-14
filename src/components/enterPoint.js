@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Button from '@material-ui/core/Button';
 import { Link as RouterLink } from 'react-router-dom';
 
@@ -11,6 +11,7 @@ import ava_image from '../assets/images/mila-kunis-mila-kunis-aktrisa-2477.jpeg'
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import { AuthContext } from '../context/AuthContext';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -54,22 +55,24 @@ const useStyles = makeStyles(() => ({
 
 export const Enterpoint = (props) => {
   const classes = useStyles();
-  const loggedin = useSelector((state) => state.login.LoggedIn);
-  const dispatch = useDispatch();
-  const handleLogin = () => {
-    dispatch(changeLoginStatus(false));
-  };
+  // const loggedin = useSelector((state) => state.login.LoggedIn);
+  // const dispatch = useDispatch();
+  // const handleLogin = () => {
+  //   dispatch(changeLoginStatus(false));
+  // };
+  const { userName, token, avatar } = useContext(AuthContext);
+  const isAuthenticated = !!token;
 
-  if (loggedin) {
+  if (isAuthenticated) {
     return (
       <div className={classes.root}>
-        <Avatar alt="Remy Sharp" src={ava_image} />
+        <Avatar alt="Remy Sharp" src={avatar} />
         <Typography variant="body2" className={classes.name}>
-          English Queen
+          {userName}
         </Typography>
         <ExitToAppIcon
           className={classes.logout}
-          onClick={handleLogin}
+          // onClick={handleLogin}
         ></ExitToAppIcon>
       </div>
     );
