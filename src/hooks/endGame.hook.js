@@ -2,9 +2,11 @@ import { useCallback, useContext } from 'react';
 import { backRoutes } from '../utils/backRoutes';
 import { AuthContext } from '../context/AuthContext';
 import { parsedStats } from '../utils/helpers';
+import { useMessage } from '../hooks/message.hook';
 
 export const useEndGame = () => {
 	const { userId, token } = useContext(AuthContext);
+	const message = useMessage();
 
 	const postUserWords = useCallback(async (correctArr, failArr) => {
 		try {
@@ -47,11 +49,12 @@ export const useEndGame = () => {
 				data: gameStats
 			});
 			console.log(data);
+			message(data.message, 200)
 		} catch (e) {
 			console.log(e);
 			console.log(e.message);
 		}
-	}, [token, userId]);
+	}, [message, token, userId]);
 
 	const postAnswers = useCallback(async (correctArr, failArr) => {
 		try {

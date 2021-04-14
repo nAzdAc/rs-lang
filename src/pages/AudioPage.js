@@ -10,7 +10,7 @@ import failSong2 from '../assets/sounds/fail.mp3';
 import { backRoutes } from '../utils/backRoutes';
 import { CircularProgress } from '@material-ui/core';
 import SpeakerIcon from '@material-ui/icons/Speaker';
-import { createSound, getWordsForPlay, parsedStats, shuffleAllElements } from '../utils/helpers';
+import { createSound, getWordsForPlay, shuffleAllElements } from '../utils/helpers';
 import { originURL } from '../utils/backRoutes';
 import { GameStats } from '../components/GameStats';
 import { useHttp } from '../hooks/http.hook';
@@ -19,6 +19,8 @@ import { LifesInGames } from '../components/LifesInGames';
 import { Howler } from 'howler';
 import { AuthContext } from '../context/AuthContext';
 import { useEndGame } from '../hooks/endGame.hook';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const useStyles = makeStyles({
 	root: {
@@ -350,6 +352,7 @@ export const AudioPage = () => {
 
 	return (
 		<div className={classes.root}>
+			<ToastContainer />
 			{endGame ? (
 				<GameStats lifes={lifes} correctAnswers={correctAnswers} failAnswers={failAnswers} />
 			) : wordsArray.length && fourButtons.length === 4 && currentWord ? (

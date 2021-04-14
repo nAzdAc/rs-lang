@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -111,17 +111,27 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignInPage() {
   const message = useMessage()
-  const { request } = useHttp();
+  const { request, error, clearError } = useHttp();
   const auth = useContext(AuthContext);
   const classes = useStyles();
   const [form, setForm] = useState({
     email: '',
     password: '',
   });
-  const [values, setValues] = React.useState({
+  const [values, setValues] = useState({
     password: '',
     showPassword: false,
   });
+
+  useEffect(
+		() => {
+      console.log(error)
+			message(error);
+			clearError();
+		},
+		[ error, message, clearError ]
+	);
+
   const handleClickShowPassword = () => {
     setValues({ ...values, showPassword: !values.showPassword });
   };
@@ -138,8 +148,9 @@ export default function SignInPage() {
     e.preventDefault();
     try {
       const data = await request(backRoutes.signIn, 'POST', { ...form });
+      console.log(data)
       auth.login(data.token, data.refreshToken, data.userId, data.name, data.avatarURL);
-      message(data.status, data.message)
+      message(data.message, 200)
     } catch (e) {}
   }
   const loggedin = useSelector((state) => state.login.LoggedIn);

@@ -16,6 +16,8 @@ import { useHttp } from '../hooks/http.hook';
 import { toggleScreen } from '../utils/fullScreen';
 import { AuthContext } from '../context/AuthContext';
 import { useEndGame } from '../hooks/endGame.hook';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const useStyles = makeStyles({
 	root: {
@@ -280,6 +282,7 @@ export const SprintPage = () => {
 
 	return (
 		<div className={classes.root}>
+			<ToastContainer />
 			{endGame ? (
 				<GameStats correctAnswers={correctAnswers} failAnswers={failAnswers} />
 			) : wordsArray.length && currentWord && currentRussianhWord ? (

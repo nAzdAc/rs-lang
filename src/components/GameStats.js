@@ -104,7 +104,6 @@ export const GameStats = ({ correctAnswers, failAnswers, lifes }) => {
 	);
 
 	function repeat(event) {
-		console.log(event.currentTarget.value);
 		const src = event.currentTarget.value;
 		const audioWord = createSound(`${src}`, wordVolume, 0.9);
 		audioWord.play();

@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import Typography from '@material-ui/core/Typography';
 import Switch from '@material-ui/core/Switch';
 import Slider from '@material-ui/core/Slider';
@@ -16,7 +16,6 @@ import {
 } from '../store/settingSlice';
 import { useSelector } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
-import { useMessage } from '../hooks/message.hook';
 import 'react-toastify/dist/ReactToastify.css';
 import illustration from '../assets/images/settings.png';
 import { Paper } from '@material-ui/core';
@@ -170,7 +169,6 @@ const VolumeSlider = withStyles({
 
 export const SettingsPage = () => {
   const classes = useStyles();
-  const message = useMessage();
   const { avatar, uploadAvatar } = useContext(AuthContext);
   const [musicVolume, setMusicVolume] = useState(
     parseInt(localStorage.getItem(LOCAL_STORAGE_KEY.musicVolume)) ||
@@ -184,13 +182,6 @@ export const SettingsPage = () => {
     parseInt(localStorage.getItem(LOCAL_STORAGE_KEY.wordVolume)) ||
       INIT_CONSTS.wordVolume
   );
-
-  async function download(file) {
-    if (!file) return;
-    const data = await uploadAvatar(file);
-    console.log(data);
-    message(data.status, data.message);
-  }
 
   function handleMusicVolume(event, newValue) {
     setMusicVolume(newValue);
@@ -288,7 +279,7 @@ export const SettingsPage = () => {
               type="file"
               id="file"
               accept="image/*"
-              onChange={(event) => download(event.target.files[0])}
+              onChange={(event) => uploadAvatar(event.target.files[0])}
             />
           </Paper>
           <Paper className={classes.card}>

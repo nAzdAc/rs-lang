@@ -106,7 +106,8 @@ export default function DictionaryPage() {
   const classes = useStyles();
   const func = useCallback(async () => {
     const result = await backRoutes.getUserWords({ userId, token });
-    if (result) {
+    console.log(result)
+    if (result.userWords.length) {
       console.log('попали в if')
       const filteredArr = result.userWords.filter((item) => !item.deleted)
       setData(filteredArr);
@@ -151,7 +152,6 @@ export default function DictionaryPage() {
         sectionArr = listUserWords.filter((item) => item.deleted);
       }
       levelArr = sectionArr;
-      console.log(levelArr)
     } else {
       if (activeWordButton === 0) {
         sectionArr = listUserWords.filter((item) => !item.deleted);

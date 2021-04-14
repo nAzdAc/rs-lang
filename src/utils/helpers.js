@@ -29,14 +29,14 @@ export function getWordsForPlay(allWords, userWords) {
 		}
 		return word;
 	});
-	console.log({ allWords });
-	console.log(userWords);
-	console.log({ deletedWords });
-	console.log({ deletedId });
-	console.log({ withoutDeleted });
-	console.log({ difficultWords });
-	console.log({ difficultId });
-	console.log({ filteredArr });
+	// console.log({ allWords });
+	// console.log(userWords);
+	// console.log({ deletedWords });
+	// console.log({ deletedId });
+	// console.log({ withoutDeleted });
+	// console.log({ difficultWords });
+	// console.log({ difficultId });
+	// console.log({ filteredArr });
 	filteredArr.sort(shuffleAllElements);
 	return filteredArr;
 }

@@ -62,7 +62,6 @@ export default function WordsCardList({
 				const data = await request(fetchUrl, 'GET');
 				setWordsArr(data);
 				setWordsReady(true)
-				console.log(data)
 			}
 		},
 		[ userWords, fetchUrl, request ]
@@ -150,7 +149,6 @@ export default function WordsCardList({
 
 
 	async function addWordToDictionaryDelete(wordId) {
-		console.log('in delete')
     await backRoutes.createUserWord({
 			userId: userId,
 			wordId: wordId,
