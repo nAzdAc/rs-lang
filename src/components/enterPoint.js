@@ -60,7 +60,7 @@ export const Enterpoint = (props) => {
   // const handleLogin = () => {
   //   dispatch(changeLoginStatus(false));
   // };
-  const { userName, token, avatar } = useContext(AuthContext);
+  const { userName, token, avatar, logout } = useContext(AuthContext);
   const isAuthenticated = !!token;
 
   if (isAuthenticated) {
@@ -72,7 +72,7 @@ export const Enterpoint = (props) => {
         </Typography>
         <ExitToAppIcon
           className={classes.logout}
-          // onClick={handleLogin}
+          onClick={logout}
         ></ExitToAppIcon>
       </div>
     );
