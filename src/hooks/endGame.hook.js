@@ -41,6 +41,9 @@ export const useEndGame = () => {
 	}, [token, userId]);
 
 	const postStats = useCallback(async (gameName, correctArr, failArr, seriesArr) => {
+		if (!token || userId) {
+			return message('Статистика не была обновлена, авторизуйтесь')
+		}
 		try {
 			const gameStats = parsedStats(gameName, correctArr, failArr, seriesArr);
 			const data = await backRoutes.putStatistics({
