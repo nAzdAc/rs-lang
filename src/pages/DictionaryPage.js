@@ -208,7 +208,7 @@ export default function DictionaryPage() {
         />
       ) : (
         <Typography className={classes.message} variant="h1" component="h2">
-          Здесь еще нет слов
+          {token? "Здесь еще нет слов": "Войдите в приложение чтобы увидеть свой словарь"}
         </Typography>
       )}
       {data.length
