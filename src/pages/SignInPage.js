@@ -33,8 +33,6 @@ import { ToastContainer } from 'react-toastify';
 import { useMessage } from '../hooks/message.hook';
 import 'react-toastify/dist/ReactToastify.css';
 
-
-
 const useStyles = makeStyles((theme) => ({
   mainBox: {
     width: '400px',
@@ -102,15 +100,15 @@ const useStyles = makeStyles((theme) => ({
   },
   message: {
     position: 'absolute',
-    top:'50%',
-    left:'50%',
+    top: '50%',
+    left: '50%',
     // marginTop: 'auto',
     // marginLeft: 'auto',
   },
 }));
 
 export default function SignInPage() {
-  const message = useMessage()
+  const message = useMessage();
   const { request, error, clearError } = useHttp();
   const auth = useContext(AuthContext);
   const classes = useStyles();
@@ -123,14 +121,11 @@ export default function SignInPage() {
     showPassword: false,
   });
 
-  useEffect(
-		() => {
-      console.log(error)
-			message(error);
-			clearError();
-		},
-		[ error, message, clearError ]
-	);
+  useEffect(() => {
+    console.log(error);
+    message(error);
+    clearError();
+  }, [error, message, clearError]);
 
   const handleClickShowPassword = () => {
     setValues({ ...values, showPassword: !values.showPassword });
@@ -148,9 +143,15 @@ export default function SignInPage() {
     e.preventDefault();
     try {
       const data = await request(backRoutes.signIn, 'POST', { ...form });
-      console.log(data)
-      auth.login(data.token, data.refreshToken, data.userId, data.name, data.avatarURL);
-      message(data.message, 200)
+      console.log(data);
+      auth.login(
+        data.token,
+        data.refreshToken,
+        data.userId,
+        data.name,
+        data.avatarURL
+      );
+      message(data.message, 200);
     } catch (e) {}
   }
   const loggedin = useSelector((state) => state.login.LoggedIn);
@@ -164,14 +165,13 @@ export default function SignInPage() {
       <Container component="main" maxWidth="xs" className={classes.mainBox}>
         <CssBaseline />
         <div className={classes.paper}>
-          
           <Typography
             component="h1"
             variant="h2"
             align="left"
             className={classes.title}
           >
-            Login
+            Аккаунт
           </Typography>
           <form className={classes.form} noValidate onSubmit={handleSubmit}>
             <TextField
@@ -180,7 +180,7 @@ export default function SignInPage() {
               required
               fullWidth
               id="email"
-              label="Email Address"
+              label="Электропочта"
               name="email"
               autoComplete="email"
               autoFocus
@@ -194,7 +194,7 @@ export default function SignInPage() {
               align="left"
               className={classes.info}
             >
-              Use the real one
+              Используйте настоящую
             </Typography>
             <FormControl
               className={classes.passwordField}
@@ -206,7 +206,7 @@ export default function SignInPage() {
                 value={form.password}
                 htmlFor="outlined-adornment-password"
               >
-                Password
+                Пароль
               </InputLabel>
               <OutlinedInput
                 name="password"
@@ -229,30 +229,30 @@ export default function SignInPage() {
                 labelWidth={70}
               />
             </FormControl>
-            <ToastContainer className={classes.info}/>
+            <ToastContainer className={classes.info} />
             <Typography
               component="h1"
               variant="subtitle2"
               align="left"
               className={classes.info}
             >
-              No stupid restrictions
+              Минимум 6 символов
             </Typography>
             <Box className={classes.buttonBox}>
               <Button
                 type="submit"
-                onClick={handleLogin}
+                // onClick={handleLogin}
                 fullWidth
                 variant="contained"
                 color="primary"
                 className={classes.submit}
               >
-                start lerning
+                Войти
               </Button>
 
               <Button className={classes.register}>
                 <Link className={classes.link} to={'/signup'}>
-                  Register
+                  Регистрация
                 </Link>
               </Button>
             </Box>
