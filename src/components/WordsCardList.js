@@ -86,6 +86,7 @@ export default function WordsCardList({
 	const getUserWords = useCallback(
 		async () => {
 			const result = await backRoutes.getUserWords({ userId, token });
+			if (!result.userWords) return;
 			if (result.userWords.length) {
 				setUserWords(result.userWords);
 				const arr = result.userWords.map((item)=> item.difficult? item.wordId:null)

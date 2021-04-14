@@ -1,4 +1,4 @@
-import React, { useState, useContext} from 'react';
+import React, { useState, useContext } from 'react';
 import { backRoutes } from '../utils/backRoutes';
 import { makeStyles } from '@material-ui/core/styles';
 import Pagination from '@material-ui/lab/Pagination';
@@ -65,7 +65,6 @@ export default function WordsPage() {
 	const handlePaginationChange = (e, value) => {
 		setPage(value);
 	};
-
 
 	return (
 		<Container className={classes.container}>

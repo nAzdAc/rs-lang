@@ -1,10 +1,11 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState, useContext } from 'react';
 import { Typography } from '@material-ui/core';
 import TabPanel from '../components/statsTabs';
 import { makeStyles } from '@material-ui/core/styles';
 import illustration from '../assets/images/stats.png';
 import { LOCAL_STORAGE_KEY } from '../utils/storageKey';
 import { backRoutes } from '../utils/backRoutes';
+import { AuthContext } from '../context/AuthContext';
 
 const useStyles = makeStyles({
 	wrapper: {
@@ -108,12 +109,15 @@ function getLearnedWordsTotal(data) {
 
 export const StatsPage = () => {
 	const classes = useStyles();
+	const [stats, setStats] = useState({});
+	const {token, userId} = useContext(AuthContext)
 
 	const getStats = useCallback(async () => {
-		const userId = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY.userData)).userId;
-		const token = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY.userData)).token;
-
+		if (!token || !userId) return;
 		const stats = await backRoutes.getStats({ userId, token });
+		console.log(stats.parseStats);
+		if (!stats.statistics) return;
+		setStats(stats.parsedStats)
 		const allGames = stats.statistics.games;
     const PARSED_STATS_ON_BACK = stats.parsedStats
 		// console.log(allGames);
