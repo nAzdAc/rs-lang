@@ -213,7 +213,7 @@ export default function DictionaryPage() {
       )}
       {data.length
         ? data.length &&
-          Math.ceil(data.length / 20) > 2 && (
+          Math.ceil(data.length / 20) > 1 && (
             <Pagination
               page={page}
               className={classes.pagination}
