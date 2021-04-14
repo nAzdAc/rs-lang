@@ -10,9 +10,9 @@ import WordsCardList from "../components/WordsCardList";
 import { AuthContext } from "../context/AuthContext";
 import Button from "@material-ui/core/Button";
 import LevelButton from "../components/LevelButton";
-import {wordCategories} from "../const/wordCategories"
-import {levels} from "../const/levels"
-import filterDictionary from "../utils/filterDictionary"
+import {wordCategories} from "../constants/wordCategories"
+import {levels} from "../constants/levels"
+// import filterDictionary from "../utils/filterDictionary"
 
 const useStyles = makeStyles((theme) => ({
   root: {

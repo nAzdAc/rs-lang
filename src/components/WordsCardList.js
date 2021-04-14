@@ -64,10 +64,14 @@ export default function WordsCardList({
       setWordsReady(true);
     } else if (!userWords.length) {
       const data = await request(fetchUrl, "GET");
+			
       setWordsArr(data);
-      setWordsReady(true);
+			if(!token){
+				setWordsReady(true);
+			}
+      
     }
-  }, [userWords, fetchUrl, request]);
+  }, [userWords, request, fetchUrl, token]);
 
   const fetchWordsForDictionary = useCallback(async () => {
     const cards = await Promise.all(
@@ -103,10 +107,9 @@ export default function WordsCardList({
 
 	useEffect(() => {
     if (!isItBook && userWordsForDictionari) {
-			// filterDictionary (activeLevel ,userWords, activeWordButton, setUserWords )
       fetchWordsForDictionary();
 		}
-		}, [activeLevel, activeWordButton, fetchWordsForDictionary, isItBook, userWordsForDictionari])
+		}, [fetchWordsForDictionary, isItBook, userWordsForDictionari])
 
   useEffect(() => {
     if (isItBook) {
@@ -115,7 +118,6 @@ export default function WordsCardList({
   }, [fetchWordsForBook, fetchWordsForDictionary, token, userId, isItBook])
 
   const setGoldStar = async (wordId, group, isItBook = false) => {
-    console.log("group ", group);
     await backRoutes.createUserWord({
       userId: userId,
       wordId: wordId,
