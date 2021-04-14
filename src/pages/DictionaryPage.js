@@ -170,65 +170,99 @@ export default function DictionaryPage() {
 		[ activeLevel, activeWordButton, listUserWords ]
 	);
 
-	return (
-		<Container className={classes.container}>
-			<ToastContainer />
-			<Box className={classes.titleBox}>
-				<Typography className={classes.title} variant="h1" component="h2">
-					Словарь
-				</Typography>
-			</Box>
-			<ul className={classes.typeBox}>
-				{wordCategories.map((item, index) => (
-					<Button
-						key={index}
-						onClick={() => handleWordsButtonClick(index)}
-						variant="contained"
-						className={
-							index === activeWordButton ? `${classes.typeButton} ${classes.typeButtonActive}` : `${classes.typeButton}`
-						}
-					>
-						{item.text}
-					</Button>
-				))}
-			</ul>
-			<ul className={classes.buttonBox}>
-				{levels.map((item, index) => (
-					<LevelButton
-						key={index}
-						click={() => handleLevelsClick(index)}
-						group={item}
-						isActive={index === activeLevel ? true : false}
-					/>
-				))}
-			</ul>
-			{data.length ? (
-				<WordsCardList
-					token={token}
-					userId={userId}
-					userWordsForDictionari={data}
-					infoPanel={activeWordButton === 0 ? 'Answers' : 'WordInfo'}
-					activeWordButton={activeWordButton}
-				/>
-			) : (
-				<Typography className={classes.message} variant="h1" component="h2">
-					Здесь еще нет слов
-				</Typography>
-			)}
-			{data.length ? (
-				data.length &&
-				Math.ceil(data.length / 20) > 2 && (
-					<Pagination
-						page={page}
-						className={classes.pagination}
-						onChange={handlePaginationChange}
-						count={data ? Math.ceil(data.length / 20) : 30}
-						color="primary"
-					/>
-				)
-			) : (
-				''
-			)}
-		</Container>
-	);
+  useEffect(() => {
+    // filterDictionary (activeLevel ,listUserWords, activeWordButton, setData )
+    // console.log(`level: ${activeLevel} ; button:  ${activeWordButton}`);
+    let sectionArr = [];
+    let levelArr = [];
+    if (activeLevel === null) {
+      if (activeWordButton === 0) {
+        sectionArr = listUserWords.filter((item) => !item.deleted);
+      } else if (activeWordButton === 1) {
+        sectionArr = listUserWords.filter(
+          (item) => item.difficult && !item.deleted
+        );
+      } else if (activeWordButton === 2) {
+        sectionArr = listUserWords.filter((item) => item.deleted);
+      }
+      levelArr = sectionArr;
+    } else {
+      if (activeWordButton === 0) {
+        sectionArr = listUserWords.filter((item) => !item.deleted);
+      } else if (activeWordButton === 1) {
+        sectionArr = listUserWords.filter(
+          (item) => item.difficult
+        );
+      } else if (activeWordButton === 2) {
+        sectionArr = listUserWords.filter((item) => item.deleted);
+      }
+      levelArr = sectionArr.filter(
+        (item) => item.group === activeLevel
+      );
+    }
+    setData(levelArr);
+  }, [activeLevel, activeWordButton, listUserWords]);
+
+  return (
+    <Container className={classes.container}>
+      <Box className={classes.titleBox}>
+        <Typography className={classes.title} variant="h1" component="h2">
+          Словарь
+        </Typography>
+      </Box>
+      <ul className={classes.typeBox}>
+        {wordCategories.map((item, index) => (
+          <Button
+            key={index}
+            onClick={() => handleWordsButtonClick(index)}
+            variant="contained"
+            className={
+              index === activeWordButton
+                ? `${classes.typeButton} ${classes.typeButtonActive}`
+                : `${classes.typeButton}`
+            }
+          >
+            {item.text}
+          </Button>
+        ))}
+      </ul>
+      <ul className={classes.buttonBox}>
+        {levels.map((item, index) => (
+          <LevelButton
+            key={index}
+            click={() => handleLevelsClick(index)}
+            group={item}
+            isActive={index === activeLevel ? true : false}
+          />
+        ))}
+      </ul>
+      {data.length ? (
+        <WordsCardList
+          token={token}
+          userId={userId}
+          isItBook={false}
+          infoPanel={activeWordButton === 0 ? "DictionaryLearning" : activeWordButton === 1 ? "DictionaryDifficult":"DictionaryDelete"}
+          activeWordButton={activeWordButton}
+          activeLevel={activeLevel}
+          userWordsForDictionari={data}
+        />
+      ) : (
+        <Typography className={classes.message} variant="h1" component="h2">
+          {token? "Здесь еще нет слов": "Войдите в приложение чтобы увидеть свой словарь"}
+        </Typography>
+      )}
+      {data.length
+        ? data.length &&
+          Math.ceil(data.length / 20) > 1 && (
+            <Pagination
+              page={page}
+              className={classes.pagination}
+              onChange={handlePaginationChange}
+              count={data ? Math.ceil(data.length / 20) : 30}
+              color="primary"
+            />
+          )
+        : ""}
+    </Container>
+  );
 }

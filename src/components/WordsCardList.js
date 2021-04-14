@@ -11,6 +11,7 @@ import Answers from "./Answers";
 import { CircularProgress } from "@material-ui/core";
 import DictionaryDelete from "./DictionaryDelete";
 // import filterDictionary from "../utils/filterDictionary"
+import { useSelector } from 'react-redux'
 
 const useStyles = makeStyles((theme) => ({
   list: {
@@ -47,6 +48,12 @@ export default function WordsCardList({
   const [wordsReady, setWordsReady] = useState(false);
   const [userWords, setUserWords] = useState([]);
   const [userDifficultWords, setUserDifficultWords] = useState([]);
+
+	// const deleteWordBtn = useSelector((state) => state.settings.DeleteWordBtn)
+	// const difficultWordBtn = useSelector((state) => state.settings.DifficultWordBtn)
+	const translateWordBtn = useSelector((state) => state.settings.TranslateWordBtn)
+	const translateSentenceWordBtn = useSelector((state) => state.settings.TranslateSentenceWordBtn)
+	
 
   const fetchWordsForBook = useCallback(async () => {
     const deleteUserWords = [];
@@ -192,11 +199,11 @@ export default function WordsCardList({
             word={item.word}
             image={item.image}
             textExample={item.textExample.replace(regexpForText, "")}
-            textExampleTranslate={item.textExampleTranslate}
+            textExampleTranslate={translateSentenceWordBtn?item.textExampleTranslate:null}
             transcription={item.transcription}
-            wordTranslate={item.wordTranslate}
+            wordTranslate={translateWordBtn?item.wordTranslate:null}
             textMeaning={item.textMeaning.replace(regexpForText, "")}
-            textMeaningTranslate={item.textMeaningTranslate}
+            textMeaningTranslate={translateSentenceWordBtn?item.textMeaningTranslate:null}
             infoPanel={
               infoPanel === "BookPage" ? (
                 <CardIcons
