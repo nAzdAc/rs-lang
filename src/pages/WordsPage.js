@@ -11,6 +11,7 @@ import WordsCardList from '../components/WordsCardList';
 import { Route, useRouteMatch, MemoryRouter, Link } from 'react-router-dom';
 import PaginationItem from '@material-ui/lab/PaginationItem';
 import { AuthContext } from '../context/AuthContext';
+import { Button } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -44,14 +45,23 @@ const useStyles = makeStyles((theme) => ({
 	titleBox: {
 		display: 'flex',
 		marginTop: '160px',
-		marginRight: 'auto'
+		marginRight: 'auto',
+    marginBottom: '24px'
 	},
 	pagination: {
 		margin: '40px',
 		fontSize: '40px',
 		marginLeft: 'auto',
 		marginRight: 'auto'
-	}
+	},
+  gamesButtonsWrapper: {
+    width: '500px',
+    display: 'flex',
+    justifyContent: 'space-between',
+  },
+  titleGames: {
+    marginBottom: '24px',
+  }
 }));
 
 export default function WordsPage() {
@@ -72,10 +82,40 @@ export default function WordsPage() {
 			<MemoryRouter initialEntries={[ `${match}` ]} initialIndex={0}>
 				<Box className={classes.titleBox}>
 					<Typography className={classes.title} variant="h1" component="h2">
-						Difficulty level
+						Уровень сложности
 					</Typography>
 					<LevelButton group={group + 1} />
 				</Box>
+        <div className={classes.gamesWrapper}>
+					<Typography className={classes.titleGames} variant="h3" component="h4">
+						Выберите игру: 
+					</Typography>
+          <div className={classes.gamesButtonsWrapper}>
+            <Link to={{
+              pathname: '/games/savanna',
+              state: { words: fetchUrl }
+            }}>
+              <Button className={classes.button} variant="contained" size="medium">
+                Саванна
+              </Button>
+            </Link>
+            {/* <NavLink>
+              <Button className={classes.button} variant="contained" size="medium">
+                Аудиовызов
+              </Button>
+            </NavLink>
+            <NavLink>
+              <Button className={classes.button} variant="contained" size="medium">
+                Спринт
+              </Button>
+            </NavLink>
+            <NavLink>
+              <Button className={classes.button} variant="contained" size="medium">
+                Match
+              </Button>
+            </NavLink> */}
+          </div>
+				</div>
 				<WordsCardList
 					userId={userId}
 					token={token}

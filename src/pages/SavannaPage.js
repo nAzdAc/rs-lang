@@ -139,7 +139,7 @@ const keyCodeArray = {
 	num4: 37
 };
 
-export const SavannaPage = () => {
+export const SavannaPage = (props) => {
 	const classes = useStyles();
 	const { request } = useHttp();
 	const { postUserWords, postStats, postAnswers } = useEndGame();
@@ -354,6 +354,7 @@ export const SavannaPage = () => {
 	}
 	return (
 		<div className={classes.root}>
+      {console.log(props)}
 			<ToastContainer />
 			{endGame ? (
 				<GameStats lifes={lifes} correctAnswers={correctAnswers} failAnswers={failAnswers} />
