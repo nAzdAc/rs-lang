@@ -65,9 +65,9 @@ export default function Answers({ fail, correct, token, userId, wordId }) {
 			<Typography className={classes.title} variant="h1" component="h4">
 				Ошибки: <span className={classes.wrong}>{fail ? fail : 0}</span>
 			</Typography>
-			<Button variant="contained" className={classes.button} onClick={handleButtonClick}>
+			{/* <Button variant="contained" className={classes.button} onClick={handleButtonClick}>
 				Удалить
-			</Button>
+			</Button> */}
 		</Box>
 	);
 }

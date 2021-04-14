@@ -69,7 +69,7 @@ export default function WordsPage() {
 
 	return (
 		<Container className={classes.container}>
-			<MemoryRouter initialEntries={[ `${match}` ]} initialIndex={0}>}
+			<MemoryRouter initialEntries={[ `${match}` ]} initialIndex={0}>
 				<Box className={classes.titleBox}>
 					<Typography className={classes.title} variant="h1" component="h2">
 						Difficulty level
@@ -82,7 +82,8 @@ export default function WordsPage() {
 					page={page}
 					difficulty={group}
 					fetchUrl={fetchUrl}
-					infoPanel="CardIcons"
+					isItBook={true}
+					infoPanel="BookPage"
 				/>
 				<Route>
 					{({ location }) => {

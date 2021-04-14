@@ -12,6 +12,7 @@ import Button from "@material-ui/core/Button";
 import LevelButton from "../components/LevelButton";
 import {wordCategories} from "../const/wordCategories"
 import {levels} from "../const/levels"
+import filterDictionary from "../utils/filterDictionary"
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -89,13 +90,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-// const wordCategories = [
-//   { text: "Изучаемые слова" },
-//   { text: "Сложные слова" },
-//   { text: "Удаленные слова" },
-// ];
-// const levels = [1, 2, 3, 4, 5, 6];
-
 export default function DictionaryPage() {
   const { userId, token } = useContext(AuthContext);
   const [page, setPage] = useState(1);
@@ -104,6 +98,7 @@ export default function DictionaryPage() {
   const [data, setData] = useState([]);
   const [listUserWords, setlistUserWords] = useState([]);
   const classes = useStyles();
+
   const func = useCallback(async () => {
     const result = await backRoutes.getUserWords({ userId, token });
     if (result) {
@@ -111,7 +106,7 @@ export default function DictionaryPage() {
       const filteredArr = result.userWords.filter((item) => !item.deleted)
       setData(filteredArr);
       setlistUserWords(result.userWords);
-
+      console.log(result.userWords)
     }
   }, [token, userId]);
 
@@ -136,6 +131,12 @@ export default function DictionaryPage() {
       setActiveLevel(index);
     }
   };
+
+  // useEffect(() => {
+  //   filterDictionary (activeLevel ,listUserWords, activeWordButton, setData )
+   
+    
+  // }, [activeLevel, activeWordButton]);
 
   useEffect(() => {
     // console.log(`level: ${activeLevel} ; button:  ${activeWordButton}`);
@@ -207,9 +208,11 @@ export default function DictionaryPage() {
         <WordsCardList
           token={token}
           userId={userId}
-          userWordsForDictionari={data}
-          infoPanel={activeWordButton === 0 ? "Answers" : "WordInfo"}
+          isItBook={false}
+          infoPanel={activeWordButton === 0 ? "DictionaryLearning" : activeWordButton === 1 ? "DictionaryDifficult":"DictionaryDelete"}
           activeWordButton={activeWordButton}
+          activeLevel={activeLevel}
+          userWordsForDictionari={data}
         />
       ) : (
         <Typography className={classes.message} variant="h1" component="h2">
