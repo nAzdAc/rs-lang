@@ -26,6 +26,10 @@ import images from "../assets/images/index";
 import { useHttp } from "../hooks/http.hook";
 import { backRoutes } from "../utils/backRoutes";
 
+import { ToastContainer } from 'react-toastify';
+import { useMessage } from '../hooks/message.hook';
+import 'react-toastify/dist/ReactToastify.css';
+
 const useStyles = makeStyles((theme) => ({
   main: {
     width: "100%",
@@ -100,6 +104,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SignUpPage() {
+  const message = useMessage()
   const {request} = useHttp();
   const classes = useStyles();
   const [form, setForm] = useState({
@@ -130,6 +135,7 @@ export default function SignUpPage() {
     try {
       const data = await request(backRoutes.signUp, "POST", { ...form });
       console.log(data);
+      message(data.status, data.message)
       setForm({
         name: "",
         email: "",
@@ -217,6 +223,7 @@ export default function SignUpPage() {
                 labelWidth={70}
               />
             </FormControl>
+            <ToastContainer className={classes.message} />
             <Typography
               component="h1"
               variant="subtitle2"
@@ -226,7 +233,7 @@ export default function SignUpPage() {
               No stupid restrictions
             </Typography>
 
-            <Button
+            {/* <Button
               variant="contained"
               color="primary"
               size="large"
@@ -234,7 +241,7 @@ export default function SignUpPage() {
               startIcon={<AddIcon />}
             >
               avatar
-            </Button>
+            </Button> */}
 
             <Box className={classes.buttonBox}>
               <Button

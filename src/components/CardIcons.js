@@ -1,4 +1,4 @@
-import React, { useContext, useCallback, useState, useEffect } from "react";
+import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { originURL } from "../utils/backRoutes";
 import Box from "@material-ui/core/Box";
@@ -6,12 +6,6 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import GradeIcon from "@material-ui/icons/Grade";
 import PlayCircleFilledIcon from "@material-ui/icons/PlayCircleFilled";
 import { Howl, Howler } from "howler";
-// import { LOCAL_STORAGE_KEY } from '../utils/storageKey';
-// import { INIT_CONSTS } from '../utils/initConsts';
-import { AuthContext } from "../context/AuthContext";
-import { backRoutes } from "../utils/backRoutes";
-import { filterableGridColumnsSelector } from "@material-ui/data-grid";
-// import { useHttp } from "../hooks/http.hook";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -53,8 +47,6 @@ export default function CardIcons({
 	setBlackStar
 }) {
   const classes = useStyles();
-  const { userId, token } = useContext(AuthContext);
-  const [allUserWords, setAllUserWords] = useState(userWords);
   // console.log(userDifficultWords)
 
   const audio = new Howl({
