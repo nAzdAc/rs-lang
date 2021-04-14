@@ -10,7 +10,7 @@ import WordInfo from "./WordInfo";
 import Answers from "./Answers";
 import { CircularProgress } from "@material-ui/core";
 import DictionaryDelete from "./DictionaryDelete";
-import filterDictionary from "../utils/filterDictionary"
+// import filterDictionary from "../utils/filterDictionary"
 
 const useStyles = makeStyles((theme) => ({
   list: {
@@ -66,12 +66,10 @@ export default function WordsCardList({
       const data = await request(fetchUrl, "GET");
       setWordsArr(data);
       setWordsReady(true);
-      console.log(data);
     }
   }, [userWords, fetchUrl, request]);
 
   const fetchWordsForDictionary = useCallback(async () => {
-		console.log(userWords)
     const cards = await Promise.all(
       userWordsForDictionari.map(async (item) => {
         const result = await request(backRoutes.getWord(item.wordId), "GET");
@@ -82,12 +80,10 @@ export default function WordsCardList({
     );
     setWordsArr(cards);
     setWordsReady(true);
-		console.log(wordsArr)
   }, [userWordsForDictionari, request]);
 
   const getUserWords = useCallback(async () => {
     const result = await backRoutes.getUserWords({ userId, token });
-		console.log(result.userWords)
     if (result.userWords.length) {
       setUserWords(result.userWords);
       const arr = result.userWords.map((item) =>
@@ -101,7 +97,6 @@ export default function WordsCardList({
 
   useEffect(() => {
     if (userId && token) {
-			console.log(userId, token)
       getUserWords();
     }
   }, [getUserWords, token, userId]);
@@ -111,11 +106,10 @@ export default function WordsCardList({
 			// filterDictionary (activeLevel ,userWords, activeWordButton, setUserWords )
       fetchWordsForDictionary();
 		}
-		}, [activeLevel, activeWordButton, fetchWordsForDictionary, isItBook])
+		}, [activeLevel, activeWordButton, fetchWordsForDictionary, isItBook, userWordsForDictionari])
 
   useEffect(() => {
     if (isItBook) {
-			console.log('bookbook')
       fetchWordsForBook();
     }
   }, [fetchWordsForBook, fetchWordsForDictionary, token, userId, isItBook])
