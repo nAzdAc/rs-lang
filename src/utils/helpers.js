@@ -11,5 +11,46 @@ export function getRandomInt(min, max) {
 	//Максимум не включается, минимум включается
 }
 
+export const createSound = (src, volume, rate = 1, loop = false) =>
+	new Howl({ src, volume: 0.01 * volume, rate, loop });
 
-export const createSound = (src, volume, rate = 1, loop = false) => new Howl({ src, volume: 0.01 * volume, rate, loop });
+export function getWordsForPlay(allWords, userWords) {
+	const deletedWords = userWords.filter((item) => item.deleted);
+	const deletedId = deletedWords.map((item) => item.wordId);
+	const withoutDeleted = allWords.filter((item) => !deletedId.includes(item.id));
+	const difficultWords = userWords.filter((item) => item.difficult);
+	const difficultId = difficultWords.map((item) => item.wordId);
+	const filteredArr = withoutDeleted.map((item) => {
+		let word = {};
+		if (difficultId.includes(item.id)) {
+			word = { ...item, difficult: true };
+		} else {
+			word = { ...item, difficult: false };
+		}
+		return word;
+	});
+	// console.log({ allWords });
+	// console.log(userWords);
+	// console.log({ deletedWords });
+	// console.log({ deletedId });
+	// console.log({ withoutDeleted });
+	// console.log({ difficultWords });
+	// console.log({ difficultId });
+	// console.log({ filteredArr });
+	filteredArr.sort(shuffleAllElements);
+	return filteredArr;
+}
+
+export function parsedStats(gameName, correctArr, failArr, seriesArr) {
+	const totalWords = correctArr.length + failArr.length;
+	const correctPercent = Math.round(100 * correctArr.length / (correctArr.length + failArr.length));
+	const longestSeries = Math.max.apply(null, seriesArr);
+
+	return {
+		gameName: gameName,
+		totalWords,
+		correctPercent,
+		longestSeries,
+		date: new Date().toLocaleDateString()
+	};
+}

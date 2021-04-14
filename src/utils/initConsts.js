@@ -3,7 +3,7 @@ import { frontRoutes } from './frontRoutes';
 export const INIT_CONSTS = {
 	musicVolume: 0,
 	soundVolume: 0,
-	wordVolume: 0,
+	wordVolume: 10,
 };
 
 export const gameCardsContent = [

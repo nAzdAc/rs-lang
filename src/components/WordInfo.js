@@ -61,12 +61,9 @@ export default function WordInfo({
   activeWordButton,
   token,
 }) {
-  const auth = useContext(AuthContext);
-
   const classes = useStyles(group);
 
   const handleButtonClick = () => {
-    console.log("click");
     if (activeWordButton === 1) {
       backRoutes.createUserWord({
         userId: userId,

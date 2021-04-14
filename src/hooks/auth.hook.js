@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect } from 'react';
 import { backRoutes } from '../utils/backRoutes';
 import { LOCAL_STORAGE_KEY } from '../utils/storageKey';
+import { useMessage } from './message.hook';
 const storageName = 'userData';
 
 export const useAuth = () => {
@@ -10,6 +11,7 @@ export const useAuth = () => {
 	const [ userName, setUserName ] = useState(null);
 	const [ avatar, setAvatar ] = useState(null);
 	const [ ready, setReady ] = useState(false);
+	const message = useMessage();
 
 	const login = useCallback((jwtToken, jwtRefreshToken, id, name, avatarURL) => {
 		setToken(jwtToken);
@@ -35,7 +37,6 @@ export const useAuth = () => {
 			const userId = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY.userData))
 				? JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY.userData)).userId
 				: '';
-			console.log(file);
 			const formData = new FormData();
 			formData.append('avatar', file);
 			const res = await fetch(`${backRoutes.signUp}/${userId}`, {
@@ -47,16 +48,15 @@ export const useAuth = () => {
 			});
 			const data = await res.json();
 			console.log(data)
+			message(data.message, res.status)
 			if (data.avatarURL) {
 				setAvatar(data.avatarURL);
 				const local = JSON.parse(localStorage.getItem(storageName));
 				const updateLocal = { ...local, avatar: data.avatarURL };
 				localStorage.setItem(storageName, JSON.stringify(updateLocal));
 			}
-
-			return { status: res.status, message: data.message };
 		},
-		[ token ]
+		[message, token]
 	);
 
 	const logout = useCallback(() => {
