@@ -63,7 +63,7 @@ export default function WordsPage() {
   const { userId, token } = useContext(AuthContext);
   let match = useRouteMatch().path;
   let group = match[match.length - 1] - 1;
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
   const classes = useStyles(group);
   const fetchUrl = backRoutes.getWordsPage(group, page-1);
 
