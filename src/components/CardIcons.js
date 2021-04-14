@@ -47,7 +47,6 @@ export default function CardIcons({
 	setBlackStar
 }) {
   const classes = useStyles();
-  // console.log(userDifficultWords)
 
   const audio = new Howl({
     src: [`${originURL}/${audioWord}`],

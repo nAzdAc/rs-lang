@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState, useContext } from 'react';
 import Typography from '@material-ui/core/Typography';
 import FullscreenIcon from '@material-ui/icons/Fullscreen';
 import FullscreenExitIcon from '@material-ui/icons/FullscreenExit';
@@ -10,13 +10,17 @@ import failSong2 from '../assets/sounds/fail.mp3';
 import { backRoutes } from '../utils/backRoutes';
 import { CircularProgress } from '@material-ui/core';
 import SpeakerIcon from '@material-ui/icons/Speaker';
-import { createSound, shuffleAllElements } from '../utils/helpers';
+import { createSound, getWordsForPlay, shuffleAllElements } from '../utils/helpers';
 import { originURL } from '../utils/backRoutes';
 import { GameStats } from '../components/GameStats';
 import { useHttp } from '../hooks/http.hook';
 import { toggleScreen } from '../utils/fullScreen';
 import { LifesInGames } from '../components/LifesInGames';
 import { Howler } from 'howler';
+import { AuthContext } from '../context/AuthContext';
+import { useEndGame } from '../hooks/endGame.hook';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const useStyles = makeStyles({
 	root: {
@@ -141,17 +145,11 @@ const keyCodeArray = {
 	num4: 37
 };
 
-// const labels = {
-// 	1: 'Useless+',
-// 	2: 'Poor+',
-// 	3: 'Ok+',
-// 	4: 'Good+',
-// 	5: 'Excellent+'
-// };
-
 export const AudioPage = () => {
 	const classes = useStyles();
 	const { request } = useHttp();
+	const { postUserWords, postStats, postAnswers } = useEndGame();
+	const { userId, token } = useContext(AuthContext);
 	const soundVolume = useMemo(() => localStorage.getItem(LOCAL_STORAGE_KEY.soundVolume) || INIT_CONSTS.soundVolume, []);
 	const wordVolume = useMemo(() => localStorage.getItem(LOCAL_STORAGE_KEY.wordVolume) || INIT_CONSTS.wordVolume, []);
 	const [ endGame, setEndGame ] = useState(false);
@@ -177,17 +175,23 @@ export const AudioPage = () => {
 	const fetchWords = useCallback(
 		async () => {
 			try {
-				const data = await request(backRoutes.words, 'GET');
-				const arr = data.map((item) => {
+				const data = await backRoutes.getUserWords({ userId, token });
+				const arr = await request(`${backRoutes.words}?group=3&page=1`, 'GET');
+				const allWords = arr.map((item) => {
 					return {
 						english: item.word,
 						russian: item.wordTranslate,
 						audio: `${originURL}/${item.audio}`,
-						transcription: item.transcription
+						transcription: item.transcription,
+						id: item.id,
+						group: item.group,
+						page: item.page,
+						deleted: false
 					};
 				});
-				arr.sort(shuffleAllElements);
-				setWordsArray(arr);
+				const gamesArr = getWordsForPlay(allWords, data.userWords)
+				console.log(gamesArr)
+				setWordsArray(gamesArr);
 				setTimeout(() => {
 					setBlock(false);
 				}, 500);
@@ -195,46 +199,18 @@ export const AudioPage = () => {
 				console.log(e);
 			}
 		},
-		[ request ]
-	);
-
-	const putStats = useCallback(
-		async () => {
-			try {
-				const userId = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY.userData)).userId;
-				const token = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY.userData)).token;
-				const totalWords = correctAnswers.length + failAnswers.length;
-				const correctPercent = Math.round(100 * correctAnswers.length / (correctAnswers.length + failAnswers.length));
-				const longestSeries = Math.max.apply(null, allSeries);
-
-				const gameStats = {
-					gameName: 'audio',
-					totalWords,
-					correctPercent,
-					longestSeries,
-					date: new Date().toLocaleDateString()
-				};
-				const data = await backRoutes.putStatistics({
-					userId,
-					token,
-					data: gameStats
-				});
-				console.log(data);
-			} catch (e) {
-				console.log(e);
-				console.log(e.message);
-			}
-		},
-		[ allSeries, correctAnswers.length, failAnswers.length ]
+		[request, token, userId]
 	);
 
 	useEffect(
 		() => {
 			if (endGame) {
-				putStats();
+				postStats('audio', correctAnswers, failAnswers, allSeries);
+				postUserWords(correctAnswers, failAnswers);
+				postAnswers(correctAnswers, failAnswers);
 			}
 		},
-		[ endGame, putStats ]
+		[allSeries, correctAnswers, endGame, failAnswers, postAnswers, postStats, postUserWords]
 	);
 
 	const answer = useCallback(
@@ -376,6 +352,7 @@ export const AudioPage = () => {
 
 	return (
 		<div className={classes.root}>
+			<ToastContainer />
 			{endGame ? (
 				<GameStats lifes={lifes} correctAnswers={correctAnswers} failAnswers={failAnswers} />
 			) : wordsArray.length && fourButtons.length === 4 && currentWord ? (

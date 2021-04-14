@@ -4,14 +4,14 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 export const useMessage = () => {
-	return useCallback((status, text) => {
-		console.log(text);
-		console.log(status);
+	return useCallback((text, status) => {
+		console.log('text', text);
+		console.log('status', status);
 		if (!text) return;
-		if (status && status !== 200) {
-			toast.error(text, {
+		if (status === 200) {
+			toast.success(text, {
 				position: 'top-right',
-				autoClose: 5000,
+				autoClose: 3500,
 				hideProgressBar: false,
 				closeOnClick: true,
 				pauseOnHover: true,
@@ -19,9 +19,9 @@ export const useMessage = () => {
 				progress: undefined
 			});
 		} else {
-			toast.success(text, {
+			toast.error(text, {
 				position: 'top-right',
-				autoClose: 5000,
+				autoClose: 3500,
 				hideProgressBar: false,
 				closeOnClick: true,
 				pauseOnHover: true,

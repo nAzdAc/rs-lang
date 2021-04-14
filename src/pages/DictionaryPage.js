@@ -101,7 +101,7 @@ export default function DictionaryPage() {
 
   const func = useCallback(async () => {
     const result = await backRoutes.getUserWords({ userId, token });
-    if (result) {
+    if (result.userWords.length) {
       const filteredArr = result.userWords.filter((item) => !item.deleted)
       setData(filteredArr);
       setlistUserWords(result.userWords);
@@ -131,7 +131,36 @@ export default function DictionaryPage() {
   };
 
   useEffect(() => {
-    filterDictionary (activeLevel ,listUserWords, activeWordButton, setData )
+    // filterDictionary (activeLevel ,listUserWords, activeWordButton, setData )
+    // console.log(`level: ${activeLevel} ; button:  ${activeWordButton}`);
+    let sectionArr = [];
+    let levelArr = [];
+    if (activeLevel === null) {
+      if (activeWordButton === 0) {
+        sectionArr = listUserWords.filter((item) => !item.deleted);
+      } else if (activeWordButton === 1) {
+        sectionArr = listUserWords.filter(
+          (item) => item.difficult && !item.deleted
+        );
+      } else if (activeWordButton === 2) {
+        sectionArr = listUserWords.filter((item) => item.deleted);
+      }
+      levelArr = sectionArr;
+    } else {
+      if (activeWordButton === 0) {
+        sectionArr = listUserWords.filter((item) => !item.deleted);
+      } else if (activeWordButton === 1) {
+        sectionArr = listUserWords.filter(
+          (item) => item.difficult
+        );
+      } else if (activeWordButton === 2) {
+        sectionArr = listUserWords.filter((item) => item.deleted);
+      }
+      levelArr = sectionArr.filter(
+        (item) => item.group === activeLevel
+      );
+    }
+    setData(levelArr);
   }, [activeLevel, activeWordButton, listUserWords]);
 
   return (

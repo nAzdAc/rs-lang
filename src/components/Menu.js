@@ -110,7 +110,6 @@ const Menu = () => {
 
   return (
     <>
-      {console.log(pathname)}
       <MenuStyled>
         <List>
           <div>

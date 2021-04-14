@@ -1,120 +1,119 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from 'react';
 
-import Button from "@material-ui/core/Button";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import TextField from "@material-ui/core/TextField";
+import Button from '@material-ui/core/Button';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import TextField from '@material-ui/core/TextField';
 
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 
-import Box from "@material-ui/core/Box";
+import Box from '@material-ui/core/Box';
 
-import Typography from "@material-ui/core/Typography";
-import { makeStyles } from "@material-ui/core/styles";
-import Container from "@material-ui/core/Container";
-import Visibility from "@material-ui/icons/Visibility";
+import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
+import Container from '@material-ui/core/Container';
+import Visibility from '@material-ui/icons/Visibility';
 
-import IconButton from "@material-ui/core/IconButton";
+import IconButton from '@material-ui/core/IconButton';
 
-import OutlinedInput from "@material-ui/core/OutlinedInput";
-import InputLabel from "@material-ui/core/InputLabel";
-import InputAdornment from "@material-ui/core/InputAdornment";
+import OutlinedInput from '@material-ui/core/OutlinedInput';
+import InputLabel from '@material-ui/core/InputLabel';
+import InputAdornment from '@material-ui/core/InputAdornment';
 
-import FormControl from "@material-ui/core/FormControl";
-import VisibilityOff from "@material-ui/icons/VisibilityOff";
-import AddIcon from "@material-ui/icons/Add";
-import images from "../assets/images/index";
-import { useHttp } from "../hooks/http.hook";
-import { backRoutes } from "../utils/backRoutes";
+import FormControl from '@material-ui/core/FormControl';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import images from '../assets/images/index';
+import { useHttp } from '../hooks/http.hook';
+import { backRoutes } from '../utils/backRoutes';
+import { useMessage } from '../hooks/message.hook';
 
 import { ToastContainer } from 'react-toastify';
-import { useMessage } from '../hooks/message.hook';
 import 'react-toastify/dist/ReactToastify.css';
 
 const useStyles = makeStyles((theme) => ({
   main: {
-    width: "100%",
-    display: "flex",
+    width: '100%',
+    display: 'flex',
   },
   paper: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    height: "100%",
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    height: '100%',
   },
   mainBox: {
-    width: "400px",
-    padding: "20px 50px 50px 40px ",
-    boxShadow: "2px 0px 14px 2px rgba(0,0,0,0.09)",
-    margin: "40px auto 40px 0px ",
+    width: '400px',
+    padding: '20px 50px 50px 40px ',
+    boxShadow: '2px 0px 14px 2px rgba(0,0,0,0.09)',
+    margin: '40px auto 40px 0px ',
   },
   avatar: {
     margin: theme.spacing(1),
     backgroundColor: theme.palette.secondary.main,
   },
   form: {
-    width: "100%", // Fix IE 11 issue.
-    height: "100%",
-    display: "flex",
-    flexDirection: "column",
+    width: '100%', // Fix IE 11 issue.
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column',
   },
   button: {
-    width: "180px",
-    height: "36px",
-    backgroundColor: "#6200EE",
-    marginTop: "30px",
-    fontSize: "14px",
+    width: '180px',
+    height: '36px',
+    backgroundColor: '#6200EE',
+    marginTop: '30px',
+    fontSize: '14px',
   },
   submit: {
-    width: "180px",
-    height: "36px",
-    backgroundColor: "#01A299",
-    fontSize: "14px",
+    width: '180px',
+    height: '36px',
+    backgroundColor: '#01A299',
+    fontSize: '14px',
   },
   link: {
-    textDecoration: "none",
+    textDecoration: 'none',
   },
   title: {
-    marginBottom: "30px",
-    marginRight: "auto",
+    marginBottom: '30px',
+    marginRight: 'auto',
   },
   info: {
-    marginLeft: "1rem",
-    opacity: "0.8",
+    marginLeft: '1rem',
+    opacity: '0.8',
   },
   passwordField: {
-    marginTop: "30px",
+    marginTop: '30px',
   },
   buttonBox: {
-    marginTop: "30px",
-    display: "flex",
+    marginTop: '30px',
+    display: 'flex',
   },
   register: {
-    margin: "auto",
-    fontSize: "14px",
+    margin: 'auto',
+    fontSize: '14px',
   },
   email: {
-    marginTop: "30px",
+    marginTop: '30px',
   },
   image: {
-    width: "400px",
-    height: "400px",
-    marginTop: "auto",
-    marginLeft: "auto",
+    width: '400px',
+    height: '400px',
+    marginTop: 'auto',
+    marginLeft: 'auto',
   },
 }));
 
 export default function SignUpPage() {
-  const message = useMessage()
-  const {request} = useHttp();
+  const message = useMessage();
+  const { request, error, clearError } = useHttp();
   const classes = useStyles();
   const [form, setForm] = useState({
-    name: "",
-    email: "",
-    password: "",
+    name: '',
+    email: '',
+    password: '',
   });
 
-  const [values, setValues] = React.useState({
-    password: "",
+  const [values, setValues] = useState({
+    password: '',
     showPassword: false,
   });
   const handleClickShowPassword = () => {
@@ -130,17 +129,24 @@ export default function SignUpPage() {
   const handleFormChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
+
+  useEffect(() => {
+    message(error);
+    clearError();
+  }, [error, message, clearError]);
+
   async function handleSubmit(e) {
     e.preventDefault();
     try {
-      const data = await request(backRoutes.signUp, "POST", { ...form });
+      const data = await request(backRoutes.signUp, 'POST', { ...form });
       console.log(data);
-      message(data.status, data.message)
+      message(data.message, 200);
       setForm({
-        name: "",
-        email: "",
-        password: "",
+        name: '',
+        email: '',
+        password: '',
       });
+      setValues({ password: '', showPassword: false });
     } catch (e) {}
   }
 
@@ -155,7 +161,7 @@ export default function SignUpPage() {
             align="left"
             className={classes.title}
           >
-            Registration
+            Регистрация
           </Typography>
           <form className={classes.form} noValidate onSubmit={handleSubmit}>
             <TextField
@@ -164,7 +170,7 @@ export default function SignUpPage() {
               required
               fullWidth
               name="name"
-              label="Name"
+              label="Имя"
               type="text"
               id="name"
               autoComplete="name"
@@ -177,7 +183,7 @@ export default function SignUpPage() {
               required
               fullWidth
               id="email"
-              label="Email Address"
+              label="Электропочта"
               name="email"
               autoComplete="email"
               autoFocus
@@ -191,7 +197,7 @@ export default function SignUpPage() {
               align="left"
               className={classes.info}
             >
-              Use the real one
+              Используйте настоящую
             </Typography>
             <FormControl
               className={classes.passwordField}
@@ -200,14 +206,14 @@ export default function SignUpPage() {
               variant="outlined"
             >
               <InputLabel htmlFor="outlined-adornment-password">
-                Password
+                Пароль
               </InputLabel>
               <OutlinedInput
                 name="password"
                 id="outlined-adornment-password"
-                type={values.showPassword ? "text" : "password"}
+                type={values.showPassword ? 'text' : 'password'}
                 value={values.password}
-                onChange={handleChange("password")}
+                onChange={handleChange('password')}
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton
@@ -230,7 +236,7 @@ export default function SignUpPage() {
               align="left"
               className={classes.info}
             >
-              No stupid restrictions
+              Хотя бы 6 символов
             </Typography>
 
             {/* <Button
@@ -251,11 +257,11 @@ export default function SignUpPage() {
                 color="primary"
                 className={classes.submit}
               >
-                Register
+                Выполнить
               </Button>
               <Button className={classes.register}>
-                <Link className={classes.link} to={"/signIn"}>
-                  Login
+                <Link className={classes.link} to={'/signIn'}>
+                  Вход
                 </Link>
               </Button>
             </Box>
