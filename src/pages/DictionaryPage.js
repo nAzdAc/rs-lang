@@ -10,8 +10,9 @@ import WordsCardList from "../components/WordsCardList";
 import { AuthContext } from "../context/AuthContext";
 import Button from "@material-ui/core/Button";
 import LevelButton from "../components/LevelButton";
-import {wordCategories} from "../const/wordCategories"
-import {levels} from "../const/levels"
+import {wordCategories} from "../constants/wordCategories"
+import {levels} from "../constants/levels"
+// import filterDictionary from "../utils/filterDictionary"
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -89,13 +90,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-// const wordCategories = [
-//   { text: "Изучаемые слова" },
-//   { text: "Сложные слова" },
-//   { text: "Удаленные слова" },
-// ];
-// const levels = [1, 2, 3, 4, 5, 6];
-
 export default function DictionaryPage() {
   const { userId, token } = useContext(AuthContext);
   const [page, setPage] = useState(1);
@@ -104,11 +98,10 @@ export default function DictionaryPage() {
   const [data, setData] = useState([]);
   const [listUserWords, setlistUserWords] = useState([]);
   const classes = useStyles();
+
   const func = useCallback(async () => {
     const result = await backRoutes.getUserWords({ userId, token });
-    console.log(result)
     if (result.userWords.length) {
-      console.log('попали в if')
       const filteredArr = result.userWords.filter((item) => !item.deleted)
       setData(filteredArr);
       setlistUserWords(result.userWords);
@@ -138,6 +131,7 @@ export default function DictionaryPage() {
   };
 
   useEffect(() => {
+    // filterDictionary (activeLevel ,listUserWords, activeWordButton, setData )
     // console.log(`level: ${activeLevel} ; button:  ${activeWordButton}`);
     let sectionArr = [];
     let levelArr = [];
@@ -206,13 +200,15 @@ export default function DictionaryPage() {
         <WordsCardList
           token={token}
           userId={userId}
-          userWordsForDictionari={data}
-          infoPanel={activeWordButton === 0 ? "Answers" : "WordInfo"}
+          isItBook={false}
+          infoPanel={activeWordButton === 0 ? "DictionaryLearning" : activeWordButton === 1 ? "DictionaryDifficult":"DictionaryDelete"}
           activeWordButton={activeWordButton}
+          activeLevel={activeLevel}
+          userWordsForDictionari={data}
         />
       ) : (
         <Typography className={classes.message} variant="h1" component="h2">
-          Здесь еще нет слов
+          {token? "Здесь еще нет слов": "Войдите в приложение чтобы увидеть свой словарь"}
         </Typography>
       )}
       {data.length
