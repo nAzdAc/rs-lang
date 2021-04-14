@@ -52,10 +52,11 @@ export default function WordsCardList({
 	// const deleteWordBtn = useSelector((state) => state.settings.DeleteWordBtn)
 	// const difficultWordBtn = useSelector((state) => state.settings.DifficultWordBtn)
 	const translateWordBtn = useSelector((state) => state.settings.TranslateWordBtn)
-	const translateSentenceWordBtn = useSelector((state) => state.settings.TranslateSentenceWordBtn)
+	const translateSentenceWordBtn = useSelector((state) => state.settings.TranslateSentenceBtn)
 	
 
   const fetchWordsForBook = useCallback(async () => {
+		console.log(translateSentenceWordBtn)
     const deleteUserWords = [];
     if (userWords && userWords.length) {
       const data = await request(fetchUrl, "GET");
