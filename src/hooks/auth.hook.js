@@ -33,7 +33,14 @@ export const useAuth = () => {
 
 	const uploadAvatar = useCallback(
 		async (file) => {
-			if (!file) return;
+			console.log(token)
+			if (!token) {
+				console.log('no token');
+				return message('Для загрузки фото необходимо авторизоваться.', 400);
+			}
+			if (!file) {
+				return message('Что-то не так с файлом.', 400);
+			}
 			const userId = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY.userData))
 				? JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY.userData)).userId
 				: '';
@@ -47,8 +54,8 @@ export const useAuth = () => {
 				}
 			});
 			const data = await res.json();
-			console.log(data)
-			message(data.message, res.status)
+			console.log(data);
+			message(data.message, res.status);
 			if (data.avatarURL) {
 				setAvatar(data.avatarURL);
 				const local = JSON.parse(localStorage.getItem(storageName));
@@ -56,7 +63,7 @@ export const useAuth = () => {
 				localStorage.setItem(storageName, JSON.stringify(updateLocal));
 			}
 		},
-		[message, token]
+		[ message, token ]
 	);
 
 	const logout = useCallback(() => {
