@@ -92,13 +92,6 @@ const useStyles = makeStyles((theme) => ({
 	}
 }));
 
-// const wordCategories = [
-//   { text: "Изучаемые слова" },
-//   { text: "Сложные слова" },
-//   { text: "Удаленные слова" },
-// ];
-// const levels = [1, 2, 3, 4, 5, 6];
-
 export default function DictionaryPage() {
 	const { userId, token } = useContext(AuthContext);
 	const [ page, setPage ] = useState(1);
@@ -106,7 +99,7 @@ export default function DictionaryPage() {
 	const [ activeLevel, setActiveLevel ] = useState(null);
 	const [ data, setData ] = useState([]);
 	const [ listUserWords, setlistUserWords ] = useState([]);
-  const message = useMessage();
+	const message = useMessage();
 	const classes = useStyles();
 	const func = useCallback(
 		async () => {
@@ -120,7 +113,7 @@ export default function DictionaryPage() {
 				setlistUserWords(result.userWords);
 			}
 		},
-		[message, token, userId]
+		[ message, token, userId ]
 	);
 
 	useEffect(
@@ -179,7 +172,7 @@ export default function DictionaryPage() {
 
 	return (
 		<Container className={classes.container}>
-      <ToastContainer />
+			<ToastContainer />
 			<Box className={classes.titleBox}>
 				<Typography className={classes.title} variant="h1" component="h2">
 					Словарь

@@ -2,7 +2,7 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
-// import Button from "@material-ui/core/Button";
+import Button from "@material-ui/core/Button";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -12,6 +12,7 @@ const useStyles = makeStyles((theme) => ({
   box: {
     display: "flex",
     flexWrap: "wrap",
+    justifyContent: "space-between",
     fontSize: "34px",
     gap: "20px",
     marginBottom: "10px",
@@ -48,25 +49,30 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function WordInfo({
+export default function DictionaryDelete({
   group,
-  difficulty,
-  page,
   userId,
   wordId,
-  activeWordButton,
   token,
-	icons,
+  clickRestore,
+
 }) {
 
   const classes = useStyles(group);
 
   return (
     <Box className={classes.box}>
-			{icons}
       <Typography className={classes.title} variant="h1" component="h4">
         Difficulty: {group + 1}
       </Typography>
+      <Button
+        variant="contained"
+        className={classes.button}
+        onClick={clickRestore}
+      >
+        Восстановить
+      </Button>
+			
     </Box>
   );
 }

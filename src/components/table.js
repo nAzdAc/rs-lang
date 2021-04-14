@@ -22,8 +22,8 @@ export function DenseTable(props) {
         <TableBody>
           {Object.keys(props.stats).map((item) => (
             <TableRow>
-              {props.stats[item].map((row) => (
-                <TableCell key={row}>{row}</TableCell>
+              {props.stats[item].map((row, i) => (
+                <TableCell key={i}>{row}</TableCell>
               ))}
             </TableRow>
           ))}
