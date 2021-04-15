@@ -12,7 +12,6 @@ import {
   changeDeleteBtn,
   changeTranslateWordBtn,
   changeTranslateSentenceBtn,
-  changeVolume,
 } from '../store/settingSlice';
 import { useSelector } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
