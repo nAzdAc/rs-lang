@@ -21,6 +21,9 @@ import { AuthContext } from '../context/AuthContext';
 import { useEndGame } from '../hooks/endGame.hook';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useSelector } from 'react-redux';
+import { deleteWords } from '../store/wordsSlice';
+import { useDispatch } from 'react-redux';
 
 const useStyles = makeStyles({
 	root: {
@@ -172,11 +175,19 @@ export const AudioPage = () => {
 	const audioFail2 = useMemo(() => createSound(failSong2, soundVolume), [ soundVolume ]);
 	const audioWord = useMemo(() => createSound(`${currentWord.audio}`, wordVolume), [ wordVolume, currentWord ]);
 
+  const dispatch = useDispatch();
+
+  const wordsRedux = useSelector(
+    state=>state.words.wordsRedux,
+  );
+
+  const getWords = async () => wordsRedux.length === 0 ? await request(`${backRoutes.words}?group=3&page=1`, 'GET') : wordsRedux;
+
 	const fetchWords = useCallback(
 		async () => {
 			try {
 				const data = await backRoutes.getUserWords({ userId, token });
-				const arr = await request(`${backRoutes.words}?group=3&page=1`, 'GET');
+				const arr = await getWords();
 				const allWords = arr.map((item) => {
 					return {
 						english: item.word,
@@ -330,9 +341,10 @@ export const AudioPage = () => {
 			document.addEventListener('keydown', keyboardClick);
 			return () => {
 				document.removeEventListener('keydown', keyboardClick);
+        dispatch(deleteWords());
 			};
 		},
-		[ answer, endGame ]
+		[dispatch, answer, endGame ]
 	);
 
 	function repeat() {
