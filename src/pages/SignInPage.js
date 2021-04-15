@@ -25,7 +25,6 @@ import images from '../assets/images';
 import { AuthContext } from '../context/AuthContext';
 import { useHttp } from '../hooks/http.hook';
 import { backRoutes } from '../utils/backRoutes';
-
 import { ToastContainer } from 'react-toastify';
 import { useMessage } from '../hooks/message.hook';
 import 'react-toastify/dist/ReactToastify.css';

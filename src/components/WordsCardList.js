@@ -11,7 +11,9 @@ import Answers from "./Answers";
 import { CircularProgress } from "@material-ui/core";
 import DictionaryDelete from "./DictionaryDelete";
 // import filterDictionary from "../utils/filterDictionary"
-import { useSelector } from 'react-redux'
+import { useSelector } from "react-redux";
+// import { ToastContainer } from "react-toastify";
+// import { useMessage } from "../hooks/message.hook";
 
 const useStyles = makeStyles((theme) => ({
   list: {
@@ -36,11 +38,11 @@ export default function WordsCardList({
   wrong,
   correct,
   activeWordButton,
-	activeLevel,
+  activeLevel,
   token,
   userId,
   isItBook,
-	userWordsForDictionari,
+  userWordsForDictionari,
 }) {
   const [wordsArr, setWordsArr] = useState([]);
   const { request } = useHttp();
@@ -48,15 +50,19 @@ export default function WordsCardList({
   const [wordsReady, setWordsReady] = useState(false);
   const [userWords, setUserWords] = useState([]);
   const [userDifficultWords, setUserDifficultWords] = useState([]);
+  // const message = useMessage();
+  // console.log(userWordsForDictionari)
 
-	// const deleteWordBtn = useSelector((state) => state.settings.DeleteWordBtn)
-	// const difficultWordBtn = useSelector((state) => state.settings.DifficultWordBtn)
-	const translateWordBtn = useSelector((state) => state.settings.TranslateWordBtn)
-	const translateSentenceWordBtn = useSelector((state) => state.settings.TranslateSentenceBtn)
-	
+  // const deleteWordBtn = useSelector((state) => state.settings.DeleteWordBtn)
+  // const difficultWordBtn = useSelector((state) => state.settings.DifficultWordBtn)
+  const translateWordBtn = useSelector(
+    (state) => state.settings.TranslateWordBtn
+  );
+  const translateSentenceWordBtn = useSelector(
+    (state) => state.settings.TranslateSentenceBtn
+  );
 
   const fetchWordsForBook = useCallback(async () => {
-		console.log(translateSentenceWordBtn)
     const deleteUserWords = [];
     if (userWords && userWords.length) {
       const data = await request(fetchUrl, "GET");
@@ -70,16 +76,12 @@ export default function WordsCardList({
       );
       setWordsArr(filteredArr);
       setWordsReady(true);
-    } else if (!userWords.length) {
+    } else {
       const data = await request(fetchUrl, "GET");
-			
       setWordsArr(data);
-			if(!token){
-				setWordsReady(true);
-			}
-      
+      setWordsReady(true);
     }
-  }, [userWords, request, fetchUrl, token]);
+  }, [userWords, request, fetchUrl]);
 
   const fetchWordsForDictionary = useCallback(async () => {
     const cards = await Promise.all(
@@ -96,7 +98,8 @@ export default function WordsCardList({
 
   const getUserWords = useCallback(async () => {
     const result = await backRoutes.getUserWords({ userId, token });
-    if (result.userWords.length) {
+    // message(result.message, 200);
+    if (result.userWords && result.userWords.length) {
       setUserWords(result.userWords);
       const arr = result.userWords.map((item) =>
         item.difficult ? item.wordId : null
@@ -113,17 +116,17 @@ export default function WordsCardList({
     }
   }, [getUserWords, token, userId]);
 
-	useEffect(() => {
+  useEffect(() => {
     if (!isItBook && userWordsForDictionari) {
       fetchWordsForDictionary();
-		}
-		}, [fetchWordsForDictionary, isItBook, userWordsForDictionari])
+    }
+  }, [fetchWordsForDictionary, isItBook, userWordsForDictionari]);
 
   useEffect(() => {
     if (isItBook) {
       fetchWordsForBook();
     }
-  }, [fetchWordsForBook, fetchWordsForDictionary, token, userId, isItBook])
+  }, [fetchWordsForBook, fetchWordsForDictionary, token, userId, isItBook]);
 
   const setGoldStar = async (wordId, group, isItBook = false) => {
     await backRoutes.createUserWord({
@@ -139,9 +142,9 @@ export default function WordsCardList({
     getUserWords();
     if (isItBook) {
       fetchWordsForBook();
-    }else{
-			fetchWordsForDictionary();
-		}
+    } else {
+      fetchWordsForDictionary();
+    }
   };
   const setBlackStar = async (wordId, group, isItBook = false) => {
     await backRoutes.createUserWord({
@@ -156,9 +159,9 @@ export default function WordsCardList({
     getUserWords();
     if (isItBook) {
       fetchWordsForBook();
-    }else{
-			fetchWordsForDictionary();
-		}
+    } else {
+      fetchWordsForDictionary();
+    }
   };
 
   async function addWordToDictionaryDelete(wordId, group, isItBook = false) {
@@ -174,9 +177,9 @@ export default function WordsCardList({
     getUserWords();
     if (isItBook) {
       fetchWordsForBook();
-    }else{
-			fetchWordsForDictionary();
-		}
+    } else {
+      fetchWordsForDictionary();
+    }
   }
   async function restore(wordId) {
     await backRoutes.createUserWord({
@@ -192,44 +195,68 @@ export default function WordsCardList({
   }
 
   return (
-    <ul className={classes.list}>
-      {wordsReady ? (
-        wordsArr.map((item) => (
-          <WordCard
-            key={item.id}
-            word={item.word}
-            image={item.image}
-            textExample={item.textExample.replace(regexpForText, "")}
-            textExampleTranslate={translateSentenceWordBtn?item.textExampleTranslate:null}
-            transcription={item.transcription}
-            wordTranslate={translateWordBtn?item.wordTranslate:null}
-            textMeaning={item.textMeaning.replace(regexpForText, "")}
-            textMeaningTranslate={translateSentenceWordBtn?item.textMeaningTranslate:null}
-            infoPanel={
-              infoPanel === "BookPage" ? (
-                <CardIcons
-                  userWords={userWords ? userWords : []}
-                  difficulty={difficulty}
-                  wordId={item.id}
-                  audioWord={item.audio}
-                  audioExample={item.audioExample}
-                  audioMeaning={item.audioMeaning}
-                  userDifficultWords={userDifficultWords}
-                  clickDelete={() =>
-                    addWordToDictionaryDelete(item.id, item.group, true)
-                  }
-                  setGoldStar={() => setGoldStar(item.id, item.group, true)}
-                  setBlackStar={() => setBlackStar(item.id, item.group, true)}
-                />
-              ) : infoPanel === "DictionaryDifficult" ? (
-                <WordInfo
-                  difficulty={difficulty}
-                  wordId={item.id}
-                  userId={userId}
-                  group={item.group}
-                  activeWordButton={activeWordButton}
-                  token={token}
-                  icons={
+    <>
+      {/* <ToastContainer /> */}
+      <ul className={classes.list}>
+        {wordsReady ? (
+          wordsArr.map((item) => (
+            <WordCard
+              key={item.id}
+              word={item.word}
+              image={item.image}
+              textExample={item.textExample.replace(regexpForText, "")}
+              textExampleTranslate={
+                translateSentenceWordBtn ? item.textExampleTranslate : null
+              }
+              transcription={item.transcription}
+              wordTranslate={translateWordBtn ? item.wordTranslate : null}
+              textMeaning={item.textMeaning.replace(regexpForText, "")}
+              textMeaningTranslate={
+                translateSentenceWordBtn ? item.textMeaningTranslate : null
+              }
+              infoPanel={
+                infoPanel === "BookPage" ? (
+                  <CardIcons
+                    userWords={userWords ? userWords : []}
+                    difficulty={difficulty}
+                    wordId={item.id}
+                    audioWord={item.audio}
+                    audioExample={item.audioExample}
+                    audioMeaning={item.audioMeaning}
+                    userDifficultWords={userDifficultWords}
+                    clickDelete={() =>
+                      addWordToDictionaryDelete(item.id, item.group, true)
+                    }
+                    setGoldStar={() => setGoldStar(item.id, item.group, true)}
+                    setBlackStar={() => setBlackStar(item.id, item.group, true)}
+                  />
+                ) : infoPanel === "DictionaryDifficult" ? (
+                  <WordInfo
+                    difficulty={difficulty}
+                    wordId={item.id}
+                    userId={userId}
+                    group={item.group}
+                    activeWordButton={activeWordButton}
+                    token={token}
+                    icons={
+                      <CardIcons
+                        userWords={userWords ? userWords : []}
+                        difficulty={difficulty}
+                        wordId={item.id}
+                        audioWord={item.audio}
+                        audioExample={item.audioExample}
+                        audioMeaning={item.audioMeaning}
+                        userDifficultWords={userDifficultWords}
+                        clickDelete={() =>
+                          addWordToDictionaryDelete(item.id, item.group)
+                        }
+                        setGoldStar={() => setGoldStar(item.id, item.group)}
+                        setBlackStar={() => setBlackStar(item.id, item.group)}
+                      />
+                    }
+                  />
+                ) : infoPanel === "DictionaryLearning" ? (
+                  <>
                     <CardIcons
                       userWords={userWords ? userWords : []}
                       difficulty={difficulty}
@@ -244,49 +271,32 @@ export default function WordsCardList({
                       setGoldStar={() => setGoldStar(item.id, item.group)}
                       setBlackStar={() => setBlackStar(item.id, item.group)}
                     />
-                  }
-                />
-              ) : infoPanel === "DictionaryLearning" ? (
-                <>
-                  <CardIcons
-                    userWords={userWords ? userWords : []}
+                    <Answers
+                      fail={item.fail}
+                      correct={item.correct}
+                      wordId={item.id}
+                      userId={userId}
+                      token={token}
+                    />
+                  </>
+                ) : infoPanel === "DictionaryDelete" ? (
+                  <DictionaryDelete
                     difficulty={difficulty}
                     wordId={item.id}
-                    audioWord={item.audio}
-                    audioExample={item.audioExample}
-                    audioMeaning={item.audioMeaning}
-                    userDifficultWords={userDifficultWords}
-                    clickDelete={() =>
-                      addWordToDictionaryDelete(item.id, item.group)
-                    }
-                    setGoldStar={() => setGoldStar(item.id, item.group)}
-                    setBlackStar={() => setBlackStar(item.id, item.group)}
-                  />
-                  <Answers
-                    fail={item.fail}
-                    correct={item.correct}
-                    wordId={item.id}
                     userId={userId}
+                    group={item.group}
+                    activeWordButton={activeWordButton}
                     token={token}
+                    clickRestore={() => restore(item.id)}
                   />
-                </>
-              ) : infoPanel === "DictionaryDelete" ? (
-                <DictionaryDelete
-                  difficulty={difficulty}
-                  wordId={item.id}
-                  userId={userId}
-                  group={item.group}
-                  activeWordButton={activeWordButton}
-                  token={token}
-                  clickRestore={() => restore(item.id)}
-                />
-              ) : null
-            }
-          />
-        ))
-      ) : (
-        <CircularProgress className={classes.loader} />
-      )}
-    </ul>
+                ) : null
+              }
+            />
+          ))
+        ) : (
+          <CircularProgress className={classes.loader} />
+        )}
+      </ul>
+    </>
   );
 }
