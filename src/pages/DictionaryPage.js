@@ -10,8 +10,11 @@ import WordsCardList from "../components/WordsCardList";
 import { AuthContext } from "../context/AuthContext";
 import Button from "@material-ui/core/Button";
 import LevelButton from "../components/LevelButton";
-import {wordCategories} from "../const/wordCategories"
-import {levels} from "../const/levels"
+import { wordCategories } from "../constants/wordCategories";
+import { levels } from "../constants/levels";
+import { useMessage } from "../hooks/message.hook";
+// import { ToastContainer } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -89,31 +92,27 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-// const wordCategories = [
-//   { text: "Изучаемые слова" },
-//   { text: "Сложные слова" },
-//   { text: "Удаленные слова" },
-// ];
-// const levels = [1, 2, 3, 4, 5, 6];
-
 export default function DictionaryPage() {
   const { userId, token } = useContext(AuthContext);
   const [page, setPage] = useState(1);
+  const [count, setCount] = useState(null);
   const [activeWordButton, setActiveWordButton] = useState(0);
   const [activeLevel, setActiveLevel] = useState(null);
   const [data, setData] = useState([]);
   const [listUserWords, setlistUserWords] = useState([]);
+  const message = useMessage();
   const classes = useStyles();
   const func = useCallback(async () => {
     const result = await backRoutes.getUserWords({ userId, token });
-    console.log(result)
+    // console.log(page);
+    if (!result.userWords) return message(result.message);
     if (result.userWords.length) {
-      console.log('попали в if')
-      const filteredArr = result.userWords.filter((item) => !item.deleted)
+      // console.log("попали в if");
+      const filteredArr = result.userWords.filter((item) => !item.deleted);
       setData(filteredArr);
       setlistUserWords(result.userWords);
     }
-  }, [token, userId]);
+  }, [message, token, userId]);
 
   useEffect(() => {
     if (userId && token) {
@@ -156,18 +155,16 @@ export default function DictionaryPage() {
       if (activeWordButton === 0) {
         sectionArr = listUserWords.filter((item) => !item.deleted);
       } else if (activeWordButton === 1) {
-        sectionArr = listUserWords.filter(
-          (item) => item.difficult
-        );
+        sectionArr = listUserWords.filter((item) => item.difficult);
       } else if (activeWordButton === 2) {
         sectionArr = listUserWords.filter((item) => item.deleted);
       }
-      levelArr = sectionArr.filter(
-        (item) => item.group === activeLevel
-      );
+      levelArr = sectionArr.filter((item) => item.group === activeLevel);
     }
-    setData(levelArr);
-  }, [activeLevel, activeWordButton, listUserWords]);
+    const newArr = levelArr.length>20? (levelArr.slice(20 * (page - 1), 20 * page)): levelArr;
+    setData(newArr);
+    setCount(levelArr.length);
+  }, [activeLevel, activeWordButton, listUserWords, page]);
 
   return (
     <Container className={classes.container}>
@@ -206,23 +203,33 @@ export default function DictionaryPage() {
         <WordsCardList
           token={token}
           userId={userId}
-          userWordsForDictionari={data}
-          infoPanel={activeWordButton === 0 ? "Answers" : "WordInfo"}
+          isItBook={false}
+          infoPanel={
+            activeWordButton === 0
+              ? "DictionaryLearning"
+              : activeWordButton === 1
+              ? "DictionaryDifficult"
+              : "DictionaryDelete"
+          }
           activeWordButton={activeWordButton}
+          activeLevel={activeLevel}
+          userWordsForDictionari={data}
         />
       ) : (
         <Typography className={classes.message} variant="h1" component="h2">
-          Здесь еще нет слов
+          {token
+            ? "Здесь еще нет слов"
+            : "Войдите в приложение чтобы увидеть свой словарь"}
         </Typography>
       )}
       {data.length
         ? data.length &&
-          Math.ceil(data.length / 20) > 2 && (
+          Math.ceil(listUserWords.length / 20) > 1 && (
             <Pagination
               page={page}
               className={classes.pagination}
               onChange={handlePaginationChange}
-              count={data ? Math.ceil(data.length / 20) : 30}
+              count={count ? Math.ceil(count / 20) : 30}
               color="primary"
             />
           )

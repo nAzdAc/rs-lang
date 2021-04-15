@@ -25,10 +25,6 @@ import images from '../assets/images';
 import { AuthContext } from '../context/AuthContext';
 import { useHttp } from '../hooks/http.hook';
 import { backRoutes } from '../utils/backRoutes';
-
-import { useDispatch, useSelector } from 'react-redux';
-import { changeLoginStatus } from '../store/loginSlice';
-
 import { ToastContainer } from 'react-toastify';
 import { useMessage } from '../hooks/message.hook';
 import 'react-toastify/dist/ReactToastify.css';
@@ -102,8 +98,6 @@ const useStyles = makeStyles((theme) => ({
     position: 'absolute',
     top: '50%',
     left: '50%',
-    // marginTop: 'auto',
-    // marginLeft: 'auto',
   },
 }));
 
@@ -154,11 +148,7 @@ export default function SignInPage() {
       message(data.message, 200);
     } catch (e) {}
   }
-  const loggedin = useSelector((state) => state.login.LoggedIn);
-  const dispatch = useDispatch();
-  const handleLogin = () => {
-    dispatch(changeLoginStatus(true));
-  };
+
 
   return (
     <Container className={classes.main}>
