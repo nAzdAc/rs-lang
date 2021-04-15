@@ -6,6 +6,7 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import GradeIcon from "@material-ui/icons/Grade";
 import PlayCircleFilledIcon from "@material-ui/icons/PlayCircleFilled";
 import { Howl, Howler } from "howler";
+import { useSelector } from 'react-redux'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -47,6 +48,9 @@ export default function CardIcons({
 	setBlackStar
 }) {
   const classes = useStyles();
+
+	const deleteWordBtn = useSelector((state) => state.settings.DeleteWordBtn)
+	const difficultWordBtn = useSelector((state) => state.settings.DifficultWordBtn)
 
   const audio = new Howl({
     src: [`${originURL}/${audioWord}`],
@@ -120,7 +124,7 @@ export default function CardIcons({
         onClick={playWordsAudio}
         className={classes.icons}
       />
-      {userDifficultWords.includes(wordId) ? (
+      {difficultWordBtn?userDifficultWords.includes(wordId) ? (
         <GradeIcon
           className={`${classes.iconActive}`}
           onClick={setBlackStar}
@@ -130,11 +134,11 @@ export default function CardIcons({
           className={`${classes.icons}`}
           onClick={setGoldStar}
         ></GradeIcon>
-      )}
-      <DeleteIcon
+      ):null}
+      {deleteWordBtn?<DeleteIcon
         className={classes.icons}
         onClick={clickDelete}
-      />
+      />:null}
     </Box>
   );
 }
