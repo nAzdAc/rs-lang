@@ -98,8 +98,6 @@ const useStyles = makeStyles((theme) => ({
     position: 'absolute',
     top: '50%',
     left: '50%',
-    // marginTop: 'auto',
-    // marginLeft: 'auto',
   },
 }));
 
@@ -150,11 +148,7 @@ export default function SignInPage() {
       message(data.message, 200);
     } catch (e) {}
   }
-  // const loggedin = useSelector((state) => state.login.LoggedIn);
-  // const dispatch = useDispatch();
-  // const handleLogin = () => {
-  //   dispatch(changeLoginStatus(true));
-  // };
+
 
   return (
     <Container className={classes.main}>

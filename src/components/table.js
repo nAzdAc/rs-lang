@@ -19,6 +19,13 @@ export function DenseTable(props) {
   return (
     <TableContainer component={Paper}>
       <Table className={classes.table} size="small" aria-label="a dense table">
+        <TableHead>
+          <TableRow>
+            {props.head.map((item, i) => (
+              <TableCell key={i}>{item}</TableCell>
+            ))}
+          </TableRow>
+        </TableHead>
         <TableBody>
           {Object.keys(props.stats).map((item) => (
             <TableRow>
