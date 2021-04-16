@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { AuthContext } from '../context/AuthContext';
 import { MenuStyled } from '../styles/Menu.styled';
 import List from '@material-ui/core/List';
 import {
@@ -28,7 +29,7 @@ import { Enterpoint } from '../components/enterPoint';
 const useStyles = makeStyles({
   settings: {
     '&:hover, &:focus': {
-      transform: 'rotate(180deg)',
+      transform: 'rotate(360deg)',
       transition: '0.5s',
     },
   },
@@ -81,6 +82,7 @@ const Menu = () => {
   const anchorRefBook = React.useRef(null);
   const anchorRefGames = React.useRef(null);
   const classes = useStyles();
+  const { token } = useContext(AuthContext);
   const {
     // eslint-disable-next-line no-unused-vars
     location: { pathname },
@@ -240,26 +242,31 @@ const Menu = () => {
               )}
             </Popper>
           </div>
-          <NavItem
-            to={frontRoutes.dictionary}
-            text="Словарь"
-            navClass={classes.full}
-          />
-          <NavItem
-            to={frontRoutes.dictionary}
-            Icon={Bookmarks}
-            navClass={classes.icon}
-          />
-          <NavItem
-            to={frontRoutes.stats}
-            text="Статистика"
-            navClass={classes.full}
-          />
-          <NavItem
-            to={frontRoutes.stats}
-            Icon={ShowChart}
-            navClass={classes.icon}
-          />
+          {
+            token ? (
+            <>
+              <NavItem
+                to={frontRoutes.dictionary}
+                text="Словарь"
+                navClass={classes.full}
+              />
+              <NavItem
+                to={frontRoutes.dictionary}
+                Icon={Bookmarks}
+                navClass={classes.icon}
+              />
+              <NavItem
+                to={frontRoutes.stats}
+                text="Статистика"
+                navClass={classes.full}
+              />
+              <NavItem
+                to={frontRoutes.stats}
+                Icon={ShowChart}
+                navClass={classes.icon}
+              />
+            </>) : null
+          }
           <NavItem to={frontRoutes.settings} Icon={Settings} />
         </List>
       </MenuStyled>
