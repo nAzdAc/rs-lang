@@ -13,12 +13,19 @@ const useStyles = makeStyles(() => ({
     gap: 8,
     width: 200,
     alignItems: 'center',
+
+    '@media (max-width: 1080px)': {
+      width: '50px',
+    },
   },
 
   name: {
     margin: 0,
     padding: 0,
     color: '#ffffff',
+    '@media (max-width: 1080px)': {
+      display: 'none',
+    },
   },
 
   logout: {
@@ -39,6 +46,9 @@ const useStyles = makeStyles(() => ({
     color: '#FFF',
     '&:hover': {
       background: '#00D9CE',
+    },
+    '@media (max-width: 1080px)': {
+      width: '48px',
     },
   },
 
