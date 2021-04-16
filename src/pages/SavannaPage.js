@@ -173,7 +173,10 @@ export const SavannaPage = (props) => {
     state=>state.words.wordsRedux,
   );
 
-  const getWords = async () => wordsRedux.length === 0 ? await request(`${backRoutes.words}?group=3&page=1`, 'GET') : wordsRedux;
+  const getWords = useCallback (
+    async () => wordsRedux.length === 0 ? await request(`${backRoutes.words}?group=3&page=1`, 'GET') : wordsRedux, 
+    [request, wordsRedux]
+  );
 
 	const fetchWords = useCallback(
 		async () => {
@@ -203,7 +206,7 @@ export const SavannaPage = (props) => {
 				console.log(e);
 			}
 		},
-		[ request, token, userId ]
+		[token, userId, getWords]
 	);
 
 	useEffect(
@@ -367,7 +370,6 @@ export const SavannaPage = (props) => {
 	}
 	return (
 		<div className={classes.root}>
-      {console.log(wordsRedux)}
 			<ToastContainer />
 			{endGame ? (
 				<GameStats lifes={lifes} correctAnswers={correctAnswers} failAnswers={failAnswers} />

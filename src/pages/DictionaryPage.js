@@ -15,6 +15,10 @@ import { levels } from "../constants/levels";
 import { useMessage } from "../hooks/message.hook";
 // import { ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
+import { Link } from "react-router-dom";
+import { useHttp } from '../hooks/http.hook';
+import { addWords } from '../store/wordsSlice';
+import { useDispatch } from 'react-redux';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -90,6 +94,19 @@ const useStyles = makeStyles((theme) => ({
     margin: "40px",
     fontSize: "40px",
   },
+  titleGames: {
+    marginBottom: '24px',
+  },
+  gamesButtonsWrapper: {
+    width: '500px',
+    display: 'flex',
+    justifyContent: 'space-between'
+  },
+  gamesWrapper: {
+    width: "100%",
+    marginTop: "24px",
+    textAlign: 'left'
+  }
 }));
 
 export default function DictionaryPage() {
@@ -102,6 +119,11 @@ export default function DictionaryPage() {
   const [listUserWords, setlistUserWords] = useState([]);
   const message = useMessage();
   const classes = useStyles();
+  const [wordsArr, setWordsArr] = useState([]);
+  const { request } = useHttp();
+  const [wordsReady, setWordsReady] = useState(false);
+  const dispatch = useDispatch();
+
   const func = useCallback(async () => {
     const result = await backRoutes.getUserWords({ userId, token });
     // console.log(page);
@@ -114,11 +136,28 @@ export default function DictionaryPage() {
     }
   }, [message, token, userId]);
 
+  const fetchWordsForDictionary = useCallback(async () => {
+    const cards = await Promise.all(
+      data.map(async (item) => {
+        const result = await request(backRoutes.getWord(item.wordId), "GET");
+        result.correct = item.correct;
+        result.fail = item.fail;
+        return result;
+      })
+    );
+    setWordsArr(cards);
+    setWordsReady(true);
+  }, [data, request]);
+
   useEffect(() => {
     if (userId && token) {
       func();
     }
   }, [func, token, userId]);
+
+  useEffect(() => {
+    fetchWordsForDictionary();
+  }, [fetchWordsForDictionary]);
 
   const handlePaginationChange = (e, value) => {
     setPage(value);
@@ -166,6 +205,13 @@ export default function DictionaryPage() {
     setCount(levelArr.length);
   }, [activeLevel, activeWordButton, listUserWords, page]);
 
+  useEffect(
+		() => {
+      dispatch(addWords(wordsArr));
+		},
+		[wordsArr, dispatch]
+	);
+
   return (
     <Container className={classes.container}>
       <Box className={classes.titleBox}>
@@ -199,6 +245,48 @@ export default function DictionaryPage() {
           />
         ))}
       </ul>
+      {
+        wordsReady ? (
+          <div className={classes.gamesWrapper}>
+            <Typography className={classes.titleGames} variant="h3" component="h4">
+              Выберите игру: 
+            </Typography>
+            <div className={classes.gamesButtonsWrapper}>
+              <Link to={{
+                pathname: '/games/savanna',
+                }}
+              >
+                <Button className={classes.button} variant="contained" size="medium">
+                  Саванна
+                </Button>
+              </Link>
+              <Link to={{
+                pathname: '/games/audio',
+                }}
+              >
+                <Button className={classes.button} variant="contained" size="medium">
+                  Аудиовызов
+                </Button>
+              </Link>
+              <Link to={{
+                pathname: '/games/sprint',
+                }}
+              >
+                <Button className={classes.button} variant="contained" size="medium">
+                  Спринт
+                </Button>
+              </Link>
+              <Link to={{
+                pathname: '/games/match',
+                }}
+              >
+                <Button className={classes.button} variant="contained" size="medium">
+                  Match
+                </Button>
+              </Link>
+            </div>
+          </div>) : null
+      }
       {data.length ? (
         <WordsCardList
           token={token}

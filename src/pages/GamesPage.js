@@ -58,6 +58,7 @@ const GamesPage = () => {
     location: { pathname },
   } = useHistory();
   const isGamesRoute = pathname.slice(1).split('/').length === 1;
+  // eslint-disable-next-line no-unused-vars
   const { path } = useRouteMatch();
 
   return (

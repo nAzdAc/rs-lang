@@ -82,6 +82,7 @@ const Menu = () => {
   const anchorRefGames = React.useRef(null);
   const classes = useStyles();
   const {
+    // eslint-disable-next-line no-unused-vars
     location: { pathname },
   } = useHistory();
 

@@ -151,7 +151,10 @@ export const SprintPage = () => {
     state=>state.words.wordsRedux,
   );
 
-  const getWords = async () => wordsRedux.length === 0 ? await request(`${backRoutes.words}?group=3&page=1`, 'GET') : wordsRedux;
+  const getWords = useCallback (
+    async () => wordsRedux.length === 0 ? await request(`${backRoutes.words}?group=3&page=1`, 'GET') : wordsRedux, 
+    [request, wordsRedux]
+  );
 
 	const fetchWords = useCallback(
 		async () => {
@@ -176,7 +179,7 @@ export const SprintPage = () => {
 				console.log(e);
 			}
 		},
-		[ request, token, userId ]
+		[ getWords, token, userId ]
 	);
 
 	useEffect(

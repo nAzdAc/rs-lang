@@ -54,6 +54,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     marginTop: "160px",
     marginRight: "auto",
+    marginBottom: '24px',
   },
   pagination: {
     margin: "40px",
@@ -163,7 +164,6 @@ export default function WordsPage() {
             <div className={classes.gamesButtonsWrapper}>
               <Link to={{
                 pathname: '/games/savanna',
-                state: { words: fetchUrl }
                 }}
               >
                 <Button className={classes.button} variant="contained" size="medium">
@@ -172,7 +172,6 @@ export default function WordsPage() {
               </Link>
               <Link to={{
                 pathname: '/games/audio',
-                state: { words: fetchUrl }
                 }}
               >
                 <Button className={classes.button} variant="contained" size="medium">
@@ -181,7 +180,6 @@ export default function WordsPage() {
               </Link>
               <Link to={{
                 pathname: '/games/sprint',
-                state: { words: fetchUrl }
                 }}
               >
                 <Button className={classes.button} variant="contained" size="medium">
@@ -190,7 +188,6 @@ export default function WordsPage() {
               </Link>
               <Link to={{
                 pathname: '/games/match',
-                state: { words: fetchUrl }
                 }}
               >
                 <Button className={classes.button} variant="contained" size="medium">
