@@ -7,8 +7,8 @@ export const MenuStyled = styled.nav`
   align-items: center;
   color: #FFFFFF;
 
-  @media (max-width: 800px) {
-    width: 50%;
+  @media (max-width: 1080px) {
+    width: unset;
   }
 
   > ul {

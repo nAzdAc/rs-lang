@@ -20,6 +20,9 @@ import { AuthContext } from '../context/AuthContext';
 import { useEndGame } from '../hooks/endGame.hook';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useSelector } from 'react-redux';
+import { deleteWords } from '../store/wordsSlice';
+import { useDispatch } from 'react-redux';
 
 const useStyles = makeStyles({
 	root: {
@@ -139,7 +142,7 @@ const keyCodeArray = {
 	num4: 37
 };
 
-export const SavannaPage = () => {
+export const SavannaPage = (props) => {
 	const classes = useStyles();
 	const { request } = useHttp();
 	const { postUserWords, postStats, postAnswers } = useEndGame();
@@ -164,12 +167,24 @@ export const SavannaPage = () => {
 	const [ currentSeries, setCurrentSeries ] = useState(0);
 	const [ allSeries, setAllSeries ] = useState([]);
 	const seriesContainer = useRef('');
+  const dispatch = useDispatch();
+
+  const wordsRedux = useSelector(
+    state=>state.words.wordsRedux,
+  );
+
+  const getWords = useCallback (
+    async () => wordsRedux.length === 0 ? await request(`${backRoutes.words}?group=3&page=1`, 'GET') : wordsRedux, 
+    [request, wordsRedux]
+  );
 
 	const fetchWords = useCallback(
 		async () => {
 			try {
 				const data = await backRoutes.getUserWords({ userId, token });
-				const arr = await request(`${backRoutes.words}?group=3&page=1`, 'GET');
+				const arr =  await getWords();
+
+        console.log(arr);
 
 				const allWords = arr.map((item) => {
 					return {
@@ -191,7 +206,7 @@ export const SavannaPage = () => {
 				console.log(e);
 			}
 		},
-		[ request, token, userId ]
+		[token, userId, getWords]
 	);
 
 	useEffect(
@@ -339,9 +354,10 @@ export const SavannaPage = () => {
 			document.addEventListener('keydown', keyboardClick);
 			return () => {
 				document.removeEventListener('keydown', keyboardClick);
+        dispatch(deleteWords());
 			};
 		},
-		[ answer, endGame ]
+		[dispatch, answer, endGame ]
 	);
 
 	const setFourRef = (btn, index) => {

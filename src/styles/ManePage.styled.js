@@ -51,7 +51,7 @@ export const useStyles = makeStyles({
       margin: '0 0 20px 0',
     },
 
-    '@media (max-width: 960px)': {
+    '@media (max-width: 1080px)': {
       padding: '20px 80px 30px 80px',
     },
 
