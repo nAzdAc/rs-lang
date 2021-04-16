@@ -4,7 +4,7 @@ import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 
-import { Link } from 'react-router-dom';
+import { Link, Redirect, Route } from 'react-router-dom';
 
 import Box from '@material-ui/core/Box';
 
@@ -25,10 +25,11 @@ import images from '../assets/images';
 import { AuthContext } from '../context/AuthContext';
 import { useHttp } from '../hooks/http.hook';
 import { backRoutes } from '../utils/backRoutes';
+
 import { ToastContainer } from 'react-toastify';
 import { useMessage } from '../hooks/message.hook';
 import 'react-toastify/dist/ReactToastify.css';
-
+// import { useAuth } from '../hooks/auth.hook';
 const useStyles = makeStyles((theme) => ({
   mainBox: {
     width: '400px',
@@ -104,7 +105,7 @@ const useStyles = makeStyles((theme) => ({
 export default function SignInPage() {
   const message = useMessage();
   const { request, error, clearError } = useHttp();
-  const auth = useContext(AuthContext);
+  const { token, login } = useContext(AuthContext);
   const classes = useStyles();
   const [form, setForm] = useState({
     email: '',
@@ -114,6 +115,10 @@ export default function SignInPage() {
     password: '',
     showPassword: false,
   });
+
+  // const { token } = useAuth();
+  console.log(token);
+  const isAuthenticated = !!token;
 
   useEffect(() => {
     console.log(error);
@@ -138,118 +143,125 @@ export default function SignInPage() {
     try {
       const data = await request(backRoutes.signIn, 'POST', { ...form });
       console.log(data);
-      auth.login(
+      login(
         data.token,
         data.refreshToken,
         data.userId,
         data.name,
         data.avatarURL
       );
+
       message(data.message, 200);
     } catch (e) {}
   }
 
-
-  return (
-    <Container className={classes.main}>
-      <Container component="main" maxWidth="xs" className={classes.mainBox}>
-        <CssBaseline />
-        <div className={classes.paper}>
-          <Typography
-            component="h1"
-            variant="h2"
-            align="left"
-            className={classes.title}
-          >
-            Аккаунт
-          </Typography>
-          <form className={classes.form} noValidate onSubmit={handleSubmit}>
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Электропочта"
-              name="email"
-              autoComplete="email"
-              autoFocus
-              value={form.email}
-              onChange={handleFormChange}
-              className={classes.email}
-            />
+  if (isAuthenticated) {
+    return <Redirect to="/book" />;
+  } else
+    return (
+      <Container className={classes.main}>
+        <Container component="main" maxWidth="xs" className={classes.mainBox}>
+          <CssBaseline />
+          <div className={classes.paper}>
             <Typography
               component="h1"
-              variant="subtitle2"
+              variant="h2"
               align="left"
-              className={classes.info}
+              className={classes.title}
             >
-              Используйте настоящую
+              Аккаунт
             </Typography>
-            <FormControl
-              className={classes.passwordField}
-              variant="outlined"
-              value={form.password}
-              onChange={handleFormChange}
-            >
-              <InputLabel
-                value={form.password}
-                htmlFor="outlined-adornment-password"
-              >
-                Пароль
-              </InputLabel>
-              <OutlinedInput
-                name="password"
-                id="outlined-adornment-password"
-                type={values.showPassword ? 'text' : 'password'}
-                value={values.password}
-                onChange={handleChange('password')}
-                endAdornment={
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      onClick={handleClickShowPassword}
-                      onMouseDown={handleMouseDownPassword}
-                      edge="end"
-                    >
-                      {values.showPassword ? <Visibility /> : <VisibilityOff />}
-                    </IconButton>
-                  </InputAdornment>
-                }
-                labelWidth={70}
-              />
-            </FormControl>
-            <ToastContainer className={classes.info} />
-            <Typography
-              component="h1"
-              variant="subtitle2"
-              align="left"
-              className={classes.info}
-            >
-              Минимум 6 символов
-            </Typography>
-            <Box className={classes.buttonBox}>
-              <Button
-                type="submit"
-                // onClick={handleLogin}
+            <form className={classes.form} noValidate onSubmit={handleSubmit}>
+              <TextField
+                variant="outlined"
+                margin="normal"
+                required
                 fullWidth
-                variant="contained"
-                color="primary"
-                className={classes.submit}
+                id="email"
+                label="Электропочта"
+                name="email"
+                autoComplete="email"
+                autoFocus
+                value={form.email}
+                onChange={handleFormChange}
+                className={classes.email}
+              />
+              <Typography
+                component="h1"
+                variant="subtitle2"
+                align="left"
+                className={classes.info}
               >
-                Войти
-              </Button>
+                Используйте настоящую
+              </Typography>
+              <FormControl
+                className={classes.passwordField}
+                variant="outlined"
+                value={form.password}
+                onChange={handleFormChange}
+              >
+                <InputLabel
+                  value={form.password}
+                  htmlFor="outlined-adornment-password"
+                >
+                  Пароль
+                </InputLabel>
+                <OutlinedInput
+                  name="password"
+                  id="outlined-adornment-password"
+                  type={values.showPassword ? 'text' : 'password'}
+                  value={values.password}
+                  onChange={handleChange('password')}
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowPassword}
+                        onMouseDown={handleMouseDownPassword}
+                        edge="end"
+                      >
+                        {values.showPassword ? (
+                          <Visibility />
+                        ) : (
+                          <VisibilityOff />
+                        )}
+                      </IconButton>
+                    </InputAdornment>
+                  }
+                  labelWidth={70}
+                />
+              </FormControl>
+              <ToastContainer className={classes.info} />
+              <Typography
+                component="h1"
+                variant="subtitle2"
+                align="left"
+                className={classes.info}
+              >
+                Минимум 6 символов
+              </Typography>
+              <Box className={classes.buttonBox}>
+                <Button
+                  type="submit"
+                  // onClick={handleLogin}
+                  fullWidth
+                  variant="contained"
+                  color="primary"
+                  className={classes.submit}
+                >
+                  Войти
+                </Button>
 
-              <Button className={classes.register}>
-                <Link className={classes.link} to={'/signup'}>
-                  Регистрация
-                </Link>
-              </Button>
-            </Box>
-          </form>
-        </div>
+                <Button className={classes.register}>
+                  <Link className={classes.link} to={'/signup'}>
+                    Регистрация
+                  </Link>
+                </Button>
+              </Box>
+            </form>
+          </div>
+        </Container>
+        <img className={classes.image} src={images.log} alt="rs" />
       </Container>
-      <img className={classes.image} src={images.log} alt="rs" />
-    </Container>
-  );
+    );
 }
