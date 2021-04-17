@@ -159,6 +159,23 @@ export const backRoutes = {
       console.log(e);
     }
   },
+  getUserWordsForDictionary: async ({ userId, token }) => {
+    try {
+      const rawResponse = await fetch(`${originURL}/users/${userId}/words/dictionary`, {
+        method: 'GET',
+        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: 'application/json',
+        },
+      });
+      const content = await rawResponse.json();
+      console.log(content);
+      return content;
+    } catch (e) {
+      console.log(e);
+    }
+  },
   getWord(wordId) {
     return `${originURL}/words/${wordId}`;
   },

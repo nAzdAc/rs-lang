@@ -2,7 +2,7 @@
 
 
 
-export const showTitle = (fails, lifes) => {
+export const showTitle = (fails, corrects, lifes) => {
 	let title = '';
 	if (lifes <= 0) return 'Ты смог потерять все жизни. Это ещё никому не удавалось. Молодец!:)'
 	if (fails < 2) {
