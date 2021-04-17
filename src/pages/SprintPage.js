@@ -21,6 +21,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useSelector } from 'react-redux';
 import { deleteWords } from '../store/wordsSlice';
 import { useDispatch } from 'react-redux';
+import { deleteLevel } from '../store/levelSlice';
 
 const useStyles = makeStyles({
 	root: {
@@ -145,23 +146,25 @@ export const SprintPage = () => {
 	const audioFail = useMemo(() => createSound(failSong, soundVolume * 5), [ soundVolume ]);
 	const audioFon = useMemo(() => createSound(fonSong, musicVolume * 0.1, 1, true), [ musicVolume ]);
 
-  const dispatch = useDispatch();
-
-  const wordsRedux = useSelector(
-    state=>state.words.wordsRedux,
-  );
-
-  const getWords = useCallback (
-    async () => wordsRedux.length === 0 ? await request(`${backRoutes.words}?group=3&page=1`, 'GET') : wordsRedux, 
-    [request, wordsRedux]
-  );
+	const dispatch = useDispatch();
+	const wordsRedux = useSelector((state) => state.words.wordsRedux);
+	const levelRedux = useSelector((state) => state.level.level)
 
 	const fetchWords = useCallback(
 		async () => {
 			try {
 				const data = await backRoutes.getUserWords({ userId, token });
-				const arr = await getWords();
-        console.log(arr);
+				let arr = [];
+				if (wordsRedux.length) {
+					arr = wordsRedux;
+				} else if (levelRedux !== null) {
+					const randomPage = getRandomInt(0, 31);
+					arr = await request(`${backRoutes.words}?group=${levelRedux}&page=${randomPage}`, 'GET');
+				} else {
+					const randomGroup = getRandomInt(0, 6);
+					const randomPage = getRandomInt(0, 31);
+					arr = await request(`${backRoutes.words}?group=${randomGroup}&page=${randomPage}`, 'GET');
+				}
 				const allWords = arr.map((item) => {
 					return {
 						english: item.word,
@@ -179,7 +182,7 @@ export const SprintPage = () => {
 				console.log(e);
 			}
 		},
-		[ getWords, token, userId ]
+		[levelRedux, request, token, userId, wordsRedux]
 	);
 
 	useEffect(
@@ -190,7 +193,7 @@ export const SprintPage = () => {
 				postAnswers(correctAnswers, failAnswers);
 			}
 		},
-		[allSeries, correctAnswers, endGame, failAnswers, postAnswers, postStats, postUserWords]
+		[ allSeries, correctAnswers, endGame, failAnswers, postAnswers, postStats, postUserWords ]
 	);
 
 	const answer = useCallback(
@@ -285,10 +288,19 @@ export const SprintPage = () => {
 			document.addEventListener('keydown', keyboardClick);
 			return () => {
 				document.removeEventListener('keydown', keyboardClick);
-        dispatch(deleteWords());
 			};
 		},
-		[dispatch, answer, endGame]
+		[ answer, endGame ]
+	);
+
+	useEffect(
+		() => {
+			return () => {
+				dispatch(deleteWords());
+				dispatch(deleteLevel())
+			};
+		},
+		[ dispatch ]
 	);
 
 	function goFullScreen(elem) {
