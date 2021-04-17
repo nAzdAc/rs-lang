@@ -19,6 +19,7 @@ import { Link } from "react-router-dom";
 import { useHttp } from '../hooks/http.hook';
 import { addWords } from '../store/wordsSlice';
 import { useDispatch } from 'react-redux';
+import filterDictionary from "../utils/filterDictionary";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -176,33 +177,10 @@ export default function DictionaryPage() {
   };
 
   useEffect(() => {
-    // console.log(`level: ${activeLevel} ; button:  ${activeWordButton}`);
-    let sectionArr = [];
-    let levelArr = [];
-    if (activeLevel === null) {
-      if (activeWordButton === 0) {
-        sectionArr = listUserWords.filter((item) => !item.deleted);
-      } else if (activeWordButton === 1) {
-        sectionArr = listUserWords.filter(
-          (item) => item.difficult && !item.deleted
-        );
-      } else if (activeWordButton === 2) {
-        sectionArr = listUserWords.filter((item) => item.deleted);
-      }
-      levelArr = sectionArr;
-    } else {
-      if (activeWordButton === 0) {
-        sectionArr = listUserWords.filter((item) => !item.deleted);
-      } else if (activeWordButton === 1) {
-        sectionArr = listUserWords.filter((item) => item.difficult);
-      } else if (activeWordButton === 2) {
-        sectionArr = listUserWords.filter((item) => item.deleted);
-      }
-      levelArr = sectionArr.filter((item) => item.group === activeLevel);
-    }
-    const newArr = levelArr.length>20? (levelArr.slice(20 * (page - 1), 20 * page)): levelArr;
+    const userWordsArr = filterDictionary(activeLevel ,listUserWords, activeWordButton)
+    const newArr = userWordsArr.length>20? (userWordsArr.slice(20 * (page - 1), 20 * page)): userWordsArr;
     setData(newArr);
-    setCount(levelArr.length);
+    setCount(userWordsArr.length);
   }, [activeLevel, activeWordButton, listUserWords, page]);
 
   useEffect(
