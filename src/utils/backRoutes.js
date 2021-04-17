@@ -1,7 +1,7 @@
 import { LOCAL_STORAGE_KEY } from './storageKey';
 
-// export const originURL = 'http://localhost:8080';
-export const originURL = 'https://react-learnwords.herokuapp.com';
+export const originURL = 'http://localhost:8080';
+// export const originURL = 'https://react-learnwords.herokuapp.com';
 
 //  ?group=1&page=1
 

@@ -10,7 +10,7 @@ import failSong2 from '../assets/sounds/fail.mp3';
 import fonSong from '../assets/sounds/fon.mp3';
 import { backRoutes } from '../utils/backRoutes';
 import { CircularProgress } from '@material-ui/core';
-import { createSound, getWordsForPlay, shuffleAllElements } from '../utils/helpers';
+import { createSound, getRandomInt, getWordsForPlay, shuffleAllElements } from '../utils/helpers';
 import { GameStats } from '../components/GameStats';
 import { useHttp } from '../hooks/http.hook';
 import { Transition } from 'react-transition-group';
@@ -172,20 +172,23 @@ export const SavannaPage = (props) => {
   const wordsRedux = useSelector(
     state=>state.words.wordsRedux,
   );
-
-  const getWords = useCallback (
-    async () => wordsRedux.length === 0 ? await request(`${backRoutes.words}?group=3&page=1`, 'GET') : wordsRedux, 
-    [request, wordsRedux]
-  );
+	const levelRedux = useSelector((state) => state.level.level)
 
 	const fetchWords = useCallback(
 		async () => {
 			try {
 				const data = await backRoutes.getUserWords({ userId, token });
-				const arr =  await getWords();
-
-        console.log(arr);
-
+				let arr = [];
+				if (wordsRedux.length) {
+					arr = wordsRedux;
+				} else if (levelRedux !== null) {
+					const randomPage = getRandomInt(0, 31);
+					arr = await request(`${backRoutes.words}?group=${levelRedux}&page=${randomPage}`, 'GET');
+				} else {
+					const randomGroup = getRandomInt(0, 6);
+					const randomPage = getRandomInt(0, 31);
+					arr = await request(`${backRoutes.words}?group=${randomGroup}&page=${randomPage}`, 'GET');
+				}
 				const allWords = arr.map((item) => {
 					return {
 						english: item.word,
@@ -206,7 +209,7 @@ export const SavannaPage = (props) => {
 				console.log(e);
 			}
 		},
-		[token, userId, getWords]
+		[levelRedux, request, token, userId, wordsRedux]
 	);
 
 	useEffect(

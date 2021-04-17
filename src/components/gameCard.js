@@ -11,7 +11,7 @@ const useStyles = makeStyles({
     paddingTop: 20,
     paddingLeft: 40,
     paddingRight: 60,
-    paddingBottom: 80,
+    paddingBottom: 40,
     width: 200,
   },
 
@@ -31,22 +31,22 @@ const useStyles = makeStyles({
   link: { textDecoration: 'none' },
 });
 
-export const GameCard = (props) => {
+export const GameCard = ({name, todo, to, activeLevel}) => {
   const classes = useStyles();
-
+  console.log(activeLevel)
   return (
     <div className={classes.root}>
       <Paper className={classes.card}>
         <Typography variant="h4" className={classes.cardTitle}>
-          {props.name}
+          {name}
         </Typography>
         <Typography variant="subtitle1" className={classes.cardText}>
-          {props.todo}
+          {todo}
         </Typography>
-        <NavLink to={props.to} className={classes.link}>
-          <Button className={classes.button} variant="contained" size="medium">
+        <NavLink to={to} className={classes.link}>
+          {activeLevel !== null ? <Button className={classes.button} variant="contained" size="medium">
             Начать
-          </Button>
+          </Button> : null}
         </NavLink>
       </Paper>
     </div>

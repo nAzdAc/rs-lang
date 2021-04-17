@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import Typography from '@material-ui/core/Typography';
 
@@ -11,6 +11,11 @@ import { MatchPage } from './MatchPage';
 import { AudioPage } from './AudioPage';
 import { SavannaPage } from './SavannaPage';
 import { GameCard } from '../components/gameCard';
+import { Box } from '@material-ui/core';
+import LevelButton from '../components/LevelButton';
+import { levels } from '../constants/levels';
+import { useDispatch } from 'react-redux';
+import { deleteLevel, setLevel } from '../store/levelSlice'
 
 const useStyles = makeStyles({
   root: {
@@ -23,17 +28,47 @@ const useStyles = makeStyles({
     rowGap: '1rem',
   },
   title: {
-    paddingTop: '80px',
-    marginBottom: '40px',
+    paddingTop: '20px',
+    marginBottom: '20px',
+  },
+  buttonBox: {
+    display: 'flex',
+    marginRight: 'auto',
+    flexWrap: 'wrap',
   },
 });
 
 const Games = () => {
   const classes = useStyles();
+  const [activeLevel, setActiveLevel] = useState(null);
+  const dispatch = useDispatch();
+  function handleLevelsClick(index) {
+		if (index === activeLevel) {
+			setActiveLevel(null);
+      dispatch(deleteLevel())
+		} else {
+			setActiveLevel(index);
+      dispatch(setLevel(index))
+		}
+	};
+
 
   return (
     <div className={classes.root}>
-      <Typography variant="h2" className={classes.title}>
+      <Typography className={classes.title} variant="h3">
+          Выберите уровень сложности
+        </Typography>
+        <Box className={classes.buttonBox}>
+        {levels.map((item, index) => (
+					<LevelButton
+						key={index}
+						click={() => handleLevelsClick(index)}
+						group={item}
+						isActive={index === activeLevel ? true : false}
+					/>
+				))}
+        </Box>
+      <Typography variant="h3" className={classes.title}>
         Выберите игру
       </Typography>
       <div className={classes.cards}>
@@ -41,6 +76,7 @@ const Games = () => {
           return (
             <div key={index}>
               <GameCard
+              activeLevel={activeLevel}
                 name={card.name}
                 todo={card.todo}
                 to={card.to}
