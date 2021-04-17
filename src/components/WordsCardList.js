@@ -48,6 +48,7 @@ export default function WordsCardList({
   const [userWords, setUserWords] = useState([]);
   const [userDifficultWords, setUserDifficultWords] = useState([]);
   // const message = useMessage();
+  // console.log(wordsForDictionari)
   
   const translateWordBtn = useSelector(
     (state) => state.settings.TranslateWordBtn
@@ -55,8 +56,6 @@ export default function WordsCardList({
   const translateSentenceWordBtn = useSelector(
     (state) => state.settings.TranslateSentenceBtn
   );
-  // console.log(wordsArr)
-  console.log(wordsForDictionari?wordsForDictionari:null)
 
   const fetchWordsForBook = useCallback(async () => {
     const deleteUserWords = [];
@@ -79,10 +78,10 @@ export default function WordsCardList({
     }
   }, [userWords, request, fetchUrl]);
 
-
   const getUserWords = useCallback(async () => {
     const result = await backRoutes.getUserWords({ userId, token });
     // message(result.message, 200);
+    
     if (result.userWords && result.userWords.length) {
       setUserWords(result.userWords);
       const arr = result.userWords.map((item) =>
@@ -205,7 +204,7 @@ export default function WordsCardList({
                 <CreatePanel
                   panel={infoPanel}
                   userWords={userWords}
-                  difficulty={difficulty}
+                  difficult={item.difficult}
                   wordId={item.id}
                   wordAudio={item.audio}
                   wordAudioExample={item.audioExample}

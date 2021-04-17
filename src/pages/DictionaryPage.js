@@ -16,7 +16,7 @@ import { useMessage } from '../hooks/message.hook';
 // import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Link } from 'react-router-dom';
-import { useHttp } from '../hooks/http.hook';
+
 import { addWords } from '../store/wordsSlice';
 import { useDispatch } from 'react-redux';
 import filterDictionary from "../utils/filterDictionary";
@@ -116,60 +116,28 @@ export default function DictionaryPage() {
   const [count, setCount] = useState(null);
   const [activeWordButton, setActiveWordButton] = useState(0);
   const [activeLevel, setActiveLevel] = useState(null);
-  const [data, setData] = useState([]);
   const [listUserWords, setlistUserWords] = useState([]);
   const message = useMessage();
   const classes = useStyles();
   const [wordsArr, setWordsArr] = useState([]);
-  const { request } = useHttp();
   const [wordsReady, setWordsReady] = useState(false);
   const dispatch = useDispatch();
-  console.log(wordsArr);
 
-  const func = useCallback(async () => {
-    const result = await backRoutes.getUserWords({ userId, token });
-    console.log(result)
-    if (!result.userWords) return message(result.message);
-    if (result.userWords.length) {
-      // console.log("попали в if");
-      // const filteredArr = result.userWords.filter((item) => !item.deleted);
-      // setData(filteredArr);
-      setlistUserWords(result.userWords);
+  const getUserWords = useCallback(async () => {
+    const result = await backRoutes.getUserWordsForDictionary({ userId, token });
+    if (!result.dictionaryWords) return message(result.message);
+    if (result.dictionaryWords.length) {
+      setlistUserWords(result.dictionaryWords);
     }
   }, [message, token, userId]);
-
-  const fetchWordsForDictionary = useCallback(async () => {
-    // console.log(data)
-    if(data.length){
-      const cards = await Promise.all(
-        data.map(async (item) => {
-          const result = await request(backRoutes.getWord(item.wordId), "GET");
-          result.correct = item.correct;
-          result.fail = item.fail;
-          return result;
-        })
-      );
-      setWordsArr(cards);
-      setWordsReady(true);
-    }
-    
-   
-  }, [data, request]);
 
 	useEffect(
 		() => {
 			if (userId && token) {
-				func();
+				getUserWords();
 			}
 		},
-		[ func, token, userId ]
-	);
-
-	useEffect(
-		() => {
-			fetchWordsForDictionary();
-		},
-		[ fetchWordsForDictionary ]
+		[ getUserWords, token, userId ]
 	);
 
 	const handlePaginationChange = (e, value) => {
@@ -192,7 +160,10 @@ export default function DictionaryPage() {
   useEffect(() => {
     const userWordsArr = filterDictionary(activeLevel ,listUserWords, activeWordButton)
     const newArr = userWordsArr.length>20? (userWordsArr.slice(20 * (page - 1), 20 * page)): userWordsArr;
-    setData(newArr);
+    setWordsArr(newArr);
+    if(newArr.length){
+      setWordsReady(true)
+    }
     setCount(userWordsArr.length);
   }, [activeLevel, activeWordButton, listUserWords, page]);
 
@@ -279,7 +250,7 @@ export default function DictionaryPage() {
             </div>
           </div>) : null
       }
-      {data.length ? (
+      {wordsArr.length ? (
         <WordsCardList
           token={token}
           userId={userId}
@@ -302,8 +273,8 @@ export default function DictionaryPage() {
             : "Войдите в приложение чтобы увидеть свой словарь"}
         </Typography>
       )}
-      {data.length
-        ? data.length &&
+      {wordsArr.length
+        ? wordsArr.length &&
           Math.ceil(listUserWords.length / 20) > 1 && (
             <Pagination
               page={page}

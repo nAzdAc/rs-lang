@@ -2,8 +2,6 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
-// import Button from '@material-ui/core/Button';
-// import { backRoutes } from '../utils/backRoutes';
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -46,17 +44,6 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Answers({ fail, correct, token, userId, wordId }) {
 	const classes = useStyles();
-
-	// const handleButtonClick = () => {
-	// 	backRoutes.createUserWord({
-	// 		userId: userId,
-	// 	wordId: wordId,
-	// 	word: {
-	// 		deleted: true,
-	// 	},
-	// 	token: token,
-	// 	});
-	// };
 	return (
 		<Box className={classes.box}>
 			<Typography className={classes.title} variant="h1" component="h4">
@@ -65,9 +52,6 @@ export default function Answers({ fail, correct, token, userId, wordId }) {
 			<Typography className={classes.title} variant="h1" component="h4">
 				Ошибки: <span className={classes.wrong}>{fail ? fail : 0}</span>
 			</Typography>
-			{/* <Button variant="contained" className={classes.button} onClick={handleButtonClick}>
-				Удалить
-			</Button> */}
 		</Box>
 	);
 }
