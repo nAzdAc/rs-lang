@@ -127,12 +127,14 @@ export default function DictionaryPage() {
 	const func = useCallback(
 		async () => {
 			const result = await backRoutes.getUserWords({ userId, token });
-			console.log(result)
+			const zalupa = await backRoutes.getUserWordsForDictionary({ userId, token });
+			console.log(result);
+			console.log(zalupa);
 			if (!result.userWords) return message(result.message);
 			if (result.userWords.length) {
 				// console.log("попали в if");
 				const filteredArr = result.userWords.filter((item) => !item.deleted);
-        console.log(filteredArr)
+				console.log(filteredArr);
 				setData(filteredArr);
 				setlistUserWords(result.userWords);
 			}
@@ -150,7 +152,7 @@ export default function DictionaryPage() {
 					return result;
 				})
 			);
-      console.log(cards)
+			console.log(cards);
 			setWordsArr(cards);
 			setWordsReady(true);
 		},
