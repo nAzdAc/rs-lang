@@ -10,7 +10,7 @@ import failSong2 from '../assets/sounds/fail.mp3';
 import { backRoutes } from '../utils/backRoutes';
 import { CircularProgress } from '@material-ui/core';
 import SpeakerIcon from '@material-ui/icons/Speaker';
-import { createSound, getWordsForPlay, shuffleAllElements } from '../utils/helpers';
+import { createSound, getRandomInt, getWordsForPlay, shuffleAllElements } from '../utils/helpers';
 import { originURL } from '../utils/backRoutes';
 import { GameStats } from '../components/GameStats';
 import { useHttp } from '../hooks/http.hook';
@@ -180,17 +180,25 @@ export const AudioPage = () => {
   const wordsRedux = useSelector(
     state=>state.words.wordsRedux,
   );
+	const levelRedux = useSelector((state) => state.level.level)
 
-  const getWords = useCallback (
-    async () => wordsRedux.length === 0 ? await request(`${backRoutes.words}?group=3&page=1`, 'GET') : wordsRedux, 
-    [request, wordsRedux]
-  );
 
 	const fetchWords = useCallback(
 		async () => {
 			try {
 				const data = await backRoutes.getUserWords({ userId, token });
-				const arr = await getWords();
+				let arr = [];
+				if (wordsRedux.length) {
+					arr = wordsRedux;
+				} else if (levelRedux !== null) {
+					const randomPage = getRandomInt(0, 31);
+					arr = await request(`${backRoutes.words}?group=${levelRedux}&page=${randomPage}`, 'GET');
+				} else {
+					const randomGroup = getRandomInt(0, 6);
+					const randomPage = getRandomInt(0, 31);
+					arr = await request(`${backRoutes.words}?group=${randomGroup}&page=${randomPage}`, 'GET');
+				}
+				console.log(arr);
 				const allWords = arr.map((item) => {
 					return {
 						english: item.word,
@@ -213,7 +221,7 @@ export const AudioPage = () => {
 				console.log(e);
 			}
 		},
-		[getWords, token, userId]
+		[levelRedux, request, token, userId, wordsRedux]
 	);
 
 	useEffect(
