@@ -94,7 +94,7 @@ export const GameStats = ({ correctAnswers, failAnswers, lifes }) => {
 					audioDefeat.play();
 				}
 			}
-			setTitle(showTitle(failAnswers.length, lifes));
+			setTitle(showTitle(failAnswers.length, correctAnswers.length, lifes));
 			return () => {
 				audioWin.stop();
 				audioDefeat.stop();
