@@ -189,6 +189,7 @@ export const SavannaPage = (props) => {
 					const randomPage = getRandomInt(0, 31);
 					arr = await request(`${backRoutes.words}?group=${randomGroup}&page=${randomPage}`, 'GET');
 				}
+				console.log(arr);
 				const allWords = arr.map((item) => {
 					return {
 						english: item.word,

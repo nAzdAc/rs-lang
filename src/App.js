@@ -31,7 +31,6 @@ function App() {
     uploadAvatar,
   } = useAuth();
   const isAuthenticated = !!token;
-  console.log(token);
   return (
     <AuthContext.Provider
       value={{

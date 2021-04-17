@@ -176,7 +176,6 @@ export const SprintPage = () => {
 					};
 				});
 				const gamesArr = getWordsForPlay(allWords, data.userWords);
-				console.log(gamesArr);
 				setWordsArray(gamesArr);
 			} catch (e) {
 				console.log(e);

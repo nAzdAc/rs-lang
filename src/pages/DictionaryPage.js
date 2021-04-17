@@ -133,7 +133,6 @@ export default function DictionaryPage() {
 			console.log(zalupa);
 			if (!result.userWords) return message(result.message);
 			if (result.userWords.length) {
-				// console.log("попали в if");
 				const filteredArr = result.userWords.filter((item) => !item.deleted);
 				console.log(filteredArr);
 				setData(filteredArr);

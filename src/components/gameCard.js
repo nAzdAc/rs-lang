@@ -33,7 +33,6 @@ const useStyles = makeStyles({
 
 export const GameCard = ({name, todo, to, activeLevel}) => {
   const classes = useStyles();
-  console.log(activeLevel)
   return (
     <div className={classes.root}>
       <Paper className={classes.card}>

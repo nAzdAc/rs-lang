@@ -137,7 +137,6 @@ export default function WordsCardList({
       token: token,
     });
     getUserWords();
-    console.log(isItBook);
     if (isItBook) {
       fetchWordsForBook();
     } else {
