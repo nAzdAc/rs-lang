@@ -71,7 +71,6 @@ export const backRoutes = {
     return `${originURL}/words?group=${group}&page=${page}`;
   },
   createUserWord: async ({ userId, wordId, word, token }) => {
-    console.log(token);
     const rawResponse = await fetch(
       `${originURL}/users/${userId}/words/${wordId}`,
       {
