@@ -2,18 +2,15 @@ import React, { useState, useEffect, useCallback } from "react";
 import { useHttp } from "../hooks/http.hook";
 import WordCard from "./WordCard";
 import "fontsource-roboto";
-import CardIcons from "./CardIcons";
 import { backRoutes } from "../utils/backRoutes";
 import { regexpForText } from "../utils/initConsts";
 import { makeStyles } from "@material-ui/core/styles";
-import WordInfo from "./WordInfo";
-import Answers from "./Answers";
 import { CircularProgress } from "@material-ui/core";
-import DictionaryDelete from "./DictionaryDelete";
 // import filterDictionary from "../utils/filterDictionary"
 import { useSelector } from "react-redux";
 // import { ToastContainer } from "react-toastify";
 // import { useMessage } from "../hooks/message.hook";
+import CreatePanel from "../components/CreatePanel";
 
 const useStyles = makeStyles((theme) => ({
   list: {
@@ -140,6 +137,7 @@ export default function WordsCardList({
       token: token,
     });
     getUserWords();
+    console.log(isItBook);
     if (isItBook) {
       fetchWordsForBook();
     } else {
@@ -215,81 +213,30 @@ export default function WordsCardList({
                 translateSentenceWordBtn ? item.textMeaningTranslate : null
               }
               infoPanel={
-                infoPanel === "BookPage" ? (
-                  <CardIcons
-                    userWords={userWords ? userWords : []}
-                    difficulty={difficulty}
-                    wordId={item.id}
-                    audioWord={item.audio}
-                    audioExample={item.audioExample}
-                    audioMeaning={item.audioMeaning}
-                    userDifficultWords={userDifficultWords}
-                    clickDelete={() =>
-                      addWordToDictionaryDelete(item.id, item.group, true)
-                    }
-                    setGoldStar={() => setGoldStar(item.id, item.group, true)}
-                    setBlackStar={() => setBlackStar(item.id, item.group, true)}
-                  />
-                ) : infoPanel === "DictionaryDifficult" ? (
-                  <WordInfo
-                    difficulty={difficulty}
-                    wordId={item.id}
-                    userId={userId}
-                    group={item.group}
-                    activeWordButton={activeWordButton}
-                    token={token}
-                    icons={
-                      <CardIcons
-                        userWords={userWords ? userWords : []}
-                        difficulty={difficulty}
-                        wordId={item.id}
-                        audioWord={item.audio}
-                        audioExample={item.audioExample}
-                        audioMeaning={item.audioMeaning}
-                        userDifficultWords={userDifficultWords}
-                        clickDelete={() =>
-                          addWordToDictionaryDelete(item.id, item.group)
-                        }
-                        setGoldStar={() => setGoldStar(item.id, item.group)}
-                        setBlackStar={() => setBlackStar(item.id, item.group)}
-                      />
-                    }
-                  />
-                ) : infoPanel === "DictionaryLearning" ? (
-                  <>
-                    <CardIcons
-                      userWords={userWords ? userWords : []}
-                      difficulty={difficulty}
-                      wordId={item.id}
-                      audioWord={item.audio}
-                      audioExample={item.audioExample}
-                      audioMeaning={item.audioMeaning}
-                      userDifficultWords={userDifficultWords}
-                      clickDelete={() =>
-                        addWordToDictionaryDelete(item.id, item.group)
-                      }
-                      setGoldStar={() => setGoldStar(item.id, item.group)}
-                      setBlackStar={() => setBlackStar(item.id, item.group)}
-                    />
-                    <Answers
-                      fail={item.fail}
-                      correct={item.correct}
-                      wordId={item.id}
-                      userId={userId}
-                      token={token}
-                    />
-                  </>
-                ) : infoPanel === "DictionaryDelete" ? (
-                  <DictionaryDelete
-                    difficulty={difficulty}
-                    wordId={item.id}
-                    userId={userId}
-                    group={item.group}
-                    activeWordButton={activeWordButton}
-                    token={token}
-                    clickRestore={() => restore(item.id)}
-                  />
-                ) : null
+                <CreatePanel
+                  panel={infoPanel}
+                  userWords={userWords}
+                  difficulty={difficulty}
+                  wordId={item.id}
+                  wordAudio={item.audio}
+                  wordAudioExample={item.audioExample}
+                  WordAudioMeaning={item.audioMeaning}
+                  userDifficultWords={userDifficultWords}
+                  userId={userId}
+                  itemGroup={item.group}
+                  activeWordButton={activeWordButton}
+                  token={token}
+                  fail={item.fail}
+                  correct={item.correct}
+                  clickDelete={() =>
+                    addWordToDictionaryDelete(item.id, item.group, isItBook)
+                  }
+                  setGoldStar={() => setGoldStar(item.id, item.group, isItBook)}
+                  setBlackStar={() =>
+                    setBlackStar(item.id, item.group, isItBook)
+                  }
+                  clickRestore={() => restore(item.id)}
+                ></CreatePanel>
               }
             />
           ))
