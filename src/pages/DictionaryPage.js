@@ -124,30 +124,36 @@ export default function DictionaryPage() {
   const { request } = useHttp();
   const [wordsReady, setWordsReady] = useState(false);
   const dispatch = useDispatch();
+  console.log(wordsArr);
 
   const func = useCallback(async () => {
     const result = await backRoutes.getUserWords({ userId, token });
-    // console.log(page);
+    console.log(result)
     if (!result.userWords) return message(result.message);
     if (result.userWords.length) {
       // console.log("попали в if");
-      const filteredArr = result.userWords.filter((item) => !item.deleted);
-      setData(filteredArr);
+      // const filteredArr = result.userWords.filter((item) => !item.deleted);
+      // setData(filteredArr);
       setlistUserWords(result.userWords);
     }
   }, [message, token, userId]);
 
   const fetchWordsForDictionary = useCallback(async () => {
-    const cards = await Promise.all(
-      data.map(async (item) => {
-        const result = await request(backRoutes.getWord(item.wordId), "GET");
-        result.correct = item.correct;
-        result.fail = item.fail;
-        return result;
-      })
-    );
-    setWordsArr(cards);
-    setWordsReady(true);
+    // console.log(data)
+    if(data.length){
+      const cards = await Promise.all(
+        data.map(async (item) => {
+          const result = await request(backRoutes.getWord(item.wordId), "GET");
+          result.correct = item.correct;
+          result.fail = item.fail;
+          return result;
+        })
+      );
+      setWordsArr(cards);
+      setWordsReady(true);
+    }
+    
+   
   }, [data, request]);
 
   useEffect(() => {
@@ -279,7 +285,7 @@ export default function DictionaryPage() {
           }
           activeWordButton={activeWordButton}
           activeLevel={activeLevel}
-          userWordsForDictionari={data}
+          wordsForDictionari={wordsArr}
         />
       ) : (
         <Typography className={classes.message} variant="h1" component="h2">
