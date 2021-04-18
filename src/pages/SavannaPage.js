@@ -23,6 +23,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useSelector } from 'react-redux';
 import { deleteWords } from '../store/wordsSlice';
 import { useDispatch } from 'react-redux';
+import { deleteLevel } from '../store/levelSlice';
 
 const useStyles = makeStyles({
 	root: {
@@ -288,6 +289,16 @@ export const SavannaPage = (props) => {
 			fetchWords();
 		},
 		[ fetchWords ]
+	);
+
+	useEffect(
+		() => {
+			return () => {
+				dispatch(deleteWords());
+				dispatch(deleteLevel())
+			};
+		},
+		[ dispatch ]
 	);
 
 	useEffect(

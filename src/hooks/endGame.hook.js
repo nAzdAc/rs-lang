@@ -1,5 +1,5 @@
 import { useCallback, useContext } from 'react';
-import { backRoutes, originURL } from '../utils/backRoutes';
+import { originURL } from '../utils/backRoutes';
 import { AuthContext } from '../context/AuthContext';
 import { parsedStats } from '../utils/helpers';
 import { useMessage } from '../hooks/message.hook';
@@ -17,18 +17,16 @@ export const useEndGame = () => {
 			}
 			try {
 				const gameStats = parsedStats(gameName, correctArr, failArr, seriesArr);
-				const data = await backRoutes.putStatistics({
-					userId,
-					token,
-					data: gameStats
+				const result = await request(`${originURL}/users/${userId}/statistics/`, 'PUT', gameStats, {
+					Authorization: `Bearer ${token}`
 				});
-				message(data.message, 200);
+				message(result.message, 200);
 			} catch (e) {
 				console.log(e);
 				console.log(e.message);
 			}
 		},
-		[ message, token, userId ]
+		[message, request, token, userId]
 	);
 
 	const postAnswers = useCallback(

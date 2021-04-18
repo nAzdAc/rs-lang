@@ -13,7 +13,7 @@ export const gameCardsContent = [
 		to: frontRoutes.savanna
 	},
 	{
-		name: 'Аудио вызов',
+		name: 'Аудиовызов',
 		todo:
 			'Мини-игра «Аудиовызов» - это тренировка, развивающая навыки речи и перевода. Вы слышите слово и видите 5 вариантов перевода.',
 		to: frontRoutes.audio
