@@ -1,52 +1,24 @@
-**Базовая работа с redux**
+# RS-lang
 
-В чем прикол — можно на любой странице приложения, хоть в играх, хоть в удаленных словах, что-то положить в state редакса, и потом из любого места приложения это значение достать. Типа локал стораджа, только на компе ничего не хранит.
+# Play, learn and talk in English
 
-Как работать
-1. Поставить расширение для chrome.
-Название Redux DevTools
-Автор: remotedevio
-https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd?hl=ru
-![Снимок экрана 2021-03-30 в 18 16 14](https://user-images.githubusercontent.com/24583617/113013040-075a4880-9184-11eb-91f0-7afc8ee3a4c3.png)
+1. Сlone the repository.
+2. Open client folder.
+3. Run `npm install`
+4. Run `npm start`
 
+# Game Keyboard Control
 
-2. добавить свой slice
+1. Sprint.
 
-– в папку store добавить файл вида
-***Slise.js
-![Снимок экрана 2021-03-30 в 18 15 33](https://user-images.githubusercontent.com/24583617/113012990-f8739600-9183-11eb-87ef-3bef2c332b3f.png)
+true - 'enter' or 1 on Numpad,
 
-я для примера создал testSlice. 
-![Снимок экрана 2021-03-30 в 18 17 01](https://user-images.githubusercontent.com/24583617/113013574-7fc10980-9184-11eb-8386-8123588d9479.png)
+false - 'space' or 2 on Numpad;
 
-внутри этого файла 2 сущности:
-исходное значение и функция, которая с этим значением работает. В моем примере
-name: 'test',
-  initialState: {
-    value: '',
-  },
+2. Audio, Match, Savanna.
 
-
-и reducer, который будет изменять исходное значение:
-в моем случае changeTest
-
-в остальной части просто перепешите имена под свои названия.
-
-3. добавьте в store.js упоминания вашего слайса, по аналогии с тем, как там указан test
-![Снимок экрана 2021-03-30 в 18 21 30](https://user-images.githubusercontent.com/24583617/113013870-c3b40e80-9184-11eb-8cbb-95e8cbbff0f8.png)
-
-4. Последний штрих, отслеживать действия пользователей и менять state в соответсвии с этим.
- Для примера я повесил на логотип в шапке обработчик событий, который при клике на лого кладет в стор слово logo
- ![Снимок экрана 2021-03-30 в 18 34 36](https://user-images.githubusercontent.com/24583617/113015843-98322380-9186-11eb-85b2-9b91dc1c26bc.png)
- 
-5. Смотрите в девтулы, что сейчас лежит в сторе. Для этого нужен был шаг 1. 
-![Снимок экрана 2021-03-30 в 18 36 21](https://user-images.githubusercontent.com/24583617/113016286-02e35f00-9187-11eb-8c3a-e12cd2d88360.png)
-
-![Снимок экрана 2021-03-30 в 18 36 26](https://user-images.githubusercontent.com/24583617/113016296-05de4f80-9187-11eb-9ecf-570219313d05.png)
-
-В девтулах много всего интересного есть, тыкайте по вкладкам
-
-6. обратиться к тому что лежит в state можно из любого места можно так:
-импртнуть 
-import { useSelector } from 'react-redux';
-взять значение, например тестовое state.test.value
+Choose an answer option from left to right:
+'1' or 1 on Numpad,
+'2' or 2 on Numpad,
+'3' or 3 on Numpad,
+'4' or 4 on Numpad.
