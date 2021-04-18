@@ -124,7 +124,7 @@ export const SprintPage = () => {
 	const classes = useStyles();
 	const { userId, token } = useContext(AuthContext);
 	const { request } = useHttp();
-	const { postUserWords, postStats, postAnswers } = useEndGame();
+	const { postStats, postAnswers } = useEndGame();
 	const soundVolume = useMemo(() => localStorage.getItem(LOCAL_STORAGE_KEY.soundVolume) || INIT_CONSTS.soundVolume, []);
 	const musicVolume = useMemo(() => localStorage.getItem(LOCAL_STORAGE_KEY.musicVolume) || INIT_CONSTS.musicVolume, []);
 	const [ endGame, setEndGame ] = useState(false);
@@ -153,19 +153,22 @@ export const SprintPage = () => {
 	const fetchWords = useCallback(
 		async () => {
 			try {
-				const data = await backRoutes.getUserWords({ userId, token });
-				let arr = [];
+				let userWordsArr = [];
+				if (userId && token) {
+					userWordsArr = (await backRoutes.getUserWords({ userId, token })).userWords;
+				}
+				let playWords = [];
 				if (wordsRedux.length) {
-					arr = wordsRedux;
+					playWords = wordsRedux;
 				} else if (levelRedux !== null) {
 					const randomPage = getRandomInt(0, 31);
-					arr = await request(`${backRoutes.words}?group=${levelRedux}&page=${randomPage}`, 'GET');
+					playWords = await request(`${backRoutes.words}?group=${levelRedux}&page=${randomPage}`, 'GET');
 				} else {
 					const randomGroup = getRandomInt(0, 6);
 					const randomPage = getRandomInt(0, 31);
-					arr = await request(`${backRoutes.words}?group=${randomGroup}&page=${randomPage}`, 'GET');
+					playWords = await request(`${backRoutes.words}?group=${randomGroup}&page=${randomPage}`, 'GET');
 				}
-				const allWords = arr.map((item) => {
+				const parsedPlayWords = playWords.map((item) => {
 					return {
 						english: item.word,
 						russian: item.wordTranslate,
@@ -175,7 +178,8 @@ export const SprintPage = () => {
 						deleted: false
 					};
 				});
-				const gamesArr = getWordsForPlay(allWords, data.userWords);
+				const gamesArr = getWordsForPlay(parsedPlayWords, userWordsArr);
+				console.log(gamesArr);
 				setWordsArray(gamesArr);
 			} catch (e) {
 				console.log(e);
@@ -188,11 +192,10 @@ export const SprintPage = () => {
 		() => {
 			if (endGame) {
 				postStats('sprint', correctAnswers, failAnswers, allSeries);
-				postUserWords(correctAnswers, failAnswers);
 				postAnswers(correctAnswers, failAnswers);
 			}
 		},
-		[ allSeries, correctAnswers, endGame, failAnswers, postAnswers, postStats, postUserWords ]
+		[ allSeries, correctAnswers, endGame, failAnswers, postAnswers, postStats ]
 	);
 
 	const answer = useCallback(

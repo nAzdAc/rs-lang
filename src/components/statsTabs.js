@@ -79,7 +79,7 @@ export default function SimpleTabs() {
       }
 
       const stats = await backRoutes.getStats({ userId, token });
-
+      console.log(stats);
       if (!stats.statistics) {
         throw new Error('Ошибка загрузки данных');
       }

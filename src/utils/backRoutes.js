@@ -17,20 +17,8 @@ export const backRoutes = {
 	upload: getRoute('upload'),
 	words: getRoute('words'),
 	statistics: getRoute('statistics'),
-	uploadAvatar: async (userId, file) => {
-		const formData = new FormData();
-		formData.append('avatar', file);
-		const res = await fetch(`${originURL}/users/${userId}`, {
-			method: 'PUT',
-			body: formData,
-			headers: {
-				Authorization: `Bearer ${token}`
-			}
-		});
-		const data = await res.json();
-		return data;
-	},
 	putStatistics: async ({ userId, token, data }) => {
+    if (!userId || !token) return;
 		const res = await fetch(`${originURL}/users/${userId}/statistics/`, {
 			method: 'PUT',
 			withCredentials: true,
@@ -45,9 +33,7 @@ export const backRoutes = {
 		return content;
 	},
 	putAnswers: async ({ userId, token, data }) => {
-		console.log(userId);
-		console.log(token);
-		console.log(data);
+		if (!token || !userId) return 
 		const res = await fetch(`${originURL}/users/${userId}/words/answers`, {
 			method: 'PUT',
 			withCredentials: true,
@@ -120,6 +106,7 @@ export const backRoutes = {
     return content
 	},
 	getUserWord: async ({ userId, wordId }) => {
+    if (!userId || !token) return;
 		const rawResponse = await fetch(`${originURL}/users/${userId}/words/${wordId}`, {
 			method: 'GET',
 			withCredentials: true,
@@ -132,6 +119,7 @@ export const backRoutes = {
     return content
 	},
 	getUserWords: async ({ userId, token }) => {
+    if (!userId || !token) return;
 		try {
 			const rawResponse = await fetch(`${originURL}/users/${userId}/words`, {
 				method: 'GET',

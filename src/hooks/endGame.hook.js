@@ -10,24 +10,6 @@ export const useEndGame = () => {
 	const { request } = useHttp();
 	const message = useMessage();
 
-	const postUserWords = useCallback(
-		async (correctArr, failArr) => {
-			if (!token || !userId) {
-				return message('Слова не были добавлены к вам в словарь, авторизуйтесь');
-			}
-			try {
-				const allAnswers = [ ...correctArr, ...failArr ];
-				const result = await request(`${originURL}/users/${userId}/words/answers`, 'PUT', allAnswers, {
-					Authorization: `Bearer ${token}`
-				});
-				console.log(result)
-			} catch (e) {
-				console.log(e);
-			}
-		},
-		[message, request, token, userId]
-	);
-
 	const postStats = useCallback(
 		async (gameName, correctArr, failArr, seriesArr) => {
 			if (!token || !userId) {
@@ -52,25 +34,26 @@ export const useEndGame = () => {
 	const postAnswers = useCallback(
 		async (correctArr, failArr) => {
 			try {
-				await Promise.all(
-					correctArr.map(async (item) => {
-						const wordId = item.id;
-						const word = { value: true };
-						await backRoutes.updateUserWord({ userId, wordId, word, token });
-					})
-				);
-				await Promise.all(
-					failArr.map(async (item) => {
-						const wordId = item.id;
-						const word = { value: false };
-						await backRoutes.updateUserWord({ userId, wordId, word, token });
-					})
-				);
+				if (!token || !userId) {
+					return message('Слова не были добавлены к вам в словарь, авторизуйтесь');
+				}
+				const allAnswers = [ ...correctArr, ...failArr ];
+				const body = {
+					allAnswers,
+					correctArr,
+					failArr
+				};
+				console.log({body})
+				const result = await request(`${originURL}/users/${userId}/words/answers`, 'PUT', body, {
+					Authorization: `Bearer ${token}`
+				});
+				message(result.message, 200);
+				console.log({result});
 			} catch (e) {
 				console.log(e);
 			}
 		},
-		[ token, userId ]
+		[message, request, token, userId]
 	);
-	return { postUserWords, postStats, postAnswers };
+	return { postStats, postAnswers };
 };
