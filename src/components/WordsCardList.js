@@ -39,7 +39,7 @@ export default function WordsCardList({
   token,
   userId,
   isItBook,
-  userWordsForDictionari,
+  wordsForDictionari,
 }) {
   const [wordsArr, setWordsArr] = useState([]);
   const { request } = useHttp();
@@ -48,10 +48,8 @@ export default function WordsCardList({
   const [userWords, setUserWords] = useState([]);
   const [userDifficultWords, setUserDifficultWords] = useState([]);
   // const message = useMessage();
-  // console.log(userWordsForDictionari)
-
-  // const deleteWordBtn = useSelector((state) => state.settings.DeleteWordBtn)
-  // const difficultWordBtn = useSelector((state) => state.settings.DifficultWordBtn)
+  // console.log(wordsForDictionari)
+  
   const translateWordBtn = useSelector(
     (state) => state.settings.TranslateWordBtn
   );
@@ -80,22 +78,10 @@ export default function WordsCardList({
     }
   }, [userWords, request, fetchUrl]);
 
-  const fetchWordsForDictionary = useCallback(async () => {
-    const cards = await Promise.all(
-      userWordsForDictionari.map(async (item) => {
-        const result = await request(backRoutes.getWord(item.wordId), "GET");
-        result.correct = item.correct;
-        result.fail = item.fail;
-        return result;
-      })
-    );
-    setWordsArr(cards);
-    setWordsReady(true);
-  }, [userWordsForDictionari, request]);
-
   const getUserWords = useCallback(async () => {
     const result = await backRoutes.getUserWords({ userId, token });
     // message(result.message, 200);
+    
     if (result.userWords && result.userWords.length) {
       setUserWords(result.userWords);
       const arr = result.userWords.map((item) =>
@@ -111,19 +97,21 @@ export default function WordsCardList({
     if (userId && token) {
       getUserWords();
     }
-  }, [getUserWords, token, userId]);
+  }, [getUserWords, token, userId, wordsForDictionari]);
 
   useEffect(() => {
-    if (!isItBook && userWordsForDictionari) {
-      fetchWordsForDictionary();
+    if (!isItBook && wordsForDictionari) {
+      setWordsArr(wordsForDictionari);
+      setWordsReady(true);
+      
     }
-  }, [fetchWordsForDictionary, isItBook, userWordsForDictionari]);
+  }, [ isItBook, wordsForDictionari]);
 
   useEffect(() => {
     if (isItBook) {
       fetchWordsForBook();
     }
-  }, [fetchWordsForBook, fetchWordsForDictionary, token, userId, isItBook]);
+  }, [fetchWordsForBook, token, userId, isItBook]);
 
   const setGoldStar = async (wordId, group, isItBook = false) => {
     await backRoutes.createUserWord({
@@ -140,7 +128,7 @@ export default function WordsCardList({
     if (isItBook) {
       fetchWordsForBook();
     } else {
-      fetchWordsForDictionary();
+      // fetchWordsForDictionary();
     }
   };
   const setBlackStar = async (wordId, group, isItBook = false) => {
@@ -157,7 +145,7 @@ export default function WordsCardList({
     if (isItBook) {
       fetchWordsForBook();
     } else {
-      fetchWordsForDictionary();
+      // fetchWordsForDictionary();
     }
   };
 
@@ -175,7 +163,7 @@ export default function WordsCardList({
     if (isItBook) {
       fetchWordsForBook();
     } else {
-      fetchWordsForDictionary();
+      // fetchWordsForDictionary();
     }
   }
   async function restore(wordId) {
@@ -188,7 +176,7 @@ export default function WordsCardList({
       token: token,
     });
     getUserWords();
-    fetchWordsForDictionary();
+    // fetchWordsForDictionary();
   }
 
   return (
@@ -215,7 +203,7 @@ export default function WordsCardList({
                 <CreatePanel
                   panel={infoPanel}
                   userWords={userWords}
-                  difficulty={difficulty}
+                  difficult={item.difficult}
                   wordId={item.id}
                   wordAudio={item.audio}
                   wordAudioExample={item.audioExample}

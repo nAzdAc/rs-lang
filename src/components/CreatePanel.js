@@ -6,7 +6,7 @@ import DictionaryDelete from "./DictionaryDelete";
 export default function CreatePanel({
   panel,
   userWords,
-  difficulty,
+  difficult,
   wordId,
   wordAudio,
   wordAudioExample,
@@ -28,7 +28,7 @@ export default function CreatePanel({
   return panel === "BookPage" ? (
     <CardIcons
       userWords={userWords ? userWords : []}
-      difficulty={difficulty}
+      difficult={difficult}
       wordId={wordId}
       audioWord={wordAudio}
       audioExample={wordAudioExample}
@@ -40,7 +40,7 @@ export default function CreatePanel({
     />
   ) : panel === "DictionaryDifficult" ? (
     <WordInfo
-      difficulty={difficulty}
+      difficult={difficult}
       wordId={wordId}
       userId={userId}
       group={itemGroup}
@@ -49,7 +49,7 @@ export default function CreatePanel({
       icons={
         <CardIcons
           userWords={userWords ? userWords : []}
-          difficulty={difficulty}
+          difficult={difficult}
           wordId={wordId}
           audioWord={wordAudio}
           audioExample={wordAudioExample}
@@ -65,7 +65,7 @@ export default function CreatePanel({
     <>
       <CardIcons
         userWords={userWords ? userWords : []}
-        difficulty={difficulty}
+        difficult={difficult}
         wordId={wordId}
         audioWord={wordAudio}
         audioExample={wordAudioExample}
@@ -85,7 +85,7 @@ export default function CreatePanel({
     </>
   ) : panel === "DictionaryDelete" ? (
     <DictionaryDelete
-      difficulty={difficulty}
+      difficult={difficult}
       wordId={wordId}
       userId={userId}
       group={itemGroup}

@@ -50,12 +50,6 @@ const useStyles = makeStyles((theme) => ({
 
 export default function WordInfo({
   group,
-  difficulty,
-  page,
-  userId,
-  wordId,
-  activeWordButton,
-  token,
 	icons,
 }) {
 

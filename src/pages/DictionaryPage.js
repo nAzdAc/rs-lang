@@ -16,7 +16,7 @@ import { useMessage } from '../hooks/message.hook';
 // import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Link } from 'react-router-dom';
-import { useHttp } from '../hooks/http.hook';
+
 import { addWords } from '../store/wordsSlice';
 import { useDispatch } from 'react-redux';
 import filterDictionary from "../utils/filterDictionary";
@@ -111,68 +111,33 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function DictionaryPage() {
-	const { userId, token } = useContext(AuthContext);
-	const [ page, setPage ] = useState(1);
-	const [ count, setCount ] = useState(null);
-	const [ activeWordButton, setActiveWordButton ] = useState(0);
-	const [ activeLevel, setActiveLevel ] = useState(null);
-	const [ data, setData ] = useState([]);
-	const [ listUserWords, setlistUserWords ] = useState([]);
-	const message = useMessage();
-	const classes = useStyles();
-	const [ wordsArr, setWordsArr ] = useState([]);
-	const { request } = useHttp();
-	const [ wordsReady, setWordsReady ] = useState(false);
-	const dispatch = useDispatch();
+  const { userId, token } = useContext(AuthContext);
+  const [page, setPage] = useState(1);
+  const [count, setCount] = useState(null);
+  const [activeWordButton, setActiveWordButton] = useState(0);
+  const [activeLevel, setActiveLevel] = useState(null);
+  const [listUserWords, setlistUserWords] = useState([]);
+  const message = useMessage();
+  const classes = useStyles();
+  const [wordsArr, setWordsArr] = useState([]);
+  const [wordsReady, setWordsReady] = useState(false);
+  const dispatch = useDispatch();
 
-	const func = useCallback(
-		async () => {
-			const result = await backRoutes.getUserWords({ userId, token });
-			const zalupa = await backRoutes.getUserWordsForDictionary({ userId, token });
-			console.log(result);
-			console.log(zalupa);
-			if (!result.userWords) return message(result.message);
-			if (result.userWords.length) {
-				const filteredArr = result.userWords.filter((item) => !item.deleted);
-				console.log(filteredArr);
-				setData(filteredArr);
-				setlistUserWords(result.userWords);
-			}
-		},
-		[ message, token, userId ]
-	);
-
-	const fetchWordsForDictionary = useCallback(
-		async () => {
-			const cards = await Promise.all(
-				data.map(async (item) => {
-					const result = await request(backRoutes.getWord(item.wordId), 'GET');
-					result.correct = item.correct;
-					result.fail = item.fail;
-					return result;
-				})
-			);
-			console.log(cards);
-			setWordsArr(cards);
-			setWordsReady(true);
-		},
-		[ data, request ]
-	);
+  const getUserWords = useCallback(async () => {
+    const result = await backRoutes.getUserWordsForDictionary({ userId, token });
+    if (!result.dictionaryWords) return message(result.message);
+    if (result.dictionaryWords.length) {
+      setlistUserWords(result.dictionaryWords);
+    }
+  }, [message, token, userId]);
 
 	useEffect(
 		() => {
 			if (userId && token) {
-				func();
+				getUserWords();
 			}
 		},
-		[ func, token, userId ]
-	);
-
-	useEffect(
-		() => {
-			fetchWordsForDictionary();
-		},
-		[ fetchWordsForDictionary ]
+		[ getUserWords, token, userId ]
 	);
 
 	const handlePaginationChange = (e, value) => {
@@ -195,7 +160,10 @@ export default function DictionaryPage() {
   useEffect(() => {
     const userWordsArr = filterDictionary(activeLevel ,listUserWords, activeWordButton)
     const newArr = userWordsArr.length>20? (userWordsArr.slice(20 * (page - 1), 20 * page)): userWordsArr;
-    setData(newArr);
+    setWordsArr(newArr);
+    if(newArr.length){
+      setWordsReady(true)
+    }
     setCount(userWordsArr.length);
   }, [activeLevel, activeWordButton, listUserWords, page]);
 
@@ -207,119 +175,116 @@ export default function DictionaryPage() {
 		[ wordsArr, dispatch ]
 	);
 
-	return (
-		<Container className={classes.container}>
-			<Box className={classes.titleBox}>
-				<Typography className={classes.title} variant="h1" component="h2">
-					Словарь
-				</Typography>
-			</Box>
-			<ul className={classes.typeBox}>
-				{wordCategories.map((item, index) => (
-					<Button
-						key={index}
-						onClick={() => handleWordsButtonClick(index)}
-						variant="contained"
-						className={
-							index === activeWordButton ? `${classes.typeButton} ${classes.typeButtonActive}` : `${classes.typeButton}`
-						}
-					>
-						{item.text}
-					</Button>
-				))}
-			</ul>
-			<ul className={classes.buttonBox}>
-				{levels.map((item, index) => (
-					<LevelButton
-						key={index}
-						click={() => handleLevelsClick(index)}
-						group={item}
-						isActive={index === activeLevel ? true : false}
-					/>
-				))}
-			</ul>
-			{wordsReady ? (
-				<div className={classes.gamesWrapper}>
-					<Typography className={classes.titleGames} variant="h3" component="h4">
-						Выберите игру:
-					</Typography>
-					<div className={classes.gamesButtonsWrapper}>
-						<Link
-							to={{
-								pathname: '/games/savanna'
-							}}
-						>
-							<Button disabled={!wordsReady} className={classes.button} variant="contained" size="medium">
-								Саванна
-							</Button>
-						</Link>
-						<Link
-							to={{
-								pathname: '/games/audio'
-							}}
-						>
-							<Button disabled={!wordsReady} className={classes.button} variant="contained" size="medium">
-								Аудиовызов
-							</Button>
-						</Link>
-						<Link
-							to={{
-								pathname: '/games/sprint'
-							}}
-						>
-							<Button disabled={!wordsReady} className={classes.button} variant="contained" size="medium">
-								Спринт
-							</Button>
-						</Link>
-						<Link
-							to={{
-								pathname: '/games/match'
-							}}
-						>
-							<Button disabled={!wordsReady} className={classes.button} variant="contained" size="medium">
-								Match
-							</Button>
-						</Link>
-					</div>
-				</div>
-			) : null}
-			{data.length ? (
-				<WordsCardList
-					token={token}
-					userId={userId}
-					isItBook={false}
-					infoPanel={
-						activeWordButton === 0 ? (
-							'DictionaryLearning'
-						) : activeWordButton === 1 ? (
-							'DictionaryDifficult'
-						) : (
-							'DictionaryDelete'
-						)
-					}
-					activeWordButton={activeWordButton}
-					activeLevel={activeLevel}
-					userWordsForDictionari={data}
-				/>
-			) : (
-				<Typography className={classes.message} variant="h1" component="h2">
-					{token ? 'Здесь еще нет слов' : 'Войдите в приложение чтобы увидеть свой словарь'}
-				</Typography>
-			)}
-			{data.length ? (
-				data.length &&
-				Math.ceil(listUserWords.length / 20) > 1 && (
-					<Pagination
-						page={page}
-						className={classes.pagination}
-						onChange={handlePaginationChange}
-						count={count ? Math.ceil(count / 20) : 30}
-						color="primary"
-					/>
-				)
-			) : (
-				''
-			)}
-		</Container>
-	);
+  return (
+    <Container className={classes.container}>
+      <Box className={classes.titleBox}>
+        <Typography className={classes.title} variant="h1" component="h2">
+          Словарь
+        </Typography>
+      </Box>
+      <ul className={classes.typeBox}>
+        {wordCategories.map((item, index) => (
+          <Button
+            key={index}
+            onClick={() => handleWordsButtonClick(index)}
+            variant="contained"
+            className={
+              index === activeWordButton
+                ? `${classes.typeButton} ${classes.typeButtonActive}`
+                : `${classes.typeButton}`
+            }
+          >
+            {item.text}
+          </Button>
+        ))}
+      </ul>
+      <ul className={classes.buttonBox}>
+        {levels.map((item, index) => (
+          <LevelButton
+            key={index}
+            click={() => handleLevelsClick(index)}
+            group={item}
+            isActive={index === activeLevel ? true : false}
+          />
+        ))}
+      </ul>
+      {
+        wordsReady ? (
+          <div className={classes.gamesWrapper}>
+            <Typography className={classes.titleGames} variant="h3" component="h4">
+              Выберите игру: 
+            </Typography>
+            <div className={classes.gamesButtonsWrapper}>
+              <Link to={{
+                pathname: '/games/savanna',
+                }}
+              >
+                <Button className={classes.button} variant="contained" size="medium">
+                  Саванна
+                </Button>
+              </Link>
+              <Link to={{
+                pathname: '/games/audio',
+                }}
+              >
+                <Button className={classes.button} variant="contained" size="medium">
+                  Аудиовызов
+                </Button>
+              </Link>
+              <Link to={{
+                pathname: '/games/sprint',
+                }}
+              >
+                <Button className={classes.button} variant="contained" size="medium">
+                  Спринт
+                </Button>
+              </Link>
+              <Link to={{
+                pathname: '/games/match',
+                }}
+              >
+                <Button className={classes.button} variant="contained" size="medium">
+                  Match
+                </Button>
+              </Link>
+            </div>
+          </div>) : null
+      }
+      {wordsArr.length ? (
+        <WordsCardList
+          token={token}
+          userId={userId}
+          isItBook={false}
+          infoPanel={
+            activeWordButton === 0
+              ? "DictionaryLearning"
+              : activeWordButton === 1
+              ? "DictionaryDifficult"
+              : "DictionaryDelete"
+          }
+          activeWordButton={activeWordButton}
+          activeLevel={activeLevel}
+          wordsForDictionari={wordsArr}
+        />
+      ) : (
+        <Typography className={classes.message} variant="h1" component="h2">
+          {token
+            ? "Здесь еще нет слов"
+            : "Войдите в приложение чтобы увидеть свой словарь"}
+        </Typography>
+      )}
+      {wordsArr.length
+        ? wordsArr.length &&
+          Math.ceil(listUserWords.length / 20) > 1 && (
+            <Pagination
+              page={page}
+              className={classes.pagination}
+              onChange={handlePaginationChange}
+              count={count ? Math.ceil(count / 20) : 30}
+              color="primary"
+            />
+          )
+        : ""}
+    </Container>
+  );
 }
