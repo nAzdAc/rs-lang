@@ -36,9 +36,7 @@ export const useAuth = () => {
 
   const uploadAvatar = useCallback(
     async (file) => {
-      console.log(token);
       if (!token) {
-        console.log('no token');
         return message('Для загрузки фото необходимо авторизоваться.', 400);
       }
       if (!file) {
@@ -59,7 +57,6 @@ export const useAuth = () => {
         },
       });
       const data = await res.json();
-      console.log(data);
       message(data.message, res.status);
       if (data.avatarURL) {
         setAvatar(data.avatarURL);
@@ -71,7 +68,6 @@ export const useAuth = () => {
     [message, token]
   );
 
-  console.log(token);
   const logout = useCallback(() => {
     setToken(null);
     setRefreshToken(null);

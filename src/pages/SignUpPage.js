@@ -139,7 +139,6 @@ export default function SignUpPage() {
     e.preventDefault();
     try {
       const data = await request(backRoutes.signUp, 'POST', { ...form });
-      console.log(data);
       message(data.message, 200);
       setForm({
         name: '',
