@@ -409,7 +409,7 @@ export const AudioPage = () => {
 									value={item.english}
 									className={classes.button}
 								>
-									{item.english}
+									{item.russian}
 								</button>
 							);
 						})}
