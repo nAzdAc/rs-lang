@@ -23,6 +23,16 @@ const ManePage = () => {
         </Typography>
         <div className={classes.textImgWrapper}>
           <div>
+            <iframe
+              width="800"
+              height="600"
+              src="https://www.youtube.com/embed/uRVv43J8jH0"
+              title="YouTube video player"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen
+              className={classes.video}
+            ></iframe>
             <Typography variant="body1" className={classes.text}>
               {MANE_PAGE_TEXT_P1}
             </Typography>
@@ -40,6 +50,7 @@ const ManePage = () => {
             <img src={images.deadlines} alt="deadlines" />
           </div>
         </div>
+
         <div className={classes.advantagesSection}>
           <Typography variant="h2" className={classes.title}>
             Ключевые преимущества

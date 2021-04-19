@@ -131,4 +131,7 @@ export const useStyles = makeStyles({
   description: {
     flex: '1 0 auto',
   },
+  video: {
+    marginLeft: '20px',
+  },
 });
