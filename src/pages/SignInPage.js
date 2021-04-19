@@ -117,11 +117,9 @@ export default function SignInPage() {
   });
 
   // const { token } = useAuth();
-  console.log(token);
   const isAuthenticated = !!token;
 
   useEffect(() => {
-    console.log(error);
     message(error);
     clearError();
   }, [error, message, clearError]);
@@ -142,7 +140,6 @@ export default function SignInPage() {
     e.preventDefault();
     try {
       const data = await request(backRoutes.signIn, 'POST', { ...form });
-      console.log(data);
       login(
         data.token,
         data.refreshToken,

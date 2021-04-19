@@ -20,6 +20,8 @@ import { Link } from 'react-router-dom';
 import { addWords } from '../store/wordsSlice';
 import { useDispatch } from 'react-redux';
 import filterDictionary from "../utils/filterDictionary";
+import { deleteWords } from '../store/wordsSlice';
+import { deleteLevel } from '../store/levelSlice';
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -155,6 +157,16 @@ export default function DictionaryPage() {
 			setActiveLevel(index);
 		}
 	};
+
+  useEffect(
+		() => {
+			return () => {
+				dispatch(deleteWords());
+				dispatch(deleteLevel())
+			};
+		},
+		[ dispatch ]
+	);
 
 
   useEffect(() => {

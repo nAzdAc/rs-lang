@@ -23,6 +23,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useSelector } from 'react-redux';
 import { deleteWords } from '../store/wordsSlice';
 import { useDispatch } from 'react-redux';
+import { deleteLevel } from '../store/levelSlice';
 
 const useStyles = makeStyles({
 	root: {
@@ -155,7 +156,7 @@ const keyCodeArray = {
 export const MatchPage = () => {
 	const classes = useStyles();
 	const { request } = useHttp();
-	const { postUserWords, postStats, postAnswers } = useEndGame();
+	const { postStats, postAnswers } = useEndGame();
 	const { userId, token } = useContext(AuthContext);
 	const soundVolume = useMemo(() => localStorage.getItem(LOCAL_STORAGE_KEY.soundVolume) || INIT_CONSTS.soundVolume, []);
 	const musicVolume = useMemo(() => localStorage.getItem(LOCAL_STORAGE_KEY.musicVolume) || INIT_CONSTS.musicVolume, []);
@@ -179,30 +180,31 @@ export const MatchPage = () => {
 	const [ fullScreen, setFullScreen ] = useState(false);
 	const gameBoard = useRef();
 
-  const dispatch = useDispatch();
+	const dispatch = useDispatch();
 
-  const wordsRedux = useSelector(
-    state=>state.words.wordsRedux,
-  );
-	const levelRedux = useSelector((state) => state.level.level)
+	const wordsRedux = useSelector((state) => state.words.wordsRedux);
+	const levelRedux = useSelector((state) => state.level.level);
 
 	const fetchWords = useCallback(
 		async () => {
 			try {
-				const data = await backRoutes.getUserWords({ userId, token });
-				let arr = [];
+				let userWordsArr = [];
+				if (userId && token) {
+					userWordsArr = (await backRoutes.getUserWords({ userId, token })).userWords;
+				}
+				let playWords = [];
 				if (wordsRedux.length) {
-					arr = wordsRedux;
+					playWords = wordsRedux;
 				} else if (levelRedux !== null) {
 					const randomPage = getRandomInt(0, 31);
-					arr = await request(`${backRoutes.words}?group=${levelRedux}&page=${randomPage}`, 'GET');
+					playWords = await request(`${backRoutes.words}?group=${levelRedux}&page=${randomPage}`, 'GET');
 				} else {
 					const randomGroup = getRandomInt(0, 6);
 					const randomPage = getRandomInt(0, 31);
-					arr = await request(`${backRoutes.words}?group=${randomGroup}&page=${randomPage}`, 'GET');
+					playWords = await request(`${backRoutes.words}?group=${randomGroup}&page=${randomPage}`, 'GET');
 				}
-        console.log(arr);
-				const allWords = arr.map((item) => {
+				console.log(playWords);
+				const parsedPlayWords = playWords.map((item) => {
 					return {
 						english: item.word,
 						russian: item.wordTranslate,
@@ -214,7 +216,7 @@ export const MatchPage = () => {
 						deleted: false
 					};
 				});
-				const gamesArr = getWordsForPlay(allWords, data.userWords);
+				const gamesArr = getWordsForPlay(parsedPlayWords, userWordsArr);
 				console.log(gamesArr);
 				setWordsArray(gamesArr);
 				setTimeout(() => {
@@ -224,18 +226,17 @@ export const MatchPage = () => {
 				console.log(e);
 			}
 		},
-		[levelRedux, request, token, userId, wordsRedux]
+		[ levelRedux, request, token, userId, wordsRedux ]
 	);
 
 	useEffect(
 		() => {
 			if (endGame) {
 				postStats('match', correctAnswers, failAnswers, allSeries);
-				postUserWords(correctAnswers, failAnswers);
 				postAnswers(correctAnswers, failAnswers);
 			}
 		},
-		[allSeries, correctAnswers, endGame, failAnswers, postAnswers, postStats, postUserWords]
+		[ allSeries, correctAnswers, endGame, failAnswers, postAnswers, postStats ]
 	);
 
 	const answer = useCallback(
@@ -340,10 +341,20 @@ export const MatchPage = () => {
 			document.addEventListener('keydown', keyboardClick);
 			return () => {
 				document.removeEventListener('keydown', keyboardClick);
-        dispatch(deleteWords());
+				dispatch(deleteWords());
 			};
 		},
-		[dispatch, answer, endGame ]
+		[ dispatch, answer, endGame ]
+	);
+
+	useEffect(
+		() => {
+			return () => {
+				dispatch(deleteWords());
+				dispatch(deleteLevel())
+			};
+		},
+		[ dispatch ]
 	);
 
 	useEffect(

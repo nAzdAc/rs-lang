@@ -5,8 +5,6 @@ import 'react-toastify/dist/ReactToastify.css';
 
 export const useMessage = () => {
 	return useCallback((text, status) => {
-		console.log('text', text);
-		console.log('status', status);
 		if (!text) return;
 		if (status === 200) {
 			toast.success(text, {
