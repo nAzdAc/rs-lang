@@ -32,6 +32,8 @@ const useStyles = makeStyles({
     paddingLeft: '120px',
     '@media (max-width: 960px)': {
       width: '100%',
+      paddingTop: '40px',
+      paddingBottom: '80px',
     },
   },
 
