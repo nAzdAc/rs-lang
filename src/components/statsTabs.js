@@ -135,6 +135,7 @@ export default function SimpleTabs() {
   const totalWords = totalWordsCount(stats.learnedWordsTotal);
   return (
     <div className={classes.root}>
+      {console.log(stats.learnedWordsTotal)}
       <AppBar position="static">
         <Tabs
           value={value}

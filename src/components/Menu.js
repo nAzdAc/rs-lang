@@ -265,9 +265,9 @@ const Menu = () => {
                 Icon={ShowChart}
                 navClass={classes.icon}
               />
+              <NavItem to={frontRoutes.settings} Icon={Settings} />
             </>) : null
           }
-          <NavItem to={frontRoutes.settings} Icon={Settings} />
         </List>
       </MenuStyled>
       <Enterpoint to={frontRoutes.signIn}></Enterpoint>
