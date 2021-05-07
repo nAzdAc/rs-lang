@@ -1,5 +1,10 @@
 import { Howl } from 'howler';
 
+export const convertText = (text) => {
+	const regExp = /<\b>|<\/\b>|<i>|<\/i>/gi;
+	return text.replace(regExp, '')
+}
+
 export function shuffleAllElements(a, b) {
 	return Math.random() - 0.5;
 }

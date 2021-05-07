@@ -13,7 +13,7 @@ const useStyles = makeStyles({
 	}
 });
 
-export default function TodayStatsTable({ learnedWordsToday, percentToday }) {
+export const TodayStatsTable = ({ learnedWordsToday, percentToday }) => {
 	const classes = useStyles();
 
 	return (

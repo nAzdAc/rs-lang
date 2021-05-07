@@ -1,4 +1,3 @@
-import React from 'react';
 import Rating from '@material-ui/lab/Rating';
 import { withStyles } from '@material-ui/core/styles';
 import FavoriteIcon from '@material-ui/icons/Favorite';
@@ -9,7 +8,6 @@ const StyledRating = withStyles({
 		color: 'red'
 	}
 })(Rating);
-
 
 export const LifesInGames = ({ lifes }) => {
 	return (

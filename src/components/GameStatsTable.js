@@ -8,11 +8,11 @@ import TableRow from '@material-ui/core/TableRow';
 
 const useStyles = makeStyles({
 	table: {
-		minWidth: '300px',
+		minWidth: '300px'
 	}
 });
 
-export default function GameStatsTable({ rows }) {
+export const GameStatsTable = ({ rows }) => {
 	const classes = useStyles();
 
 	return (

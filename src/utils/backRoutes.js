@@ -1,9 +1,7 @@
 import { LOCAL_STORAGE_KEY } from './storageKey';
 
-// export const originURL = 'http://localhost:8080';
-export const originURL = 'https://react-learnwords.herokuapp.com';
-
-//  ?group=1&page=1
+export const originURL = 'http://localhost:8080';
+// export const originURL = 'https://nazdac-rs-lang.herokuapp.com/';
 
 const token = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY.userData))
 	? JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY.userData)).token

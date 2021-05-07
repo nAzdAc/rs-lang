@@ -5,10 +5,10 @@ import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
-import { Chart } from '../components/chart';
+import { Chart } from '../components/Chart';
 import { useState } from 'react';
-import GameStatsTable from './GameStatsTable';
-import TodayStatsTable from './TodayStatsTable';
+import { GameStatsTable } from './GameStatsTable';
+import { TodayStatsTable } from './TodayStatsTable';
 
 function TabPanel(props) {
 	const { children, value, index, ...other } = props;
@@ -55,7 +55,7 @@ const useStyles = makeStyles((theme) => ({
 	}
 }));
 
-export default function StatisticsTabs({ stats }) {
+export const StatisticsTabs = ({ stats }) => {
 	const classes = useStyles();
 	const [ value, setValue ] = useState(0);
 
@@ -87,7 +87,7 @@ export default function StatisticsTabs({ stats }) {
 				)}
 			</TabPanel>
 
-			<TabPanel value={value} index={1} style={{ minWidth: '200px', minHeight: '200px'}}>
+			<TabPanel value={value} index={1} style={{ minWidth: '200px', minHeight: '200px' }}>
 				{stats && (
 					<div className={classes.tabContainer}>
 						<Typography variant="h4" className={classes.title}>
@@ -103,4 +103,4 @@ export default function StatisticsTabs({ stats }) {
 			</TabPanel>
 		</div>
 	);
-}
+};

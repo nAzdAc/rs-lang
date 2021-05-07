@@ -2,7 +2,6 @@ import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } 
 import Typography from '@material-ui/core/Typography';
 import FullscreenIcon from '@material-ui/icons/Fullscreen';
 import FullscreenExitIcon from '@material-ui/icons/FullscreenExit';
-import { makeStyles } from '@material-ui/core/styles';
 import { LOCAL_STORAGE_KEY } from '../utils/storageKey';
 import { INIT_CONSTS } from '../utils/initConsts';
 import successSong from '../assets/sounds/success.mp3';
@@ -24,124 +23,8 @@ import { useSelector } from 'react-redux';
 import { deleteWords } from '../store/wordsSlice';
 import { useDispatch } from 'react-redux';
 import { deleteLevel } from '../store/levelSlice';
-
-const useStyles = makeStyles({
-	root: {
-		display: 'flex',
-		alignItems: 'center',
-		justifyContent: 'center'
-	},
-	gameContainer: {
-		width: '90%',
-		height: '100%',
-		display: 'flex',
-		flexDirection: 'column',
-		flexWrap: 'wrap',
-		alignItems: 'center',
-		justifyContent: 'space-between',
-		background: 'white',
-		position: 'relative'
-	},
-	heart: {
-		fontSize: '50px',
-		color: 'red'
-	},
-	contentWrap: {
-		width: '100%',
-		display: 'flex',
-		flexDirection: 'column',
-		flexWrap: 'wrap',
-		alignItems: 'center'
-	},
-	buttonsWrap: {
-		width: '100%',
-		display: 'flex',
-		flexWrap: 'wrap',
-		alignItems: 'center',
-		justifyContent: 'space-around',
-		marginBottom: '30px'
-	},
-	button: {
-		marginRight: '10px',
-		borderRadius: '5px',
-		border: 'none',
-		cursor: 'pointer',
-		fontWeight: 'bold',
-		width: '20%',
-		maxWidth: '150px',
-		height: '50px',
-		background: '#01A299',
-		color: '#FFF',
-		'&:hover': {
-			background: '#00D9CE'
-		}
-	},
-	badButton: {
-		background: '#B00020',
-		'&:hover': {
-			background: '#E6002A'
-		}
-	},
-	goodButton: {
-		background: '#16a600',
-		'&:hover': {
-			background: '#28fc03'
-		}
-	},
-	fail: {
-		marginBottom: '10px'
-	},
-	loader: {
-		position: 'absolute',
-		top: '50%',
-		left: '50%'
-	},
-	fullScreenBtn: {
-		position: 'absolute',
-		right: '0',
-		bottom: '0',
-		border: 'none',
-		outline: 'none',
-		cursor: 'pointer',
-		fontWeight: 'bold',
-		width: '50px',
-		height: '50px',
-		background: 'white',
-		color: '#FFF'
-	},
-	fullScreenIcon: {
-		cursor: 'pointer',
-		fontSize: '50px',
-		color: '#01A299',
-		'&:hover': {
-			color: '#00D9CE'
-		}
-	},
-	series: {
-		minHeight: '100px',
-		display: 'flex',
-		flexWrap: 'wrap',
-		alignItems: 'center',
-		justifyContent: 'flex-start',
-		marginBottom: '30px',
-		width: '90%'
-	},
-	starIcon: {
-		fontSize: '50px',
-		color: 'gold'
-	}
-});
-
-const keyCodeArray = {
-	top1: 49,
-	top2: 50,
-	top3: 51,
-	top4: 52,
-	num1: 35,
-	num2: 40,
-	num3: 34,
-	num4: 37
-};
+import { useStyles } from '../styles/pagesStyles/Games.styles';
+import { fourKeyCode } from '../utils/keyCode';
 
 export const SavannaPage = (props) => {
 	const classes = useStyles();
@@ -168,12 +51,10 @@ export const SavannaPage = (props) => {
 	const [ currentSeries, setCurrentSeries ] = useState(0);
 	const [ allSeries, setAllSeries ] = useState([]);
 	const seriesContainer = useRef('');
-  const dispatch = useDispatch();
+	const dispatch = useDispatch();
 
-  const wordsRedux = useSelector(
-    state=>state.words.wordsRedux,
-  );
-	const levelRedux = useSelector((state) => state.level.level)
+	const wordsRedux = useSelector((state) => state.words.wordsRedux);
+	const levelRedux = useSelector((state) => state.level.level);
 
 	const fetchWords = useCallback(
 		async () => {
@@ -214,7 +95,7 @@ export const SavannaPage = (props) => {
 				console.log(e);
 			}
 		},
-		[levelRedux, request, token, userId, wordsRedux]
+		[ levelRedux, request, token, userId, wordsRedux ]
 	);
 
 	useEffect(
@@ -224,7 +105,7 @@ export const SavannaPage = (props) => {
 				postAnswers(correctAnswers, failAnswers);
 			}
 		},
-		[allSeries, correctAnswers, endGame, failAnswers, postAnswers, postStats]
+		[ allSeries, correctAnswers, endGame, failAnswers, postAnswers, postStats ]
 	);
 
 	const answer = useCallback(
@@ -295,7 +176,7 @@ export const SavannaPage = (props) => {
 		() => {
 			return () => {
 				dispatch(deleteWords());
-				dispatch(deleteLevel())
+				dispatch(deleteLevel());
 			};
 		},
 		[ dispatch ]
@@ -355,15 +236,15 @@ export const SavannaPage = (props) => {
 		() => {
 			if (endGame) return;
 			const keyboardClick = (event) => {
-				if (!Object.values(keyCodeArray).includes(event.keyCode)) return;
+				if (!Object.values(fourKeyCode).includes(event.keyCode)) return;
 				let elem;
-				if (event.keyCode === keyCodeArray.top1 || event.keyCode === keyCodeArray.num1) {
+				if (event.keyCode === fourKeyCode.top1 || event.keyCode === fourKeyCode.num1) {
 					elem = four.current[0];
-				} else if (event.keyCode === keyCodeArray.top2 || event.keyCode === keyCodeArray.num2) {
+				} else if (event.keyCode === fourKeyCode.top2 || event.keyCode === fourKeyCode.num2) {
 					elem = four.current[1];
-				} else if (event.keyCode === keyCodeArray.top3 || event.keyCode === keyCodeArray.num3) {
+				} else if (event.keyCode === fourKeyCode.top3 || event.keyCode === fourKeyCode.num3) {
 					elem = four.current[2];
-				} else if (event.keyCode === keyCodeArray.top4 || event.keyCode === keyCodeArray.num4) {
+				} else if (event.keyCode === fourKeyCode.top4 || event.keyCode === fourKeyCode.num4) {
 					elem = four.current[3];
 				}
 				answer(elem.value, true);
@@ -371,10 +252,10 @@ export const SavannaPage = (props) => {
 			document.addEventListener('keydown', keyboardClick);
 			return () => {
 				document.removeEventListener('keydown', keyboardClick);
-        dispatch(deleteWords());
+				dispatch(deleteWords());
 			};
 		},
-		[dispatch, answer, endGame ]
+		[ dispatch, answer, endGame ]
 	);
 
 	const setFourRef = (btn, index) => {

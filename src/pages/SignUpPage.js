@@ -1,108 +1,26 @@
 import React, { useEffect, useState } from 'react';
-
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-
 import { Link } from 'react-router-dom';
-
 import Box from '@material-ui/core/Box';
-
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Visibility from '@material-ui/icons/Visibility';
-
 import IconButton from '@material-ui/core/IconButton';
-
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import InputLabel from '@material-ui/core/InputLabel';
 import InputAdornment from '@material-ui/core/InputAdornment';
-
 import FormControl from '@material-ui/core/FormControl';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
-import images from '../assets/images/index';
 import { useHttp } from '../hooks/http.hook';
 import { backRoutes } from '../utils/backRoutes';
 import { useMessage } from '../hooks/message.hook';
-
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useStyles } from '../styles/pagesStyles/SignUpPage.styles'
 
-const useStyles = makeStyles((theme) => ({
-  main: {
-    width: '100%',
-    display: 'flex',
-  },
-  paper: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    height: '100%',
-  },
-  mainBox: {
-    width: '400px',
-    padding: '20px 50px 50px 40px ',
-    boxShadow: '2px 0px 14px 2px rgba(0,0,0,0.09)',
-    margin: '40px auto 40px 0px ',
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
-  },
-  form: {
-    width: '100%', // Fix IE 11 issue.
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  button: {
-    width: '180px',
-    height: '36px',
-    backgroundColor: '#6200EE',
-    marginTop: '30px',
-    fontSize: '14px',
-  },
-  submit: {
-    width: '180px',
-    height: '36px',
-    backgroundColor: '#01A299',
-    fontSize: '14px',
-  },
-  link: {
-    textDecoration: 'none',
-  },
-  title: {
-    marginBottom: '30px',
-    marginRight: 'auto',
-  },
-  info: {
-    marginLeft: '1rem',
-    opacity: '0.8',
-  },
-  passwordField: {
-    marginTop: '30px',
-  },
-  buttonBox: {
-    marginTop: '30px',
-    display: 'flex',
-  },
-  register: {
-    margin: 'auto',
-    fontSize: '14px',
-  },
-  email: {
-    marginTop: '30px',
-  },
-  image: {
-    width: '400px',
-    height: '400px',
-    marginTop: 'auto',
-    marginLeft: 'auto',
-  },
-}));
-
-export default function SignUpPage() {
+export const SignUpPage = () => {
   const message = useMessage();
   const { request, error, clearError } = useHttp();
   const classes = useStyles();
@@ -267,7 +185,6 @@ export default function SignUpPage() {
           </form>
         </div>
       </Container>
-      <img className={classes.image} src={images.log} alt="rs" />
     </Container>
   );
 }

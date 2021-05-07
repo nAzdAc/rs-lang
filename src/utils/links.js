@@ -1,4 +1,4 @@
-import { frontRoutes } from "../utils/frontRoutes";
+import { frontRoutes } from "./frontRoutes";
 
 export const bookLinks = [
   {

@@ -1,4 +1,5 @@
-import images from '../assets/images';
+import { images } from '../assets/images/imagesRequire';
+import { useStyles } from '../styles/componentsStyles/Footer.styles';
 
 const gitAccounts = [
 	{
@@ -20,19 +21,21 @@ const gitAccounts = [
 ];
 
 export const Footer = () => {
+	const classes = useStyles();
+
 	return (
-		<footer className="footer">
-      <p className="year">2021</p>
-      <div className="developers">
+		<footer className={classes.footer}>
+			<p className={classes.year}>2021</p>
+			<div className={classes.developers}>
 				{gitAccounts.map((acc) => (
-					<a className="github" target="_blank" key={acc.url} rel="noopener noreferrer" href={acc.url}>
+					<a className={classes.githubLink} target="_blank" key={acc.url} rel="noopener noreferrer" href={acc.url}>
 						{acc.name}
 					</a>
 				))}
 			</div>
-			<div className="rs">
-				<a className="rs__link" target="_blank" rel="noopener noreferrer" href="https://rs.school/react/">
-					<img className="rs__link-img" src={images.rs} alt="rs" />
+			<div className={classes.imageWrap}>
+				<a className={classes.schoolLink} target="_blank" rel="noopener noreferrer" href="https://rs.school/react/">
+					<img className={classes.schoolImage} src={images.school} alt="rs" />
 				</a>
 			</div>
 		</footer>

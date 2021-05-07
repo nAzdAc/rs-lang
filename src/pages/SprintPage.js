@@ -2,7 +2,6 @@ import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } 
 import Typography from '@material-ui/core/Typography';
 import FullscreenIcon from '@material-ui/icons/Fullscreen';
 import FullscreenExitIcon from '@material-ui/icons/FullscreenExit';
-import { makeStyles } from '@material-ui/core/styles';
 import { LOCAL_STORAGE_KEY } from '../utils/storageKey';
 import { INIT_CONSTS } from '../utils/initConsts';
 import fonSong from '../assets/sounds/fon.mp3';
@@ -22,103 +21,8 @@ import { useSelector } from 'react-redux';
 import { deleteWords } from '../store/wordsSlice';
 import { useDispatch } from 'react-redux';
 import { deleteLevel } from '../store/levelSlice';
-
-const useStyles = makeStyles({
-	root: {
-		display: 'flex',
-		alignItems: 'center',
-		justifyContent: 'center'
-	},
-	gameContainer: {
-		position: 'relative',
-		width: '90%',
-		display: 'flex',
-		flexDirection: 'column',
-		flexWrap: 'wrap',
-		alignItems: 'center',
-		justifyContent: 'space-around',
-		padding: '20px 0px 10px 0px',
-		background: 'white'
-	},
-	buttonsWrap: {
-		display: 'flex',
-		flexWrap: 'wrap',
-		alignItems: 'center'
-	},
-	badButton: {
-		borderRadius: '5px',
-		border: 'none',
-		cursor: 'pointer',
-		marginRight: '10px',
-		fontWeight: 'bold',
-		width: '109px',
-		height: '36px',
-		background: '#B00020',
-		color: '#FFF',
-		'&:hover': {
-			background: '#E6002A'
-		}
-	},
-	goodButton: {
-		borderRadius: '5px',
-		border: 'none',
-		cursor: 'pointer',
-		fontWeight: 'bold',
-		width: '109px',
-		height: '36px',
-		background: '#01A299',
-		color: '#FFF',
-		'&:hover': {
-			background: '#00D9CE'
-		}
-	},
-	loader: {
-		position: 'absolute',
-		top: '50%',
-		left: '50%'
-	},
-	fullScreenBtn: {
-		position: 'absolute',
-		right: '0',
-		bottom: '0',
-		border: 'none',
-		outline: 'none',
-		cursor: 'pointer',
-		fontWeight: 'bold',
-		width: '50px',
-		height: '50px',
-		background: 'white',
-		color: '#FFF'
-	},
-	fullScreenIcon: {
-		cursor: 'pointer',
-		fontSize: '50px',
-		color: '#01A299',
-		'&:hover': {
-			color: '#00D9CE'
-		}
-	},
-	series: {
-		minHeight: '100px',
-		display: 'flex',
-		flexWrap: 'wrap',
-		alignItems: 'center',
-		justifyContent: 'flex-start',
-		marginBottom: '30px',
-		width: '90%'
-	},
-	starIcon: {
-		fontSize: '50px',
-		color: 'gold'
-	}
-});
-
-const keyCodeArray = {
-	enter: 13,
-	space: 32,
-	num1: 35,
-	num2: 40
-};
+import { useStyles } from '../styles/pagesStyles/Games.styles';
+import { yesNoKeyCode } from '../utils/keyCode';
 
 export const SprintPage = () => {
 	const classes = useStyles();
@@ -148,7 +52,7 @@ export const SprintPage = () => {
 
 	const dispatch = useDispatch();
 	const wordsRedux = useSelector((state) => state.words.wordsRedux);
-	const levelRedux = useSelector((state) => state.level.level)
+	const levelRedux = useSelector((state) => state.level.level);
 
 	const fetchWords = useCallback(
 		async () => {
@@ -185,7 +89,7 @@ export const SprintPage = () => {
 				console.log(e);
 			}
 		},
-		[levelRedux, request, token, userId, wordsRedux]
+		[ levelRedux, request, token, userId, wordsRedux ]
 	);
 
 	useEffect(
@@ -278,11 +182,11 @@ export const SprintPage = () => {
 		() => {
 			if (endGame) return;
 			const keyboardClick = (event) => {
-				if (!Object.values(keyCodeArray).includes(event.keyCode)) return;
+				if (!Object.values(yesNoKeyCode).includes(event.keyCode)) return;
 				let value;
-				if (event.keyCode === keyCodeArray.enter || event.keyCode === keyCodeArray.num2) {
+				if (event.keyCode === yesNoKeyCode.enter || event.keyCode === yesNoKeyCode.num2) {
 					value = 'true';
-				} else if (event.keyCode === keyCodeArray.space || event.keyCode === keyCodeArray.num1) {
+				} else if (event.keyCode === yesNoKeyCode.space || event.keyCode === yesNoKeyCode.num1) {
 					value = 'false';
 				}
 				answer(value);
@@ -299,7 +203,7 @@ export const SprintPage = () => {
 		() => {
 			return () => {
 				dispatch(deleteWords());
-				dispatch(deleteLevel())
+				dispatch(deleteLevel());
 			};
 		},
 		[ dispatch ]
