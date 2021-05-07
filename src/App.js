@@ -18,8 +18,10 @@ import { LevelsPage } from './pages/LevelsPage';
 import { AuthContext } from './context/AuthContext';
 import { useAuth } from './hooks/auth.hook';
 import { DictionaryPage } from './pages/DictionaryPage';
+import { useStyles } from './styles/pagesStyles/App.styles';
 
-function App() {
+export const App = () => {
+	const classes = useStyles();
 	const { token, login, logout, userId, userName, avatar, uploadAvatar, settings } = useAuth();
 	const isAuthenticated = !!token;
 	return (
@@ -37,7 +39,7 @@ function App() {
 			}}
 		>
 			<Router>
-				<div className="App">
+				<div className={classes.app}>
 					<Header />
 					<Switch>
 						<Route exact path="/">
@@ -86,5 +88,3 @@ function App() {
 		</AuthContext.Provider>
 	);
 }
-
-export default App;
