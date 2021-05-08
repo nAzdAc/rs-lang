@@ -7,30 +7,30 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { AuthContext } from '../context/AuthContext';
 import { useStyles } from '../styles/componentsStyles/EnterPoint.styles';
 
-export const EnterPoint = (props) => {
+export const EnterPoint = ({ link }) => {
 	const classes = useStyles();
 
-	const { userName, token, avatar, logout } = useContext(AuthContext);
-	const isAuthenticated = !!token;
+	const { isAuthenticated, userName, avatar, logout } = useContext(AuthContext);
 
-	if (isAuthenticated) {
-		return (
-			<div className={classes.root}>
-				<Avatar alt="Remy Sharp" src={avatar} />
-				<Typography variant="body2" className={classes.name}>
-					{userName}
-				</Typography>
-				<ExitToAppIcon className={classes.logout} onClick={logout} />
-			</div>
-		);
-	}
 	return (
-		<div className={classes.root}>
-			<RouterLink to={props.to} className={classes.link}>
-				<Button variant="contained" size="small" className={classes.button}>
-					Войти
-				</Button>
-			</RouterLink>
-		</div>
+		<React.Fragment>
+			{isAuthenticated ? (
+				<div className={classes.root}>
+					<div className={classes.avatarWrap}>
+						<Avatar className={classes.avatar} alt="Remy Sharp" src={avatar} />
+						<Typography variant="body2" className={classes.name}>
+							{userName}
+						</Typography>
+					</div>
+					<ExitToAppIcon className={classes.logout} onClick={logout} />
+				</div>
+			) : (
+				<RouterLink to={link} className={classes.link}>
+					<Button variant="contained" size="small" className={classes.button}>
+						Войти
+					</Button>
+				</RouterLink>
+			)}
+		</React.Fragment>
 	);
 };

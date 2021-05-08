@@ -1,48 +1,30 @@
-import styled from 'styled-components';
 import { makeStyles } from '@material-ui/core/styles';
 
-export const MenuStyled = styled.nav`
-	width: 60%;
-	display: flex;
-	justify-content: flex-end;
-	align-items: center;
-	color: #ffffff;
-
-	@media (max-width: 1080px) {
-		width: unset;
-	}
-
-	> ul {
-		display: flex;
-
-		& > .MuiListItem-gutters {
-			@media (max-width: 800px) {
-				padding: 6px;
-			}
-		}
-	}
-
-	> ul > div {
-		display: flex;
-
-		& > .MuiButton-root {
-			min-width: 20px;
-		}
-
-		& > .MuiButton-text {
-			padding: 0;
-			margin-right: 10px;
-		}
-
-		& > .MuiListItem-gutters {
-			@media (max-width: 800px) {
-				padding: 6px;
-			}
-		}
-	}
-`;
-
 export const useStyles = makeStyles({
+	list: {
+		display: 'flex',
+		alignItems: 'center',
+		position: 'relative',
+		zIndex: '2',
+		color: '#fff',
+		'& > a, button': {
+				padding: '0px 2px 0px 2px',
+				margin: '0px 2px 0px 2px',
+			},
+	},
+	sectionWrap: {
+		display: 'flex',
+		'& > button': {
+			width: '20px',
+			minWidth: '20px',
+			color: '#fff',
+			marginBottom: '5px'
+		},
+		'& > a, button': {
+				padding: '0px 2px 0px 2px',
+				margin: '0px 2px 0px 2px',
+			},
+	},
 	settings: {
 		'&:hover, &:focus': {
 			transform: 'rotate(360deg)',
@@ -60,13 +42,20 @@ export const useStyles = makeStyles({
 		}
 	},
 	full: {
-		'@media (max-width: 800px)': {
+		'@media (max-width: 715px)': {
 			display: 'none'
 		}
 	},
 	icon: {
-		'@media (min-width: 800px)': {
+		'@media (min-width: 715px)': {
 			display: 'none'
+		}
+	},
+	text: {
+		fontFamily: '"Itim", cursive;',
+		fontSize: '25px',
+		'@media (max-width: 900px)': {
+			fontSize: '17px',
 		}
 	}
 });

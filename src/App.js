@@ -1,6 +1,5 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import { Header } from './components/Header';
 import { SettingsPage } from './pages/SettingsPage';
 import { GamesPage } from './pages/GamesPage';
 import { SprintPage } from './pages/SprintPage';
@@ -18,6 +17,8 @@ import { LevelsPage } from './pages/LevelsPage';
 import { AuthContext } from './context/AuthContext';
 import { useAuth } from './hooks/auth.hook';
 import { DictionaryPage } from './pages/DictionaryPage';
+import { Menu } from './components/Menu';
+import { Link } from 'react-router-dom';
 import { useStyles } from './styles/pagesStyles/App.styles';
 
 export const App = () => {
@@ -40,7 +41,12 @@ export const App = () => {
 		>
 			<Router>
 				<div className={classes.app}>
-					<Header />
+					<header className={classes.header}>
+						<Link to="/" className={classes.logo}>
+							RS lang
+						</Link>
+						<Menu />
+					</header>
 					<Switch>
 						<Route exact path="/">
 							<MainPage />
@@ -87,4 +93,4 @@ export const App = () => {
 			</Router>
 		</AuthContext.Provider>
 	);
-}
+};

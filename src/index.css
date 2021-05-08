@@ -1,8 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap');
 
-* {
+#root {
   margin: 0;
   padding: 0;
+  height: 100%;
 }
 
 body {
@@ -21,31 +22,6 @@ code {
     monospace;
 }
 
-/*!  FOOTER  !*/
-/* 
-@media (max-width: 1180px) {
-  .header,
-  .header_country {
-    padding: 0 30px;
-  }
-}
-
-@media (max-width: 800px) {
-  .developers {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .github {
-    margin: 5px;
-    font-size: 14px;
-  }
-
-  .footer {
-    height: max-content;
-  }
-} */
-
 .slide-word.entering {
   animation: slideDown 5s forwards;
 }
@@ -53,10 +29,8 @@ code {
 @keyframes slideDown {
   0% {
     transform: translateY(0px);
-    /* opacity: 1; */
   }
   100% {
     transform: translateY(300px);
-    /* opacity: 0; */
   }
 }

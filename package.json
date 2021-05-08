@@ -14,9 +14,7 @@
     "classnames": "^2.3.0",
     "fontsource-roboto": "^4.0.0",
     "howler": "^2.2.1",
-    "material-ui-image": "^3.3.1",
     "react": "^17.0.2",
-    "react-animations": "^1.0.0",
     "react-dom": "^17.0.2",
     "react-redux": "^7.2.3",
     "react-router-dom": "^5.2.0",
@@ -25,8 +23,6 @@
     "react-transition-group": "^4.4.1",
     "recharts": "^2.0.9",
     "redux": "^4.0.5",
-    "styled-components": "^5.2.1",
-    "use-sound": "^2.0.1",
     "web-vitals": "^1.1.1"
   },
   "scripts": {

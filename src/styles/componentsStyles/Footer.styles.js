@@ -15,9 +15,6 @@ export const useStyles = makeStyles({
 		'@media (max-width: 730px)': {
 			fontSize: '20px'
 		},
-		'@media (max-width: 530px)': {
-			fontSize: '14px'
-		}
 	},
 	developers: {
 		color: '#fff'
@@ -29,18 +26,11 @@ export const useStyles = makeStyles({
 		'@media (max-width: 730px)': {
 			fontSize: '14px'
 		},
-		'@media (max-width: 530px)': {
-			fontSize: '11px'
-		}
 	},
 	schoolImage: {
 		'@media (max-width: 730px)': {
-			width: '75px',
+			width: '70px',
 			height: '30px'
 		},
-		'@media (max-width: 530px)': {
-			width: '50px',
-			height: '20px'
-		}
 	}
 });
