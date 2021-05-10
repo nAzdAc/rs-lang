@@ -3,8 +3,12 @@ import { frontRoutes } from './frontRoutes';
 export const INIT_CONSTS = {
 	musicVolume: 0,
 	soundVolume: 0,
-	wordVolume: 10,
+	wordVolume: 10
 };
+
+export const levels = [ 1, 2, 3, 4, 5, 6 ];
+
+export const wordCategories = [ { text: 'Изучаемые слова' }, { text: 'Сложные слова' }, { text: 'Удаленные слова' } ];
 
 export const gameCardsContent = [
 	{

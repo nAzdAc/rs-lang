@@ -1,8 +1,8 @@
 export const images = {
-	aleksey: require('./aleksey.jpg').default,
-	nicolay: require('./nicolay.jpg').default,
-	ivan: require('./ivan.jpg').default,
-	max: require('./max.jpg').default,
-	misha: require('./misha.jpg').default,
-  school: require('./rs.png').default,
+	aleksey: require('./aleksey.png').default,
+	nicolay: require('./nicolay.png').default,
+	ivan: require('./ivan.png').default,
+	max: require('./max.png').default,
+	misha: require('./misha.png').default,
+	school: require('./rs.png').default
 };

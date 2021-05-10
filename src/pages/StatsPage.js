@@ -3,25 +3,25 @@ import { AuthContext } from '../context/AuthContext';
 import { useHttp } from '../hooks/http.hook';
 import { originURL } from '../utils/backRoutes';
 import { Typography } from '@material-ui/core';
-import { StatisticsTabs } from '../components/Tabs';
-import { useStyles } from '../styles/pagesStyles/StatsPage.styles';
+import { StatisticsTabs } from '../components/StatisticsTabs';
+import { useStyles } from '../styles/pagesStyles/StatsGamesSettings.styles';
 
 export const StatsPage = () => {
 	const classes = useStyles();
-	const { userId, token } = useContext(AuthContext);
+	const { userId, token, isAuthenticated } = useContext(AuthContext);
 	const { request } = useHttp();
 	const [ stats, setStats ] = useState();
 
 	const getStats = useCallback(
 		async () => {
-			if (!token || !userId) return;
+			if (!isAuthenticated || !userId) return;
 			const userStats = (await request(`${originURL}/users/${userId}/statistics/`, 'GET', null, {
 				Authorization: `Bearer ${token}`
 			})).parsedStats;
 			console.log(userStats);
 			setStats(userStats);
 		},
-		[ request, token, userId ]
+		[ isAuthenticated, request, token, userId ]
 	);
 
 	useEffect(
@@ -32,10 +32,9 @@ export const StatsPage = () => {
 	);
 
 	return (
-		<div className={classes.wrapper}>
-			<div className={classes.content}>
+		<div className={classes.root}>
 				{userId && token ? (
-					<React.Fragment>
+					<div className={classes.tab}>
 						{stats === null ? (
 							<Typography variant="h2" className={classes.title}>
 								У вас ещё нет статистики
@@ -48,13 +47,12 @@ export const StatsPage = () => {
 								<StatisticsTabs stats={stats} />
 							</React.Fragment>
 						)}
-					</React.Fragment>
+					</div>
 				) : (
 					<Typography variant="h2" className={classes.title}>
 						Статистика доступна только для авторизованных пользователей
 					</Typography>
 				)}
-			</div>
 		</div>
 	);
 };

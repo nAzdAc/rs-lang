@@ -14,7 +14,7 @@ import { useSelector } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Paper } from '@material-ui/core';
-import { useStyles, VolumeSlider, PurpleSwitch, marks } from '../styles/pagesStyles/SettingsPage.styles';
+import { useStyles, VolumeSlider, PurpleSwitch, marks } from '../styles/pagesStyles/StatsGamesSettings.styles';
 
 export const SettingsPage = () => {
   const classes = useStyles();
@@ -63,12 +63,11 @@ export const SettingsPage = () => {
   };
 
   return (
-    <div className={classes.wrapper}>
-      <div className={classes.content}>
+    <div className={classes.root}>
         <Typography variant="h2" className={classes.title}>
           Настройки
         </Typography>
-        <div className={classes.contentCards}>
+        <div className={classes.cardsWrap}>
           <Paper className={classes.card}>
             <Typography variant="h4" className={classes.subtitle}>
               Отображение кнопок
@@ -164,7 +163,6 @@ export const SettingsPage = () => {
             />
           </Paper>
         </div>
-      </div>
     </div>
   );
 };

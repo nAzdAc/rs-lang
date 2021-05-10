@@ -8,9 +8,13 @@ export const useStyles = makeStyles({
 		zIndex: '2',
 		color: '#fff',
 		'& > a, button': {
+			padding: '0px 5px 0px 5px',
+			margin: '0px 5px 0px 5px',
+			'@media (max-width: 750px)': {
 				padding: '0px 2px 0px 2px',
-				margin: '0px 2px 0px 2px',
-			},
+			margin: '0px 2px 0px 2px',
+			}
+		}
 	},
 	sectionWrap: {
 		display: 'flex',
@@ -21,9 +25,13 @@ export const useStyles = makeStyles({
 			marginBottom: '5px'
 		},
 		'& > a, button': {
+			padding: '0px 5px 0px 5px',
+			margin: '0px 5px 0px 5px',
+			'@media (max-width: 750px)': {
 				padding: '0px 2px 0px 2px',
-				margin: '0px 2px 0px 2px',
-			},
+			margin: '0px 2px 0px 2px',
+			}
+		}
 	},
 	settings: {
 		'&:hover, &:focus': {
@@ -42,20 +50,20 @@ export const useStyles = makeStyles({
 		}
 	},
 	full: {
-		'@media (max-width: 715px)': {
+		'@media (max-width: 750px)': {
 			display: 'none'
 		}
 	},
 	icon: {
-		'@media (min-width: 715px)': {
+		'@media (min-width: 750px)': {
 			display: 'none'
 		}
 	},
 	text: {
 		fontFamily: '"Itim", cursive;',
 		fontSize: '25px',
-		'@media (max-width: 900px)': {
-			fontSize: '17px',
+		'@media (max-width: 920px)': {
+			fontSize: '17px'
 		}
 	}
 });

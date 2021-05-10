@@ -10,10 +10,10 @@ import { SavannaPage } from './SavannaPage';
 import { GameCard } from '../components/GameCard';
 import { Box } from '@material-ui/core';
 import { LevelButton } from '../components/LevelButton';
-import { levels } from '../constants/levels';
+import { levels } from '../utils/initConsts';
 import { useDispatch } from 'react-redux';
 import { deleteLevel, setLevel } from '../store/levelSlice';
-import { useStyles } from '../styles/pagesStyles/GamesPage.styles';
+import { useStyles } from '../styles/pagesStyles/StatsGamesSettings.styles';
 
 const Games = () => {
 	const classes = useStyles();
@@ -47,7 +47,7 @@ const Games = () => {
 			<Typography variant="h3" className={classes.title}>
 				Выберите игру
 			</Typography>
-			<div className={classes.cards}>
+			<div className={classes.cardsWrap}>
 				{gameCardsContent.map((card, index) => {
 					return (
 						<div key={index}>

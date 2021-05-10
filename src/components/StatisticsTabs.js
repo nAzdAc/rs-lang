@@ -1,21 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
-import { Chart } from '../components/Chart';
+import { Chart } from './Chart';
 import { useState } from 'react';
 import { GameStatsTable } from './GameStatsTable';
 import { TodayStatsTable } from './TodayStatsTable';
+import { useStyles } from '../styles/pagesStyles/StatsGamesSettings.styles';
 
 function TabPanel(props) {
 	const { children, value, index, ...other } = props;
 
 	return (
 		<div
-			style={{ padding: '20px' }}
 			role="tabpanel"
 			hidden={value !== index}
 			id={`simple-tabpanel-${index}`}
@@ -40,21 +39,6 @@ function a11yProps(index) {
 	};
 }
 
-const useStyles = makeStyles((theme) => ({
-	root: {
-		flexGrow: 1,
-		backgroundColor: theme.palette.background.paper
-	},
-	title: {
-		marginBottom: '20px',
-		marginTop: '20px'
-	},
-	tabContainer: {
-		width: '100%',
-		height: '100%'
-	}
-}));
-
 export const StatisticsTabs = ({ stats }) => {
 	const classes = useStyles();
 	const [ value, setValue ] = useState(0);
@@ -64,7 +48,7 @@ export const StatisticsTabs = ({ stats }) => {
 	};
 
 	return (
-		<div className={classes.root}>
+		<React.Fragment>
 			<AppBar position="static">
 				<Tabs value={value} onChange={handleChange} aria-label="simple tabs example">
 					<Tab label="В цифрах" {...a11yProps(0)} />
@@ -75,11 +59,11 @@ export const StatisticsTabs = ({ stats }) => {
 			<TabPanel value={value} index={0}>
 				{stats && (
 					<React.Fragment>
-						<Typography variant="h4" className={classes.title}>
+						<Typography variant="h4" className={classes.subTitle}>
 							Успехи в играх
 						</Typography>
 						<GameStatsTable rows={stats.games} />
-						<Typography variant="h4" className={classes.title}>
+						<Typography variant="h4" className={classes.subTitle}>
 							За сегодня
 						</Typography>
 						<TodayStatsTable learnedWordsToday={stats.learnedWordsToday} percentToday={stats.percentToday} />
@@ -87,20 +71,20 @@ export const StatisticsTabs = ({ stats }) => {
 				)}
 			</TabPanel>
 
-			<TabPanel value={value} index={1} style={{ minWidth: '200px', minHeight: '200px' }}>
+			<TabPanel value={value} index={1}>
 				{stats && (
-					<div className={classes.tabContainer}>
-						<Typography variant="h4" className={classes.title}>
+					<React.Fragment>
+						<Typography variant="h4" className={classes.subTitle}>
 							Сколько всего слов вы изучили
 						</Typography>
 						<Chart data={stats.learnedWordsTotal} />
-						<Typography variant="h4" className={classes.title}>
+						<Typography variant="h4" className={classes.subTitle}>
 							Прогресс изучения слов по дням
 						</Typography>
 						<Chart data={stats.learnedWordsPerDate} />
-					</div>
+					</React.Fragment>
 				)}
 			</TabPanel>
-		</div>
+		</React.Fragment>
 	);
 };

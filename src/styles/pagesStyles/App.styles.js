@@ -4,7 +4,6 @@ export const useStyles = makeStyles({
 	app: {
 		display: 'flex',
 		flexDirection: 'column',
-		alignItems: 'center',
 		justifyContent: 'space-between',
 		minHeight: '100%',
 	},
@@ -23,10 +22,10 @@ export const useStyles = makeStyles({
 		color: '#f2f2f2',
 		textDecoration: 'none',
 		margin: '0px 10px 0px 10px',
-		'@media (max-width: 900px)': {
+		'@media (max-width: 920px)': {
 			fontSize: '45px',
 		},
-		'@media (max-width: 715px)': {
+		'@media (max-width: 750px)': {
 			fontSize: '32px',
 		},
 	}
