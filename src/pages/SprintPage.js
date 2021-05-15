@@ -233,10 +233,10 @@ export const SprintPage = () => {
 					<Typography variant="h4">{`${currentWord.english || ''} = ${currentRussianhWord || ''}`}</Typography>
 					<div ref={seriesContainer} className={classes.series} />
 					<div className={classes.buttonsWrap}>
-						<button className={classes.badButton} onClick={(event) => answer(event.target.value)} value={false}>
+						<button className={`${classes.button} ${classes.badButton}`} onClick={(event) => answer(event.target.value)} value={false}>
 							НЕ ВЕРНО
 						</button>
-						<button className={classes.goodButton} onClick={(event) => answer(event.target.value)} value={true}>
+						<button className={`${classes.button} ${classes.goodButton}`} onClick={(event) => answer(event.target.value)} value={true}>
 							ВЕРНО
 						</button>
 					</div>

@@ -58,6 +58,7 @@ export const SignUpPage = () => {
 		e.preventDefault();
 		try {
 			const data = await request(backRoutes.signUp, 'POST', { ...form });
+			console.log(data);
 			message(data.message, 200);
 			setForm({
 				name: '',
@@ -132,7 +133,7 @@ export const SignUpPage = () => {
 					</FormControl>
 					<ToastContainer />
 					<Typography component="h1" variant="subtitle2" align="left" className={classes.info}>
-						Хотя бы 6 символов
+						Пароль должен содержать от 4 до 10 символов
 					</Typography>
 					<Box className={classes.buttonBox}>
 						<Button type="submit" variant="contained" className={classes.button}>

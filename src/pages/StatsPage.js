@@ -1,27 +1,27 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { AuthContext } from '../context/AuthContext';
 import { useHttp } from '../hooks/http.hook';
 import { originURL } from '../utils/backRoutes';
 import { Typography } from '@material-ui/core';
 import { StatisticsTabs } from '../components/StatisticsTabs';
 import { useStyles } from '../styles/pagesStyles/StatsGamesSettings.styles';
+import { AuthContext } from '../context/AuthContext';
 
 export const StatsPage = () => {
 	const classes = useStyles();
-	const { userId, token, isAuthenticated } = useContext(AuthContext);
+	const { userId, token } = useContext(AuthContext);
 	const { request } = useHttp();
 	const [ stats, setStats ] = useState();
 
 	const getStats = useCallback(
 		async () => {
-			if (!isAuthenticated || !userId) return;
+			if (!token || !userId) return;
 			const userStats = (await request(`${originURL}/users/${userId}/statistics/`, 'GET', null, {
 				Authorization: `Bearer ${token}`
 			})).parsedStats;
 			console.log(userStats);
 			setStats(userStats);
 		},
-		[ isAuthenticated, request, token, userId ]
+		[ request, token, userId ]
 	);
 
 	useEffect(

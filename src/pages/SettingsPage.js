@@ -1,168 +1,151 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import Typography from '@material-ui/core/Typography';
 import { AuthContext } from '../context/AuthContext';
-import { LOCAL_STORAGE_KEY } from '../utils/storageKey';
-import { INIT_CONSTS } from '../utils/initConsts';
-import { useDispatch } from 'react-redux';
-import {
-  changeDifficultBtn,
-  changeDeleteBtn,
-  changeTranslateWordBtn,
-  changeTranslateSentenceBtn,
-} from '../store/settingSlice';
 import { useSelector } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Paper } from '@material-ui/core';
 import { useStyles, VolumeSlider, PurpleSwitch, marks } from '../styles/pagesStyles/StatsGamesSettings.styles';
+import { store } from '../redux/store';
+import { asyncVolume, changeSwitch, musicVolume } from '../redux/actions';
 
 export const SettingsPage = () => {
-  const classes = useStyles();
-  const { avatar, uploadAvatar } = useContext(AuthContext);
-  const [musicVolume, setMusicVolume] = useState(
-    parseInt(localStorage.getItem(LOCAL_STORAGE_KEY.musicVolume)) ||
-      INIT_CONSTS.musicVolume
-  );
-  const [soundVolume, setSoundVolume] = useState(
-    parseInt(localStorage.getItem(LOCAL_STORAGE_KEY.soundVolume)) ||
-      INIT_CONSTS.soundVolume
-  );
-  const [wordVolume, setWordVolume] = useState(
-    parseInt(localStorage.getItem(LOCAL_STORAGE_KEY.wordVolume)) ||
-      INIT_CONSTS.wordVolume
-  );
+	const classes = useStyles();
+	const { avatarURL, uploadAvatar, settings, setSettings } = useContext(AuthContext);
+	const soundRef = useRef();
+	const musicRef = useRef();
+	const wordRef = useRef();
 
-  function handleMusicVolume(event, newValue) {
-    setMusicVolume(newValue);
-    localStorage.setItem(LOCAL_STORAGE_KEY.musicVolume, newValue);
-  }
-  function handleSoundVolume(event, newValue) {
-    setSoundVolume(newValue);
-    localStorage.setItem(LOCAL_STORAGE_KEY.soundVolume, newValue);
-  }
-  function handleWordVolume(event, newValue) {
-    setWordVolume(newValue);
-    localStorage.setItem(LOCAL_STORAGE_KEY.wordVolume, newValue);
-  }
+	useEffect(() => {
+		musicRef.current.addEventListener('mouseup', (event) => {
+			console.log(musicRef.current.dataset.name);
+		});
+		wordRef.current.addEventListener('mouseup', (event) => {
+			console.log(wordRef.current.dataset.name);
+		});
+	}, []);
 
-  const dispatch = useDispatch();
-  const handleDifficulty = (e) => {
-    dispatch(changeDifficultBtn(e.target.checked));
-  };
+	// store.subscribe(() => {
+	// 	const state = store.getState();
+	// 	musicRef.current.value = state.musicVolume;
+	// 	soundRef.current.value = state.soundVolume;
+	// });
 
-  const handleDeleteWord = (e) => {
-    dispatch(changeDeleteBtn(e.target.checked));
-  };
+	useEffect(() => {
+		store.subscribe(() => {
+			const state = store.getState();
+			musicRef.current.value = state.volume.MUSIC_VOLUME;
+			wordRef.current.value = state.volume.WORD_VOLUME;
+		});
+		store.dispatch({ type: 'INIT_APP' });
+	}, []);
 
-  const handleTranslateWord = (e) => {
-    dispatch(changeTranslateWordBtn(e.target.checked));
-  };
+	function handleMusicVolume(event, newValue) {
+		console.log('event', event.target.name)
+		store.dispatch(musicVolume(newValue));
+	}
 
-  const handleTranslateSentence = (e) => {
-    dispatch(changeTranslateSentenceBtn(e.target.checked));
-  };
+	function handleSoundVolume(event, newValue) {
+		setSettings((prev) => (prev = { ...prev, soundVolume: newValue }));
+	}
+	function handleWordVolume(event, newValue) {
+		store.dispatch(asyncVolume(newValue));
+	}
 
-  return (
-    <div className={classes.root}>
-        <Typography variant="h2" className={classes.title}>
-          Настройки
-        </Typography>
-        <div className={classes.cardsWrap}>
-          <Paper className={classes.card}>
-            <Typography variant="h4" className={classes.subtitle}>
-              Отображение кнопок
-            </Typography>
-            <div className={classes.buttonsWrapper}>
-              <Typography variant="subtitle1">Сложное слово</Typography>
-              <PurpleSwitch
-                onChange={handleDifficulty}
-                checked={useSelector(
-                  (state) => state.settings.DifficultWordBtn
-                )}
-              />
-            </div>
-            <div className={classes.buttonsWrapper}>
-              <Typography variant="subtitle1">Удалить слово</Typography>
-              <PurpleSwitch
-                onChange={handleDeleteWord}
-                checked={useSelector((state) => state.settings.DeleteWordBtn)}
-              />
-            </div>
-          </Paper>
+	return (
+		<div className={classes.root}>
+			<Typography variant="h2" className={classes.title}>
+				Настройки
+			</Typography>
+			<div className={classes.cardsWrap}>
+				<Paper className={classes.card}>
+					<Typography variant="h4" className={classes.subtitle}>
+						Отображение кнопок
+					</Typography>
+					<div className={classes.buttonsWrapper}>
+						<Typography variant="subtitle1">Сложное слово</Typography>
+						<PurpleSwitch
+							checked={true}
+						/>
+					</div>
+					<div className={classes.buttonsWrapper}>
+						<Typography variant="subtitle1">Удалить слово</Typography>
+						<PurpleSwitch checked={true} />
+					</div>
+				</Paper>
 
-          <Paper className={classes.card}>
-            <Typography variant="h4" className={classes.subtitle}>
-              Отображение перевода
-            </Typography>
-            <div className={classes.buttonsWrapper} style={{ width: '250px' }}>
-              <Typography variant="subtitle1">Перевод слов</Typography>
-              <PurpleSwitch
-                onChange={handleTranslateWord}
-                checked={useSelector(
-                  (state) => state.settings.TranslateWordBtn
-                )}
-              />
-            </div>
-            <div className={classes.buttonsWrapper} style={{ width: '250px' }}>
-              <Typography variant="subtitle1">Перевод предложений</Typography>
-              <PurpleSwitch
-                onChange={handleTranslateSentence}
-                checked={useSelector(
-                  (state) => state.settings.TranslateSentenceBtn
-                )}
-              />
-            </div>
-          </Paper>
-          <ToastContainer />
-          <Paper className={classes.card}>
-            <Typography variant="h4" className={classes.subtitle}>
-              Аватар
-            </Typography>
-            <img alt="avatar" className={classes.avatarImage} src={avatar} />
-            <label htmlFor="file" className={classes.upload}>
-              + ИЗМЕНИТЬ
-            </label>
-            <input
-              style={{ display: 'none' }}
-              type="file"
-              id="file"
-              accept="image/*"
-              onChange={(event) => uploadAvatar(event.target.files[0])}
-            />
-          </Paper>
-          <Paper className={classes.card}>
-            <Typography variant="h6" className={classes.subtitle}>
-              Громкость музыки
-            </Typography>
-            <VolumeSlider
-              marks={marks}
-              valueLabelDisplay="auto"
-              aria-label="pretto slider"
-              value={musicVolume}
-              onChange={handleMusicVolume}
-            />
-            <Typography variant="h6" className={classes.subtitle}>
-              Громкость звуков
-            </Typography>
-            <VolumeSlider
-              marks={marks}
-              valueLabelDisplay="auto"
-              aria-label="pretto slider"
-              value={soundVolume}
-              onChange={handleSoundVolume}
-            />
-            <Typography variant="h6" className={classes.subtitle}>
-              Громкость произношения слов
-            </Typography>
-            <VolumeSlider
-              marks={marks}
-              valueLabelDisplay="auto"
-              aria-label="pretto slider"
-              value={wordVolume}
-              onChange={handleWordVolume}
-            />
-          </Paper>
-        </div>
-    </div>
-  );
+				<Paper className={classes.card}>
+					<Typography variant="h4" className={classes.subtitle}>
+						Отображение перевода
+					</Typography>
+					<div className={classes.buttonsWrapper} style={{ width: '250px' }}>
+						<Typography variant="subtitle1">Перевод слов</Typography>
+						<PurpleSwitch
+							
+							checked={true}
+						/>
+					</div>
+					<div className={classes.buttonsWrapper} style={{ width: '250px' }}>
+						<Typography variant="subtitle1">Перевод предложений</Typography>
+						<PurpleSwitch
+							checked={true}
+						/>
+					</div>
+				</Paper>
+				<ToastContainer />
+				<Paper className={classes.card}>
+					<Typography variant="h4" className={classes.subtitle}>
+						Аватар
+					</Typography>
+					<img alt="avatar" className={classes.avatarImage} src={avatarURL} />
+					<label htmlFor="file" className={classes.upload}>
+						+ ИЗМЕНИТЬ
+					</label>
+					<input
+						style={{ display: 'none' }}
+						type="file"
+						id="file"
+						accept="image/*"
+						onChange={(event) => uploadAvatar(event.target.files[0])}
+					/>
+				</Paper>
+				<Paper className={classes.card}>
+					<Typography variant="h6" className={classes.subtitle}>
+						Громкость музыки
+					</Typography>
+					<VolumeSlider
+						marks={marks}
+						valueLabelDisplay="auto"
+						aria-label="pretto slider"
+						ref={musicRef}
+						onChange={handleMusicVolume}
+						data-name="musicVolume"
+						name='music'
+					/>
+					<Typography variant="h6" className={classes.subtitle}>
+						Громкость звуков
+					</Typography>
+					<VolumeSlider
+						marks={marks}
+						valueLabelDisplay="auto"
+						aria-label="pretto slider"
+						ref={soundRef}
+						onChange={handleSoundVolume}
+						data-name="soundVolume"
+					/>
+					<Typography variant="h6" className={classes.subtitle}>
+						Громкость произношения слов
+					</Typography>
+					<VolumeSlider
+						marks={marks}
+						valueLabelDisplay="auto"
+						aria-label="pretto slider"
+						ref={wordRef}
+						data-name="wordVolume"
+						onChange={handleWordVolume}
+					/>
+				</Paper>
+			</div>
+		</div>
+	);
 };

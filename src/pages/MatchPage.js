@@ -274,7 +274,7 @@ export const MatchPage = () => {
 							return (
 								<div key={index} className={classes.imageWrap}>
 									<div data-name={image.src} ref={(elem) => setFourRef(elem, index)} className={classes.overlay} />
-									<img
+									<img	
 										className={classes.image}
 										onClick={(event) => answer(event.target.dataset.name)}
 										data-name={image.src}

@@ -5,7 +5,7 @@ import { makeStyles, withStyles } from '@material-ui/core/styles';
 export const useStyles = makeStyles({
 	root: {
 		backgroundColor: '#FCFCFF',
-		padding: '10px 10px 10px 20px',
+		padding: '20px 10px 10px 20px',
 		display: 'flex',
 		flexDirection: 'column',
 		'& > header': {
@@ -49,7 +49,8 @@ export const useStyles = makeStyles({
 	buttonBox: {
 		display: 'flex',
 		flexWrap: 'wrap',
-		marginBottom: '10px'
+		marginBottom: '20px',
+		gap: '30px',
 	},
 	cardsWrap: {
 		display: 'flex',

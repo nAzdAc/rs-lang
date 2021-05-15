@@ -9,6 +9,5 @@ export const frontRoutes = {
 	match: '/games/match',
 	dictionary: '/dictionary',
 	signIn: '/signin',
-	signUp: '/signup',
-	levels: '/levels'
+	signUp: '/signup'
 };

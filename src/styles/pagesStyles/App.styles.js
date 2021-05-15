@@ -5,7 +5,7 @@ export const useStyles = makeStyles({
 		display: 'flex',
 		flexDirection: 'column',
 		justifyContent: 'space-between',
-		minHeight: '100%',
+		minHeight: '100%'
 	},
 	header: {
 		width: '100%',
@@ -13,20 +13,25 @@ export const useStyles = makeStyles({
 		display: 'flex',
 		justifyContent: 'space-between',
 		alignItems: 'center',
-		backgroundColor: '#5600e8',
+		gap: '15px',
+		backgroundColor: '#5600e8'
+	},
+	link: {
+		textDecoration: 'none'
 	},
 	logo: {
+		marginLeft: '10px',
+		width: '250px',
 		fontFamily: '"Permanent Marker", cursive',
 		fontSize: '55px',
-		lineHeight: '80px',
 		color: '#f2f2f2',
-		textDecoration: 'none',
-		margin: '0px 10px 0px 10px',
-		'@media (max-width: 920px)': {
-			fontSize: '45px',
+		'@media (max-width: 950px)': {
+			width: '190px',
+			fontSize: '45px'
 		},
-		'@media (max-width: 750px)': {
-			fontSize: '32px',
-		},
+		'@media (max-width: 800px)': {
+			width: '140px',
+			fontSize: '32px'
+		}
 	}
 });

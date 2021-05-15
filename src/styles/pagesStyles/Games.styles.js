@@ -8,8 +8,8 @@ export const useStyles = makeStyles({
 	},
 	gameContainer: {
 		position: 'relative',
-		width: '90%',
-    height: '100%',
+		width: '100%',
+		height: '100%',
 		display: 'flex',
 		flexDirection: 'column',
 		flexWrap: 'wrap',
@@ -19,21 +19,20 @@ export const useStyles = makeStyles({
 		background: 'white'
 	},
 	buttonsWrap: {
-		width: '100%',
 		display: 'flex',
 		flexWrap: 'wrap',
 		alignItems: 'center',
 		justifyContent: 'space-around',
-		marginBottom: '30px'
+		marginBottom: '15px',
+		gap: '10px'
 	},
-  button: {
-		marginRight: '10px',
+	button: {
+		padding: '5px',
 		borderRadius: '5px',
 		border: 'none',
 		cursor: 'pointer',
 		fontWeight: 'bold',
-		width: '20%',
-		maxWidth: '150px',
+		minWidth: '100px',
 		height: '50px',
 		background: '#01A299',
 		color: '#FFF',
@@ -42,6 +41,7 @@ export const useStyles = makeStyles({
 		}
 	},
 	badButton: {
+		marginRight: '20px',
 		background: '#B00020',
 		'&:hover': {
 			background: '#E6002A'
@@ -53,7 +53,7 @@ export const useStyles = makeStyles({
 			background: '#28fc03'
 		}
 	},
-  speaker: {
+	speaker: {
 		width: '150px',
 		height: '120px',
 		marginBottom: '60px',
@@ -63,7 +63,7 @@ export const useStyles = makeStyles({
 			color: '#00D9CE'
 		}
 	},
-  fail: {
+	fail: {
 		marginBottom: '10px'
 	},
 	loader: {
@@ -98,27 +98,36 @@ export const useStyles = makeStyles({
 		flexWrap: 'wrap',
 		alignItems: 'center',
 		justifyContent: 'flex-start',
-		marginBottom: '30px',
+		marginBottom: '15px',
 		width: '90%'
 	},
 	starIcon: {
 		fontSize: '50px',
 		color: 'gold'
 	},
-  imagesContainer: {
+	imagesContainer: {
 		width: '100%',
 		display: 'flex',
 		flexWrap: 'wrap',
 		alignItems: 'center',
 		justifyContent: 'center',
-		marginBottom: '20px'
+		marginBottom: '20px',
+		gap: '10px'
 	},
 	imageWrap: {
+		borderRadius: '5px',
 		cursor: 'pointer',
 		position: 'relative',
 		width: '180px',
 		height: '180px',
-		margin: '10px'
+		'@media (max-width: 900px)': {
+			width: '140px',
+			height: '140px',
+		},
+		'@media (max-width: 700px)': {
+			width: '100px',
+			height: '100px',
+		}
 	},
 	overlay: {
 		display: 'block',
@@ -152,6 +161,7 @@ export const useStyles = makeStyles({
 		left: '0px',
 		width: '100%',
 		height: '100%',
+		borderRadius: 'inherit',
 		cursor: 'pointer'
 	},
 	word: {
@@ -160,4 +170,12 @@ export const useStyles = makeStyles({
 	meaning: {
 		marginBottom: '30px'
 	},
+	finishLine: {
+		backgroundColor: 'red',
+		width: '80%',
+		height: '3px',
+		color: 'red',
+		border: 'none',
+		marginBottom: '10px',
+	}
 });

@@ -1,0 +1,49 @@
+import React from 'react';
+import Typography from '@material-ui/core/Typography';
+import 'fontsource-roboto';
+import Box from '@material-ui/core/Box';
+import { LevelButton } from '../components/LevelButton';
+import { NavLink } from 'react-router-dom';
+import { useHistory, Switch, Route, useRouteMatch } from 'react-router-dom';
+import { bookLinks } from '../utils/links';
+import { BookPage } from './BookPage';
+import { useStyles } from '../styles/pagesStyles/StatsGamesSettings.styles';
+
+export const LevelPage = () => {
+	const classes = useStyles();
+	const { location: { pathname } } = useHistory();
+	const isBookRoute = pathname.slice(1).split('/').length === 1;
+	const { path } = useRouteMatch();
+
+	const LevelsButtons = () => {
+		return (
+			<React.Fragment>
+				<Typography className={classes.title} variant="h2">
+					Выберите уровень сложности
+				</Typography>
+				<Box className={classes.buttonBox}>
+					{bookLinks.map((link, index) => {
+						return (
+							<NavLink key={index} className={classes.link} to={`book${link.to}`}>
+								<LevelButton group={index + 1} />
+							</NavLink>
+						);
+					})}
+				</Box>
+			</React.Fragment>
+		);
+	}
+
+	return (
+		<div className={classes.root}>
+				{isBookRoute && <LevelsButtons />}
+				<Switch>
+					{bookLinks.map((link, index) => (
+						<Route path={`${path}${link.to}`} key={index}>
+							<BookPage />
+						</Route>
+					))}
+				</Switch>
+		</div>
+	);
+};

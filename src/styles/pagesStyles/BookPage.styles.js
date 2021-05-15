@@ -1,39 +1,24 @@
 import { makeStyles } from '@material-ui/core/styles';
 
-export const useStyles = makeStyles((theme) => ({
-	root: {
-		'& > *': {
-			marginTop: theme.spacing(2)
+export const useStyles = makeStyles({
+	levelTitle: {
+		marginBottom: '20px',
+		color: (group) =>
+			group === 0
+				? '#BB86FC'
+				: group === 1
+					? '#985EFF'
+					: group === 2
+						? '#7F39FB'
+						: group === 3 ? '#6200EE' : group === 4 ? '#5600E8' : group === 5 ? '#3700B3' : '#3700B3',
+		'@media (max-width: 670px)': {
+			fontSize: '40px',
 		}
 	},
-	container: {
+	pagination: {
 		display: 'flex',
-		flexWrap: 'wrap',
-		flexDirection: 'column',
-		alignItems: 'flex-start'
-	},
-	title: {
-		marginTop: '160px',
-		width: '100%',
-		fontSize: '60px',
-		fontStyle: 'normal',
-		fontWeight: '300',
-		lineHeight: '72px',
-		textAlign: 'left',
-		verticalAlign: 'middle'
-	},
-	buttonBox: {
-		display: 'flex',
-		marginTop: '40px',
-		marginRight: 'auto',
-		flexWrap: 'wrap'
-	},
-	link: {
-		textDecoration: 'none'
-	},
-	illustration: {
-		display: 'flex',
-		justifyContent: 'flex-end',
-		width: '100%'
+		alignItems: 'center',
+		justifyContent: 'center',
+		marginTop: '20px',
 	}
-}));
+});

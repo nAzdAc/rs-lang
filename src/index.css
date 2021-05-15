@@ -6,6 +6,11 @@
   height: 100%;
 }
 
+* {
+  margin: 0;
+  padding: 0
+}
+
 body {
   margin: 0 auto;
   height: 100vh;
@@ -31,6 +36,6 @@ code {
     transform: translateY(0px);
   }
   100% {
-    transform: translateY(300px);
+    transform: translateY(315px);
   }
 }

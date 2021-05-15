@@ -282,35 +282,39 @@ export const SavannaPage = (props) => {
 					</button>
 					<Transition in={!block} timeout={5000} onEntered={(event) => answer(event.dataset.name, false)}>
 						{(state) => (
-							<Typography data-name={currentWord.english} className={`slide-word ${state}`} variant="h3">
+							<Typography
+								style={{ marginBottom: '300px' }}
+								data-name={currentWord.english}
+								className={`slide-word ${state}`}
+								variant="h3"
+							>
 								{currentWord.russian}
 							</Typography>
 						)}
 					</Transition>
-					<div className={classes.contentWrap}>
-						<div ref={seriesContainer} className={classes.series} />
-						<div className={classes.buttonsWrap}>
-							{fourButtons.map((item, index) => {
-								return (
-									<button
-										ref={(btn) => setFourRef(btn, index)}
-										disabled={block}
-										key={index}
-										onClick={(event) => answer(event.target.value, true)}
-										value={item.english}
-										className={classes.button}
-									>
-										{item.english}
-									</button>
-								);
-							})}
-						</div>
-						<LifesInGames lifes={lifes} />
-						<Typography variant="subtitle1" className={classes.correct}>{`Правильные ответы: ${correctAnswers.length ||
-							0}`}</Typography>
-						<Typography color="secondary" variant="subtitle1" className={classes.fail}>{`Ошибки: ${failAnswers.length ||
-							0}`}</Typography>
+					<hr className={classes.finishLine} />
+					<div className={classes.buttonsWrap}>
+						{fourButtons.map((item, index) => {
+							return (
+								<button
+									ref={(btn) => setFourRef(btn, index)}
+									disabled={block}
+									key={index}
+									onClick={(event) => answer(event.target.value, true)}
+									value={item.english}
+									className={classes.button}
+								>
+									{item.english}
+								</button>
+							);
+						})}
 					</div>
+					<div ref={seriesContainer} className={classes.series} />
+					<LifesInGames lifes={lifes} />
+					<Typography variant="subtitle1" className={classes.correct}>{`Правильные ответы: ${correctAnswers.length ||
+						0}`}</Typography>
+					<Typography color="secondary" variant="subtitle1" className={classes.fail}>{`Ошибки: ${failAnswers.length ||
+						0}`}</Typography>
 				</div>
 			) : (
 				<CircularProgress className={classes.loader} />
