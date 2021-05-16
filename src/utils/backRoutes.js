@@ -17,6 +17,7 @@ export const backRoutes = {
 	signIn: getRoute('signin'),
 	upload: getRoute('upload'),
 	words: getRoute('words'),
+	settings: getRoute('settings'),
 	statistics: getRoute('statistics'),
 	getWordsPage(group = 0, page = 0) {
 		return `${originURL}/words?group=${group}&page=${page}`;

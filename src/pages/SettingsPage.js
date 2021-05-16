@@ -1,56 +1,134 @@
-import React, { useContext, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import Typography from '@material-ui/core/Typography';
-import { AuthContext } from '../context/AuthContext';
-import { useSelector } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Paper } from '@material-ui/core';
 import { useStyles, VolumeSlider, PurpleSwitch, marks } from '../styles/pagesStyles/StatsGamesSettings.styles';
-import { store } from '../redux/store';
-import { asyncVolume, changeSwitch, musicVolume } from '../redux/actions';
+import {
+	reduxFetchSettings,
+	reduxUpload,
+	setDeleteWord,
+	setDifficultWord,
+	setMusicVolume,
+	setSoundVolume,
+	setTranslateSentence,
+	setTranslateWord,
+	setWordVolume
+} from '../redux/actions';
+import { useDispatch, useSelector } from 'react-redux';
+import { useMessage } from '../hooks/message.hook';
+import { backRoutes } from '../utils/backRoutes';
 
 export const SettingsPage = () => {
+	const dispatch = useDispatch();
+	const settings = useSelector((state) => state.app.settings);
+	const { token, avatarURL } = useSelector((state) => state.app.userData);
+	const message = useMessage();
 	const classes = useStyles();
-	const { avatarURL, uploadAvatar, settings, setSettings } = useContext(AuthContext);
-	const soundRef = useRef();
-	const musicRef = useRef();
-	const wordRef = useRef();
+	const soundSlider = useRef();
+	const musicSlider = useRef();
+	const wordSlider = useRef();
+	const difficultWordSwitch = useRef();
+	const deleteWordSwitch = useRef();
+	const translateWordSwitch = useRef();
+	const translateSentencesSwitch = useRef();
 
-	useEffect(() => {
-		musicRef.current.addEventListener('mouseup', (event) => {
-			console.log(musicRef.current.dataset.name);
-		});
-		wordRef.current.addEventListener('mouseup', (event) => {
-			console.log(wordRef.current.dataset.name);
-		});
-	}, []);
+	useEffect(
+		() => {
+			// musicSlider.current.addEventListener('mouseup', async(e) => {
+			// 	dispatch(reduxFetchSettings(musicSlider.current.dataset.name, e.target.ariaValueNow, token))
+			// });
+			// soundSlider.current.addEventListener('mouseup', (e) => {
+			// 	console.log(soundSlider.current.dataset.name);
+			// 	console.log(e.target.ariaValueNow);
+			// });
+			// wordSlider.current.addEventListener('mouseup', (e) => {
+			// 	console.log(wordSlider.current);
+			// 	console.log(e);
+			// });
+			[ musicSlider.current, soundSlider.current, wordSlider.current ].forEach((elem) => {
+				elem.addEventListener('mouseup', async (e) => {
+					dispatch(reduxFetchSettings(e.target.ariaValueText, e.target.ariaValueNow, token));
+				});
+			});
+			// [
+			// 	difficultWordSwitch.current,
+			// 	deleteWordSwitch.current,
+			// 	translateWordSwitch.current,
+			// 	translateSentencesSwitch.current
+			// ].forEach((elem) => {
+			// 	elem.addEventListener('mouseup', async (e) => {
+			// 		console.log(e);
+			// 		console.log(e.target.id);
+			// 		console.log(e.target.name);
+			// 		dispatch(reduxFetchSettings(e.target.name, e.target.checked, token));
+			// 	});
+			// });
+			// difficultWordSwitch.current.addEventListener('mouseup', (e) => {
+			// 	console.log(difficultWordSwitch.current);
+			// 	console.log(e);
+			// });
+			// deleteWordSwitch.current.addEventListener('mouseup', (e) => {
+			// 	console.log(deleteWordSwitch.current);
+			// 	console.log(e);
+			// });
+			// translateWordSwitch.current.addEventListener('mouseup', (e) => {
+			// 	console.log(translateWordSwitch.current);
+			// 	console.log(e);
+			// });
+			// translateSentencesSwitch.current.addEventListener('mouseup', (e) => {
+			// 	console.log(translateSentencesSwitch.current);
+			// 	console.log(e);
+			// });
+		},
+		[ dispatch, token ]
+	);
 
-	// store.subscribe(() => {
-	// 	const state = store.getState();
-	// 	musicRef.current.value = state.musicVolume;
-	// 	soundRef.current.value = state.soundVolume;
-	// });
+	const handleMusicVolume = (event, newValue) => {
+		dispatch(setMusicVolume(newValue));
+	};
 
-	useEffect(() => {
-		store.subscribe(() => {
-			const state = store.getState();
-			musicRef.current.value = state.volume.MUSIC_VOLUME;
-			wordRef.current.value = state.volume.WORD_VOLUME;
-		});
-		store.dispatch({ type: 'INIT_APP' });
-	}, []);
+	const handleSoundVolume = (event, newValue) => {
+		dispatch(setSoundVolume(newValue));
+	};
+	const handleWordVolume = (event, newValue) => {
+		dispatch(setWordVolume(newValue));
+	};
 
-	function handleMusicVolume(event, newValue) {
-		console.log('event', event.target.name)
-		store.dispatch(musicVolume(newValue));
-	}
+	// const handleDifficultWord = (e) => {
+	// dispatch(setDifficultWord(e.target.checked));
+	// dispatch(reduxFetchSettings(e.target.name, e.target.checked, token));
+	// };
 
-	function handleSoundVolume(event, newValue) {
-		setSettings((prev) => (prev = { ...prev, soundVolume: newValue }));
-	}
-	function handleWordVolume(event, newValue) {
-		store.dispatch(asyncVolume(newValue));
-	}
+	// const handleDeleteWord = (e) => {
+	// dispatch(setDeleteWord(e.target.checked));
+	// dispatch(reduxFetchSettings(e.target.name, e.target.checked, token));
+	// };
+
+	// const handleTranslateWord = (e) => {
+	// dispatch(setTranslateWord(e.target.checked));
+	// dispatch(reduxFetchSettings(e.target.name, e.target.checked, token));
+	// };
+
+	// const handleTranslateSentence = (e) => {
+	// dispatch(setTranslateSentence(e.target.checked));
+	// dispatch(reduxFetchSettings(e.target.name, e.target.checked, token));
+	// };
+
+	const handleSwitch = (e) => {
+		dispatch(reduxFetchSettings(e.target.name, e.target.checked, token));
+	};
+
+	const handleAvatar = async (e) => {
+		if (!token) {
+			return message('Для загрузки фото необходимо авторизоваться.', 400);
+		}
+		if (!e.target.files[0]) {
+			return message('Выберите файл', 400);
+		}
+		const { text, code } = await dispatch(reduxUpload(e.target.files[0], token));
+		message(text, code);
+	};
 
 	return (
 		<div className={classes.root}>
@@ -65,15 +143,26 @@ export const SettingsPage = () => {
 					<div className={classes.buttonsWrapper}>
 						<Typography variant="subtitle1">Сложное слово</Typography>
 						<PurpleSwitch
-							checked={true}
+							aria-valuetext="difficultWord"
+							name="difficultWord"
+							data-name="difficultWord"
+							onChange={handleSwitch}
+							checked={settings.difficultWord}
+							ref={difficultWordSwitch}
 						/>
 					</div>
 					<div className={classes.buttonsWrapper}>
 						<Typography variant="subtitle1">Удалить слово</Typography>
-						<PurpleSwitch checked={true} />
+						<PurpleSwitch
+							aria-valuetext="deleteWord"
+							name="deleteWord"
+							data-name="deleteWord"
+							onChange={handleSwitch}
+							checked={settings.deleteWord}
+							ref={deleteWordSwitch}
+						/>
 					</div>
 				</Paper>
-
 				<Paper className={classes.card}>
 					<Typography variant="h4" className={classes.subtitle}>
 						Отображение перевода
@@ -81,14 +170,23 @@ export const SettingsPage = () => {
 					<div className={classes.buttonsWrapper} style={{ width: '250px' }}>
 						<Typography variant="subtitle1">Перевод слов</Typography>
 						<PurpleSwitch
-							
-							checked={true}
+							aria-valuetext="translateWord"
+							name="translateWord"
+							data-name="translateWord"
+							onChange={handleSwitch}
+							checked={settings.translateWord}
+							ref={translateWordSwitch}
 						/>
 					</div>
 					<div className={classes.buttonsWrapper} style={{ width: '250px' }}>
 						<Typography variant="subtitle1">Перевод предложений</Typography>
 						<PurpleSwitch
-							checked={true}
+							aria-valuetext="translateSentences"
+							name="translateSentences"
+							data-name="translateSentences"
+							onChange={handleSwitch}
+							checked={settings.translateSentences}
+							ref={translateSentencesSwitch}
 						/>
 					</div>
 				</Paper>
@@ -101,13 +199,7 @@ export const SettingsPage = () => {
 					<label htmlFor="file" className={classes.upload}>
 						+ ИЗМЕНИТЬ
 					</label>
-					<input
-						style={{ display: 'none' }}
-						type="file"
-						id="file"
-						accept="image/*"
-						onChange={(event) => uploadAvatar(event.target.files[0])}
-					/>
+					<input style={{ display: 'none' }} type="file" id="file" accept="image/*" onChange={handleAvatar} />
 				</Paper>
 				<Paper className={classes.card}>
 					<Typography variant="h6" className={classes.subtitle}>
@@ -117,10 +209,11 @@ export const SettingsPage = () => {
 						marks={marks}
 						valueLabelDisplay="auto"
 						aria-label="pretto slider"
-						ref={musicRef}
-						onChange={handleMusicVolume}
+						aria-valuetext="musicVolume"
 						data-name="musicVolume"
-						name='music'
+						ref={musicSlider}
+						value={settings.musicVolume}
+						onChange={handleMusicVolume}
 					/>
 					<Typography variant="h6" className={classes.subtitle}>
 						Громкость звуков
@@ -129,9 +222,11 @@ export const SettingsPage = () => {
 						marks={marks}
 						valueLabelDisplay="auto"
 						aria-label="pretto slider"
-						ref={soundRef}
-						onChange={handleSoundVolume}
+						aria-valuetext="soundVolume"
 						data-name="soundVolume"
+						ref={soundSlider}
+						value={settings.soundVolume}
+						onChange={handleSoundVolume}
 					/>
 					<Typography variant="h6" className={classes.subtitle}>
 						Громкость произношения слов
@@ -140,8 +235,10 @@ export const SettingsPage = () => {
 						marks={marks}
 						valueLabelDisplay="auto"
 						aria-label="pretto slider"
-						ref={wordRef}
+						aria-valuetext="wordVolume"
 						data-name="wordVolume"
+						ref={wordSlider}
+						value={settings.wordVolume}
 						onChange={handleWordVolume}
 					/>
 				</Paper>
@@ -149,3 +246,18 @@ export const SettingsPage = () => {
 		</div>
 	);
 };
+
+// const mapStateToProps = (state) => {
+// 	console.log(state);
+// 	return {
+// 		musicVolume: state.settings.MUSIC_VOLUME,
+// 		soundVlume: state.settings.SOUND_VOLUME,
+// 		wordVolume: state.settings.WORD_VOLUME
+// 	};
+// };
+
+// const mapDispatchToProps = {
+// 	setMusicVolume
+// };
+
+// export default connect(mapStateToProps, mapDispatchToProps)(SettingsPage);

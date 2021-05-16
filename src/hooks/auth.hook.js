@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect } from 'react';
 import { backRoutes } from '../utils/backRoutes';
+import { LOCAL_STORAGE_KEY } from '../utils/storageKey';
 import { useMessage } from './message.hook';
-const storageName = 'userData';
 
 export const useAuth = () => {
 	const [ token, setToken ] = useState(null);
@@ -15,25 +15,31 @@ export const useAuth = () => {
 		difficultWord: true,
 		deleteWord: true,
 		translateWord: true,
-		translateSentences: true,
+		translateSentences: true
 	});
 	const [ ready, setReady ] = useState(false);
 	const message = useMessage();
 
-	const login = useCallback(({token, userId, userName, avatarURL, settings}) => {
+	const login = useCallback(({ token, userId, userName, avatarURL, settings }) => {
 		setToken(token);
 		setUserId(userId);
 		setUserName(userName);
 		setAvatarURL(avatarURL);
-    setSettings(settings)
+		setSettings(settings);
 		localStorage.setItem(
-			storageName,
+			LOCAL_STORAGE_KEY.userData,
 			JSON.stringify({
 				token,
 				userId,
 				userName,
-				avatarURL,
-        settings,
+				avatarURL
+			})
+		);
+		console.log(settings);
+		localStorage.setItem(
+			LOCAL_STORAGE_KEY.userSettings,
+			JSON.stringify({
+				settings
 			})
 		);
 	}, []);
@@ -59,9 +65,9 @@ export const useAuth = () => {
 			message(data.message, res.status);
 			if (data.avatarURL) {
 				setAvatarURL(data.avatarURL);
-				const local = JSON.parse(localStorage.getItem(storageName));
+				const local = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY.userData));
 				const updateLocal = { ...local, avatarURL: data.avatarURL };
-				localStorage.setItem(storageName, JSON.stringify(updateLocal));
+				localStorage.setItem(LOCAL_STORAGE_KEY.userData, JSON.stringify(updateLocal));
 			}
 		},
 		[ message, token ]
@@ -71,20 +77,22 @@ export const useAuth = () => {
 		setToken(null);
 		setUserId(null);
 		setUserName(null);
-		localStorage.removeItem(storageName);
+		localStorage.removeItem(LOCAL_STORAGE_KEY.userData);
 	}, []);
 
 	useEffect(
 		() => {
-			const data = JSON.parse(localStorage.getItem(storageName));
-			console.log(data)
-			if (data && data.token) {
+			const userData = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY.userData));
+			const userSettings = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY.userSettings));
+			console.log(userData);
+			console.log(userSettings)
+			if (userData && userData.token) {
 				login({
-					token: data.token,
-					userId: data.userId,
-					userName: data.name,
-					avatarURL: data.avatarURL,
-					settings: data.settings
+					token: userData.token,
+					userId: userData.userId,
+					userName: userData.name,
+					avatarURL: userData.avatarURL,
+					settings: userSettings
 				});
 			}
 			setReady(true);
@@ -100,7 +108,7 @@ export const useAuth = () => {
 		userName,
 		uploadAvatar,
 		avatarURL,
-    settings,
+		settings,
 		setSettings,
 		ready
 	};

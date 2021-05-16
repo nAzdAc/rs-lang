@@ -18,8 +18,11 @@ import { useMessage } from '../hooks/message.hook';
 import 'react-toastify/dist/ReactToastify.css';
 import { useStyles } from '../styles/pagesStyles/StatsGamesSettings.styles';
 import { AuthContext } from '../context/AuthContext';
+import { useDispatch } from 'react-redux'
+import { reduxLogin } from '../redux/actions';
 
 export const SignInPage = () => {
+	const dispatch = useDispatch();
 	const message = useMessage();
 	const { request, error, clearError } = useHttp();
 	const { login, isAuthenticated } = useContext(AuthContext);
@@ -56,6 +59,8 @@ export const SignInPage = () => {
 	async function handleSubmit(e) {
 		e.preventDefault();
 		try {
+			dispatch(reduxLogin(form))
+			
 			const data = await request(backRoutes.signIn, 'POST', { ...form });
 			console.log(data);
 			login({

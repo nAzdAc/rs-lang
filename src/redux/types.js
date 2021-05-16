@@ -5,23 +5,11 @@ export const DIFFICULT_WORD = 'DIFFICULT_WORD'
 export const DELETE_WORD = 'DELETE_WORD'
 export const TRANSLATE_WORD = 'TRANSLATE_WORD'
 export const TRANSLATE_SENTENCES = 'TRANSLATE_SENTENCES'
-export const DISABLE_BUTTONS = 'DISABLE_BUTTONS'
-export const ENABLE_BUTTONS = 'ENABLE_BUTTONS'
-
-
-
-export const initVolume = {
-  'SOUND_VOLUME': 0,
-  'MUSIC_VOLUME': 0,
-  'WORD_VOLUME': 0,
-}
-export const initSwitch = {
-  'DIFFICULT_WORD': true,
-  'DELETE_WORD': true,
-  'TRANSLATE_WORD': true,
-  'TRANSLATE_SENTENCES': true
-}
-
-export const all = {
-  disabled: false
-}
+export const SHOW_LOADER = 'SHOW_LOADER'
+export const HIDE_LOADER = 'HIDE_LOADER'
+export const SHOW_MESSAGE = 'SHOW_MESSAGE'
+export const HIDE_MESSAGE = 'HIDE_MESSAGE'
+export const SIGN_IN = 'SIGN_IN'
+export const SIGN_UP = 'SIGN_UP'
+export const UPLOAD_AVATAR = 'UPLOAD_AVATAR'
+export const FETCH_SETTINGS = 'FETCH_SETTINGS'
