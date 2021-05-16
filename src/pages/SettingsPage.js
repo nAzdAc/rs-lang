@@ -17,10 +17,6 @@ export const SettingsPage = () => {
 	const soundSlider = useRef();
 	const musicSlider = useRef();
 	const wordSlider = useRef();
-	const difficultWordSwitch = useRef();
-	const deleteWordSwitch = useRef();
-	const translateWordSwitch = useRef();
-	const translateSentencesSwitch = useRef();
 
 	useEffect(
 		() => {
@@ -70,7 +66,6 @@ export const SettingsPage = () => {
 							data-name="difficultWord"
 							onChange={handleSwitch}
 							checked={settings.difficultWord}
-							ref={difficultWordSwitch}
 						/>
 					</div>
 					<div className={classes.buttonsWrapper}>
@@ -81,7 +76,6 @@ export const SettingsPage = () => {
 							data-name="deleteWord"
 							onChange={handleSwitch}
 							checked={settings.deleteWord}
-							ref={deleteWordSwitch}
 						/>
 					</div>
 				</Paper>
@@ -97,7 +91,6 @@ export const SettingsPage = () => {
 							data-name="translateWord"
 							onChange={handleSwitch}
 							checked={settings.translateWord}
-							ref={translateWordSwitch}
 						/>
 					</div>
 					<div className={classes.buttonsWrapper} style={{ width: '250px' }}>
@@ -108,7 +101,6 @@ export const SettingsPage = () => {
 							data-name="translateSentences"
 							onChange={handleSwitch}
 							checked={settings.translateSentences}
-							ref={translateSentencesSwitch}
 						/>
 					</div>
 				</Paper>
