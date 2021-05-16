@@ -6,14 +6,8 @@ import {
 	SIGN_IN,
 	SIGN_UP,
 	UPLOAD_AVATAR,
-	SOUND_VOLUME,
-	MUSIC_VOLUME,
-	WORD_VOLUME,
-	DIFFICULT_WORD,
-	DELETE_WORD,
-	TRANSLATE_WORD,
-	TRANSLATE_SENTENCES,
-  FETCH_SETTINGS
+	SET_VOLUME,
+	FETCH_SETTINGS
 } from './types';
 
 const initialState = {
@@ -58,20 +52,8 @@ export function appReducer(state = initialState, action) {
 			return { ...state, message: action.payload };
 		case HIDE_MESSAGE:
 			return { ...state, message: null };
-		case SOUND_VOLUME:
-			return { ...state, settings: { ...state.settings, soundVolume: action.payload } };
-		case MUSIC_VOLUME:
-			return { ...state, settings: { ...state.settings, musicVolume: action.payload } };
-		case WORD_VOLUME:
-			return { ...state, settings: { ...state.settings, wordVolume: action.payload } };
-		case DIFFICULT_WORD:
-			return { ...state, settings: { ...state.settings, difficultWord: action.payload } };
-		case DELETE_WORD:
-			return { ...state, settings: { ...state.settings, deleteWord: action.payload } };
-		case TRANSLATE_WORD:
-			return { ...state, settings: { ...state.settings, translateWord: action.payload } };
-		case TRANSLATE_SENTENCES:
-			return { ...state, settings: { ...state.settings, translateSentences: action.payload } };
+		case SET_VOLUME:
+			return { ...state, settings: { ...state.settings, ...action.payload } };
 		case FETCH_SETTINGS:
 			return { ...state, settings: { ...action.payload } };
 		default:

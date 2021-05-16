@@ -1,20 +1,14 @@
 import { backRoutes } from '../utils/backRoutes';
 import { LOCAL_STORAGE_KEY } from '../utils/storageKey';
 import {
-	DELETE_WORD,
-	DIFFICULT_WORD,
 	FETCH_SETTINGS,
 	HIDE_LOADER,
 	HIDE_MESSAGE,
-	MUSIC_VOLUME,
+	SET_VOLUME,
 	SHOW_LOADER,
 	SHOW_MESSAGE,
 	SIGN_IN,
-	SOUND_VOLUME,
-	TRANSLATE_SENTENCES,
-	TRANSLATE_WORD,
 	UPLOAD_AVATAR,
-	WORD_VOLUME
 } from './types';
 
 export function showLoader() {
@@ -42,52 +36,12 @@ export function hideMessage() {
 	};
 }
 
-export function setMusicVolume(value) {
+export function setVolume(name, value) {
 	return {
-		type: MUSIC_VOLUME,
-		payload: value
-	};
-}
-
-export function setSoundVolume(value) {
-	return {
-		type: SOUND_VOLUME,
-		payload: value
-	};
-}
-
-export function setWordVolume(value) {
-	return {
-		type: WORD_VOLUME,
-		payload: value
-	};
-}
-
-export function setDifficultWord(value) {
-	return {
-		type: DIFFICULT_WORD,
-		payload: value
-	};
-}
-
-export function setDeleteWord(value) {
-	return {
-		type: DELETE_WORD,
-		payload: value
-	};
-}
-
-export function setTranslateWord(value) {
-	return {
-		type: TRANSLATE_WORD,
-		payload: value
-	};
-}
-
-export function setTranslateSentence(value) {
-	return {
-		type: TRANSLATE_SENTENCES,
-		payload: value
+		type: SET_VOLUME,
+		payload: {
+			[name]: value
+		}
 	};
 }
 

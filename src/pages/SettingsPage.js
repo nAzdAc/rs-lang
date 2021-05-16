@@ -4,20 +4,9 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Paper } from '@material-ui/core';
 import { useStyles, VolumeSlider, PurpleSwitch, marks } from '../styles/pagesStyles/StatsGamesSettings.styles';
-import {
-	reduxFetchSettings,
-	reduxUpload,
-	setDeleteWord,
-	setDifficultWord,
-	setMusicVolume,
-	setSoundVolume,
-	setTranslateSentence,
-	setTranslateWord,
-	setWordVolume
-} from '../redux/actions';
+import { reduxFetchSettings, reduxUpload, setVolume } from '../redux/actions';
 import { useDispatch, useSelector } from 'react-redux';
 import { useMessage } from '../hooks/message.hook';
-import { backRoutes } from '../utils/backRoutes';
 
 export const SettingsPage = () => {
 	const dispatch = useDispatch();
@@ -35,85 +24,18 @@ export const SettingsPage = () => {
 
 	useEffect(
 		() => {
-			// musicSlider.current.addEventListener('mouseup', async(e) => {
-			// 	dispatch(reduxFetchSettings(musicSlider.current.dataset.name, e.target.ariaValueNow, token))
-			// });
-			// soundSlider.current.addEventListener('mouseup', (e) => {
-			// 	console.log(soundSlider.current.dataset.name);
-			// 	console.log(e.target.ariaValueNow);
-			// });
-			// wordSlider.current.addEventListener('mouseup', (e) => {
-			// 	console.log(wordSlider.current);
-			// 	console.log(e);
-			// });
 			[ musicSlider.current, soundSlider.current, wordSlider.current ].forEach((elem) => {
 				elem.addEventListener('mouseup', async (e) => {
 					dispatch(reduxFetchSettings(e.target.ariaValueText, e.target.ariaValueNow, token));
 				});
 			});
-			// [
-			// 	difficultWordSwitch.current,
-			// 	deleteWordSwitch.current,
-			// 	translateWordSwitch.current,
-			// 	translateSentencesSwitch.current
-			// ].forEach((elem) => {
-			// 	elem.addEventListener('mouseup', async (e) => {
-			// 		console.log(e);
-			// 		console.log(e.target.id);
-			// 		console.log(e.target.name);
-			// 		dispatch(reduxFetchSettings(e.target.name, e.target.checked, token));
-			// 	});
-			// });
-			// difficultWordSwitch.current.addEventListener('mouseup', (e) => {
-			// 	console.log(difficultWordSwitch.current);
-			// 	console.log(e);
-			// });
-			// deleteWordSwitch.current.addEventListener('mouseup', (e) => {
-			// 	console.log(deleteWordSwitch.current);
-			// 	console.log(e);
-			// });
-			// translateWordSwitch.current.addEventListener('mouseup', (e) => {
-			// 	console.log(translateWordSwitch.current);
-			// 	console.log(e);
-			// });
-			// translateSentencesSwitch.current.addEventListener('mouseup', (e) => {
-			// 	console.log(translateSentencesSwitch.current);
-			// 	console.log(e);
-			// });
 		},
 		[ dispatch, token ]
 	);
 
-	const handleMusicVolume = (event, newValue) => {
-		dispatch(setMusicVolume(newValue));
+	const handleVolume = (e, newValue) => {
+		dispatch(setVolume(e.target.ariaValueText, newValue));
 	};
-
-	const handleSoundVolume = (event, newValue) => {
-		dispatch(setSoundVolume(newValue));
-	};
-	const handleWordVolume = (event, newValue) => {
-		dispatch(setWordVolume(newValue));
-	};
-
-	// const handleDifficultWord = (e) => {
-	// dispatch(setDifficultWord(e.target.checked));
-	// dispatch(reduxFetchSettings(e.target.name, e.target.checked, token));
-	// };
-
-	// const handleDeleteWord = (e) => {
-	// dispatch(setDeleteWord(e.target.checked));
-	// dispatch(reduxFetchSettings(e.target.name, e.target.checked, token));
-	// };
-
-	// const handleTranslateWord = (e) => {
-	// dispatch(setTranslateWord(e.target.checked));
-	// dispatch(reduxFetchSettings(e.target.name, e.target.checked, token));
-	// };
-
-	// const handleTranslateSentence = (e) => {
-	// dispatch(setTranslateSentence(e.target.checked));
-	// dispatch(reduxFetchSettings(e.target.name, e.target.checked, token));
-	// };
 
 	const handleSwitch = (e) => {
 		dispatch(reduxFetchSettings(e.target.name, e.target.checked, token));
@@ -213,7 +135,7 @@ export const SettingsPage = () => {
 						data-name="musicVolume"
 						ref={musicSlider}
 						value={settings.musicVolume}
-						onChange={handleMusicVolume}
+						onChange={handleVolume}
 					/>
 					<Typography variant="h6" className={classes.subtitle}>
 						Громкость звуков
@@ -226,7 +148,7 @@ export const SettingsPage = () => {
 						data-name="soundVolume"
 						ref={soundSlider}
 						value={settings.soundVolume}
-						onChange={handleSoundVolume}
+						onChange={handleVolume}
 					/>
 					<Typography variant="h6" className={classes.subtitle}>
 						Громкость произношения слов
@@ -239,25 +161,10 @@ export const SettingsPage = () => {
 						data-name="wordVolume"
 						ref={wordSlider}
 						value={settings.wordVolume}
-						onChange={handleWordVolume}
+						onChange={handleVolume}
 					/>
 				</Paper>
 			</div>
 		</div>
 	);
 };
-
-// const mapStateToProps = (state) => {
-// 	console.log(state);
-// 	return {
-// 		musicVolume: state.settings.MUSIC_VOLUME,
-// 		soundVlume: state.settings.SOUND_VOLUME,
-// 		wordVolume: state.settings.WORD_VOLUME
-// 	};
-// };
-
-// const mapDispatchToProps = {
-// 	setMusicVolume
-// };
-
-// export default connect(mapStateToProps, mapDispatchToProps)(SettingsPage);
