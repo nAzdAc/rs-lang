@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import { gameCardsContent } from '../utils/initConsts';
 import { useHistory, Switch, Route, useRouteMatch } from 'react-router-dom';
@@ -11,20 +11,18 @@ import { GameCard } from '../components/GameCard';
 import { Box } from '@material-ui/core';
 import { LevelButton } from '../components/LevelButton';
 import { levels } from '../utils/initConsts';
-import { useDispatch } from 'react-redux';
-import { deleteLevel, setLevel } from '../store/levelSlice';
+import { useDispatch, useSelector } from 'react-redux';
 import { useStyles } from '../styles/pagesStyles/StatsGamesSettings.styles';
+import { deleteLevel, setLevel } from '../redux/actions';
 
 const Games = () => {
 	const classes = useStyles();
-	const [ activeLevel, setActiveLevel ] = useState(null);
+	const { level } = useSelector((state) => state);
 	const dispatch = useDispatch();
 	function handleLevelsClick(index) {
-		if (index === activeLevel) {
-			setActiveLevel(null);
+		if (index === level) {
 			dispatch(deleteLevel());
 		} else {
-			setActiveLevel(index);
 			dispatch(setLevel(index));
 		}
 	}
@@ -40,7 +38,7 @@ const Games = () => {
 						key={index}
 						click={() => handleLevelsClick(index)}
 						group={item}
-						isActive={index === activeLevel ? true : false}
+						isActive={index === level ? true : false}
 					/>
 				))}
 			</Box>
@@ -51,7 +49,7 @@ const Games = () => {
 				{gameCardsContent.map((card, index) => {
 					return (
 						<div key={index}>
-							<GameCard activeLevel={activeLevel} name={card.name} todo={card.todo} to={card.to} />
+							<GameCard name={card.name} todo={card.todo} to={card.to} />
 						</div>
 					);
 				})}

@@ -1,27 +1,32 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { useHttp } from '../hooks/http.hook';
-import { originURL } from '../utils/backRoutes';
+import React, { useCallback, useEffect, useState } from 'react';
+import { backRoutes } from '../utils/backRoutes';
 import { Typography } from '@material-ui/core';
 import { StatisticsTabs } from '../components/StatisticsTabs';
 import { useStyles } from '../styles/pagesStyles/StatsGamesSettings.styles';
-import { AuthContext } from '../context/AuthContext';
+import { useSelector } from 'react-redux';
 
 export const StatsPage = () => {
 	const classes = useStyles();
-	const { userId, token } = useContext(AuthContext);
-	const { request } = useHttp();
+	const { token } = useSelector(state => state.userData);
 	const [ stats, setStats ] = useState();
 
 	const getStats = useCallback(
 		async () => {
-			if (!token || !userId) return;
-			const userStats = (await request(`${originURL}/users/${userId}/statistics/`, 'GET', null, {
-				Authorization: `Bearer ${token}`
-			})).parsedStats;
-			console.log(userStats);
-			setStats(userStats);
+			if (!token) return;
+			const res = await fetch(backRoutes.statistics, {
+				method: 'GET',
+				withCredentials: true,
+				headers: {
+					Accept: 'application/json',
+					'Content-Type': 'application/json',
+					Authorization: `Bearer ${token}`
+				},
+			});
+			const json = await res.json();
+			console.log(json);
+			setStats(json.parsedStats);
 		},
-		[ request, token, userId ]
+		[ token ]
 	);
 
 	useEffect(
@@ -33,7 +38,7 @@ export const StatsPage = () => {
 
 	return (
 		<div className={classes.root}>
-				{userId && token ? (
+				{!!token ? (
 					<div className={classes.tab}>
 						{stats === null ? (
 							<Typography variant="h2" className={classes.title}>

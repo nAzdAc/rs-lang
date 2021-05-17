@@ -10,8 +10,8 @@ import { useMessage } from '../hooks/message.hook';
 
 export const SettingsPage = () => {
 	const dispatch = useDispatch();
-	const settings = useSelector((state) => state.app.settings);
-	const { token, avatarURL } = useSelector((state) => state.app.userData);
+	const { soundVolume, musicVolume, wordVolume, difficultWord, deleteWord, translateSentences, translateWord } = useSelector((state) => state.settings);
+	const { token, avatarURL } = useSelector((state) => state.userData);
 	const message = useMessage();
 	const classes = useStyles();
 	const soundSlider = useRef();
@@ -65,7 +65,7 @@ export const SettingsPage = () => {
 							name="difficultWord"
 							data-name="difficultWord"
 							onChange={handleSwitch}
-							checked={settings.difficultWord}
+							checked={difficultWord}
 						/>
 					</div>
 					<div className={classes.buttonsWrapper}>
@@ -75,7 +75,7 @@ export const SettingsPage = () => {
 							name="deleteWord"
 							data-name="deleteWord"
 							onChange={handleSwitch}
-							checked={settings.deleteWord}
+							checked={deleteWord}
 						/>
 					</div>
 				</Paper>
@@ -90,7 +90,7 @@ export const SettingsPage = () => {
 							name="translateWord"
 							data-name="translateWord"
 							onChange={handleSwitch}
-							checked={settings.translateWord}
+							checked={translateWord}
 						/>
 					</div>
 					<div className={classes.buttonsWrapper} style={{ width: '250px' }}>
@@ -100,7 +100,7 @@ export const SettingsPage = () => {
 							name="translateSentences"
 							data-name="translateSentences"
 							onChange={handleSwitch}
-							checked={settings.translateSentences}
+							checked={translateSentences}
 						/>
 					</div>
 				</Paper>
@@ -126,7 +126,7 @@ export const SettingsPage = () => {
 						aria-valuetext="musicVolume"
 						data-name="musicVolume"
 						ref={musicSlider}
-						value={settings.musicVolume}
+						value={musicVolume}
 						onChange={handleVolume}
 					/>
 					<Typography variant="h6" className={classes.subtitle}>
@@ -139,7 +139,7 @@ export const SettingsPage = () => {
 						aria-valuetext="soundVolume"
 						data-name="soundVolume"
 						ref={soundSlider}
-						value={settings.soundVolume}
+						value={soundVolume}
 						onChange={handleVolume}
 					/>
 					<Typography variant="h6" className={classes.subtitle}>
@@ -152,7 +152,7 @@ export const SettingsPage = () => {
 						aria-valuetext="wordVolume"
 						data-name="wordVolume"
 						ref={wordSlider}
-						value={settings.wordVolume}
+						value={wordVolume}
 						onChange={handleVolume}
 					/>
 				</Paper>

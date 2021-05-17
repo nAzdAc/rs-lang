@@ -16,7 +16,7 @@ export const backRoutes = {
 	signUp: getRoute('signup'),
 	signIn: getRoute('signin'),
 	upload: getRoute('upload'),
-	words: getRoute('words'),
+	userWords: getRoute('userWords'),
 	settings: getRoute('settings'),
 	statistics: getRoute('statistics'),
 	getWordsPage(group = 0, page = 0) {

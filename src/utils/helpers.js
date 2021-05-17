@@ -51,22 +51,3 @@ export function getWordsForPlay(allWords, userWords) {
 		return filteredArr;
 	}
 }
-
-export function parsedStats(gameName, correctArr, failArr, seriesArr) {
-	const totalWords = correctArr.length + failArr.length;
-	const correctPercent = Math.round(100 * correctArr.length / (correctArr.length + failArr.length));
-	const longestSeries = Math.max.apply(null, seriesArr);
-	const monthArr = ["Января", "Февраля", "Марта", "Апреля", "Мая", "Июня", "Июля", "Августа", "Сентября", "Октября", "Ноября", "Декабря", ]
-	const month = new Date().getUTCMonth();
-	const year = new Date().getUTCFullYear();
-	const day = new Date().getUTCDate(); 
-
-	const date = `${day} ${monthArr[month]} ${year}`
-	return {
-		gameName: gameName,
-		totalWords,
-		correctPercent,
-		longestSeries,
-		date
-	};
-}

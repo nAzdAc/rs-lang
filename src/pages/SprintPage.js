@@ -1,36 +1,31 @@
-import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Typography from '@material-ui/core/Typography';
 import FullscreenIcon from '@material-ui/icons/Fullscreen';
 import FullscreenExitIcon from '@material-ui/icons/FullscreenExit';
-import { LOCAL_STORAGE_KEY } from '../utils/storageKey';
-import { INIT_CONSTS } from '../utils/initConsts';
 import fonSong from '../assets/sounds/fon.mp3';
 import successSong from '../assets/sounds/success.mp3';
 import failSong from '../assets/sounds/no.wav';
-import { backRoutes } from '../utils/backRoutes';
 import { CircularProgress } from '@material-ui/core';
-import { createSound, getRandomInt, getWordsForPlay } from '../utils/helpers';
+import { createSound, getRandomInt } from '../utils/helpers';
 import { GameStats } from '../components/GameStats';
-import { useHttp } from '../hooks/http.hook';
 import { toggleScreen } from '../utils/fullScreen';
-import { AuthContext } from '../context/AuthContext';
-import { useEndGame } from '../hooks/endGame.hook';
+import { useGames } from '../hooks/games.hook';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useSelector } from 'react-redux';
 import { deleteWords } from '../store/wordsSlice';
 import { useDispatch } from 'react-redux';
-import { deleteLevel } from '../store/levelSlice';
 import { useStyles } from '../styles/pagesStyles/Games.styles';
 import { yesNoKeyCode } from '../utils/keyCode';
+import { deleteLevel } from '../redux/actions';
 
 export const SprintPage = () => {
 	const classes = useStyles();
-	const { userId, token } = useContext(AuthContext);
-	const { request } = useHttp();
-	const { postStats, postAnswers } = useEndGame();
-	const soundVolume = useMemo(() => localStorage.getItem(LOCAL_STORAGE_KEY.soundVolume) || INIT_CONSTS.soundVolume, []);
-	const musicVolume = useMemo(() => localStorage.getItem(LOCAL_STORAGE_KEY.musicVolume) || INIT_CONSTS.musicVolume, []);
+	const dispatch = useDispatch();
+	// const { token } = useSelector((state) => state.userData);
+	const { soundVolume, musicVolume } = useSelector((state) => state.settings);
+	// const { userWords } = useSelector((state) => state);
+	const { getWords } = useGames();
 	const [ endGame, setEndGame ] = useState(false);
 	const [ seconds, setSeconds ] = useState(60);
 	const [ wordsArray, setWordsArray ] = useState([]);
@@ -50,64 +45,25 @@ export const SprintPage = () => {
 	const audioFail = useMemo(() => createSound(failSong, soundVolume * 5), [ soundVolume ]);
 	const audioFon = useMemo(() => createSound(fonSong, musicVolume * 0.1, 1, true), [ musicVolume ]);
 
-	const dispatch = useDispatch();
-	const wordsRedux = useSelector((state) => state.words.wordsRedux);
-	const levelRedux = useSelector((state) => state.level.level);
-
 	const fetchWords = useCallback(
 		async () => {
 			try {
-				let userWordsArr = [];
-				if (userId && token) {
-					userWordsArr = (await backRoutes.getUserWords({ userId, token })).userWords;
-				}
-				let playWords = [];
-				if (wordsRedux.length) {
-					playWords = wordsRedux;
-				} else if (levelRedux !== null) {
-					const randomPage = getRandomInt(0, 31);
-					playWords = await request(`${backRoutes.words}?group=${levelRedux}&page=${randomPage}`, 'GET');
-				} else {
-					const randomGroup = getRandomInt(0, 6);
-					const randomPage = getRandomInt(0, 31);
-					playWords = await request(`${backRoutes.words}?group=${randomGroup}&page=${randomPage}`, 'GET');
-				}
-				const parsedPlayWords = playWords.map((item) => {
-					return {
-						english: item.word,
-						russian: item.wordTranslate,
-						id: item.id,
-						group: item.group,
-						page: item.page,
-						deleted: false
-					};
-				});
-				const gamesArr = getWordsForPlay(parsedPlayWords, userWordsArr);
-				console.log(gamesArr);
-				setWordsArray(gamesArr);
+				const playWords = await getWords();
+				console.log(playWords);
+				setWordsArray(playWords);
 			} catch (e) {
 				console.log(e);
 			}
 		},
-		[ levelRedux, request, token, userId, wordsRedux ]
-	);
-
-	useEffect(
-		() => {
-			if (endGame) {
-				postStats('sprint', correctAnswers, failAnswers, allSeries);
-				postAnswers(correctAnswers, failAnswers);
-			}
-		},
-		[ allSeries, correctAnswers, endGame, failAnswers, postAnswers, postStats ]
+		[ getWords ]
 	);
 
 	const answer = useCallback(
 		(value) => {
 			if (endGame) return;
 			if (
-				(value === 'true' && currentWord.russian === currentRussianhWord) ||
-				(value === 'false' && currentWord.russian !== currentRussianhWord)
+				(value === 'true' && currentWord.wordTranslate === currentRussianhWord) ||
+				(value === 'false' && currentWord.wordTranslate !== currentRussianhWord)
 			) {
 				seriesContainer.current.innerHTML += ' <img src="https://img.icons8.com/color/48/000000/hand-drawn-star.png"/>';
 				setCurrentSeries((prev) => prev + 1);
@@ -140,9 +96,9 @@ export const SprintPage = () => {
 					let word;
 					const num = Math.random();
 					if (num > 0.45) {
-						word = wordsArray[currentNumber].russian;
+						word = wordsArray[currentNumber].wordTranslate;
 					} else {
-						word = wordsArray[getRandomInt(0, wordsArray.length)].russian;
+						word = wordsArray[getRandomInt(0, wordsArray.length)].wordTranslate;
 					}
 					return word;
 				});
@@ -218,7 +174,7 @@ export const SprintPage = () => {
 		<div className={classes.root}>
 			<ToastContainer />
 			{endGame ? (
-				<GameStats correctAnswers={correctAnswers} failAnswers={failAnswers} />
+				<GameStats allSeries={allSeries} gameName='sprint' correctAnswers={correctAnswers} failAnswers={failAnswers} />
 			) : wordsArray.length && currentWord && currentRussianhWord ? (
 				<div ref={gameBoard} className={classes.gameContainer}>
 					<button onClick={() => goFullScreen(gameBoard.current)} className={classes.fullScreenBtn}>
@@ -230,13 +186,21 @@ export const SprintPage = () => {
 					</button>
 					<Typography variant="h5">Осталось: </Typography>
 					<Typography variant="h2">{seconds}</Typography>
-					<Typography variant="h4">{`${currentWord.english || ''} = ${currentRussianhWord || ''}`}</Typography>
+					<Typography variant="h4">{`${currentWord.word || ''} = ${currentRussianhWord || ''}`}</Typography>
 					<div ref={seriesContainer} className={classes.series} />
 					<div className={classes.buttonsWrap}>
-						<button className={`${classes.button} ${classes.badButton}`} onClick={(event) => answer(event.target.value)} value={false}>
+						<button
+							className={`${classes.button} ${classes.badButton}`}
+							onClick={(event) => answer(event.target.value)}
+							value={false}
+						>
 							НЕ ВЕРНО
 						</button>
-						<button className={`${classes.button} ${classes.goodButton}`} onClick={(event) => answer(event.target.value)} value={true}>
+						<button
+							className={`${classes.button} ${classes.goodButton}`}
+							onClick={(event) => answer(event.target.value)}
+							value={true}
+						>
 							ВЕРНО
 						</button>
 					</div>

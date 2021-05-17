@@ -16,7 +16,7 @@ import { Transition } from 'react-transition-group';
 import { toggleScreen } from '../utils/fullScreen';
 import { LifesInGames } from '../components/LifesInGames';
 import { AuthContext } from '../context/AuthContext';
-import { useEndGame } from '../hooks/endGame.hook';
+import { useGames } from '../hooks/games.hook';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useSelector } from 'react-redux';
@@ -29,7 +29,7 @@ import { fourKeyCode } from '../utils/keyCode';
 export const SavannaPage = (props) => {
 	const classes = useStyles();
 	const { request } = useHttp();
-	const { postStats, postAnswers } = useEndGame();
+	const { postStats, postAnswers } = useGames();
 	const { userId, token } = useContext(AuthContext);
 	const soundVolume = useMemo(() => localStorage.getItem(LOCAL_STORAGE_KEY.soundVolume) || INIT_CONSTS.soundVolume, []);
 	const musicVolume = useMemo(() => localStorage.getItem(LOCAL_STORAGE_KEY.musicVolume) || INIT_CONSTS.musicVolume, []);
@@ -102,7 +102,7 @@ export const SavannaPage = (props) => {
 		() => {
 			if (endGame) {
 				postStats('savanna', correctAnswers, failAnswers, allSeries);
-				postAnswers(correctAnswers, failAnswers);
+				// postAnswers(correctAnswers, failAnswers);
 			}
 		},
 		[ allSeries, correctAnswers, endGame, failAnswers, postAnswers, postStats ]

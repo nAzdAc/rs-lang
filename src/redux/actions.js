@@ -1,14 +1,17 @@
 import { backRoutes } from '../utils/backRoutes';
 import { LOCAL_STORAGE_KEY } from '../utils/storageKey';
 import {
+	DELETE_LEVEL,
 	FETCH_SETTINGS,
 	HIDE_LOADER,
 	HIDE_MESSAGE,
+	LOG_OUT,
+	SET_LEVEL,
 	SET_VOLUME,
 	SHOW_LOADER,
 	SHOW_MESSAGE,
 	SIGN_IN,
-	UPLOAD_AVATAR,
+	UPLOAD_AVATAR
 } from './types';
 
 export function showLoader() {
@@ -44,10 +47,29 @@ export function setVolume(name, value) {
 		}
 	};
 }
+export function setLevel(value) {
+	return {
+		type: SET_LEVEL,
+		payload: value
+	};
+}
+
+export function deleteLevel() {
+	return {
+		type: DELETE_LEVEL
+	};
+}
+
+export function reduxLogOut() {
+	localStorage.removeItem(LOCAL_STORAGE_KEY.userData);
+	return {
+		type: LOG_OUT
+	};
+}
 
 export function reduxLogin(value) {
 	return async (dispatch) => {
-		dispatch(showLoader());
+		// dispatch(showLoader());
 		console.log(value);
 		const res = await fetch(backRoutes.signIn, {
 			method: 'POST',
@@ -59,6 +81,7 @@ export function reduxLogin(value) {
 			body: JSON.stringify(value)
 		});
 		const json = await res.json();
+		console.log(json);
 		const statistics = json.statistics && json.statistics.length ? json.statistics : [];
 		const payload = {
 			userData: {
@@ -70,10 +93,14 @@ export function reduxLogin(value) {
 			settings: {
 				...json.settings
 			},
+			userWords: json.userWords,
 			statistics
 		};
+		localStorage.setItem(LOCAL_STORAGE_KEY.userData, JSON.stringify(payload.userData));
+		localStorage.setItem(LOCAL_STORAGE_KEY.userSettings, JSON.stringify(payload.settings));
+		localStorage.setItem(LOCAL_STORAGE_KEY.userWords, JSON.stringify(payload.userWords));
 		dispatch({ type: SIGN_IN, payload });
-		dispatch(hideLoader());
+		// dispatch(hideLoader());
 	};
 }
 
@@ -88,11 +115,11 @@ export function reduxFetchSettings(name, value, token) {
 				Authorization: `Bearer ${token}`
 			},
 			body: JSON.stringify({ name, value })
-		})
+		});
 		const json = await res.json();
-		dispatch({ type: FETCH_SETTINGS, payload: json.settings})
-		return json.message
-	}
+		dispatch({ type: FETCH_SETTINGS, payload: json.settings });
+		return json.message;
+	};
 }
 export function reduxUpload(file, token) {
 	return async (dispatch) => {

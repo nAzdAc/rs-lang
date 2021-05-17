@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState } from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import { Link, Redirect } from 'react-router-dom';
@@ -11,21 +11,17 @@ import InputLabel from '@material-ui/core/InputLabel';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import FormControl from '@material-ui/core/FormControl';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
-import { useHttp } from '../hooks/http.hook';
-import { backRoutes } from '../utils/backRoutes';
 import { ToastContainer } from 'react-toastify';
-import { useMessage } from '../hooks/message.hook';
+// import { useMessage } from '../hooks/message.hook';
 import 'react-toastify/dist/ReactToastify.css';
 import { useStyles } from '../styles/pagesStyles/StatsGamesSettings.styles';
-import { AuthContext } from '../context/AuthContext';
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { reduxLogin } from '../redux/actions';
 
 export const SignInPage = () => {
 	const dispatch = useDispatch();
-	const message = useMessage();
-	const { request, error, clearError } = useHttp();
-	const { login, isAuthenticated } = useContext(AuthContext);
+	// const message = useMessage();
+	const { token } = useSelector(state => state.userData);
 	const classes = useStyles();
 	const [ form, setForm ] = useState({
 		email: '',
@@ -35,14 +31,6 @@ export const SignInPage = () => {
 		password: '',
 		showPassword: false
 	});
-
-	useEffect(
-		() => {
-			message(error);
-			clearError();
-		},
-		[ error, message, clearError ]
-	);
 
 	const handleClickShowPassword = () => {
 		setValues({ ...values, showPassword: !values.showPassword });
@@ -60,21 +48,11 @@ export const SignInPage = () => {
 		e.preventDefault();
 		try {
 			dispatch(reduxLogin(form))
-			
-			const data = await request(backRoutes.signIn, 'POST', { ...form });
-			console.log(data);
-			login({
-				token: data.token,
-				userId: data.userId,
-				userName: data.name,
-				avatarURL: data.avatarURL,
-				settings: data.settings
-			});
-			message(data.message, 200);
+			// message(data.message, 200);
 		} catch (e) {}
 	}
 
-	if (isAuthenticated) {
+	if (!!token) {
 		return <Redirect to="/book" />;
 	} else
 		return (

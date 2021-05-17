@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import { Link } from 'react-router-dom';
@@ -11,16 +11,16 @@ import InputLabel from '@material-ui/core/InputLabel';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import FormControl from '@material-ui/core/FormControl';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
-import { useHttp } from '../hooks/http.hook';
 import { backRoutes } from '../utils/backRoutes';
 import { useMessage } from '../hooks/message.hook';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useStyles } from '../styles/pagesStyles/StatsGamesSettings.styles';
+import { useSelector } from 'react-redux';
 
 export const SignUpPage = () => {
 	const message = useMessage();
-	const { request, error, clearError } = useHttp();
+	const { token } = useSelector(state => state.userData)
 	const classes = useStyles();
 	const [ form, setForm ] = useState({
 		name: '',
@@ -46,20 +46,22 @@ export const SignUpPage = () => {
 		setForm({ ...form, [e.target.name]: e.target.value });
 	};
 
-	useEffect(
-		() => {
-			message(error);
-			clearError();
-		},
-		[ error, message, clearError ]
-	);
-
 	async function handleSubmit(e) {
 		e.preventDefault();
 		try {
-			const data = await request(backRoutes.signUp, 'POST', { ...form });
-			console.log(data);
-			message(data.message, 200);
+			const res = await fetch(backRoutes.signUp, {
+				method: 'POST',
+				withCredentials: true,
+				headers: {
+					Accept: 'application/json',
+					'Content-Type': 'application/json',
+					Authorization: `Bearer ${token}`
+				},
+				body: JSON.stringify({ ...form })
+			});
+			const json = await res.json();
+			console.log(json);
+			message(json.message, 200);
 			setForm({
 				name: '',
 				email: '',

@@ -13,6 +13,7 @@ export const useStyles = makeStyles({
 		textDecoration: 'none',
 	},
 	icon: {
+		display: 'block',
 		'&:hover, &:focus': {
 			transform: 'rotate(360deg)',
 			transition: '0.5s'

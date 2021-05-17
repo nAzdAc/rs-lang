@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { useStyles } from '../styles/componentsStyles/Menu.styles';
 import List from '@material-ui/core/List';
 import { MenuBook, Settings, Bookmarks, VideogameAsset, ShowChart } from '@material-ui/icons';
@@ -6,11 +6,11 @@ import { Link } from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
 import { frontRoutes } from '../utils/frontRoutes';
 import { EnterPoint } from '../components/EnterPoint';
-import { AuthContext } from '../context/AuthContext';
+import { useSelector } from 'react-redux';
 
 export const Menu = () => {
 	const classes = useStyles();
-	const { token } = useContext(AuthContext);
+	const { token } = useSelector(state => state.userData);
 
 	return (
 		<React.Fragment>
@@ -33,7 +33,7 @@ export const Menu = () => {
 						Настройки
 					</Typography>
 				</Link>
-				{token && (
+				{!!token && (
 					<React.Fragment>
 						<Link to={frontRoutes.dictionary} className={classes.link}>
 							<Bookmarks className={classes.icon} />
