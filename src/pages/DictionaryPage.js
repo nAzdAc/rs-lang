@@ -109,40 +109,33 @@ export const DictionaryPage = () => {
 										);
 									})}
 								</ul>
-								<ul className={classes.wordList}>
-									{activeWords.map((word) => {
-										return <DictionaryCard key={word._id} word={word} />;
-									})}
-								</ul>
-								{/* <WordsCardList
-									token={token}
-									isItBook={false}
-									infoPanel={
-										activeSection === 0 ? (
-											'DictionaryLearning'
-										) : activeSection === 1 ? (
-											'DictionaryDifficult'
-										) : (
-											'DictionaryDelete'
-										)
-									}
-									activeSection={activeSection}
-									activeLevel={activeLevel}
-									wordsForDictionari={activeWords}
-								/> */}
 								{Math.ceil(userWords.length / 20) > 1 && (
 									<Pagination
 										page={page}
 										className={classes.pagination}
 										onChange={handlePaginationChange}
-										count={count ? Math.ceil(count / 20) : 30}
+										count={Math.ceil(count / 20)}
+										color="primary"
+									/>
+								)}
+								<ul className={classes.wordList}>
+									{activeWords.map((word) => {
+										return <DictionaryCard key={word._id} word={word} />;
+									})}
+								</ul>
+								{Math.ceil(userWords.length / 20) > 1 && (
+									<Pagination
+										page={page}
+										className={classes.pagination}
+										onChange={handlePaginationChange}
+										count={Math.ceil(count / 20)}
 										color="primary"
 									/>
 								)}
 							</React.Fragment>
 						) : (
 							<Typography className={classes.message} variant="h3">
-								{token ? 'Здесь еще нет слов' : 'Войдите в приложение чтобы увидеть свой словарь'}
+								{token ? 'Здесь нет слов' : 'Войдите в приложение чтобы увидеть свой словарь'}
 							</Typography>
 						)}
 					</React.Fragment>

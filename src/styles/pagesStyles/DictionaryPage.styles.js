@@ -11,7 +11,10 @@ export const useStyles = makeStyles({
 	},
 	title: {
 		marginBottom: '25px',
-		marginRight: 'auto'
+		marginRight: 'auto',
+		'@media (max-width: 800px)': {
+			fontSize: '4rem'
+		}
 	},
 	buttonBox: {
 		display: 'flex',
@@ -28,12 +31,15 @@ export const useStyles = makeStyles({
 	typeButton: {
 		width: '100%',
 		height: '50px',
-		fontSize: '14px',
+		fontSize: '1rem',
 		fontWeight: '500',
 		color: 'white',
 		backgroundColor: '#6200EE',
 		borderRadius: '0',
-		padding: '2px'
+		padding: '2px',
+		'@media (max-width: 800px)': {
+			fontSize: '0.75rem'
+		}
 	},
 	typeButtonActive: {
 		borderBottom: '4px solid white',
@@ -51,7 +57,7 @@ export const useStyles = makeStyles({
 		height: '100%'
 	},
 	pagination: {
-		margin: '40px',
+		margin: '25px',
 		fontSize: '40px'
 	},
 	titleGames: {
@@ -70,6 +76,6 @@ export const useStyles = makeStyles({
 	wordList: {
 		display: 'flex',
 		flexDirection: 'column',
-		gap: '10px'
+		gap: '20px'
 	}
 });
