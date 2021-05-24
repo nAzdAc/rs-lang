@@ -29,7 +29,7 @@ export const useStyles = makeStyles({
 			width: '190px',
 			fontSize: '45px'
 		},
-		'@media (max-width: 800px)': {
+		'@media (max-width: 820px)': {
 			width: '140px',
 			fontSize: '32px'
 		}

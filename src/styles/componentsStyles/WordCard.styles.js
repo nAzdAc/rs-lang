@@ -1,55 +1,76 @@
 import { makeStyles } from '@material-ui/core/styles';
 
-export const useStyles = makeStyles((theme) => ({
-	root: {
-		flexGrow: 1,
-		boxSizing: 'border-box'
+export const useStyles = makeStyles({
+	wordCard: {
+		background: 'grey',
+		display: 'flex',
+		flexWrap: 'wrap',
+		alignItems: 'center',
+		justifyContent: 'space-around',
+		gap: '15px',
+		padding: '10px',
+		cursor: 'pointer',
+		minHeight: '220px'
 	},
-	item: {
-		minWidth: '360px',
-		width: '100%'
+	cardImage: {
+		width: '200px',
+		height: '200px',
+		borderRadius: '10px'
 	},
-	paper: {
-		boxSizing: 'border-box',
-		padding: '1rem',
+	cardContent: {
 		display: 'flex',
 		flexDirection: 'column',
+		flexWrap: 'wrap',
 		justifyContent: 'space-around',
-		textAlign: 'left',
-		color: theme.palette.text.secondary,
-		height: '100%',
-		boxShadow: 'none'
+		marginBottom: '20px'
 	},
-	wordExample: {
+	cardUnitWrap: {
 		display: 'flex',
 		flexWrap: 'wrap',
-		fontSize: '34px',
-		color: '#000000'
+		alignItems: 'center',
+		gap: '10px',
+		marginBottom: '5px'
 	},
-	textEx: {
-		fontSize: '16px',
-		fontWeight: '400',
-		color: '#000000'
+	bigCardIcon: {
+		cursor: 'pointer',
+		fontSize: '50px',
+		color: 'black',
+		'&:hover': {
+			transform: 'scale(1.2)'
+		}
 	},
-	textExTr: {
-		fontSize: '16px',
-		fontWeight: '500',
-		color: '#000000'
+	goldIcon: {
+		color: 'gold'
 	},
-
-	img: {
-		height: '100%',
-		width: '100%',
-		objectFit: 'contain'
+	littleCardIcon: {
+		cursor: 'pointer',
+		fontSize: '30px',
+		color: 'black',
+		'&:hover': {
+			transform: 'scale(1.2)'
+		}
 	},
-	conteiner: {
-		display: 'flex',
-		flexWrap: 'wrap',
-		margin: '0',
-		marginTop: '40px',
-		justifyContent: 'center',
-		minHeight: '232px',
-		width: '100%',
-		boxShadow: '2px 0px 14px 2px rgba(0,0,0,0.09)'
+	correct: {
+		color: 'red'
+	},
+	fail: {
+		color: 'green'
+	},
+	englishText: {
+		color: 'black',
+		fontWeight: '600'
+	},
+	translateText: {
+		color: 'black',
+		fontStyle: 'italic'
+	},
+	iconWrap: {
+		marginRight: '5px',
+		border: 'none',
+		outline: 'none',
+		cursor: 'pointer',
+		fontWeight: 'bold',
+		background: 'inherit',
+		color: '#FFF'
 	}
-}));
+});

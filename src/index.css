@@ -36,6 +36,6 @@ code {
     transform: translateY(0px);
   }
   100% {
-    transform: translateY(315px);
+    transform: translateY(310px);
   }
 }

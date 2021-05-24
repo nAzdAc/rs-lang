@@ -7,36 +7,40 @@ import { useSelector } from 'react-redux';
 
 export const useGames = () => {
 	const { token } = useSelector((state) => state.userData);
-	const { level, words } = useSelector((state) => state);
+	const { level, activeWords } = useSelector((state) => state);
 	const { request } = useHttp();
 	const message = useMessage();
 
 	const getWords = useCallback(
 		async () => {
-			let playWords = [];
-			if (words.length) {
-				playWords = words;
-			} else {
-				let group;
-				if (level !== null) {
-					group = level;
+			try {
+				let playWords = [];
+				if (activeWords.length) {
+					playWords = activeWords;
 				} else {
-					group = getRandomInt(0, 6);
-				}
-				const page = getRandomInt(0, 31);
-				const res = await fetch(backRoutes.getWordsPage(group, page), {
-					method: 'GET',
-					withCredentials: true,
-					headers: {
-						Accept: 'application/json',
-						'Content-Type': 'application/json'
+					let group;
+					if (level !== null) {
+						group = level;
+					} else {
+						group = getRandomInt(0, 6);
 					}
-				});
-				playWords = await res.json();
+					const page = getRandomInt(0, 31);
+					const res = await fetch(backRoutes.getWordsPage(group, page), {
+						method: 'GET',
+						withCredentials: true,
+						headers: {
+							Accept: 'application/json',
+							'Content-Type': 'application/json'
+						}
+					});
+					playWords = await res.json();
+				}
+				return playWords;
+			} catch (e) {
+				console.log(e);
 			}
-			return playWords;
 		},
-		[ level, words ]
+		[ level, activeWords ]
 	);
 
 	const postStats = useCallback(
@@ -54,14 +58,14 @@ export const useGames = () => {
 						Authorization: `Bearer ${token}`
 					},
 					body: JSON.stringify({
-					gameName,
-					correctArr,
-					failArr,
-					seriesArr
+						gameName,
+						correctArr,
+						failArr,
+						seriesArr
 					})
 				});
 				const json = await res.json();
-				console.log(json)
+				console.log(json);
 				// message(json.message, 200);
 			} catch (e) {
 				console.log(e);

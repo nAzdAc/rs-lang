@@ -1,11 +1,9 @@
 import { LOCAL_STORAGE_KEY } from './storageKey';
 
 export const originURL =
-	process.env.NODE_ENV === 'development' ?
-	'http://localhost:8080' :
-	'https://nazdac-rs-lang.herokuapp.com';
-	console.log(originURL);
-	
+	process.env.NODE_ENV === 'development' ? 'http://localhost:8080' : 'https://nazdac-rs-lang.herokuapp.com';
+console.log(originURL);
+
 const token = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY.userData))
 	? JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY.userData)).token
 	: '';
@@ -19,6 +17,7 @@ export const backRoutes = {
 	userWords: getRoute('userWords'),
 	settings: getRoute('settings'),
 	statistics: getRoute('statistics'),
+	updateWord: getRoute('updateWord'),
 	getWordsPage(group = 0, page = 0) {
 		return `${originURL}/words?group=${group}&page=${page}`;
 	},

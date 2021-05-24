@@ -1,48 +1,40 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState, useContext } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Typography from '@material-ui/core/Typography';
 import FullscreenIcon from '@material-ui/icons/Fullscreen';
 import FullscreenExitIcon from '@material-ui/icons/FullscreenExit';
-import { LOCAL_STORAGE_KEY } from '../utils/storageKey';
-import { INIT_CONSTS } from '../utils/initConsts';
 import successSong from '../assets/sounds/success.mp3';
 import failSong2 from '../assets/sounds/fail.mp3';
-import { backRoutes } from '../utils/backRoutes';
 import { CircularProgress } from '@material-ui/core';
 import SpeakerIcon from '@material-ui/icons/Speaker';
-import { createSound, getRandomInt, getWordsForPlay, shuffleAllElements } from '../utils/helpers';
-import { originURL } from '../utils/backRoutes';
+import { createSound, shuffleAllElements } from '../utils/helpers';
 import { GameStats } from '../components/GameStats';
-import { useHttp } from '../hooks/http.hook';
 import { toggleScreen } from '../utils/fullScreen';
 import { LifesInGames } from '../components/LifesInGames';
 import { Howler } from 'howler';
-import { AuthContext } from '../context/AuthContext';
 import { useGames } from '../hooks/games.hook';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useSelector } from 'react-redux';
-import { deleteWords } from '../store/wordsSlice';
 import { useDispatch } from 'react-redux';
-import { deleteLevel } from '../store/levelSlice';
 import { useStyles } from '../styles/pagesStyles/Games.styles';
 import { fourKeyCode } from '../utils/keyCode';
+import { originURL } from '../utils/backRoutes';
+import { deleteLevel } from '../redux/actions';
 
 export const AudioPage = () => {
 	const classes = useStyles();
-	const { request } = useHttp();
-	const { postStats, postAnswers } = useGames();
-	const { userId, token } = useContext(AuthContext);
-	const soundVolume = useMemo(() => localStorage.getItem(LOCAL_STORAGE_KEY.soundVolume) || INIT_CONSTS.soundVolume, []);
-	const wordVolume = useMemo(() => localStorage.getItem(LOCAL_STORAGE_KEY.wordVolume) || INIT_CONSTS.wordVolume, []);
+	const dispatch = useDispatch();
+	const { getWords } = useGames();
+	const { soundVolume, wordVolume } = useSelector((state) => state.settings);
 	const [ endGame, setEndGame ] = useState(false);
+	const [ wordsArray, setWordsArray ] = useState([]);
 	const [ correctAnswers, setCorrectAnswers ] = useState([]);
 	const [ failAnswers, setFailAnswers ] = useState([]);
 	const [ currentNumber, setCurrentNumber ] = useState(0);
 	const [ currentWord, setCurrentWord ] = useState({});
-	const [ wordsArray, setWordsArray ] = useState([]);
 	const [ fourButtons, setFourButtons ] = useState([]);
-	const [ block, setBlock ] = useState(true);
 	const [ lifes, setLifes ] = useState(5);
+	const [ block, setBlock ] = useState(true);
 	const four = useRef([]);
 	const [ fullScreen, setFullScreen ] = useState(false);
 	const [ currentSeries, setCurrentSeries ] = useState(0);
@@ -52,71 +44,35 @@ export const AudioPage = () => {
 
 	const audioSuccess = useMemo(() => createSound(successSong, soundVolume), [ soundVolume ]);
 	const audioFail2 = useMemo(() => createSound(failSong2, soundVolume), [ soundVolume ]);
-	const audioWord = useMemo(() => createSound(`${currentWord.audio}`, wordVolume), [ wordVolume, currentWord ]);
+	const audioWord = useMemo(() => createSound(`${originURL}/${currentWord.audio}`, wordVolume), [
+		wordVolume,
+		currentWord
+	]);
 
-	const dispatch = useDispatch();
-
-	const wordsRedux = useSelector((state) => state.words.wordsRedux);
-	const levelRedux = useSelector((state) => state.level.level);
-
-	const fetchWords = useCallback(
+	const playWords = useCallback(
 		async () => {
-			try {
-				let userWordsArr = [];
-				if (userId && token) {
-					userWordsArr = (await backRoutes.getUserWords({ userId, token })).userWords;
-				}
-				let playWords = [];
-				if (wordsRedux.length) {
-					playWords = wordsRedux;
-				} else if (levelRedux !== null) {
-					const randomPage = getRandomInt(0, 31);
-					playWords = await request(`${backRoutes.words}?group=${levelRedux}&page=${randomPage}`, 'GET');
-				} else {
-					const randomGroup = getRandomInt(0, 6);
-					const randomPage = getRandomInt(0, 31);
-					playWords = await request(`${backRoutes.words}?group=${randomGroup}&page=${randomPage}`, 'GET');
-				}
-				console.log(playWords);
-				const parsedPlayWords = playWords.map((item) => {
-					return {
-						english: item.word,
-						russian: item.wordTranslate,
-						audio: `${originURL}/${item.audio}`,
-						transcription: item.transcription,
-						id: item.id,
-						group: item.group,
-						page: item.page,
-						deleted: false
-					};
-				});
-				const gamesArr = getWordsForPlay(parsedPlayWords, userWordsArr);
-				console.log(gamesArr);
-				setWordsArray(gamesArr);
-				setTimeout(() => {
-					setBlock(false);
-				}, 500);
-			} catch (e) {
-				console.log(e);
-			}
+			const words = await getWords();
+			console.log(words);
+			setWordsArray(words);
+			setTimeout(() => {
+				setBlock(false);
+			}, 200);
 		},
-		[ levelRedux, request, token, userId, wordsRedux ]
+		[ getWords ]
 	);
 
 	useEffect(
 		() => {
-			if (endGame) {
-				postStats('audio', correctAnswers, failAnswers, allSeries);
-				// postAnswers(correctAnswers, failAnswers);
-			}
+			playWords();
 		},
-		[ allSeries, correctAnswers, endGame, failAnswers, postAnswers, postStats ]
+		[ playWords ]
 	);
 
 	const answer = useCallback(
 		(word) => {
+			console.log(word);
 			if (block || !word || endGame) return;
-			if (word === currentWord.english) {
+			if (word === currentWord.word) {
 				setCorrectAnswers((prev) => [ ...prev, currentWord ]);
 				seriesContainer.current.innerHTML += ' <img src="https://img.icons8.com/color/48/000000/hand-drawn-star.png"/>';
 				setCurrentSeries((prev) => prev + 1);
@@ -134,7 +90,7 @@ export const AudioPage = () => {
 				setAllSeries((prev) => [ ...prev, currentSeries ]);
 				setCurrentSeries(0);
 				seriesContainer.current.innerHTML = '';
-				const goodButton = four.current.find((button) => button.value === currentWord.english);
+				const goodButton = four.current.find((button) => button.value === currentWord.word);
 				const badButton = four.current.find((button) => button.value === word);
 				goodButton.classList.add(classes.goodButton);
 				badButton.classList.add(classes.badButton);
@@ -150,13 +106,6 @@ export const AudioPage = () => {
 			}
 		},
 		[ audioFail2, audioSuccess, block, classes.badButton, classes.goodButton, currentSeries, currentWord, endGame ]
-	);
-
-	useEffect(
-		() => {
-			fetchWords();
-		},
-		[ fetchWords ]
 	);
 
 	useEffect(
@@ -199,7 +148,7 @@ export const AudioPage = () => {
 	useEffect(
 		() => {
 			if (wordsArray.length && currentNumber < wordsArray.length) {
-				const arr = wordsArray.filter((word) => word.english !== currentWord.english).sort(shuffleAllElements);
+				const arr = wordsArray.filter((word) => word.word !== currentWord.word).sort(shuffleAllElements);
 				arr.unshift(currentWord);
 				const fourArr = arr.slice(0, 4);
 				fourArr.sort(shuffleAllElements);
@@ -238,8 +187,7 @@ export const AudioPage = () => {
 	useEffect(
 		() => {
 			return () => {
-				dispatch(deleteWords());
-				dispatch(deleteLevel())
+				dispatch(deleteLevel());
 			};
 		},
 		[ dispatch ]
@@ -264,7 +212,13 @@ export const AudioPage = () => {
 		<div className={classes.root}>
 			<ToastContainer />
 			{endGame ? (
-				<GameStats lifes={lifes} correctAnswers={correctAnswers} failAnswers={failAnswers} />
+				<GameStats
+					allSeries={allSeries}
+					gameName="audio"
+					lifes={lifes}
+					correctAnswers={correctAnswers}
+					failAnswers={failAnswers}
+				/>
 			) : wordsArray.length && fourButtons.length === 4 && currentWord ? (
 				<div ref={gameBoard} className={classes.gameContainer}>
 					<button onClick={() => goFullScreen(gameBoard.current)} className={classes.fullScreenBtn}>
@@ -284,10 +238,10 @@ export const AudioPage = () => {
 									ref={(btn) => setFourRef(btn, index)}
 									key={index}
 									onClick={(event) => answer(event.target.value)}
-									value={item.english}
+									value={item.word}
 									className={classes.button}
 								>
-									{item.russian}
+									{item.wordTranslate}
 								</button>
 							);
 						})}

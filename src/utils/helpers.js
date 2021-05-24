@@ -1,9 +1,9 @@
 import { Howl } from 'howler';
 
 export const convertText = (text) => {
-	const regExp = /<\b>|<\/\b>|<i>|<\/i>/gi;
-	return text.replace(regExp, '')
-}
+	const regExp = /<b>|<\/b>|<i>|<\/i>/gi;
+	return text.replace(regExp, '');
+};
 
 export function shuffleAllElements(a, b) {
 	return Math.random() - 0.5;
@@ -21,9 +21,9 @@ export const createSound = (src, volume, rate = 1, loop = false) =>
 
 export function getWordsForPlay(allWords, userWords) {
 	if (!userWords.length) {
-		return allWords.map(item => {
-			return { ...item, difficult: false }
-		})
+		return allWords.map((item) => {
+			return { ...item, difficult: false };
+		});
 	} else {
 		const deletedWords = userWords.filter((item) => item.deleted);
 		const deletedId = deletedWords.map((item) => item.wordId);

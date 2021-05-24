@@ -1,122 +1,72 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState, useContext } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Typography from '@material-ui/core/Typography';
 import FullscreenIcon from '@material-ui/icons/Fullscreen';
 import FullscreenExitIcon from '@material-ui/icons/FullscreenExit';
-import { LOCAL_STORAGE_KEY } from '../utils/storageKey';
-import { INIT_CONSTS } from '../utils/initConsts';
 import fonSong from '../assets/sounds/fon.mp3';
 import successSong from '../assets/sounds/success.mp3';
 import failSong2 from '../assets/sounds/fail.mp3';
-import { backRoutes } from '../utils/backRoutes';
 import { CircularProgress } from '@material-ui/core';
-import { createSound, getRandomInt, getWordsForPlay, shuffleAllElements } from '../utils/helpers';
-import { originURL } from '../utils/backRoutes';
+import { convertText, createSound, shuffleAllElements } from '../utils/helpers';
 import { GameStats } from '../components/GameStats';
-import { useHttp } from '../hooks/http.hook';
 import { toggleScreen } from '../utils/fullScreen';
 import { LifesInGames } from '../components/LifesInGames';
-import { AuthContext } from '../context/AuthContext';
 import { useGames } from '../hooks/games.hook';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useSelector } from 'react-redux';
-import { deleteWords } from '../store/wordsSlice';
-import { useDispatch } from 'react-redux';
-import { deleteLevel } from '../store/levelSlice';
+import { useSelector, useDispatch } from 'react-redux';
+import { deleteLevel } from '../redux/actions';
 import { useStyles } from '../styles/pagesStyles/Games.styles';
 import { fourKeyCode } from '../utils/keyCode';
-import { convertText } from '../utils/helpers';
+import { originURL } from '../utils/backRoutes';
 
 export const MatchPage = () => {
 	const classes = useStyles();
-	const { request } = useHttp();
-	const { postStats, postAnswers } = useGames();
-	const { userId, token } = useContext(AuthContext);
-	const soundVolume = useMemo(() => localStorage.getItem(LOCAL_STORAGE_KEY.soundVolume) || INIT_CONSTS.soundVolume, []);
-	const musicVolume = useMemo(() => localStorage.getItem(LOCAL_STORAGE_KEY.musicVolume) || INIT_CONSTS.musicVolume, []);
+	const dispatch = useDispatch();
+	const { getWords } = useGames();
+	const { soundVolume, musicVolume } = useSelector((state) => state.settings);
 	const [ endGame, setEndGame ] = useState(false);
+	const [ wordsArray, setWordsArray ] = useState([]);
 	const [ correctAnswers, setCorrectAnswers ] = useState([]);
 	const [ failAnswers, setFailAnswers ] = useState([]);
-	const [ currentNumber, setCurrentNumber ] = useState(0);
 	const [ currentWord, setCurrentWord ] = useState({});
-	const [ wordsArray, setWordsArray ] = useState([]);
+	const [ currentNumber, setCurrentNumber ] = useState(0);
 	const [ fourImages, setFourImages ] = useState([]);
 	const [ lifes, setLifes ] = useState(5);
 	const [ block, setBlock ] = useState(true);
 	const [ currentSeries, setCurrentSeries ] = useState(0);
 	const [ allSeries, setAllSeries ] = useState([]);
 	const seriesContainer = useRef('');
+	const [ fullScreen, setFullScreen ] = useState(false);
+	const four = useRef([]);
+	const gameBoard = useRef();
 
 	const audioSuccess = useMemo(() => createSound(successSong, soundVolume), [ soundVolume ]);
 	const audioFail = useMemo(() => createSound(failSong2, soundVolume), [ soundVolume ]);
 	const audioFon = useMemo(() => createSound(fonSong, musicVolume * 0.1, 1, true), [ musicVolume ]);
-	const four = useRef([]);
-	const [ fullScreen, setFullScreen ] = useState(false);
-	const gameBoard = useRef();
 
-	const dispatch = useDispatch();
-
-	const wordsRedux = useSelector((state) => state.words.wordsRedux);
-	const levelRedux = useSelector((state) => state.level.level);
-
-	const fetchWords = useCallback(
+	const playWords = useCallback(
 		async () => {
-			try {
-				let userWordsArr = [];
-				if (userId && token) {
-					userWordsArr = (await backRoutes.getUserWords({ userId, token })).userWords;
-				}
-				let playWords = [];
-				if (wordsRedux.length) {
-					playWords = wordsRedux;
-				} else if (levelRedux !== null) {
-					const randomPage = getRandomInt(0, 31);
-					playWords = await request(`${backRoutes.words}?group=${levelRedux}&page=${randomPage}`, 'GET');
-				} else {
-					const randomGroup = getRandomInt(0, 6);
-					const randomPage = getRandomInt(0, 31);
-					playWords = await request(`${backRoutes.words}?group=${randomGroup}&page=${randomPage}`, 'GET');
-				}
-				console.log(playWords);
-				const parsedPlayWords = playWords.map((item) => {
-					return {
-						english: item.word,
-						russian: item.wordTranslate,
-						meaning: convertText(item.textMeaning),
-						src: `${originURL}/${item.image}`,
-						id: item.id,
-						group: item.group,
-						page: item.page,
-						deleted: false
-					};
-				});
-				const gamesArr = getWordsForPlay(parsedPlayWords, userWordsArr);
-				console.log(gamesArr);
-				setWordsArray(gamesArr);
-				setTimeout(() => {
-					setBlock(false);
-				}, 500);
-			} catch (e) {
-				console.log(e);
-			}
+			const words = await getWords();
+			console.log(words);
+			setWordsArray(words);
+			setTimeout(() => {
+				setBlock(false);
+			}, 200);
 		},
-		[ levelRedux, request, token, userId, wordsRedux ]
+		[ getWords ]
 	);
 
 	useEffect(
 		() => {
-			if (endGame) {
-				postStats('match', correctAnswers, failAnswers, allSeries);
-				// postAnswers(correctAnswers, failAnswers);
-			}
+			playWords();
 		},
-		[ allSeries, correctAnswers, endGame, failAnswers, postAnswers, postStats ]
+		[ playWords ]
 	);
 
 	const answer = useCallback(
 		(src) => {
 			if (block || !src || endGame) return;
-			if (src === currentWord.src) {
+			if (src === currentWord.image) {
 				seriesContainer.current.innerHTML += ' <img src="https://img.icons8.com/color/48/000000/hand-drawn-star.png"/>';
 				setCurrentSeries((prev) => prev + 1);
 				setCorrectAnswers((prev) => [ ...prev, currentWord ]);
@@ -135,7 +85,7 @@ export const MatchPage = () => {
 				seriesContainer.current.innerHTML = '';
 				setFailAnswers((prev) => [ ...prev, currentWord ]);
 				setLifes((prev) => prev - 1);
-				const goodOverlay = four.current.find((elem) => elem.dataset.name === currentWord.src);
+				const goodOverlay = four.current.find((elem) => elem.dataset.name === currentWord.image);
 				const badOverlay = four.current.find((elem) => elem.dataset.name === src);
 				goodOverlay.classList.add(classes.goodOverlay);
 				badOverlay.classList.add(classes.badOverlay);
@@ -150,13 +100,6 @@ export const MatchPage = () => {
 			}
 		},
 		[ audioFail, audioSuccess, block, classes.badOverlay, classes.goodOverlay, currentSeries, currentWord, endGame ]
-	);
-
-	useEffect(
-		() => {
-			fetchWords();
-		},
-		[ fetchWords ]
 	);
 
 	useEffect(
@@ -215,7 +158,6 @@ export const MatchPage = () => {
 			document.addEventListener('keydown', keyboardClick);
 			return () => {
 				document.removeEventListener('keydown', keyboardClick);
-				dispatch(deleteWords());
 			};
 		},
 		[ dispatch, answer, endGame ]
@@ -224,7 +166,6 @@ export const MatchPage = () => {
 	useEffect(
 		() => {
 			return () => {
-				dispatch(deleteWords());
 				dispatch(deleteLevel());
 			};
 		},
@@ -234,7 +175,7 @@ export const MatchPage = () => {
 	useEffect(
 		() => {
 			if (wordsArray.length && currentNumber < wordsArray.length) {
-				const arr = wordsArray.filter((word) => word.src !== currentWord.src).sort(shuffleAllElements);
+				const arr = wordsArray.filter((word) => word.image !== currentWord.image).sort(shuffleAllElements);
 				arr.unshift(currentWord);
 				const fourArr = arr.slice(0, 4);
 				fourArr.sort(shuffleAllElements);
@@ -259,7 +200,13 @@ export const MatchPage = () => {
 		<div className={classes.root}>
 			<ToastContainer />
 			{endGame ? (
-				<GameStats lifes={lifes} correctAnswers={correctAnswers} failAnswers={failAnswers} />
+				<GameStats
+					allSeries={allSeries}
+					gameName="match"
+					lifes={lifes}
+					correctAnswers={correctAnswers}
+					failAnswers={failAnswers}
+				/>
 			) : wordsArray.length && currentWord && fourImages.length === 4 ? (
 				<div ref={gameBoard} className={classes.gameContainer}>
 					<button onClick={() => goFullScreen(gameBoard.current)} className={classes.fullScreenBtn}>
@@ -273,20 +220,22 @@ export const MatchPage = () => {
 						{fourImages.map((image, index) => {
 							return (
 								<div key={index} className={classes.imageWrap}>
-									<div data-name={image.src} ref={(elem) => setFourRef(elem, index)} className={classes.overlay} />
-									<img	
+									<div data-name={image.image} ref={(elem) => setFourRef(elem, index)} className={classes.overlay} />
+									<img
 										className={classes.image}
 										onClick={(event) => answer(event.target.dataset.name)}
-										data-name={image.src}
-										src={image.src}
-										alt={image.src}
+										data-name={image.image}
+										src={`${originURL}/${image.image}`}
+										alt={image.image}
 									/>
 								</div>
 							);
 						})}
 					</div>
-					<Typography className={classes.word} variant="h3">{`${currentWord.english || ''}`}</Typography>
-					<Typography className={classes.meaning} variant="h5">{`${currentWord.meaning || ''}`}</Typography>
+					<Typography className={classes.word} variant="h3">{`${currentWord.word || ''}`}</Typography>
+					<Typography className={classes.meaning} variant="h5">
+						{`${convertText(currentWord.textMeaning)}` || ''}
+					</Typography>
 					<div ref={seriesContainer} className={classes.series} />
 					<LifesInGames lifes={lifes} />
 					<Typography

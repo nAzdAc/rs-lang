@@ -9,12 +9,14 @@ import {
 	SET_VOLUME,
 	FETCH_SETTINGS,
 	LOG_OUT,
-  SET_LEVEL,
-  DELETE_LEVEL
+	SET_LEVEL,
+	DELETE_LEVEL,
+	SET_ACTIVE_WORDS,
+	UPDATE_USER_WORD
 } from './types';
 
 const initialState = {
-  level: null,
+	level: null,
 	loading: false,
 	message: null,
 	userData: {
@@ -32,8 +34,8 @@ const initialState = {
 		translateWord: true,
 		translateSentences: true
 	},
-	userWords: {},
-	words: [],
+	userWords: [],
+	activeWords: [],
 	statistics: []
 };
 
@@ -47,12 +49,22 @@ export function rootReducer(state = initialState, action) {
 				userData: { ...action.payload.userData },
 				settings: { ...action.payload.settings },
 				statistics: { ...action.payload.statistics },
-				userWords: { ...action.payload.userWords }
+				userWords: [ ...action.payload.userWords ]
 			};
 		case LOG_OUT:
 			return {
 				...state,
 				userData: {}
+			};
+		case SET_ACTIVE_WORDS:
+			return {
+				...state,
+				activeWords: [ ...action.payload ]
+			};
+		case UPDATE_USER_WORD:
+			return {
+				...state,
+				userWords: [ ...action.payload ]
 			};
 		case UPLOAD_AVATAR:
 			return { ...state, userData: { ...state.userData, avatarURL: action.payload } };
@@ -69,7 +81,7 @@ export function rootReducer(state = initialState, action) {
 		case SET_LEVEL:
 			return { ...state, level: action.payload };
 		case DELETE_LEVEL:
-			return { ...state, level: null};
+			return { ...state, level: null };
 		case FETCH_SETTINGS:
 			return { ...state, settings: { ...action.payload } };
 		default:

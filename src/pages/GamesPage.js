@@ -17,8 +17,8 @@ import { deleteLevel, setLevel } from '../redux/actions';
 
 const Games = () => {
 	const classes = useStyles();
-	const { level } = useSelector((state) => state);
 	const dispatch = useDispatch();
+	const { level } = useSelector((state) => state);
 	function handleLevelsClick(index) {
 		if (index === level) {
 			dispatch(deleteLevel());

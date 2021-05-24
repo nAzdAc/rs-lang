@@ -12,9 +12,7 @@ import { toggleScreen } from '../utils/fullScreen';
 import { useGames } from '../hooks/games.hook';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useSelector } from 'react-redux';
-import { deleteWords } from '../store/wordsSlice';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useStyles } from '../styles/pagesStyles/Games.styles';
 import { yesNoKeyCode } from '../utils/keyCode';
 import { deleteLevel } from '../redux/actions';
@@ -22,9 +20,7 @@ import { deleteLevel } from '../redux/actions';
 export const SprintPage = () => {
 	const classes = useStyles();
 	const dispatch = useDispatch();
-	// const { token } = useSelector((state) => state.userData);
 	const { soundVolume, musicVolume } = useSelector((state) => state.settings);
-	// const { userWords } = useSelector((state) => state);
 	const { getWords } = useGames();
 	const [ endGame, setEndGame ] = useState(false);
 	const [ seconds, setSeconds ] = useState(60);
@@ -45,17 +41,20 @@ export const SprintPage = () => {
 	const audioFail = useMemo(() => createSound(failSong, soundVolume * 5), [ soundVolume ]);
 	const audioFon = useMemo(() => createSound(fonSong, musicVolume * 0.1, 1, true), [ musicVolume ]);
 
-	const fetchWords = useCallback(
+	const playWords = useCallback(
 		async () => {
-			try {
-				const playWords = await getWords();
-				console.log(playWords);
-				setWordsArray(playWords);
-			} catch (e) {
-				console.log(e);
-			}
+			const words = await getWords();
+			console.log(words)
+			setWordsArray(words);
 		},
 		[ getWords ]
+	);
+
+	useEffect(
+		() => {
+			playWords();
+		},
+		[ playWords ]
 	);
 
 	const answer = useCallback(
@@ -79,13 +78,6 @@ export const SprintPage = () => {
 			setCurrentNumber((prev) => prev + 1);
 		},
 		[ audioFail, audioSuccess, currentRussianhWord, currentSeries, currentWord, endGame ]
-	);
-
-	useEffect(
-		() => {
-			fetchWords();
-		},
-		[ fetchWords ]
 	);
 
 	useEffect(
@@ -158,7 +150,6 @@ export const SprintPage = () => {
 	useEffect(
 		() => {
 			return () => {
-				dispatch(deleteWords());
 				dispatch(deleteLevel());
 			};
 		},
@@ -174,7 +165,7 @@ export const SprintPage = () => {
 		<div className={classes.root}>
 			<ToastContainer />
 			{endGame ? (
-				<GameStats allSeries={allSeries} gameName='sprint' correctAnswers={correctAnswers} failAnswers={failAnswers} />
+				<GameStats allSeries={allSeries} gameName="sprint" correctAnswers={correctAnswers} failAnswers={failAnswers} />
 			) : wordsArray.length && currentWord && currentRussianhWord ? (
 				<div ref={gameBoard} className={classes.gameContainer}>
 					<button onClick={() => goFullScreen(gameBoard.current)} className={classes.fullScreenBtn}>

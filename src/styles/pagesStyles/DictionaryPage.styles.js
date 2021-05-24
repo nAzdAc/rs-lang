@@ -1,74 +1,54 @@
 import { makeStyles } from '@material-ui/core/styles';
 
-export const useStyles = makeStyles((theme) => ({
+export const useStyles = makeStyles({
 	root: {
-		'& > *': {
-			marginTop: theme.spacing(2)
-		}
-	},
-	container: {
 		width: '100%',
 		display: 'flex',
+		flexDirection: 'column',
 		flexWrap: 'wrap',
 		justifyContent: 'center',
-		aligneItems: 'flex-start'
+		alignItems: 'center'
 	},
 	title: {
-		marginRight: '40px',
-		fontSize: '60px',
-		fontStyle: 'normal',
-		fontWeight: '300',
-		lineHeight: '80px',
-		textAlign: 'left',
-		color: '#000000',
-		verticalAlign: 'middle'
+		marginBottom: '25px',
+		marginRight: 'auto'
 	},
-	message: {
-		// marginRight: "40px",
-		fontSize: '30px',
-		fontStyle: 'italic',
-		fontWeight: '300',
-		verticalAlign: 'middle'
-	},
-	titleBox: {
-		height: '72px',
+	buttonBox: {
 		display: 'flex',
-		marginTop: '80px',
-		marginRight: 'auto',
-		width: '100%'
+		flexWrap: 'wrap',
+		marginBottom: '20px',
+		gap: '30px',
+		marginRight: 'auto'
 	},
 	typeBox: {
 		width: '100%',
-		height: '48px',
 		display: 'flex',
-		marginTop: '40px',
-		// backgroundColor:'#6200EE',
-		justifyContent: 'space-around'
-		// marginRight: "auto",
+		marginBottom: '20px'
 	},
 	typeButton: {
 		width: '100%',
+		height: '50px',
 		fontSize: '14px',
 		fontWeight: '500',
 		color: 'white',
 		backgroundColor: '#6200EE',
-		borderRadius: '0'
+		borderRadius: '0',
+		padding: '2px'
 	},
 	typeButtonActive: {
 		borderBottom: '4px solid white',
-		margiBottom: '-4px',
 		color: 'white',
 		backgroundColor: '#6200EE'
 	},
-	buttonBox: {
-		width: '100%',
-		display: 'flex',
-		marginTop: '40px',
-		marginRight: 'auto',
-		flexWrap: 'wrap'
+	subtitle: {
+		marginBottom: '15px',
+		marginRight: 'auto'
 	},
 	link: {
-		textDecoration: 'none'
+		textDecoration: 'none',
+		color: '#fff',
+		width: '100%',
+		height: '100%'
 	},
 	pagination: {
 		margin: '40px',
@@ -86,5 +66,10 @@ export const useStyles = makeStyles((theme) => ({
 		width: '100%',
 		marginTop: '24px',
 		textAlign: 'left'
+	},
+	wordList: {
+		display: 'flex',
+		flexDirection: 'column',
+		gap: '10px'
 	}
-}));
+});

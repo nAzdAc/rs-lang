@@ -6,11 +6,13 @@ import {
 	HIDE_LOADER,
 	HIDE_MESSAGE,
 	LOG_OUT,
+	SET_ACTIVE_WORDS,
 	SET_LEVEL,
 	SET_VOLUME,
 	SHOW_LOADER,
 	SHOW_MESSAGE,
 	SIGN_IN,
+	UPDATE_USER_WORD,
 	UPLOAD_AVATAR
 } from './types';
 
@@ -64,6 +66,30 @@ export function reduxLogOut() {
 	localStorage.removeItem(LOCAL_STORAGE_KEY.userData);
 	return {
 		type: LOG_OUT
+	};
+}
+
+export function setActiveWords(arr) {
+	return async (dispatch) => {
+		dispatch({ type: SET_ACTIVE_WORDS, payload: arr });
+	};
+}
+
+export function updateUserWord(object, token) {
+	return async (dispatch) => {
+		const res = await fetch(backRoutes.updateWord, {
+			method: 'POST',
+			withCredentials: true,
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json',
+				Authorization: `Bearer ${token}`
+			},
+			body: JSON.stringify(object)
+		});
+		const json = await res.json();
+		console.log(json);
+		dispatch({ type: UPDATE_USER_WORD, payload: json.userWords });
 	};
 }
 

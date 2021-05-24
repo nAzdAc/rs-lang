@@ -41,7 +41,6 @@ export const useStyles = makeStyles({
 		}
 	},
 	badButton: {
-		marginRight: '20px',
 		background: '#B00020',
 		'&:hover': {
 			background: '#E6002A'
@@ -122,11 +121,11 @@ export const useStyles = makeStyles({
 		height: '180px',
 		'@media (max-width: 900px)': {
 			width: '140px',
-			height: '140px',
+			height: '140px'
 		},
 		'@media (max-width: 700px)': {
 			width: '100px',
-			height: '100px',
+			height: '100px'
 		}
 	},
 	overlay: {
@@ -176,6 +175,6 @@ export const useStyles = makeStyles({
 		height: '3px',
 		color: 'red',
 		border: 'none',
-		marginBottom: '10px',
+		marginBottom: '10px'
 	}
 });

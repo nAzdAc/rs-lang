@@ -1,118 +1,80 @@
-import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Typography from '@material-ui/core/Typography';
 import FullscreenIcon from '@material-ui/icons/Fullscreen';
 import FullscreenExitIcon from '@material-ui/icons/FullscreenExit';
-import { LOCAL_STORAGE_KEY } from '../utils/storageKey';
-import { INIT_CONSTS } from '../utils/initConsts';
 import successSong from '../assets/sounds/success.mp3';
 import failSong2 from '../assets/sounds/fail.mp3';
 import fonSong from '../assets/sounds/fon.mp3';
-import { backRoutes } from '../utils/backRoutes';
 import { CircularProgress } from '@material-ui/core';
-import { createSound, getRandomInt, getWordsForPlay, shuffleAllElements } from '../utils/helpers';
+import { createSound, shuffleAllElements } from '../utils/helpers';
 import { GameStats } from '../components/GameStats';
-import { useHttp } from '../hooks/http.hook';
 import { Transition } from 'react-transition-group';
 import { toggleScreen } from '../utils/fullScreen';
 import { LifesInGames } from '../components/LifesInGames';
-import { AuthContext } from '../context/AuthContext';
 import { useGames } from '../hooks/games.hook';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useSelector } from 'react-redux';
-import { deleteWords } from '../store/wordsSlice';
-import { useDispatch } from 'react-redux';
-import { deleteLevel } from '../store/levelSlice';
+import { useSelector, useDispatch } from 'react-redux';
+import { deleteLevel } from '../redux/actions';
 import { useStyles } from '../styles/pagesStyles/Games.styles';
 import { fourKeyCode } from '../utils/keyCode';
 
 export const SavannaPage = (props) => {
 	const classes = useStyles();
-	const { request } = useHttp();
-	const { postStats, postAnswers } = useGames();
-	const { userId, token } = useContext(AuthContext);
-	const soundVolume = useMemo(() => localStorage.getItem(LOCAL_STORAGE_KEY.soundVolume) || INIT_CONSTS.soundVolume, []);
-	const musicVolume = useMemo(() => localStorage.getItem(LOCAL_STORAGE_KEY.musicVolume) || INIT_CONSTS.musicVolume, []);
+	const dispatch = useDispatch();
+	const { getWords } = useGames();
+	const { soundVolume, musicVolume } = useSelector((state) => state.settings);
 	const [ endGame, setEndGame ] = useState(false);
+	const [ wordsArray, setWordsArray ] = useState([]);
 	const [ correctAnswers, setCorrectAnswers ] = useState([]);
 	const [ failAnswers, setFailAnswers ] = useState([]);
 	const [ currentNumber, setCurrentNumber ] = useState(0);
 	const [ currentWord, setCurrentWord ] = useState({});
-	const [ wordsArray, setWordsArray ] = useState([]);
 	const [ fourButtons, setFourButtons ] = useState([]);
 	const [ lifes, setLifes ] = useState(5);
 	const [ block, setBlock ] = useState(true);
+	const four = useRef([]);
+	const [ fullScreen, setFullScreen ] = useState(false);
+	const [ currentSeries, setCurrentSeries ] = useState(0);
+	const [ allSeries, setAllSeries ] = useState([]);
+	const gameBoard = useRef();
+	const seriesContainer = useRef('');
+
 	const audioSuccess = useMemo(() => createSound(successSong, soundVolume), [ soundVolume ]);
 	const audioFail2 = useMemo(() => createSound(failSong2, soundVolume), [ soundVolume ]);
 	const audioFon = useMemo(() => createSound(fonSong, musicVolume * 0.1, 1, true), [ musicVolume ]);
-	const four = useRef([]);
-	const [ fullScreen, setFullScreen ] = useState(false);
-	const gameBoard = useRef();
-	const [ currentSeries, setCurrentSeries ] = useState(0);
-	const [ allSeries, setAllSeries ] = useState([]);
-	const seriesContainer = useRef('');
-	const dispatch = useDispatch();
 
-	const wordsRedux = useSelector((state) => state.words.wordsRedux);
-	const levelRedux = useSelector((state) => state.level.level);
-
-	const fetchWords = useCallback(
+	const playWords = useCallback(
 		async () => {
-			try {
-				let userWordsArr = [];
-				if (userId && token) {
-					userWordsArr = (await backRoutes.getUserWords({ userId, token })).userWords;
-				}
-				let playWords = [];
-				if (wordsRedux.length) {
-					playWords = wordsRedux;
-				} else if (levelRedux !== null) {
-					const randomPage = getRandomInt(0, 31);
-					playWords = await request(`${backRoutes.words}?group=${levelRedux}&page=${randomPage}`, 'GET');
-				} else {
-					const randomGroup = getRandomInt(0, 6);
-					const randomPage = getRandomInt(0, 31);
-					playWords = await request(`${backRoutes.words}?group=${randomGroup}&page=${randomPage}`, 'GET');
-				}
-				console.log(playWords);
-				const parsedPlayWords = playWords.map((item) => {
-					return {
-						english: item.word,
-						russian: item.wordTranslate,
-						id: item.id,
-						group: item.group,
-						page: item.page,
-						deleted: false
-					};
-				});
-				const gamesArr = getWordsForPlay(parsedPlayWords, userWordsArr);
-				console.log(gamesArr);
-				setWordsArray(gamesArr);
-				setTimeout(() => {
-					setBlock(false);
-				}, 500);
-			} catch (e) {
-				console.log(e);
-			}
+			const words = await getWords();
+			console.log(words);
+			setWordsArray(words);
+			setTimeout(() => {
+				setBlock(false);
+			}, 200);
 		},
-		[ levelRedux, request, token, userId, wordsRedux ]
+		[ getWords ]
 	);
 
 	useEffect(
 		() => {
-			if (endGame) {
-				postStats('savanna', correctAnswers, failAnswers, allSeries);
-				// postAnswers(correctAnswers, failAnswers);
-			}
+			playWords();
 		},
-		[ allSeries, correctAnswers, endGame, failAnswers, postAnswers, postStats ]
+		[ playWords ]
+	);
+
+	useEffect(
+		() => {
+			console.log(block);
+		},
+		[ block ]
 	);
 
 	const answer = useCallback(
 		(value, click) => {
 			if (block || endGame || !value) return;
 			if (click) {
-				if (value === currentWord.english) {
+				if (value === currentWord.word) {
 					seriesContainer.current.innerHTML +=
 						' <img src="https://img.icons8.com/color/48/000000/hand-drawn-star.png"/>';
 					setCurrentSeries((prev) => prev + 1);
@@ -133,7 +95,7 @@ export const SavannaPage = (props) => {
 					setFailAnswers((prev) => [ ...prev, currentWord ]);
 					audioFail2.play();
 					setLifes((prev) => prev - 1);
-					const goodButton = four.current.find((button) => button.value === currentWord.english);
+					const goodButton = four.current.find((button) => button.value === currentWord.word);
 					const badButton = four.current.find((button) => button.value === value);
 					goodButton.classList.add(classes.goodButton);
 					badButton.classList.add(classes.badButton);
@@ -163,23 +125,6 @@ export const SavannaPage = (props) => {
 			}
 		},
 		[ audioFail2, audioSuccess, block, classes.badButton, classes.goodButton, currentSeries, currentWord, endGame ]
-	);
-
-	useEffect(
-		() => {
-			fetchWords();
-		},
-		[ fetchWords ]
-	);
-
-	useEffect(
-		() => {
-			return () => {
-				dispatch(deleteWords());
-				dispatch(deleteLevel());
-			};
-		},
-		[ dispatch ]
 	);
 
 	useEffect(
@@ -221,7 +166,7 @@ export const SavannaPage = (props) => {
 	useEffect(
 		() => {
 			if (wordsArray.length && currentNumber < wordsArray.length && currentWord) {
-				const arr = wordsArray.filter((word) => word.english !== currentWord.english).sort(shuffleAllElements);
+				const arr = wordsArray.filter((word) => word.word !== currentWord.word).sort(shuffleAllElements);
 				arr.unshift(currentWord);
 				const fourArr = arr.slice(0, 4);
 				fourArr.sort(shuffleAllElements);
@@ -252,7 +197,6 @@ export const SavannaPage = (props) => {
 			document.addEventListener('keydown', keyboardClick);
 			return () => {
 				document.removeEventListener('keydown', keyboardClick);
-				dispatch(deleteWords());
 			};
 		},
 		[ dispatch, answer, endGame ]
@@ -262,6 +206,16 @@ export const SavannaPage = (props) => {
 		if (!btn) return;
 		four.current[index] = btn;
 	};
+
+	useEffect(
+		() => {
+			return () => {
+				dispatch(deleteLevel());
+			};
+		},
+		[ dispatch ]
+	);
+
 	function goFullScreen(elem) {
 		setFullScreen((prev) => !prev);
 		toggleScreen(elem);
@@ -270,7 +224,13 @@ export const SavannaPage = (props) => {
 		<div className={classes.root}>
 			<ToastContainer />
 			{endGame ? (
-				<GameStats lifes={lifes} correctAnswers={correctAnswers} failAnswers={failAnswers} />
+				<GameStats
+					allSeries={allSeries}
+					gameName="savanna"
+					lifes={lifes}
+					correctAnswers={correctAnswers}
+					failAnswers={failAnswers}
+				/>
 			) : wordsArray.length && fourButtons.length ? (
 				<div ref={gameBoard} className={classes.gameContainer}>
 					<button onClick={() => goFullScreen(gameBoard.current)} className={classes.fullScreenBtn}>
@@ -283,12 +243,12 @@ export const SavannaPage = (props) => {
 					<Transition in={!block} timeout={5000} onEntered={(event) => answer(event.dataset.name, false)}>
 						{(state) => (
 							<Typography
-								style={{ marginBottom: '300px' }}
-								data-name={currentWord.english}
+								data-name={currentWord.word}
 								className={`slide-word ${state}`}
 								variant="h3"
+								style={{ marginBottom: '310px' }}
 							>
-								{currentWord.russian}
+								{currentWord.wordTranslate}
 							</Typography>
 						)}
 					</Transition>
@@ -301,10 +261,10 @@ export const SavannaPage = (props) => {
 									disabled={block}
 									key={index}
 									onClick={(event) => answer(event.target.value, true)}
-									value={item.english}
+									value={item.word}
 									className={classes.button}
 								>
-									{item.english}
+									{item.word}
 								</button>
 							);
 						})}

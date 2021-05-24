@@ -6,29 +6,29 @@ export const useStyles = makeStyles({
 		display: 'flex',
 		alignItems: 'center',
 		justifyContent: 'space-evenly',
-		zIndex: '2',
+		zIndex: '2'
 	},
 	link: {
 		color: '#FFF',
-		textDecoration: 'none',
+		textDecoration: 'none'
 	},
 	icon: {
-		display: 'block',
+		opacity: '0',
 		'&:hover, &:focus': {
 			transform: 'rotate(360deg)',
 			transition: '0.5s'
 		},
-		'@media (min-width: 801px)': {
-      display: 'none',
-    },
+		'@media (max-width: 820px)': {
+			opacity: '1'
+		}
 	},
 	text: {
 		fontFamily: '"Itim", cursive;',
-    '@media (max-width: 950px)': {
-      fontSize: '20px',
-    },
-		'@media (max-width: 800px)': {
-      display: 'none',
-    },
-  }
+		'@media (max-width: 950px)': {
+			fontSize: '20px'
+		},
+		'@media (max-width: 820px)': {
+			display: 'none'
+		}
+	}
 });

@@ -5,10 +5,7 @@ import 'fontsource-roboto';
 import { backRoutes } from '../utils/backRoutes';
 import { convertText } from '../utils/helpers';
 import { CircularProgress } from '@material-ui/core';
-// import filterDictionary from "../utils/filterDictionary"
 import { useSelector } from 'react-redux';
-// import { ToastContainer } from "react-toastify";
-// import { useMessage } from "../hooks/message.hook";
 import { CreatePanel } from '../components/CreatePanel';
 import { useStyles } from '../styles/componentsStyles/WordsCardList.styles.js';
 
@@ -31,8 +28,6 @@ export const WordsCardList = ({
 	const [ wordsReady, setWordsReady ] = useState(false);
 	const [ userWords, setUserWords ] = useState([]);
 	const [ userDifficultWords, setUserDifficultWords ] = useState([]);
-	// const message = useMessage();
-	// console.log(wordsForDictionari)
 
 	const translateWordBtn = useSelector((state) => state.settings.TranslateWordBtn);
 	const translateSentenceWordBtn = useSelector((state) => state.settings.TranslateSentenceBtn);
