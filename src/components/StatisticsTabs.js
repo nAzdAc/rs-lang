@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
@@ -9,6 +9,7 @@ import { useState } from 'react';
 import { GameStatsTable } from './GameStatsTable';
 import { TodayStatsTable } from './TodayStatsTable';
 import { useStyles } from '../styles/pagesStyles/StatsGamesSettings.styles';
+import { useSelector } from 'react-redux';
 
 function TabPanel(props) {
 	const { children, value, index, ...other } = props;
@@ -39,10 +40,17 @@ function a11yProps(index) {
 	};
 }
 
-export const StatisticsTabs = ({ stats }) => {
+export const StatisticsTabs = () => {
 	const classes = useStyles();
 	const [ value, setValue ] = useState(0);
+	const { statistics } = useSelector((state) => state);
 
+	useEffect(
+		() => {
+			console.log(statistics);
+		},
+		[ statistics ]
+	);
 	const handleChange = (event, newValue) => {
 		setValue(newValue);
 	};
@@ -57,31 +65,31 @@ export const StatisticsTabs = ({ stats }) => {
 			</AppBar>
 
 			<TabPanel value={value} index={0}>
-				{stats && (
+				{statistics && (
 					<React.Fragment>
 						<Typography variant="h4" className={classes.subTitle}>
 							Успехи в играх
 						</Typography>
-						<GameStatsTable rows={stats.games} />
+						<GameStatsTable rows={statistics.games} />
 						<Typography variant="h4" className={classes.subTitle}>
 							За сегодня
 						</Typography>
-						<TodayStatsTable learnedWordsToday={stats.learnedWordsToday} percentToday={stats.percentToday} />
+						<TodayStatsTable learnedWordsToday={statistics.learnedWordsToday} percentToday={statistics.percentToday} />
 					</React.Fragment>
 				)}
 			</TabPanel>
 
 			<TabPanel value={value} index={1}>
-				{stats && (
+				{statistics && (
 					<React.Fragment>
 						<Typography variant="h4" className={classes.subTitle}>
 							Сколько всего слов вы изучили
 						</Typography>
-						<Chart data={stats.learnedWordsTotal} />
+						<Chart data={statistics.learnedWordsTotal} />
 						<Typography variant="h4" className={classes.subTitle}>
 							Прогресс изучения слов по дням
 						</Typography>
-						<Chart data={stats.learnedWordsPerDate} />
+						<Chart data={statistics.learnedWordsPerDate} />
 					</React.Fragment>
 				)}
 			</TabPanel>

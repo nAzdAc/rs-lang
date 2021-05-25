@@ -5,7 +5,7 @@ import Box from '@material-ui/core/Box';
 import { LevelButton } from '../components/LevelButton';
 import { NavLink } from 'react-router-dom';
 import { useHistory, Switch, Route, useRouteMatch } from 'react-router-dom';
-import { bookLinks } from '../utils/links';
+import { bookLinks } from '../utils/constants';
 import { BookPage } from './BookPage';
 import { useStyles } from '../styles/pagesStyles/StatsGamesSettings.styles';
 
@@ -32,18 +32,18 @@ export const LevelPage = () => {
 				</Box>
 			</React.Fragment>
 		);
-	}
+	};
 
 	return (
 		<div className={classes.root}>
-				{isBookRoute && <LevelsButtons />}
-				<Switch>
-					{bookLinks.map((link, index) => (
-						<Route path={`${path}${link.to}`} key={index}>
-							<BookPage />
-						</Route>
-					))}
-				</Switch>
+			{isBookRoute && <LevelsButtons />}
+			<Switch>
+				{bookLinks.map((link, index) => (
+					<Route path={`${path}${link.to}`} key={index}>
+						<BookPage />
+					</Route>
+				))}
+			</Switch>
 		</div>
 	);
 };

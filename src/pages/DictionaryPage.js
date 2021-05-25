@@ -6,22 +6,21 @@ import 'fontsource-roboto';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import { LevelButton } from '../components/LevelButton';
-import { wordCategories } from '../utils/initConsts';
-import { levels } from '../utils/initConsts';
+import { wordCategories } from '../utils/constants';
+import { levels } from '../utils/constants';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import filterDictionary from '../utils/filterDictionary';
-import { useStyles } from '../styles/pagesStyles/DictionaryPage.styles';
-import { gameCardsContent } from '../utils/initConsts';
+import { useStyles } from '../styles/pagesStyles/WordList.styles';
+import { gameCardsContent } from '../utils/constants';
 import { setActiveWords } from '../redux/actions';
-import { CircularProgress } from '@material-ui/core';
-import { DictionaryCard } from '../components/DictionaryCard';
+import { WordCard } from '../components/WordCard';
 
 export const DictionaryPage = () => {
 	const classes = useStyles();
 	const dispatch = useDispatch();
 	const { token } = useSelector((state) => state.userData);
-	const { userWords, activeWords, loading } = useSelector((state) => state);
+	const { userWords, activeWords } = useSelector((state) => state);
 	const [ page, setPage ] = useState(1);
 	const [ count, setCount ] = useState(null);
 	const [ activeSection, setActiveSection ] = useState(0);
@@ -82,65 +81,57 @@ export const DictionaryPage = () => {
 					</Button>
 				))}
 			</ul>
-			<React.Fragment>
-				{loading ? (
-					<CircularProgress />
-				) : (
-					<React.Fragment>
-						{activeWords.length ? (
-							<React.Fragment>
-								<Typography className={classes.subtitle} variant="h4">
-									Можешь запустить игру с этими словами
-								</Typography>
-								<ul className={classes.typeBox}>
-									{gameCardsContent.map((game) => {
-										return (
-											<Button className={classes.typeButton} variant="contained" size="medium">
-												<Link
-													className={classes.link}
-													key={game.name}
-													to={{
-														pathname: game.to
-													}}
-												>
-													{game.name}
-												</Link>
-											</Button>
-										);
-									})}
-								</ul>
-								{Math.ceil(userWords.length / 20) > 1 && (
-									<Pagination
-										page={page}
-										className={classes.pagination}
-										onChange={handlePaginationChange}
-										count={Math.ceil(count / 20)}
-										color="primary"
-									/>
-								)}
-								<ul className={classes.wordList}>
-									{activeWords.map((word) => {
-										return <DictionaryCard key={word._id} word={word} />;
-									})}
-								</ul>
-								{Math.ceil(userWords.length / 20) > 1 && (
-									<Pagination
-										page={page}
-										className={classes.pagination}
-										onChange={handlePaginationChange}
-										count={Math.ceil(count / 20)}
-										color="primary"
-									/>
-								)}
-							</React.Fragment>
-						) : (
-							<Typography className={classes.message} variant="h3">
-								{token ? 'Здесь нет слов' : 'Войдите в приложение чтобы увидеть свой словарь'}
-							</Typography>
-						)}
-					</React.Fragment>
-				)}
-			</React.Fragment>
+			{activeWords.length ? (
+				<React.Fragment>
+					<Typography className={classes.subtitle} variant="h4">
+						Можешь запустить игру с этими словами
+					</Typography>
+					<ul className={classes.typeBox}>
+						{gameCardsContent.map((game) => {
+							return (
+								<Button className={classes.typeButton} variant="contained" size="medium">
+									<Link
+										className={classes.link}
+										key={game.name}
+										to={{
+											pathname: game.to
+										}}
+									>
+										{game.name}
+									</Link>
+								</Button>
+							);
+						})}
+					</ul>
+					{Math.ceil(userWords.length / 20) > 1 && (
+						<Pagination
+							page={page}
+							className={classes.pagination}
+							onChange={handlePaginationChange}
+							count={Math.ceil(count / 20)}
+							color="primary"
+						/>
+					)}
+					<ul className={classes.wordList}>
+						{activeWords.map((word) => {
+							return <WordCard key={`${word._id}${word.word}`} word={word} />;
+						})}
+					</ul>
+					{Math.ceil(userWords.length / 20) > 1 && (
+						<Pagination
+							page={page}
+							className={classes.pagination}
+							onChange={handlePaginationChange}
+							count={Math.ceil(count / 20)}
+							color="primary"
+						/>
+					)}
+				</React.Fragment>
+			) : (
+				<Typography className={classes.message} variant="h3">
+					{token ? 'Здесь нет слов' : 'Войдите в приложение чтобы увидеть свой словарь'}
+				</Typography>
+			)}
 		</Container>
 	);
 };

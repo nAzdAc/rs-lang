@@ -13,7 +13,7 @@ export const useStyles = makeStyles({
 		marginBottom: '25px',
 		marginRight: 'auto',
 		'@media (max-width: 800px)': {
-			fontSize: '4rem'
+			fontSize: '3.5rem'
 		}
 	},
 	buttonBox: {
@@ -21,7 +21,10 @@ export const useStyles = makeStyles({
 		flexWrap: 'wrap',
 		marginBottom: '20px',
 		gap: '30px',
-		marginRight: 'auto'
+		marginRight: 'auto',
+		'@media (max-width: 800px)': {
+			gap: '20px'
+		}
 	},
 	typeBox: {
 		width: '100%',
@@ -38,7 +41,7 @@ export const useStyles = makeStyles({
 		borderRadius: '0',
 		padding: '2px',
 		'@media (max-width: 800px)': {
-			fontSize: '0.75rem'
+			fontSize: '0.7rem'
 		}
 	},
 	typeButtonActive: {
@@ -57,8 +60,10 @@ export const useStyles = makeStyles({
 		height: '100%'
 	},
 	pagination: {
+		display: 'flex',
 		margin: '25px',
-		fontSize: '40px'
+		fontSize: '40px',
+		justifyContent: 'center'
 	},
 	titleGames: {
 		marginBottom: '24px'
@@ -77,5 +82,19 @@ export const useStyles = makeStyles({
 		display: 'flex',
 		flexDirection: 'column',
 		gap: '20px'
+	},
+	levelTitle: {
+		marginBottom: '20px',
+		color: (group) =>
+			group === 0
+				? '#BB86FC'
+				: group === 1
+					? '#985EFF'
+					: group === 2
+						? '#7F39FB'
+						: group === 3 ? '#6200EE' : group === 4 ? '#5600E8' : group === 5 ? '#3700B3' : '#3700B3',
+		'@media (max-width: 800px)': {
+			fontSize: '2.5rem'
+		}
 	}
 });

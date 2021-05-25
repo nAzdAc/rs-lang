@@ -22,9 +22,9 @@ export const EnterPoint = ({ link }) => {
 			{!!token ? (
 				<div className={classes.root}>
 					<div className={classes.avatarWrap}>
-						<Avatar className={classes.avatar} alt="Remy Sharp" src={avatarURL} />
+						<Avatar className={classes.avatar} alt={userName || ''} title={userName || ''} src={avatarURL} />
 						<Typography variant="body2" className={classes.name}>
-							{userName}
+							{userName || 'raccon :)'}
 						</Typography>
 					</div>
 					<ExitToAppIcon className={classes.logout} onClick={handleLogOut} />

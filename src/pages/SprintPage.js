@@ -14,7 +14,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useSelector, useDispatch } from 'react-redux';
 import { useStyles } from '../styles/pagesStyles/Games.styles';
-import { yesNoKeyCode } from '../utils/keyCode';
+import { yesNoKeyCode } from '../utils/constants';
 import { deleteLevel } from '../redux/actions';
 
 export const SprintPage = () => {
@@ -44,7 +44,7 @@ export const SprintPage = () => {
 	const playWords = useCallback(
 		async () => {
 			const words = await getWords();
-			console.log(words)
+			console.log(words);
 			setWordsArray(words);
 		},
 		[ getWords ]

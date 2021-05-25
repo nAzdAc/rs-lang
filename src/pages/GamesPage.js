@@ -1,6 +1,6 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
-import { gameCardsContent } from '../utils/initConsts';
+import { gameCardsContent } from '../utils/constants';
 import { useHistory, Switch, Route, useRouteMatch } from 'react-router-dom';
 import { SprintPage } from './SprintPage';
 import { frontRoutes } from '../utils/frontRoutes';
@@ -10,7 +10,7 @@ import { SavannaPage } from './SavannaPage';
 import { GameCard } from '../components/GameCard';
 import { Box } from '@material-ui/core';
 import { LevelButton } from '../components/LevelButton';
-import { levels } from '../utils/initConsts';
+import { levels } from '../utils/constants';
 import { useDispatch, useSelector } from 'react-redux';
 import { useStyles } from '../styles/pagesStyles/StatsGamesSettings.styles';
 import { deleteLevel, setLevel } from '../redux/actions';

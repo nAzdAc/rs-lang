@@ -2,13 +2,13 @@ import { useCallback } from 'react';
 import { backRoutes } from '../utils/backRoutes';
 import { getRandomInt } from '../utils/helpers';
 import { useMessage } from './message.hook';
-import { useHttp } from './http.hook';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { reduxPostStats } from '../redux/actions';
 
 export const useGames = () => {
+	const dispatch = useDispatch();
 	const { token } = useSelector((state) => state.userData);
 	const { level, activeWords } = useSelector((state) => state);
-	const { request } = useHttp();
 	const message = useMessage();
 
 	const getWords = useCallback(
@@ -48,56 +48,10 @@ export const useGames = () => {
 			if (!token) {
 				return message('Статистика не была обновлена, авторизуйтесь');
 			}
-			try {
-				const res = await fetch(backRoutes.statistics, {
-					method: 'POST',
-					withCredentials: true,
-					headers: {
-						Accept: 'application/json',
-						'Content-Type': 'application/json',
-						Authorization: `Bearer ${token}`
-					},
-					body: JSON.stringify({
-						gameName,
-						correctArr,
-						failArr,
-						seriesArr
-					})
-				});
-				const json = await res.json();
-				console.log(json);
-				// message(json.message, 200);
-			} catch (e) {
-				console.log(e);
-				console.log(e.message);
-			}
+			dispatch(reduxPostStats(token, gameName, correctArr, failArr, seriesArr));
 		},
-		[ message, token ]
+		[ dispatch, message, token ]
 	);
 
-	const postAnswers = useCallback(
-		async (correctArr, failArr) => {
-			try {
-				if (!token) {
-					return message('Слова не были добавлены к вам в словарь, авторизуйтесь');
-				}
-				const allAnswers = [ ...correctArr, ...failArr ];
-				const body = {
-					allAnswers,
-					correctArr,
-					failArr
-				};
-				console.log({ body });
-				const result = await request(backRoutes.statistics, 'PUT', body, {
-					Authorization: `Bearer ${token}`
-				});
-				message(result.message, 200);
-				console.log({ result });
-			} catch (e) {
-				console.log(e);
-			}
-		},
-		[ message, request, token ]
-	);
-	return { postStats, postAnswers, getWords };
+	return { postStats, getWords };
 };

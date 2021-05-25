@@ -12,7 +12,8 @@ import {
 	SET_LEVEL,
 	DELETE_LEVEL,
 	SET_ACTIVE_WORDS,
-	UPDATE_USER_WORD
+	UPDATE_USER_WORD,
+	POST_STATS
 } from './types';
 
 const initialState = {
@@ -36,7 +37,7 @@ const initialState = {
 	},
 	userWords: [],
 	activeWords: [],
-	statistics: []
+	statistics: {}
 };
 
 export function rootReducer(state = initialState, action) {
@@ -84,6 +85,9 @@ export function rootReducer(state = initialState, action) {
 			return { ...state, level: null };
 		case FETCH_SETTINGS:
 			return { ...state, settings: { ...action.payload } };
+		case POST_STATS:
+			console.log(action);
+			return { ...state, statistics: { ...action.payload.statistics }, userWords: [ ...action.payload.userWords ] };
 		default:
 			return state;
 	}

@@ -4,9 +4,15 @@ import { makeStyles } from '@material-ui/core/styles';
 export const useStyles = makeStyles({
 	button: {
 		width: '72px',
+		minWidth: '36px',
 		height: '72px',
 		fontSize: '52px',
 		color: 'white',
+		'@media (max-width: 650px)': {
+			width: '53px',
+			height: '53px',
+			fontSize: '26px'
+		},
 		backgroundColor: (group) =>
 			group === 1
 				? '#BB86FC'

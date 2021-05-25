@@ -17,7 +17,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useSelector, useDispatch } from 'react-redux';
 import { deleteLevel } from '../redux/actions';
 import { useStyles } from '../styles/pagesStyles/Games.styles';
-import { fourKeyCode } from '../utils/keyCode';
+import { fourKeyCode } from '../utils/constants';
 
 export const SavannaPage = (props) => {
 	const classes = useStyles();

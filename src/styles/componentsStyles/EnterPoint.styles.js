@@ -3,27 +3,27 @@ import { makeStyles } from '@material-ui/core/styles';
 export const useStyles = makeStyles(() => ({
 	root: {
 		display: 'flex',
-		alignItems: 'center',
+		alignItems: 'center'
 	},
 	avatarWrap: {
 		display: 'flex',
 		flexDirection: 'column',
 		alignItems: 'center',
 		justifyContent: 'center',
-		marginRight: '10px',
 		color: '#fff',
+		width: '90px'
 	},
 	avatar: {
 		marginBottom: '3px',
-		width: '50px',
-		height: '50px',
+		width: '55px',
+		height: '55px'
 	},
 	logout: {
 		color: '#ffffff',
 		cursor: 'pointer',
 		marginRight: '10px',
 		'&:hover': {
-			transform: 'scale(1.2)',
+			transform: 'scale(1.2)'
 		}
 	},
 	button: {
@@ -35,9 +35,13 @@ export const useStyles = makeStyles(() => ({
 		marginRight: '10px',
 		'&:hover': {
 			background: '#00D9CE'
-		},
+		}
 	},
 	link: {
 		textDecoration: 'none'
+	},
+	name: {
+		fontSize: '0.9rem',
+		color: '#fff'
 	}
 }));

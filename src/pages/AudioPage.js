@@ -17,7 +17,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { useStyles } from '../styles/pagesStyles/Games.styles';
-import { fourKeyCode } from '../utils/keyCode';
+import { fourKeyCode } from '../utils/constants';
 import { originURL } from '../utils/backRoutes';
 import { deleteLevel } from '../redux/actions';
 

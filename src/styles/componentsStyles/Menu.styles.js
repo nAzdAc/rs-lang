@@ -18,16 +18,17 @@ export const useStyles = makeStyles({
 			transform: 'rotate(360deg)',
 			transition: '0.5s'
 		},
-		'@media (max-width: 820px)': {
+		'@media (max-width: 800px)': {
 			opacity: '1'
 		}
 	},
 	text: {
 		fontFamily: '"Itim", cursive;',
+		fontSize: '24px',
 		'@media (max-width: 950px)': {
-			fontSize: '20px'
+			fontSize: '17px'
 		},
-		'@media (max-width: 820px)': {
+		'@media (max-width: 800px)': {
 			display: 'none'
 		}
 	}

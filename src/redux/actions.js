@@ -1,11 +1,12 @@
 import { backRoutes } from '../utils/backRoutes';
-import { LOCAL_STORAGE_KEY } from '../utils/storageKey';
+import { LOCAL_STORAGE_KEY } from '../utils/constants';
 import {
 	DELETE_LEVEL,
 	FETCH_SETTINGS,
 	HIDE_LOADER,
 	HIDE_MESSAGE,
 	LOG_OUT,
+	POST_STATS,
 	SET_ACTIVE_WORDS,
 	SET_LEVEL,
 	SET_VOLUME,
@@ -108,7 +109,6 @@ export function reduxLogin(value) {
 		});
 		const json = await res.json();
 		console.log(json);
-		const statistics = json.statistics && json.statistics.length ? json.statistics : [];
 		const payload = {
 			userData: {
 				avatarURL: json.avatarURL,
@@ -120,7 +120,7 @@ export function reduxLogin(value) {
 				...json.settings
 			},
 			userWords: json.userWords,
-			statistics
+			statistics: json.statistics
 		};
 		localStorage.setItem(LOCAL_STORAGE_KEY.userData, JSON.stringify(payload.userData));
 		localStorage.setItem(LOCAL_STORAGE_KEY.userSettings, JSON.stringify(payload.settings));
@@ -169,5 +169,40 @@ export function reduxUpload(file, token) {
 			localStorage.setItem(LOCAL_STORAGE_KEY.userData, JSON.stringify(updateLocal));
 		}
 		return { text: json.message, code: json.http_code || 200 };
+	};
+}
+
+export function reduxPostStats(token, gameName, correctArr, failArr, seriesArr) {
+	return async (dispatch) => {
+		try {
+			const res = await fetch(backRoutes.statistics, {
+				method: 'POST',
+				withCredentials: true,
+				headers: {
+					Accept: 'application/json',
+					'Content-Type': 'application/json',
+					Authorization: `Bearer ${token}`
+				},
+				body: JSON.stringify({
+					gameName: gameName,
+					correctArr: correctArr,
+					failArr: failArr,
+					seriesArr: seriesArr
+				})
+			});
+			const json = await res.json();
+			console.log(json);
+			// message(json.message, 200);
+			dispatch({
+				type: POST_STATS,
+				payload: {
+					statistics: json.statistics,
+					userWords: json.userWords
+				}
+			});
+		} catch (e) {
+			console.log(e);
+			console.log(e.message);
+		}
 	};
 }

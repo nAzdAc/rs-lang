@@ -13,7 +13,7 @@ export const useStyles = makeStyles({
 		display: 'flex',
 		justifyContent: 'space-between',
 		alignItems: 'center',
-		gap: '15px',
+		gap: '5px',
 		backgroundColor: '#5600e8'
 	},
 	link: {
@@ -27,9 +27,9 @@ export const useStyles = makeStyles({
 		color: '#f2f2f2',
 		'@media (max-width: 950px)': {
 			width: '190px',
-			fontSize: '45px'
+			fontSize: '40px'
 		},
-		'@media (max-width: 820px)': {
+		'@media (max-width: 800px)': {
 			width: '140px',
 			fontSize: '32px'
 		}

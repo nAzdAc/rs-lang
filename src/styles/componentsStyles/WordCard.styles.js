@@ -7,7 +7,7 @@ export const useStyles = makeStyles({
 		flexWrap: 'wrap',
 		alignItems: 'center',
 		gap: '15px',
-		padding: '10px',
+		padding: '10px 5px',
 		cursor: 'pointer'
 	},
 	mainInfo: {
@@ -42,6 +42,7 @@ export const useStyles = makeStyles({
 		}
 	},
 	deleteButton: {
+		fontSize: '0.8rem',
 		cursor: 'pointer',
 		border: 'none',
 		borderRadius: '5px',
@@ -54,6 +55,10 @@ export const useStyles = makeStyles({
 		marginRight: '10px',
 		'&:hover': {
 			background: '#00D9CE'
+		},
+		'@media (max-width: 700px)': {
+			height: '35px',
+			fontSize: '0.65rem'
 		}
 	},
 	iconWrap: {
@@ -64,9 +69,6 @@ export const useStyles = makeStyles({
 		fontWeight: 'bold',
 		background: 'inherit',
 		color: '#FFF'
-	},
-	goldIcon: {
-		color: 'gold'
 	},
 	bigCardIcon: {
 		cursor: 'pointer',
@@ -183,5 +185,8 @@ export const useStyles = makeStyles({
 		flexDirection: 'column',
 		alignSelf: 'auto',
 		marginTop: '30px'
+	},
+	goldIcon: {
+		color: 'gold'
 	}
 });
