@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { Paper } from '@material-ui/core';
 import {
 	useStyles,
 	VolumeSlider,
@@ -76,7 +75,7 @@ export const SettingsPage = () => {
 		<div className={classes.root}>
 			<h2 className={classes.title}>Настройки</h2>
 			<div className={classes.cardsWrap}>
-				<Paper className={classes.card}>
+				<div className={classes.card}>
 					<h4 className={classes.subtitle1}>Отображение кнопок</h4>
 					<div className={classes.buttonsWrapper}>
 						<h6 className={classes.subtitle2}>Сложное слово</h6>
@@ -119,8 +118,8 @@ export const SettingsPage = () => {
 							checked={translateSentences}
 						/>
 					</div>
-				</Paper>
-				<Paper className={classes.card}>
+				</div>
+				<div className={classes.card}>
 					<h6 className={classes.subtitle1}>Громкость музыки</h6>
 					<VolumeSlider
 						marks={marks}
@@ -154,9 +153,16 @@ export const SettingsPage = () => {
 						value={wordVolume}
 						onChange={handleVolume}
 					/>
-				</Paper>
-				<Paper className={classes.card}>
-					<img alt="avatar" className={classes.avatarImage} src={avatarURL} />
+				</div>
+				<div className={classes.card}>
+					<img
+						alt="avatar"
+						className={classes.avatarImage}
+						src={
+							avatarURL ||
+							'http://res.cloudinary.com/nazdac/image/upload/v1616652013/travelAppFolder/dmlfcuvyr79gpkbgg639.jpg'
+						}
+					/>
 					<label htmlFor="file" className={classes.purpleButton}>
 						+ ИЗМЕНИТЬ АВАТАР
 					</label>
@@ -174,7 +180,7 @@ export const SettingsPage = () => {
 							+ ИЗМЕНИТЬ НИКНЕЙМ
 						</button>
 					</form>
-				</Paper>
+				</div>
 				<ToastContainer />
 			</div>
 		</div>

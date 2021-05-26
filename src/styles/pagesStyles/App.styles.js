@@ -5,7 +5,8 @@ export const useStyles = makeStyles({
 		display: 'flex',
 		flexDirection: 'column',
 		justifyContent: 'space-between',
-		minHeight: '100%'
+		minHeight: '100%',
+		backgroundColor: '#F2F2F2'
 	},
 	header: {
 		width: '100%',
@@ -21,16 +22,13 @@ export const useStyles = makeStyles({
 	},
 	logo: {
 		marginLeft: '10px',
-		width: '250px',
 		fontFamily: '"Permanent Marker", cursive',
 		fontSize: '55px',
-		color: '#f2f2f2',
+		color: '#F2F2F2',
 		'@media (max-width: 950px)': {
-			width: '190px',
 			fontSize: '40px'
 		},
 		'@media (max-width: 800px)': {
-			width: '140px',
 			fontSize: '32px'
 		}
 	}

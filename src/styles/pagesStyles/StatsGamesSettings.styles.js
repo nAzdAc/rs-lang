@@ -7,12 +7,12 @@ export const useStyles = makeStyles({
 	root: {
 		fontFamily: '"Itim", cursive;',
 		color: '#6200EE',
-		backgroundColor: '#FCFCFF',
+		backgroundColor: '#F2F2F2',
 		padding: '20px 10px 10px 20px',
 		display: 'flex',
 		flexDirection: 'column',
 		'& > header': {
-			backgroundColor: '#5600e8'
+			backgroundColor: '#5600E8'
 		}
 	},
 	buttonsWrapper: {
@@ -54,7 +54,7 @@ export const useStyles = makeStyles({
 		width: '100%',
 		height: '36px',
 		background: '#6200EE',
-		color: '#FCFCFF',
+		color: '#F2F2F2',
 		fontFamily: '"Itim", cursive;',
 		display: 'flex',
 		alignItems: 'center',
@@ -63,7 +63,20 @@ export const useStyles = makeStyles({
 		cursor: 'pointer',
 		outline: 'none',
 		border: 'none',
-		fontSize: '1rem'
+		fontSize: '1rem',
+		'&:hover': {
+			transform: 'scale(1.2)'
+		}
+	},
+	outlainedButton: {
+		width: '130px',
+		background: '#F2F2F2',
+		color: '#6200EE',
+		border: '3px solid #6200EE',
+		marginLeft: '40px'
+	},
+	containedButton: {
+		width: '130px'
 	},
 	buttonBox: {
 		display: 'flex',
@@ -82,7 +95,8 @@ export const useStyles = makeStyles({
 		margin: '20px',
 		display: 'flex',
 		flexDirection: 'column',
-		alignItems: 'center'
+		alignItems: 'center',
+		boxShadow: '5px 0px 17px 5px rgba(0,0,0,0.15)'
 	},
 	cardTitle: {
 		marginBottom: '10px',
@@ -91,13 +105,6 @@ export const useStyles = makeStyles({
 	cardText: {
 		marginBottom: '10px'
 	},
-	button: {
-		backgroundColor: '#01A299',
-		color: '#fff',
-		'&:hover': {
-			background: '#00D9CE'
-		}
-	},
 	link: { textDecoration: 'none' },
 	tab: {
 		width: '100%',
@@ -105,7 +112,7 @@ export const useStyles = makeStyles({
 	},
 	formCard: {
 		width: '90%',
-		maxWidth: '400px',
+		maxWidth: '500px',
 		padding: '20px',
 		boxShadow: '2px 0px 14px 2px rgba(0,0,0,0.09)',
 		display: 'flex',
@@ -121,24 +128,56 @@ export const useStyles = makeStyles({
 		}
 	},
 	info: {
+		fontSize: '0.8rem',
 		margin: '0px 0px 25px 10px',
-		opacity: '0.6'
+		opacity: '0.8'
 	},
 	passwordField: {
 		marginTop: '20px'
 	},
-	register: {
-		border: '2px solid #01A299',
-		padding: '5px',
-		marginLeft: '40px',
-		fontSize: '14px',
-		'&:hover': {
-			background: '#00D9CE',
-			color: '#fff'
-		}
-	},
 	nameField: {
 		margin: '30px 0px 20px 0px'
+	},
+	passwordIcon: {
+		color: '#5600E8'
+	},
+	field: {
+		color: '#5600E8',
+		fontFamily: '"Itim", cursive;',
+		'& .MuiOutlinedInput-inputAdornedEnd': {
+			color: '#5600E8',
+			fontFamily: '"Itim", cursive;'
+		},
+		'& label.Mui-focused': {
+			color: '#5600E8',
+			fontFamily: '"Itim", cursive;'
+		},
+		'& .MuiInputLabel-outlined': {
+			color: '#5600E8',
+			fontFamily: '"Itim", cursive;'
+		},
+		'& .MuiInput-underline:after': {
+			borderBottomColor: '#5600E8',
+			fontFamily: '"Itim", cursive;'
+		},
+		'& .MuiOutlinedInput-root': {
+			'& fieldset': {
+				borderColor: '#5600E8',
+				fontFamily: '"Itim", cursive;'
+			},
+			'& .MuiOutlinedInput-input': {
+				color: '#5600E8',
+				fontFamily: '"Itim", cursive;'
+			},
+			'&:hover fieldset': {
+				borderColor: '#5600E8',
+				fontFamily: '"Itim", cursive;'
+			},
+			'&.Mui-focused fieldset': {
+				borderColor: '#5600E8',
+				fontFamily: '"Itim", cursive;'
+			}
+		}
 	}
 });
 
@@ -215,26 +254,33 @@ export const VolumeSlider = withStyles({
 export const CssTextField = withStyles({
 	root: {
 		'& label.Mui-focused': {
-			color: '#5600E8'
+			color: '#5600E8',
+			fontFamily: '"Itim", cursive;'
 		},
 		'& .MuiInputLabel-outlined': {
-			color: '#5600E8'
+			color: '#5600E8',
+			fontFamily: '"Itim", cursive;'
 		},
 		'& .MuiInput-underline:after': {
-			borderBottomColor: '#5600E8'
+			borderBottomColor: '#5600E8',
+			fontFamily: '"Itim", cursive;'
 		},
 		'& .MuiOutlinedInput-root': {
 			'& fieldset': {
-				borderColor: '#5600E8'
+				borderColor: '#5600E8',
+				fontFamily: '"Itim", cursive;'
 			},
 			'& .MuiOutlinedInput-input': {
-				color: '#5600E8'
+				color: '#5600E8',
+				fontFamily: '"Itim", cursive;'
 			},
 			'&:hover fieldset': {
-				borderColor: '#5600E8'
+				borderColor: '#5600E8',
+				fontFamily: '"Itim", cursive;'
 			},
 			'&.Mui-focused fieldset': {
-				borderColor: '#5600E8'
+				borderColor: '#5600E8',
+				fontFamily: '"Itim", cursive;'
 			}
 		}
 	}

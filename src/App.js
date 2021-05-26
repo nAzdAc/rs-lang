@@ -5,7 +5,6 @@ import { Menu } from './components/Menu';
 import { Link } from 'react-router-dom';
 import { useStyles } from './styles/pagesStyles/App.styles';
 import { useRoutes } from './hooks/routes.hook';
-import { Typography } from '@material-ui/core';
 
 export const App = () => {
 	const classes = useStyles();
@@ -14,10 +13,8 @@ export const App = () => {
 		<Router>
 			<div className={classes.app}>
 				<header className={classes.header}>
-					<Link to="/" className={classes.link}>
-						<Typography variant="h2" className={classes.logo}>
-							RS Lang
-						</Typography>
+					<Link to="/" className={classes.logo}>
+						RS Lang
 					</Link>
 					<Menu />
 				</header>

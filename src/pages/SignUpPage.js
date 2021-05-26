@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
 import { Link } from 'react-router-dom';
 import Box from '@material-ui/core/Box';
-import Typography from '@material-ui/core/Typography';
 import Visibility from '@material-ui/icons/Visibility';
 import IconButton from '@material-ui/core/IconButton';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
@@ -15,12 +12,12 @@ import { backRoutes } from '../utils/backRoutes';
 import { useMessage } from '../hooks/message.hook';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useStyles } from '../styles/pagesStyles/StatsGamesSettings.styles';
+import { CssTextField, useStyles } from '../styles/pagesStyles/StatsGamesSettings.styles';
 import { useSelector } from 'react-redux';
 
 export const SignUpPage = () => {
 	const message = useMessage();
-	const { token } = useSelector(state => state.userData)
+	const { token } = useSelector((state) => state.userData);
 	const classes = useStyles();
 	const [ form, setForm ] = useState({
 		name: '',
@@ -74,42 +71,28 @@ export const SignUpPage = () => {
 	return (
 		<div className={classes.root}>
 			<div className={classes.formCard}>
-				<Typography component="h1" variant="h2" align="left" className={classes.title}>
-					Регистрация
-				</Typography>
+				<h2 className={classes.title}>Регистрация</h2>
 				<form className={classes.form} noValidate onSubmit={handleSubmit}>
-					<TextField
+					<CssTextField
 						variant="outlined"
-						margin="normal"
-						required
-						fullWidth
 						name="name"
 						label="Имя"
 						type="text"
 						id="name"
-						autoComplete="name"
 						value={form.name}
 						onChange={handleFormChange}
-						className={classes.field}
 					/>
-					<TextField
+					<span className={classes.info}>Не более 12 символов</span>
+					<CssTextField
 						variant="outlined"
-						margin="normal"
-						required
-						fullWidth
 						id="email"
 						label="Электропочта"
 						name="email"
-						autoComplete="email"
 						autoFocus
 						value={form.email}
 						onChange={handleFormChange}
-						className={classes.field}
-						style={{ marginTop: '30px' }}
 					/>
-					<Typography component="h1" variant="subtitle2" align="left" className={classes.info}>
-						Используйте настоящую
-					</Typography>
+					<span className={classes.info}>Используйте настоящую</span>
 					<FormControl className={classes.field} value={form.password} onChange={handleFormChange} variant="outlined">
 						<InputLabel htmlFor="outlined-adornment-password">Пароль</InputLabel>
 						<OutlinedInput
@@ -121,6 +104,7 @@ export const SignUpPage = () => {
 							endAdornment={
 								<InputAdornment position="end">
 									<IconButton
+										className={classes.passwordIcon}
 										aria-label="toggle password visibility"
 										onClick={handleClickShowPassword}
 										onMouseDown={handleMouseDownPassword}
@@ -134,18 +118,16 @@ export const SignUpPage = () => {
 						/>
 					</FormControl>
 					<ToastContainer />
-					<Typography component="h1" variant="subtitle2" align="left" className={classes.info}>
-						Пароль должен содержать от 4 до 10 символов
-					</Typography>
+					<span className={classes.info}>От 4 до 12 символов</span>
 					<Box className={classes.buttonBox}>
-						<Button type="submit" variant="contained" className={classes.button}>
+						<button type="submit" className={`${classes.purpleButton} ${classes.containedButton}`}>
 							Выполнить
-						</Button>
-						<Button className={classes.register}>
+						</button>
+						<button className={`${classes.purpleButton} ${classes.outlainedButton}`}>
 							<Link className={classes.link} to={'/signIn'}>
 								Вход
 							</Link>
-						</Button>
+						</button>
 					</Box>
 				</form>
 			</div>

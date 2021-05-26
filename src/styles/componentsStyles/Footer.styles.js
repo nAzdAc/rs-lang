@@ -11,20 +11,23 @@ export const useStyles = makeStyles({
 	},
 	year: {
 		fontSize: '28px',
-		color: '#FCFCFF',
+		color: '#F2F2F2',
 		'@media (max-width: 730px)': {
 			fontSize: '20px'
 		}
 	},
 	developers: {
-		color: '#FCFCFF'
+		color: '#F2F2F2'
 	},
 	githubLink: {
 		fontSize: '20px',
 		margin: '10px',
-		color: '#FCFCFF',
+		color: '#F2F2F2',
 		'@media (max-width: 730px)': {
 			fontSize: '14px'
+		},
+		'&:hover': {
+			textDecoration: 'underline'
 		}
 	},
 	schoolImage: {

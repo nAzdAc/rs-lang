@@ -10,6 +10,9 @@
   margin: 0;
   padding: 0
 }
+a:visited, a:active, a:link, a:hover {
+  text-decoration: none;
+}
 
 body {
   margin: 0 auto;
@@ -19,7 +22,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #fcfcff;
+  background-color: #F2F2F2;
 }
 
 code {

@@ -1,5 +1,4 @@
 import React from 'react';
-import { Typography } from '@material-ui/core';
 import { StatisticsTabs } from '../components/StatisticsTabs';
 import { useStyles } from '../styles/pagesStyles/StatsGamesSettings.styles';
 import { useSelector } from 'react-redux';
@@ -14,22 +13,16 @@ export const StatsPage = () => {
 			{!!token ? (
 				<div className={classes.tab}>
 					{statistics === null ? (
-						<Typography variant="h2" className={classes.title}>
-							У вас ещё нет статистики
-						</Typography>
+						<h2 className={classes.title}>У вас ещё нет статистики</h2>
 					) : (
 						<React.Fragment>
-							<Typography variant="h2" className={classes.title}>
-								Статистика
-							</Typography>
+							<h2 className={classes.title}>Статистика</h2>
 							<StatisticsTabs />
 						</React.Fragment>
 					)}
 				</div>
 			) : (
-				<Typography variant="h2" className={classes.title}>
-					Статистика доступна только для авторизованных пользователей
-				</Typography>
+				<h2 className={classes.title}>Статистика доступна только для авторизованных пользователей</h2>
 			)}
 		</div>
 	);
