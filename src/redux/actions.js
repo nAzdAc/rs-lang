@@ -9,6 +9,7 @@ import {
 	POST_STATS,
 	SET_ACTIVE_WORDS,
 	SET_LEVEL,
+	SET_NAME,
 	SET_VOLUME,
 	SHOW_LOADER,
 	SHOW_MESSAGE,
@@ -169,6 +170,27 @@ export function reduxUpload(file, token) {
 			localStorage.setItem(LOCAL_STORAGE_KEY.userData, JSON.stringify(updateLocal));
 		}
 		return { text: json.message, code: json.http_code || 200 };
+	};
+}
+
+export function setName(name, token) {
+	return async (dispatch) => {
+		console.log(name);
+		console.log(token);
+		const res = await fetch(backRoutes.setName, {
+			method: 'POST',
+			withCredentials: true,
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json',
+				Authorization: `Bearer ${token}`
+			},
+			body: JSON.stringify({ name })
+		});
+		const json = await res.json();
+		console.log(json);
+		dispatch({ type: SET_NAME, payload: json.name });
+		return json.message;
 	};
 }
 

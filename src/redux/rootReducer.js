@@ -13,7 +13,8 @@ import {
 	DELETE_LEVEL,
 	SET_ACTIVE_WORDS,
 	UPDATE_USER_WORD,
-	POST_STATS
+	POST_STATS,
+	SET_NAME
 } from './types';
 
 const initialState = {
@@ -83,6 +84,14 @@ export function rootReducer(state = initialState, action) {
 			return { ...state, level: action.payload };
 		case DELETE_LEVEL:
 			return { ...state, level: null };
+		case SET_NAME:
+			return {
+				...state,
+				userData: {
+					...state.userData,
+					userName: action.payload
+				}
+			};
 		case FETCH_SETTINGS:
 			return { ...state, settings: { ...action.payload } };
 		case POST_STATS:

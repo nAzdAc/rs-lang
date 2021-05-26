@@ -1,6 +1,5 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
-import 'fontsource-roboto';
 import Box from '@material-ui/core/Box';
 import { LevelButton } from '../components/LevelButton';
 import { NavLink } from 'react-router-dom';

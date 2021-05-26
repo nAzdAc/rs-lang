@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import Pagination from '@material-ui/lab/Pagination';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
-import 'fontsource-roboto';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import { LevelButton } from '../components/LevelButton';

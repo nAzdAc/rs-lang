@@ -1,22 +1,36 @@
-import React, { useEffect, useRef } from 'react';
-import Typography from '@material-ui/core/Typography';
+import React, { useEffect, useRef, useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Paper } from '@material-ui/core';
-import { useStyles, VolumeSlider, PurpleSwitch, marks } from '../styles/pagesStyles/StatsGamesSettings.styles';
-import { reduxFetchSettings, reduxUpload, setVolume } from '../redux/actions';
+import {
+	useStyles,
+	VolumeSlider,
+	PurpleSwitch,
+	marks,
+	CssTextField
+} from '../styles/pagesStyles/StatsGamesSettings.styles';
+import { reduxFetchSettings, reduxUpload, setName, setVolume } from '../redux/actions';
 import { useDispatch, useSelector } from 'react-redux';
 import { useMessage } from '../hooks/message.hook';
 
 export const SettingsPage = () => {
 	const dispatch = useDispatch();
-	const { soundVolume, musicVolume, wordVolume, difficultWord, deleteWord, translateSentences, translateWord } = useSelector((state) => state.settings);
+	const {
+		soundVolume,
+		musicVolume,
+		wordVolume,
+		difficultWord,
+		deleteWord,
+		translateSentences,
+		translateWord
+	} = useSelector((state) => state.settings);
 	const { token, avatarURL } = useSelector((state) => state.userData);
 	const message = useMessage();
 	const classes = useStyles();
 	const soundSlider = useRef();
 	const musicSlider = useRef();
 	const wordSlider = useRef();
+	const [ newName, setNewName ] = useState('');
 
 	useEffect(
 		() => {
@@ -48,18 +62,24 @@ export const SettingsPage = () => {
 		message(text, code);
 	};
 
+	const handleName = (e) => {
+		setNewName(e.target.value);
+	};
+
+	const handleSubmit = async (e) => {
+		e.preventDefault();
+		dispatch(setName(newName, token));
+		setNewName('');
+	};
+
 	return (
 		<div className={classes.root}>
-			<Typography variant="h2" className={classes.title}>
-				Настройки
-			</Typography>
+			<h2 className={classes.title}>Настройки</h2>
 			<div className={classes.cardsWrap}>
 				<Paper className={classes.card}>
-					<Typography variant="h4" className={classes.subtitle}>
-						Отображение кнопок
-					</Typography>
+					<h4 className={classes.subtitle1}>Отображение кнопок</h4>
 					<div className={classes.buttonsWrapper}>
-						<Typography variant="subtitle1">Сложное слово</Typography>
+						<h6 className={classes.subtitle2}>Сложное слово</h6>
 						<PurpleSwitch
 							aria-valuetext="difficultWord"
 							name="difficultWord"
@@ -69,7 +89,7 @@ export const SettingsPage = () => {
 						/>
 					</div>
 					<div className={classes.buttonsWrapper}>
-						<Typography variant="subtitle1">Удалить слово</Typography>
+						<h6 className={classes.subtitle2}>Удалить слово</h6>
 						<PurpleSwitch
 							aria-valuetext="deleteWord"
 							name="deleteWord"
@@ -78,13 +98,9 @@ export const SettingsPage = () => {
 							checked={deleteWord}
 						/>
 					</div>
-				</Paper>
-				<Paper className={classes.card}>
-					<Typography variant="h4" className={classes.subtitle}>
-						Отображение перевода
-					</Typography>
+					<h4 className={classes.subtitle1}>Отображение перевода</h4>
 					<div className={classes.buttonsWrapper} style={{ width: '250px' }}>
-						<Typography variant="subtitle1">Перевод слов</Typography>
+						<h6 className={classes.subtitle2}>Перевод слов</h6>
 						<PurpleSwitch
 							aria-valuetext="translateWord"
 							name="translateWord"
@@ -94,7 +110,7 @@ export const SettingsPage = () => {
 						/>
 					</div>
 					<div className={classes.buttonsWrapper} style={{ width: '250px' }}>
-						<Typography variant="subtitle1">Перевод предложений</Typography>
+						<h6 className={classes.subtitle2}>Перевод предложений</h6>
 						<PurpleSwitch
 							aria-valuetext="translateSentences"
 							name="translateSentences"
@@ -104,21 +120,8 @@ export const SettingsPage = () => {
 						/>
 					</div>
 				</Paper>
-				<ToastContainer />
 				<Paper className={classes.card}>
-					<Typography variant="h4" className={classes.subtitle}>
-						Аватар
-					</Typography>
-					<img alt="avatar" className={classes.avatarImage} src={avatarURL} />
-					<label htmlFor="file" className={classes.upload}>
-						+ ИЗМЕНИТЬ
-					</label>
-					<input style={{ display: 'none' }} type="file" id="file" accept="image/*" onChange={handleAvatar} />
-				</Paper>
-				<Paper className={classes.card}>
-					<Typography variant="h6" className={classes.subtitle}>
-						Громкость музыки
-					</Typography>
+					<h6 className={classes.subtitle1}>Громкость музыки</h6>
 					<VolumeSlider
 						marks={marks}
 						valueLabelDisplay="auto"
@@ -129,9 +132,7 @@ export const SettingsPage = () => {
 						value={musicVolume}
 						onChange={handleVolume}
 					/>
-					<Typography variant="h6" className={classes.subtitle}>
-						Громкость звуков
-					</Typography>
+					<h6 className={classes.subtitle1}>Громкость звуков</h6>
 					<VolumeSlider
 						marks={marks}
 						valueLabelDisplay="auto"
@@ -142,9 +143,7 @@ export const SettingsPage = () => {
 						value={soundVolume}
 						onChange={handleVolume}
 					/>
-					<Typography variant="h6" className={classes.subtitle}>
-						Громкость произношения слов
-					</Typography>
+					<h6 className={classes.subtitle1}>Громкость произношения слов</h6>
 					<VolumeSlider
 						marks={marks}
 						valueLabelDisplay="auto"
@@ -156,6 +155,27 @@ export const SettingsPage = () => {
 						onChange={handleVolume}
 					/>
 				</Paper>
+				<Paper className={classes.card}>
+					<img alt="avatar" className={classes.avatarImage} src={avatarURL} />
+					<label htmlFor="file" className={classes.purpleButton}>
+						+ ИЗМЕНИТЬ АВАТАР
+					</label>
+					<input style={{ display: 'none' }} type="file" id="file" accept="image/*" onChange={handleAvatar} />
+					<form onSubmit={handleSubmit}>
+						<CssTextField
+							className={classes.nameField}
+							label="Введите Никнейм"
+							variant="outlined"
+							id="outlined-input"
+							value={newName}
+							onChange={handleName}
+						/>
+						<button type="submit" className={classes.purpleButton}>
+							+ ИЗМЕНИТЬ НИКНЕЙМ
+						</button>
+					</form>
+				</Paper>
+				<ToastContainer />
 			</div>
 		</div>
 	);

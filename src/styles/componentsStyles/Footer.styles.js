@@ -4,33 +4,33 @@ export const useStyles = makeStyles({
 	footer: {
 		width: '100%',
 		height: '70px',
-		backgroundColor: '#5600e8',
+		backgroundColor: '#5600E8',
 		display: 'flex',
 		justifyContent: 'space-around',
 		alignItems: 'center'
 	},
 	year: {
 		fontSize: '28px',
-		color: '#fff',
+		color: '#FCFCFF',
 		'@media (max-width: 730px)': {
 			fontSize: '20px'
-		},
+		}
 	},
 	developers: {
-		color: '#fff'
+		color: '#FCFCFF'
 	},
 	githubLink: {
 		fontSize: '20px',
 		margin: '10px',
-		color: '#fff',
+		color: '#FCFCFF',
 		'@media (max-width: 730px)': {
 			fontSize: '14px'
-		},
+		}
 	},
 	schoolImage: {
 		'@media (max-width: 730px)': {
 			width: '70px',
 			height: '30px'
-		},
+		}
 	}
 });

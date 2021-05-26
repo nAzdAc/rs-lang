@@ -1,15 +1,18 @@
 import Switch from '@material-ui/core/Switch';
 import Slider from '@material-ui/core/Slider';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
+import { TextField } from '@material-ui/core';
 
 export const useStyles = makeStyles({
 	root: {
+		fontFamily: '"Itim", cursive;',
+		color: '#6200EE',
 		backgroundColor: '#FCFCFF',
 		padding: '20px 10px 10px 20px',
 		display: 'flex',
 		flexDirection: 'column',
 		'& > header': {
-			backgroundColor: '#5600e8',
+			backgroundColor: '#5600e8'
 		}
 	},
 	buttonsWrapper: {
@@ -17,59 +20,76 @@ export const useStyles = makeStyles({
 		display: 'flex',
 		flexWrap: 'wrap',
 		alignItems: 'center',
+		textAlign: 'center',
 		justifyContent: 'space-between',
 		marginBottom: '10px'
 	},
 	title: {
+		fontSize: '5rem',
 		marginBottom: '25px',
+		fontFamily: '"Itim", cursive;',
 		marginRight: 'auto',
+		'@media (max-width: 768px)': {
+			fontSize: '3.5rem'
+		}
 	},
-	subtitle: {
-		marginBottom: '15px',
+	subtitle1: {
+		fontSize: '1.5rem',
+		fontWeight: '650',
 		marginRight: 'auto',
+		marginBottom: '15px'
+	},
+	subtitle2: {
+		fontSize: '1.05rem',
+		fontWeight: '500',
+		marginRight: 'auto'
 	},
 	avatarImage: {
 		width: '100px',
 		height: '100px',
 		borderRadius: '50%',
-		margin: '10px'
+		margin: '20px'
 	},
-	upload: {
-		width: '134px',
+	purpleButton: {
+		width: '100%',
 		height: '36px',
 		background: '#6200EE',
-		color: '#FFFFFF',
+		color: '#FCFCFF',
+		fontFamily: '"Itim", cursive;',
 		display: 'flex',
 		alignItems: 'center',
 		justifyContent: 'space-around',
 		borderRadius: '6px',
 		cursor: 'pointer',
-		marginTop: '20px',
+		outline: 'none',
+		border: 'none',
+		fontSize: '1rem'
 	},
 	buttonBox: {
 		display: 'flex',
 		flexWrap: 'wrap',
 		marginBottom: '20px',
-		gap: '30px',
+		gap: '30px'
 	},
 	cardsWrap: {
 		display: 'flex',
-		flexWrap: 'wrap',
+		flexWrap: 'wrap'
 	},
 	card: {
+		color: '#6200EE',
 		padding: '20px 30px 20px 30px',
 		width: '220px',
 		margin: '20px',
 		display: 'flex',
 		flexDirection: 'column',
-		alignItems: 'center',
+		alignItems: 'center'
 	},
 	cardTitle: {
 		marginBottom: '10px',
-		marginRight: 'auto',
+		marginRight: 'auto'
 	},
 	cardText: {
-		marginBottom: '10px',
+		marginBottom: '10px'
 	},
 	button: {
 		backgroundColor: '#01A299',
@@ -81,7 +101,7 @@ export const useStyles = makeStyles({
 	link: { textDecoration: 'none' },
 	tab: {
 		width: '100%',
-		maxWidth: '600px',
+		maxWidth: '600px'
 	},
 	formCard: {
 		width: '90%',
@@ -90,14 +110,14 @@ export const useStyles = makeStyles({
 		boxShadow: '2px 0px 14px 2px rgba(0,0,0,0.09)',
 		display: 'flex',
 		flexDirection: 'column',
-		alignItems: 'center',
+		alignItems: 'center'
 	},
 	form: {
 		width: '100%',
 		display: 'flex',
 		flexDirection: 'column',
 		'& > div': {
-			margin: '0px',
+			margin: '0px'
 		}
 	},
 	info: {
@@ -114,9 +134,12 @@ export const useStyles = makeStyles({
 		fontSize: '14px',
 		'&:hover': {
 			background: '#00D9CE',
-			color: '#fff',
-		},
+			color: '#fff'
+		}
 	},
+	nameField: {
+		margin: '30px 0px 20px 0px'
+	}
 });
 
 export const PurpleSwitch = withStyles({
@@ -188,3 +211,31 @@ export const VolumeSlider = withStyles({
 		backgroundColor: 'currentColor'
 	}
 })(Slider);
+
+export const CssTextField = withStyles({
+	root: {
+		'& label.Mui-focused': {
+			color: '#5600E8'
+		},
+		'& .MuiInputLabel-outlined': {
+			color: '#5600E8'
+		},
+		'& .MuiInput-underline:after': {
+			borderBottomColor: '#5600E8'
+		},
+		'& .MuiOutlinedInput-root': {
+			'& fieldset': {
+				borderColor: '#5600E8'
+			},
+			'& .MuiOutlinedInput-input': {
+				color: '#5600E8'
+			},
+			'&:hover fieldset': {
+				borderColor: '#5600E8'
+			},
+			'&.Mui-focused fieldset': {
+				borderColor: '#5600E8'
+			}
+		}
+	}
+})(TextField);

@@ -13,3 +13,4 @@ export const DELETE_LEVEL = 'DELETE_LEVEL';
 export const SET_ACTIVE_WORDS = 'SET_ACTIVE_WORDS';
 export const UPDATE_USER_WORD = 'UPDATE_USER_WORD';
 export const POST_STATS = 'POST_STATS';
+export const SET_NAME = 'SET_NAME';
