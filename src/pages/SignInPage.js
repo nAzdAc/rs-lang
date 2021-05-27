@@ -14,6 +14,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { CssTextField, useStyles } from '../styles/pagesStyles/StatsGamesSettings.styles';
 import { useDispatch, useSelector } from 'react-redux';
 import { reduxLogin } from '../redux/actions';
+import { Container } from '@material-ui/core';
 
 export const SignInPage = () => {
 	const dispatch = useDispatch();
@@ -53,7 +54,7 @@ export const SignInPage = () => {
 		return <Redirect to="/book" />;
 	} else
 		return (
-			<div className={classes.root}>
+			<Container className={classes.root}>
 				<div className={classes.formCard}>
 					<h2 className={classes.title}>Аккаунт</h2>
 					<form className={classes.form} onSubmit={handleSubmit}>
@@ -108,6 +109,6 @@ export const SignInPage = () => {
 						</Box>
 					</form>
 				</div>
-			</div>
+			</Container>
 		);
 };

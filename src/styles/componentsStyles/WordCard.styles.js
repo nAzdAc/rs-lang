@@ -2,6 +2,10 @@ import { makeStyles } from '@material-ui/core/styles';
 
 export const useStyles = makeStyles({
 	wordCard: {
+		fontFamily: '"Itim", cursive;',
+		color: '#5600E8',
+		backgroundColor: '#F2F2F2',
+		boxShadow: '3px 0px 10px 3px rgba(0,0,0,0.25)',
 		display: 'flex',
 		flexDirection: 'column',
 		flexWrap: 'wrap',
@@ -11,6 +15,7 @@ export const useStyles = makeStyles({
 		cursor: 'pointer'
 	},
 	mainInfo: {
+		fontFamily: 'inherit',
 		display: 'flex',
 		justifyContent: 'space-around',
 		alignItems: 'center'
@@ -18,7 +23,7 @@ export const useStyles = makeStyles({
 	cardImage: {
 		width: '200px',
 		height: '200px',
-		borderRadius: '10px',
+		borderRadius: '4px',
 		marginRight: '10px',
 		'@media (max-width: 600px)': {
 			width: '150px',
@@ -42,22 +47,25 @@ export const useStyles = makeStyles({
 		}
 	},
 	deleteButton: {
+		background: '#5600E8',
+		color: '#F2F2F2',
+		fontFamily: '"Itim", cursive;',
 		fontSize: '0.8rem',
+		display: 'flex',
+		alignItems: 'center',
+		justifyContent: 'space-around',
 		cursor: 'pointer',
 		border: 'none',
-		borderRadius: '5px',
+		borderRadius: '6px',
 		padding: '5px',
 		outline: 'none',
 		fontWeight: 'bold',
-		height: '50px',
-		background: '#01A299',
-		color: '#FFF',
+		height: '36px',
 		marginRight: '10px',
 		'&:hover': {
-			background: '#00D9CE'
+			transform: 'scale(1.2)'
 		},
-		'@media (max-width: 700px)': {
-			height: '35px',
+		'@media (max-width: 768px)': {
 			fontSize: '0.65rem'
 		}
 	},
@@ -67,13 +75,12 @@ export const useStyles = makeStyles({
 		outline: 'none',
 		cursor: 'pointer',
 		fontWeight: 'bold',
-		background: 'inherit',
-		color: '#FFF'
+		background: 'inherit'
 	},
 	bigCardIcon: {
 		cursor: 'pointer',
 		fontSize: '3rem',
-		color: 'black',
+		color: '#5600E8',
 		'&:hover': {
 			transform: 'scale(1.2)'
 		},
@@ -88,13 +95,20 @@ export const useStyles = makeStyles({
 		display: 'flex',
 		flexWrap: 'wrap',
 		alignItems: 'center',
+		alignText: 'center',
 		gap: '10px',
 		marginBottom: '5px'
+	},
+	cardUnitPlayWrap: {
+		display: 'flex',
+		alignItems: 'center',
+		alignText: 'center',
+		flexWrap: 'wrap'
 	},
 	littleCardIcon: {
 		cursor: 'pointer',
 		fontSize: '2rem',
-		color: 'black',
+		color: '#5600E8',
 		'&:hover': {
 			transform: 'scale(1.2)'
 		},
@@ -132,7 +146,8 @@ export const useStyles = makeStyles({
 		}
 	},
 	englishText: {
-		color: 'black',
+		fontFamily: '"Itim", cursive;',
+		color: '#5600E8',
 		fontWeight: '600',
 		fontSize: '2rem',
 		'@media (max-width: 1300px)': {
@@ -149,7 +164,7 @@ export const useStyles = makeStyles({
 		}
 	},
 	translateText: {
-		color: 'black',
+		color: '#5600E8',
 		fontStyle: 'italic',
 		fontSize: '2rem',
 		'@media (max-width: 1300px)': {
@@ -166,18 +181,33 @@ export const useStyles = makeStyles({
 		}
 	},
 	wordText: {
-		fontSize: '3rem',
+		fontSize: '2.5rem',
 		'@media (max-width: 1300px)': {
-			fontSize: '2rem'
+			fontSize: '1.8rem'
 		},
 		'@media (max-width: 1000px)': {
-			fontSize: '1.5rem'
+			fontSize: '1.4rem'
 		},
 		'@media (max-width: 800px)': {
 			fontSize: '1rem'
 		},
 		'@media (max-width: 600px)': {
 			fontSize: '0.85rem'
+		}
+	},
+	infoText: {
+		fontSize: '2rem',
+		'@media (max-width: 1300px)': {
+			fontSize: '1.6rem'
+		},
+		'@media (max-width: 1000px)': {
+			fontSize: '1.2rem'
+		},
+		'@media (max-width: 800px)': {
+			fontSize: '0.8rem'
+		},
+		'@media (max-width: 600px)': {
+			fontSize: '0.65rem'
 		}
 	},
 	additionalInfo: {

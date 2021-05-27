@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Pagination from '@material-ui/lab/Pagination';
 import Container from '@material-ui/core/Container';
-import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import { LevelButton } from '../components/LevelButton';
@@ -10,7 +9,7 @@ import { levels } from '../utils/constants';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import filterDictionary from '../utils/filterDictionary';
-import { useStyles } from '../styles/pagesStyles/WordList.styles';
+import { useStyles } from '../styles/pagesStyles/WordsPage.styles';
 import { gameCardsContent } from '../utils/constants';
 import { setActiveWords } from '../redux/actions';
 import { WordCard } from '../components/WordCard';
@@ -53,9 +52,7 @@ export const DictionaryPage = () => {
 
 	return (
 		<Container className={classes.root}>
-			<Typography className={classes.title} variant="h1">
-				Словарь
-			</Typography>
+			<h2 className={classes.title}>Словарь</h2>
 			<Box className={classes.buttonBox}>
 				{levels.map((item, index) => (
 					<LevelButton
@@ -82,9 +79,7 @@ export const DictionaryPage = () => {
 			</ul>
 			{activeWords.length ? (
 				<React.Fragment>
-					<Typography className={classes.subtitle} variant="h4">
-						Можешь запустить игру с этими словами
-					</Typography>
+					<h4 className={classes.subtitle}>Можешь запустить игру с этими словами</h4>
 					<ul className={classes.typeBox}>
 						{gameCardsContent.map((game) => {
 							return (
@@ -127,9 +122,9 @@ export const DictionaryPage = () => {
 					)}
 				</React.Fragment>
 			) : (
-				<Typography className={classes.message} variant="h3">
+				<h3 className={classes.message}>
 					{token ? 'Здесь нет слов' : 'Войдите в приложение чтобы увидеть свой словарь'}
-				</Typography>
+				</h3>
 			)}
 		</Container>
 	);

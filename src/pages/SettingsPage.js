@@ -11,6 +11,7 @@ import {
 import { reduxFetchSettings, reduxUpload, setName, setVolume } from '../redux/actions';
 import { useDispatch, useSelector } from 'react-redux';
 import { useMessage } from '../hooks/message.hook';
+import { Container, Paper } from '@material-ui/core';
 
 export const SettingsPage = () => {
 	const dispatch = useDispatch();
@@ -72,10 +73,10 @@ export const SettingsPage = () => {
 	};
 
 	return (
-		<div className={classes.root}>
+		<Container className={classes.root}>
 			<h2 className={classes.title}>Настройки</h2>
 			<div className={classes.cardsWrap}>
-				<div className={classes.card}>
+				<Paper className={classes.card}>
 					<h4 className={classes.subtitle1}>Отображение кнопок</h4>
 					<div className={classes.buttonsWrapper}>
 						<h6 className={classes.subtitle2}>Сложное слово</h6>
@@ -118,8 +119,8 @@ export const SettingsPage = () => {
 							checked={translateSentences}
 						/>
 					</div>
-				</div>
-				<div className={classes.card}>
+				</Paper>
+				<Paper className={classes.card}>
 					<h6 className={classes.subtitle1}>Громкость музыки</h6>
 					<VolumeSlider
 						marks={marks}
@@ -153,8 +154,8 @@ export const SettingsPage = () => {
 						value={wordVolume}
 						onChange={handleVolume}
 					/>
-				</div>
-				<div className={classes.card}>
+				</Paper>
+				<Paper className={classes.card}>
 					<img
 						alt="avatar"
 						className={classes.avatarImage}
@@ -180,9 +181,9 @@ export const SettingsPage = () => {
 							+ ИЗМЕНИТЬ НИКНЕЙМ
 						</button>
 					</form>
-				</div>
+				</Paper>
 				<ToastContainer />
 			</div>
-		</div>
+		</Container>
 	);
 };

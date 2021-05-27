@@ -8,7 +8,21 @@ import TableRow from '@material-ui/core/TableRow';
 
 const useStyles = makeStyles({
 	table: {
-		minWidth: '300px'
+		boxShadow: '3px 0px 10px 3px rgba(0,0,0,0.25)',
+		minWidth: '300px',
+		color: '#5600E8',
+		fontFamily: '"Itim", cursive;',
+		'& .MuiTableRow-root': {
+			'& .MuiTableCell-head': {
+				fontWeight: '600',
+				color: 'inherit',
+				fontFamily: 'inherit'
+			},
+			'& .MuiTableCell-body': {
+				color: 'inherit',
+				fontFamily: 'inherit'
+			}
+		}
 	}
 });
 
@@ -39,4 +53,4 @@ export const GameStatsTable = ({ rows }) => {
 			</TableBody>
 		</Table>
 	);
-}
+};

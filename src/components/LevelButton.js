@@ -6,12 +6,18 @@ export const useStyles = makeStyles({
 		width: '72px',
 		minWidth: '36px',
 		height: '72px',
+		fontWeight: '600',
 		fontSize: '52px',
-		color: 'white',
-		'@media (max-width: 650px)': {
-			width: '53px',
-			height: '53px',
-			fontSize: '26px'
+		color: '#F2F2F2',
+		'@media (max-width: 768px)': {
+			width: '57px',
+			height: '57px',
+			fontSize: '27px'
+		},
+		'&:hover': {
+			color: '#5600E8',
+			backgroundColor: '#F2F2F2',
+			boxShadow: '3px 0px 10px 3px rgba(0,0,0,0.25)'
 		},
 		backgroundColor: (group) =>
 			group === 1
@@ -23,8 +29,8 @@ export const useStyles = makeStyles({
 						: group === 4 ? '#6200EE' : group === 5 ? '#5600E8' : group === 6 ? '#3700B3' : '#3700B3'
 	},
 	buttonActive: {
-		borderBottom: '4px solid white',
-		marginBottom: '-4px'
+		borderBottom: '5px solid #F2F2F2',
+		marginBottom: '-5px'
 	}
 });
 

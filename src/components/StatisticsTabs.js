@@ -1,9 +1,7 @@
 import React, { useEffect } from 'react';
-import PropTypes from 'prop-types';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import Typography from '@material-ui/core/Typography';
 import { Chart } from './Chart';
 import { useState } from 'react';
 import { GameStatsTable } from './GameStatsTable';
@@ -26,13 +24,6 @@ function TabPanel(props) {
 		</div>
 	);
 }
-
-TabPanel.propTypes = {
-	children: PropTypes.node,
-	index: PropTypes.any.isRequired,
-	value: PropTypes.any.isRequired
-};
-
 function a11yProps(index) {
 	return {
 		id: `simple-tab-${index}`,
@@ -57,9 +48,9 @@ export const StatisticsTabs = () => {
 
 	return (
 		<React.Fragment>
-			<AppBar position="static">
+			<AppBar className={classes.tab} position="static">
 				<Tabs value={value} onChange={handleChange} aria-label="simple tabs example">
-					<Tab label="В цифрах" {...a11yProps(0)} />
+					<Tab className={classes.buttonZalupa} label="В цифрах" {...a11yProps(0)} />
 					<Tab label="На графиках" {...a11yProps(1)} />
 				</Tabs>
 			</AppBar>
@@ -67,13 +58,13 @@ export const StatisticsTabs = () => {
 			<TabPanel value={value} index={0}>
 				{statistics && (
 					<React.Fragment>
-						<Typography variant="h4" className={classes.subTitle}>
+						<h4 style={{ margin: '10px' }} className={classes.subtitle1}>
 							Успехи в играх
-						</Typography>
+						</h4>
 						<GameStatsTable rows={statistics.games} />
-						<Typography variant="h4" className={classes.subTitle}>
+						<h4 style={{ margin: '10px' }} className={classes.subtitle1}>
 							За сегодня
-						</Typography>
+						</h4>
 						<TodayStatsTable learnedWordsToday={statistics.learnedWordsToday} percentToday={statistics.percentToday} />
 					</React.Fragment>
 				)}
@@ -82,13 +73,13 @@ export const StatisticsTabs = () => {
 			<TabPanel value={value} index={1}>
 				{statistics && (
 					<React.Fragment>
-						<Typography variant="h4" className={classes.subTitle}>
+						<h4 style={{ margin: '10px' }} className={classes.subtitle1}>
 							Сколько всего слов вы изучили
-						</Typography>
+						</h4>
 						<Chart data={statistics.learnedWordsTotal} />
-						<Typography variant="h4" className={classes.subTitle}>
+						<h4 style={{ margin: '10px' }} className={classes.subtitle1}>
 							Прогресс изучения слов по дням
-						</Typography>
+						</h4>
 						<Chart data={statistics.learnedWordsPerDate} />
 					</React.Fragment>
 				)}

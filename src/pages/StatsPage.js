@@ -2,6 +2,7 @@ import React from 'react';
 import { StatisticsTabs } from '../components/StatisticsTabs';
 import { useStyles } from '../styles/pagesStyles/StatsGamesSettings.styles';
 import { useSelector } from 'react-redux';
+import { Container } from '@material-ui/core';
 
 export const StatsPage = () => {
 	const classes = useStyles();
@@ -9,9 +10,9 @@ export const StatsPage = () => {
 	const { statistics } = useSelector((state) => state);
 
 	return (
-		<div className={classes.root}>
+		<Container className={classes.root}>
 			{!!token ? (
-				<div className={classes.tab}>
+				<div className={classes.tabsContainer}>
 					{statistics === null ? (
 						<h2 className={classes.title}>У вас ещё нет статистики</h2>
 					) : (
@@ -24,6 +25,6 @@ export const StatsPage = () => {
 			) : (
 				<h2 className={classes.title}>Статистика доступна только для авторизованных пользователей</h2>
 			)}
-		</div>
+		</Container>
 	);
 };

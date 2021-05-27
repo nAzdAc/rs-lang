@@ -4,7 +4,7 @@ import GradeIcon from '@material-ui/icons/Grade';
 import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { useStyles } from '../styles/componentsStyles/WordCard.styles';
-import { Paper, Typography } from '@material-ui/core';
+import { Paper } from '@material-ui/core';
 import { convertText, createSound } from '../utils/helpers';
 import { useDispatch, useSelector } from 'react-redux';
 import classNames from 'classnames/bind';
@@ -85,24 +85,24 @@ export const WordCard = ({ word }) => {
 								</button>
 							</React.Fragment>
 						)}
-						<Typography className={classes.wordText} variant="h5">
+						<h4 className={classes.infoText}>
 							Правильно:&#160;
 							<span className={classes.correctText}>{word.correct || 0}&#160;</span>
-						</Typography>
-						<Typography className={classes.wordText} variant="h5">
+						</h4>
+						<h4 className={classes.infoText}>
 							Ошибочно:&#160;
 							<span className={classes.failText}>{word.fail || 0}</span>
-						</Typography>
+						</h4>
 					</div>
 
 					<div className={classes.cardUnitWrap}>
-						<button className={classes.iconWrap} value={word.audio} onClick={play}>
-							<PlayCircleFilledIcon className={classes.bigCardIcon} />
-						</button>
-						<Typography
-							className={classes.wordText}
-							variant="h4"
-						>{`${word.word} ${word.transcription} \u2014 ${word.wordTranslate}`}</Typography>
+						<div className={classes.cardUnitPlayWrap}>
+							<button className={classes.iconWrap} value={word.audio} onClick={play}>
+								<PlayCircleFilledIcon className={classes.bigCardIcon} />
+							</button>
+							<h4 className={classes.wordText}>{`${word.word} ${word.transcription} \u2014 `}</h4>
+						</div>
+						<h4 className={classes.wordText}>{`${word.wordTranslate}`}</h4>
 					</div>
 				</div>
 			</div>
@@ -110,30 +110,26 @@ export const WordCard = ({ word }) => {
 				<div className={classes.additionalInfo}>
 					<div className={classes.cardContent}>
 						<div className={classes.cardUnitWrap}>
-							<button className={classes.iconWrap} value={word.audioMeaning} onClick={play}>
-								<PlayCircleFilledIcon className={classes.littleCardIcon} />
-							</button>
-							<Typography className={classes.englishText} variant="h6">
-								{convertText(word.textMeaning)}
-							</Typography>
+							<div className={classes.cardUnitPlayWrap}>
+								<button className={classes.iconWrap} value={word.audioMeaning} onClick={play}>
+									<PlayCircleFilledIcon className={classes.littleCardIcon} />
+								</button>
+								<p className={classes.englishText}>{convertText(word.textMeaning)}</p>
+							</div>
 						</div>
-						<Typography className={classes.translateText} variant="h6">
-							{word.textMeaningTranslate}
-						</Typography>
+						<p className={classes.translateText}>{word.textMeaningTranslate}</p>
 					</div>
 
 					<div className={classes.cardContent}>
 						<div className={classes.cardUnitWrap}>
-							<button className={classes.iconWrap} value={word.audioExample} onClick={play}>
-								<PlayCircleFilledIcon className={classes.littleCardIcon} />
-							</button>
-							<Typography className={classes.englishText} variant="h6">
-								{convertText(word.textExample)}
-							</Typography>
+							<div className={classes.cardUnitPlayWrap}>
+								<button className={classes.iconWrap} value={word.audioExample} onClick={play}>
+									<PlayCircleFilledIcon className={classes.littleCardIcon} />
+								</button>
+								<p className={classes.englishText}>{convertText(word.textExample)}</p>
+							</div>
 						</div>
-						<Typography className={classes.translateText} variant="h6">
-							{word.textExampleTranslate}
-						</Typography>
+						<p className={classes.translateText}>{word.textExampleTranslate}</p>
 					</div>
 				</div>
 			)}

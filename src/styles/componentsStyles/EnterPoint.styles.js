@@ -10,7 +10,7 @@ export const useStyles = makeStyles(() => ({
 		flexDirection: 'column',
 		alignItems: 'center',
 		justifyContent: 'center',
-		color: '#fff',
+		color: '#F2F2F2',
 		width: '90px'
 	},
 	avatar: {
@@ -19,7 +19,7 @@ export const useStyles = makeStyles(() => ({
 		height: '55px'
 	},
 	logout: {
-		color: '#ffffff',
+		color: '#F2F2F2',
 		cursor: 'pointer',
 		marginRight: '10px',
 		'&:hover': {
@@ -27,14 +27,23 @@ export const useStyles = makeStyles(() => ({
 		}
 	},
 	button: {
-		fontWeight: 'bold',
+		fontFamily: '"Itim", cursive;',
+		display: 'flex',
+		alignItems: 'center',
+		justifyContent: 'space-around',
+		fontSize: '1rem',
+		cursor: 'pointer',
+		borderRadius: '6px',
+		outline: 'none',
+		fontWeight: '600',
 		width: '84px',
 		height: '36px',
-		background: '#01A299',
-		color: '#FFF',
+		background: '#5600E8',
+		border: '3px solid #F2F2F2',
+		color: '#F2F2F2',
 		marginRight: '10px',
 		'&:hover': {
-			background: '#00D9CE'
+			transform: 'scale(1.2)'
 		}
 	},
 	link: {
@@ -42,6 +51,6 @@ export const useStyles = makeStyles(() => ({
 	},
 	name: {
 		fontSize: '0.9rem',
-		color: '#fff'
+		color: '#F2F2F2'
 	}
 }));

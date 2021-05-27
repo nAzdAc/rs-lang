@@ -1,5 +1,4 @@
 import React from 'react';
-import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import { LevelButton } from '../components/LevelButton';
 import { NavLink } from 'react-router-dom';
@@ -17,9 +16,7 @@ export const LevelPage = () => {
 	const LevelsButtons = () => {
 		return (
 			<React.Fragment>
-				<Typography className={classes.title} variant="h2">
-					Выберите уровень сложности
-				</Typography>
+				<h2 className={classes.title}>Выберите уровень сложности</h2>
 				<Box className={classes.buttonBox}>
 					{bookLinks.map((link, index) => {
 						return (

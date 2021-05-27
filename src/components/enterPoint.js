@@ -1,14 +1,14 @@
 import React from 'react';
-import Button from '@material-ui/core/Button';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { useStyles } from '../styles/componentsStyles/EnterPoint.styles';
 import { useDispatch, useSelector } from 'react-redux';
 import { reduxLogOut } from '../redux/actions';
+import { frontRoutes } from '../utils/frontRoutes';
 
-export const EnterPoint = ({ link }) => {
+export const EnterPoint = () => {
 	const classes = useStyles();
 	const dispatch = useDispatch();
 	const { token, avatarURL, userName } = useSelector((state) => state.userData);
@@ -30,11 +30,9 @@ export const EnterPoint = ({ link }) => {
 					<ExitToAppIcon className={classes.logout} onClick={handleLogOut} />
 				</div>
 			) : (
-				<RouterLink to={link} className={classes.link}>
-					<Button variant="contained" size="small" className={classes.button}>
-						Войти
-					</Button>
-				</RouterLink>
+				<Link to={frontRoutes.signIn} className={classes.link}>
+					<button className={`${classes.button}`}>Войти</button>
+				</Link>
 			)}
 		</React.Fragment>
 	);

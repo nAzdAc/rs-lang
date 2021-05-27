@@ -1,18 +1,15 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { backRoutes } from '../utils/backRoutes';
 import Pagination from '@material-ui/lab/Pagination';
-import Typography from '@material-ui/core/Typography';
-import 'fontsource-roboto';
 import { gameCardsContent } from '../utils/constants';
 import { Link, useRouteMatch } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { useStyles } from '../styles/pagesStyles/WordList.styles';
+import { useStyles } from '../styles/pagesStyles/WordsPage.styles';
 import { setActiveWords } from '../redux/actions';
-import { Button } from '@material-ui/core';
+import { Button, CircularProgress } from '@material-ui/core';
 import { WordCard } from '../components/WordCard';
 
 export const BookPage = () => {
-	const { token } = useSelector((state) => state.userData);
 	const { userWords, activeWords } = useSelector((state) => state);
 	let match = useRouteMatch().path;
 	let group = match[match.length - 1] - 1;
@@ -70,14 +67,10 @@ export const BookPage = () => {
 
 	return (
 		<React.Fragment>
-			<Typography className={classes.levelTitle} variant="h2">
-				{`Уровень сложности ${group + 1}`}
-			</Typography>
+			<h2 className={classes.levelTitle}>{`Уровень сложности ${group + 1}`}</h2>
 			{activeWords.length ? (
 				<React.Fragment>
-					<Typography className={classes.subtitle} variant="h4">
-						Можешь запустить игру с этими словами
-					</Typography>
+					<h4 className={classes.subtitle}>Можешь запустить игру с этими словами</h4>
 					<ul className={classes.typeBox}>
 						{gameCardsContent.map((game) => {
 							return (
@@ -116,9 +109,7 @@ export const BookPage = () => {
 					/>
 				</React.Fragment>
 			) : (
-				<Typography className={classes.message} variant="h3">
-					{token ? 'Здесь нет слов' : 'Войдите в приложение чтобы увидеть свой словарь'}
-				</Typography>
+				<CircularProgress />
 			)}
 		</React.Fragment>
 	);

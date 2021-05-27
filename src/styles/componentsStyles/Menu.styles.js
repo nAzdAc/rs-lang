@@ -9,26 +9,31 @@ export const useStyles = makeStyles({
 		zIndex: '2'
 	},
 	link: {
-		color: '#FFF',
-		textDecoration: 'none'
-	},
-	icon: {
-		opacity: '0',
-		'&:hover, &:focus': {
-			transform: 'rotate(360deg)',
-			transition: '0.5s'
-		},
-		'@media (max-width: 800px)': {
-			opacity: '1'
+		fontFamily: '"Itim", cursive;',
+		color: '#F2F2F2',
+		'& .MuiSvgIcon-root': {
+			color: '#F2F2F2',
+			display: 'none',
+			'&:hover, &:focus': {
+				transform: 'rotate(360deg)',
+				transition: '0.5s'
+			},
+			'@media (max-width: 768px)': {
+				display: 'block'
+			}
 		}
 	},
 	text: {
+		color: '#F2F2F2',
 		fontFamily: '"Itim", cursive;',
 		fontSize: '24px',
+		'&:hover': {
+			textDecoration: 'underline'
+		},
 		'@media (max-width: 950px)': {
 			fontSize: '17px'
 		},
-		'@media (max-width: 800px)': {
+		'@media (max-width: 768px)': {
 			display: 'none'
 		}
 	}

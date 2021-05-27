@@ -14,6 +14,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { CssTextField, useStyles } from '../styles/pagesStyles/StatsGamesSettings.styles';
 import { useSelector } from 'react-redux';
+import { Container } from '@material-ui/core';
 
 export const SignUpPage = () => {
 	const message = useMessage();
@@ -69,7 +70,7 @@ export const SignUpPage = () => {
 	}
 
 	return (
-		<div className={classes.root}>
+		<Container className={classes.root}>
 			<div className={classes.formCard}>
 				<h2 className={classes.title}>Регистрация</h2>
 				<form className={classes.form} noValidate onSubmit={handleSubmit}>
@@ -82,7 +83,7 @@ export const SignUpPage = () => {
 						value={form.name}
 						onChange={handleFormChange}
 					/>
-					<span className={classes.info}>Не более 12 символов</span>
+					<span className={classes.info}>Не более 15 символов</span>
 					<CssTextField
 						variant="outlined"
 						id="email"
@@ -118,7 +119,7 @@ export const SignUpPage = () => {
 						/>
 					</FormControl>
 					<ToastContainer />
-					<span className={classes.info}>От 4 до 12 символов</span>
+					<span className={classes.info}>От 4 до 15 символов</span>
 					<Box className={classes.buttonBox}>
 						<button type="submit" className={`${classes.purpleButton} ${classes.containedButton}`}>
 							Выполнить
@@ -131,6 +132,6 @@ export const SignUpPage = () => {
 					</Box>
 				</form>
 			</div>
-		</div>
+		</Container>
 	);
 };

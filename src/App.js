@@ -5,6 +5,7 @@ import { Menu } from './components/Menu';
 import { Link } from 'react-router-dom';
 import { useStyles } from './styles/pagesStyles/App.styles';
 import { useRoutes } from './hooks/routes.hook';
+import { EnterPoint } from './components/EnterPoint';
 
 export const App = () => {
 	const classes = useStyles();
@@ -17,6 +18,7 @@ export const App = () => {
 						RS Lang
 					</Link>
 					<Menu />
+					<EnterPoint />
 				</header>
 				<React.Fragment>{routes}</React.Fragment>
 				<Footer />

@@ -6,7 +6,7 @@ import { TextField } from '@material-ui/core';
 export const useStyles = makeStyles({
 	root: {
 		fontFamily: '"Itim", cursive;',
-		color: '#6200EE',
+		color: '#5600E8',
 		backgroundColor: '#F2F2F2',
 		padding: '20px 10px 10px 20px',
 		display: 'flex',
@@ -33,13 +33,24 @@ export const useStyles = makeStyles({
 			fontSize: '3.5rem'
 		}
 	},
+	gameTitle: {
+		fontSize: '3.5rem',
+		marginBottom: '25px',
+		fontFamily: '"Itim", cursive;',
+		marginRight: 'auto',
+		'@media (max-width: 768px)': {
+			fontSize: '2.5rem'
+		}
+	},
 	subtitle1: {
+		fontFamily: '"Itim", cursive;',
 		fontSize: '1.5rem',
 		fontWeight: '650',
 		marginRight: 'auto',
 		marginBottom: '15px'
 	},
 	subtitle2: {
+		fontFamily: '"Itim", cursive;',
 		fontSize: '1.05rem',
 		fontWeight: '500',
 		marginRight: 'auto'
@@ -51,9 +62,10 @@ export const useStyles = makeStyles({
 		margin: '20px'
 	},
 	purpleButton: {
+		padding: '3px',
 		width: '100%',
 		height: '36px',
-		background: '#6200EE',
+		background: '#5600E8',
 		color: '#F2F2F2',
 		fontFamily: '"Itim", cursive;',
 		display: 'flex',
@@ -71,8 +83,8 @@ export const useStyles = makeStyles({
 	outlainedButton: {
 		width: '130px',
 		background: '#F2F2F2',
-		color: '#6200EE',
-		border: '3px solid #6200EE',
+		color: '#5600E8',
+		border: '3px solid #5600E8',
 		marginLeft: '40px'
 	},
 	containedButton: {
@@ -89,14 +101,16 @@ export const useStyles = makeStyles({
 		flexWrap: 'wrap'
 	},
 	card: {
-		color: '#6200EE',
+		backgroundColor: '#F2F2F2',
+		color: '#5600E8',
 		padding: '20px 30px 20px 30px',
-		width: '220px',
+		width: '230px',
 		margin: '20px',
 		display: 'flex',
 		flexDirection: 'column',
+		gap: '10px',
 		alignItems: 'center',
-		boxShadow: '5px 0px 17px 5px rgba(0,0,0,0.15)'
+		boxShadow: '3px 0px 10px 3px rgba(0,0,0,0.25)'
 	},
 	cardTitle: {
 		marginBottom: '10px',
@@ -106,15 +120,36 @@ export const useStyles = makeStyles({
 		marginBottom: '10px'
 	},
 	link: { textDecoration: 'none' },
-	tab: {
+	tabsContainer: {
+		backgroundColor: '#F2F2F2',
 		width: '100%',
 		maxWidth: '600px'
 	},
+	tab: {
+		backgroundColor: '#5600E8',
+		color: '#F2F2F2',
+		'& .MuiTab-root': {
+			fontWeight: '600',
+			fontFamily: '"Itim", cursive;'
+		},
+		'& .MuiTabs-indicator': {
+			height: '4px',
+			backgroundColor: '#F2F2F2'
+		}
+	},
+	// buttonZalupa: {
+	// 	color: 'yellow',
+	// 	backgroundColor: 'green'
+	// },
+	// zalupaPanel: {
+	// 	backgroundColor: '#5600E8',
+	// 	color: '#F2F2F2'
+	// },
 	formCard: {
 		width: '90%',
 		maxWidth: '500px',
 		padding: '20px',
-		boxShadow: '2px 0px 14px 2px rgba(0,0,0,0.09)',
+		boxShadow: '3px 0px 10px 3px rgba(0,0,0,0.25)',
 		display: 'flex',
 		flexDirection: 'column',
 		alignItems: 'center'

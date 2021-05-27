@@ -1,5 +1,4 @@
 import React from 'react';
-import Typography from '@material-ui/core/Typography';
 import { gameCardsContent } from '../utils/constants';
 import { useHistory, Switch, Route, useRouteMatch } from 'react-router-dom';
 import { SprintPage } from './SprintPage';
@@ -29,9 +28,7 @@ const Games = () => {
 
 	return (
 		<div className={classes.root}>
-			<Typography className={classes.title} variant="h3">
-				Выберите уровень сложности
-			</Typography>
+			<h3 className={classes.gameTitle}>Выберите уровень сложности</h3>
 			<Box className={classes.buttonBox}>
 				{levels.map((item, index) => (
 					<LevelButton
@@ -42,9 +39,7 @@ const Games = () => {
 					/>
 				))}
 			</Box>
-			<Typography variant="h3" className={classes.title}>
-				Выберите игру
-			</Typography>
+			<h3 className={classes.gameTitle}>Выберите игру</h3>
 			<div className={classes.cardsWrap}>
 				{gameCardsContent.map((card, index) => {
 					return (

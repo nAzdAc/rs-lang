@@ -8,8 +8,22 @@ import TableRow from '@material-ui/core/TableRow';
 
 const useStyles = makeStyles({
 	table: {
+		boxShadow: '3px 0px 10px 3px rgba(0,0,0,0.25)',
 		minWidth: '300px',
-		maxWidth: '400px'
+		maxWidth: '400px',
+		color: '#5600E8',
+		fontFamily: '"Itim", cursive;',
+		'& .MuiTableRow-root': {
+			'& .MuiTableCell-head': {
+				fontWeight: '600',
+				color: 'inherit',
+				fontFamily: 'inherit'
+			},
+			'& .MuiTableCell-body': {
+				color: 'inherit',
+				fontFamily: 'inherit'
+			}
+		}
 	}
 });
 
@@ -40,4 +54,4 @@ export const TodayStatsTable = ({ learnedWordsToday, percentToday }) => {
 			</TableBody>
 		</Table>
 	);
-}
+};
