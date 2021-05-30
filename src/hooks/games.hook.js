@@ -48,6 +48,7 @@ export const useGames = () => {
 			if (!token) {
 				return message('Статистика не была обновлена, авторизуйтесь');
 			}
+			if (!correctArr.length && !failArr.length) return;
 			dispatch(reduxPostStats(token, gameName, correctArr, failArr, seriesArr));
 		},
 		[ dispatch, message, token ]

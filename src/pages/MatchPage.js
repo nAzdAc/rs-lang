@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import Typography from '@material-ui/core/Typography';
 import FullscreenIcon from '@material-ui/icons/Fullscreen';
 import FullscreenExitIcon from '@material-ui/icons/FullscreenExit';
 import fonSong from '../assets/sounds/fon.mp3';
@@ -18,6 +17,7 @@ import { deleteLevel } from '../redux/actions';
 import { useStyles } from '../styles/pagesStyles/Games.styles';
 import { fourKeyCode } from '../utils/constants';
 import { originURL } from '../utils/backRoutes';
+import { GamesProgressBar } from '../components/GamesProgressBar';
 
 export const MatchPage = () => {
 	const classes = useStyles();
@@ -209,6 +209,7 @@ export const MatchPage = () => {
 				/>
 			) : wordsArray.length && currentWord && fourImages.length === 4 ? (
 				<div ref={gameBoard} className={classes.gameContainer}>
+					<GamesProgressBar currentNumber={currentNumber} allNumber={wordsArray.length} />
 					<button onClick={() => goFullScreen(gameBoard.current)} className={classes.fullScreenBtn}>
 						{fullScreen ? (
 							<FullscreenExitIcon className={classes.fullScreenIcon} />
@@ -232,21 +233,18 @@ export const MatchPage = () => {
 							);
 						})}
 					</div>
-					<Typography className={classes.word} variant="h3">{`${currentWord.word || ''}`}</Typography>
-					<Typography className={classes.meaning} variant="h5">
-						{`${convertText(currentWord.textMeaning)}` || ''}
-					</Typography>
+					<h3 className={classes.currentWord}>{`${currentWord.word || ''}`}</h3>
+					<p className={classes.example}>{`${convertText(currentWord.textExample)}` || ''}</p>
 					<div ref={seriesContainer} className={classes.series} />
 					<LifesInGames lifes={lifes} />
-					<Typography
-						variant="subtitle1"
-						className={classes.correct}
-					>{`Правильные ответы: ${correctAnswers.length}`}</Typography>
-					<Typography
-						color="secondary"
-						variant="subtitle1"
-						className={classes.fail}
-					>{`Ошибки: ${failAnswers.length}`}</Typography>
+					<h4 className={classes.progressText}>
+						Правильные ответы:&#160;
+						<span className={classes.correctText}>{correctAnswers.length || 0}</span>
+					</h4>
+					<h4 className={classes.progressText}>
+						Ошибки:&#160;
+						<span className={classes.failText}>{failAnswers.length || 0}</span>
+					</h4>
 				</div>
 			) : (
 				<CircularProgress className={classes.loader} />

@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import Typography from '@material-ui/core/Typography';
 import FullscreenIcon from '@material-ui/icons/Fullscreen';
 import FullscreenExitIcon from '@material-ui/icons/FullscreenExit';
 import successSong from '../assets/sounds/success.mp3';
@@ -20,6 +19,7 @@ import { useStyles } from '../styles/pagesStyles/Games.styles';
 import { fourKeyCode } from '../utils/constants';
 import { originURL } from '../utils/backRoutes';
 import { deleteLevel } from '../redux/actions';
+import { GamesProgressBar } from '../components/GamesProgressBar';
 
 export const AudioPage = () => {
 	const classes = useStyles();
@@ -76,11 +76,11 @@ export const AudioPage = () => {
 				setCorrectAnswers((prev) => [ ...prev, currentWord ]);
 				seriesContainer.current.innerHTML += ' <img src="https://img.icons8.com/color/48/000000/hand-drawn-star.png"/>';
 				setCurrentSeries((prev) => prev + 1);
-				const goodButton = four.current.find((button) => button.value === word);
-				goodButton.classList.add(classes.goodButton);
+				const correctButton = four.current.find((button) => button.value === word);
+				correctButton.classList.add(classes.correctButton);
 				setBlock(true);
 				setTimeout(() => {
-					goodButton.classList.remove(classes.goodButton);
+					correctButton.classList.remove(classes.correctButton);
 					setCurrentNumber((prev) => prev + 1);
 					setBlock(false);
 				}, 2000);
@@ -90,14 +90,14 @@ export const AudioPage = () => {
 				setAllSeries((prev) => [ ...prev, currentSeries ]);
 				setCurrentSeries(0);
 				seriesContainer.current.innerHTML = '';
-				const goodButton = four.current.find((button) => button.value === currentWord.word);
-				const badButton = four.current.find((button) => button.value === word);
-				goodButton.classList.add(classes.goodButton);
-				badButton.classList.add(classes.badButton);
+				const correctButton = four.current.find((button) => button.value === currentWord.word);
+				const failButton = four.current.find((button) => button.value === word);
+				correctButton.classList.add(classes.correctButton);
+				failButton.classList.add(classes.failButton);
 				setBlock(true);
 				setTimeout(() => {
-					goodButton.classList.remove(classes.goodButton);
-					badButton.classList.remove(classes.badButton);
+					correctButton.classList.remove(classes.correctButton);
+					failButton.classList.remove(classes.failButton);
 					setCurrentNumber((prev) => prev + 1);
 					setBlock(false);
 				}, 2000);
@@ -105,7 +105,7 @@ export const AudioPage = () => {
 				setLifes((prev) => prev - 1);
 			}
 		},
-		[ audioFail2, audioSuccess, block, classes.badButton, classes.goodButton, currentSeries, currentWord, endGame ]
+		[ audioFail2, audioSuccess, block, classes.failButton, classes.correctButton, currentSeries, currentWord, endGame ]
 	);
 
 	useEffect(
@@ -221,6 +221,7 @@ export const AudioPage = () => {
 				/>
 			) : wordsArray.length && fourButtons.length === 4 && currentWord ? (
 				<div ref={gameBoard} className={classes.gameContainer}>
+					<GamesProgressBar currentNumber={currentNumber} allNumber={wordsArray.length} />
 					<button onClick={() => goFullScreen(gameBoard.current)} className={classes.fullScreenBtn}>
 						{fullScreen ? (
 							<FullscreenExitIcon className={classes.fullScreenIcon} />
@@ -239,7 +240,7 @@ export const AudioPage = () => {
 									key={index}
 									onClick={(event) => answer(event.target.value)}
 									value={item.word}
-									className={classes.button}
+									className={classes.purpleButton}
 								>
 									{item.wordTranslate}
 								</button>
@@ -247,10 +248,14 @@ export const AudioPage = () => {
 						})}
 					</div>
 					<LifesInGames lifes={lifes} />
-					<Typography variant="subtitle1" className={classes.correct}>{`Правильные ответы: ${correctAnswers.length ||
-						0}`}</Typography>
-					<Typography color="secondary" variant="subtitle1" className={classes.fail}>{`Ошибки: ${failAnswers.length ||
-						0}`}</Typography>
+					<h4 className={classes.progressText}>
+						Правильные ответы:&#160;
+						<span className={classes.correctText}>{correctAnswers.length || 0}</span>
+					</h4>
+					<h4 className={classes.progressText}>
+						Ошибки:&#160;
+						<span className={classes.failText}>{failAnswers.length || 0}</span>
+					</h4>
 				</div>
 			) : (
 				<CircularProgress className={classes.loader} />

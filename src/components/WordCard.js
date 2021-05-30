@@ -12,7 +12,7 @@ import { updateUserWord } from '../redux/actions';
 import { Howler } from 'howler';
 
 export const WordCard = ({ word }) => {
-	// console.log(word.deleted);
+	// console.log(word._id);
 	// console.log(typeof word.deleted);
 	const classes = useStyles();
 	const dispatch = useDispatch();

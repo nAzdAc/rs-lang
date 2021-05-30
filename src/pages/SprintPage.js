@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import Typography from '@material-ui/core/Typography';
 import FullscreenIcon from '@material-ui/icons/Fullscreen';
 import FullscreenExitIcon from '@material-ui/icons/FullscreenExit';
 import fonSong from '../assets/sounds/fon.mp3';
@@ -16,6 +15,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useStyles } from '../styles/pagesStyles/Games.styles';
 import { yesNoKeyCode } from '../utils/constants';
 import { deleteLevel } from '../redux/actions';
+import { GamesProgressBar } from '../components/GamesProgressBar';
+import { RoundTimer } from '../components/RoundTimer';
+import { Howler } from 'howler';
 
 export const SprintPage = () => {
 	const classes = useStyles();
@@ -28,17 +30,17 @@ export const SprintPage = () => {
 	const [ correctAnswers, setCorrectAnswers ] = useState([]);
 	const [ failAnswers, setFailAnswers ] = useState([]);
 	const [ currentWord, setCurrentWord ] = useState({});
-	const [ currentRussianhWord, setCurrentRussianhWord ] = useState('');
+	const [ currentRussianWord, setCurrentRussianWord ] = useState('');
 	const [ currentNumber, setCurrentNumber ] = useState(0);
-	const timer = useRef();
 	const [ fullScreen, setFullScreen ] = useState(false);
 	const [ currentSeries, setCurrentSeries ] = useState(0);
 	const [ allSeries, setAllSeries ] = useState([]);
-	const seriesContainer = useRef('');
 	const gameBoard = useRef();
+	const seriesContainer = useRef('');
+	const timer = useRef();
 
 	const audioSuccess = useMemo(() => createSound(successSong, soundVolume), [ soundVolume ]);
-	const audioFail = useMemo(() => createSound(failSong, soundVolume * 5), [ soundVolume ]);
+	const audioFail = useMemo(() => createSound(failSong, soundVolume), [ soundVolume ]);
 	const audioFon = useMemo(() => createSound(fonSong, musicVolume * 0.1, 1, true), [ musicVolume ]);
 
 	const playWords = useCallback(
@@ -61,8 +63,8 @@ export const SprintPage = () => {
 		(value) => {
 			if (endGame) return;
 			if (
-				(value === 'true' && currentWord.wordTranslate === currentRussianhWord) ||
-				(value === 'false' && currentWord.wordTranslate !== currentRussianhWord)
+				(value === 'true' && currentWord.wordTranslate === currentRussianWord) ||
+				(value === 'false' && currentWord.wordTranslate !== currentRussianWord)
 			) {
 				seriesContainer.current.innerHTML += ' <img src="https://img.icons8.com/color/48/000000/hand-drawn-star.png"/>';
 				setCurrentSeries((prev) => prev + 1);
@@ -77,14 +79,14 @@ export const SprintPage = () => {
 			}
 			setCurrentNumber((prev) => prev + 1);
 		},
-		[ audioFail, audioSuccess, currentRussianhWord, currentSeries, currentWord, endGame ]
+		[ audioFail, audioSuccess, currentRussianWord, currentSeries, currentWord, endGame ]
 	);
 
 	useEffect(
 		() => {
 			if (wordsArray.length && currentNumber < wordsArray.length) {
 				setCurrentWord(wordsArray[currentNumber]);
-				setCurrentRussianhWord(() => {
+				setCurrentRussianWord(() => {
 					let word;
 					const num = Math.random();
 					if (num > 0.45) {
@@ -99,31 +101,35 @@ export const SprintPage = () => {
 		[ currentNumber, wordsArray ]
 	);
 
+	useEffect(() => {
+		timer.current = setInterval(() => {
+			setSeconds((prev) => prev - 1);
+		}, 1000);
+		return () => {
+			clearInterval(timer.current);
+		};
+	}, []);
+
 	useEffect(
 		() => {
-			if (!endGame && wordsArray.length && currentWord) {
-				audioFon.play();
-				timer.current = setInterval(() => {
-					setSeconds((prev) => prev - 1);
-				}, 1000);
-			}
-			return () => {
+			if (seconds <= 0 || (currentNumber && currentNumber >= wordsArray.length)) {
+				setEndGame(true);
 				clearInterval(timer.current);
-				audioFon.stop();
-			};
+			}
 		},
-		[ endGame, audioFon, wordsArray, currentWord ]
+		[ seconds, audioFon, currentNumber, wordsArray.length ]
 	);
 
 	useEffect(
 		() => {
-			if (seconds === 0 || (currentNumber && currentNumber >= wordsArray.length)) {
-				setEndGame(true);
-				clearInterval(timer.current);
-				audioFon.stop();
+			if (!endGame && musicVolume) {
+				audioFon.play();
 			}
+			return () => {
+				Howler.stop();
+			};
 		},
-		[ seconds, wordsArray, currentNumber, audioFon ]
+		[ endGame, audioFon, musicVolume ]
 	);
 
 	useEffect(
@@ -161,13 +167,21 @@ export const SprintPage = () => {
 		toggleScreen(elem);
 	}
 
+	useEffect(
+		() => {
+			console.log(seconds);
+		},
+		[ seconds ]
+	);
+
 	return (
 		<div className={classes.root}>
 			<ToastContainer />
 			{endGame ? (
 				<GameStats allSeries={allSeries} gameName="sprint" correctAnswers={correctAnswers} failAnswers={failAnswers} />
-			) : wordsArray.length && currentWord && currentRussianhWord ? (
+			) : wordsArray.length && currentWord && currentRussianWord ? (
 				<div ref={gameBoard} className={classes.gameContainer}>
+					<GamesProgressBar currentNumber={currentNumber} allNumber={wordsArray.length} />
 					<button onClick={() => goFullScreen(gameBoard.current)} className={classes.fullScreenBtn}>
 						{fullScreen ? (
 							<FullscreenExitIcon className={classes.fullScreenIcon} />
@@ -175,35 +189,33 @@ export const SprintPage = () => {
 							<FullscreenIcon className={classes.fullScreenIcon} />
 						)}
 					</button>
-					<Typography variant="h5">Осталось: </Typography>
-					<Typography variant="h2">{seconds}</Typography>
-					<Typography variant="h4">{`${currentWord.word || ''} = ${currentRussianhWord || ''}`}</Typography>
+					<RoundTimer seconds={seconds} />
+					<h4 className={classes.currentWord}>{`${currentWord.word || ''} = ${currentRussianWord || ''}`}</h4>
 					<div ref={seriesContainer} className={classes.series} />
 					<div className={classes.buttonsWrap}>
 						<button
-							className={`${classes.button} ${classes.badButton}`}
+							className={`${classes.purpleButton} ${classes.failButton}`}
 							onClick={(event) => answer(event.target.value)}
 							value={false}
 						>
 							НЕ ВЕРНО
 						</button>
 						<button
-							className={`${classes.button} ${classes.goodButton}`}
+							className={`${classes.purpleButton} ${classes.correctButton}`}
 							onClick={(event) => answer(event.target.value)}
 							value={true}
 						>
 							ВЕРНО
 						</button>
 					</div>
-					<Typography
-						variant="subtitle1"
-						className={classes.answer}
-					>{`Правильные ответы: ${correctAnswers.length}`}</Typography>
-					<Typography
-						color="secondary"
-						variant="subtitle1"
-						className={classes.answer}
-					>{`Ошибки: ${failAnswers.length}`}</Typography>
+					<h4 className={classes.progressText}>
+						Правильные ответы:&#160;
+						<span className={classes.correctText}>{correctAnswers.length || 0}</span>
+					</h4>
+					<h4 className={classes.progressText}>
+						Ошибки:&#160;
+						<span className={classes.failText}>{failAnswers.length || 0}</span>
+					</h4>
 				</div>
 			) : (
 				<CircularProgress className={classes.loader} />

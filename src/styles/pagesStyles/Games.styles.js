@@ -2,9 +2,13 @@ import { makeStyles } from '@material-ui/core/styles';
 
 export const useStyles = makeStyles({
 	root: {
+		height: '100%',
 		display: 'flex',
+		flexDirection: 'column',
 		alignItems: 'center',
-		justifyContent: 'center'
+		justifyContent: 'center',
+		fontFamily: '"Itim", cursive;',
+		background: '#F2F2F2'
 	},
 	gameContainer: {
 		position: 'relative',
@@ -16,7 +20,8 @@ export const useStyles = makeStyles({
 		alignItems: 'center',
 		justifyContent: 'space-between',
 		padding: '20px 0px 10px 0px',
-		background: 'white'
+		background: '#F2F2F2',
+		color: '#5600E8'
 	},
 	buttonsWrap: {
 		display: 'flex',
@@ -24,32 +29,45 @@ export const useStyles = makeStyles({
 		alignItems: 'center',
 		justifyContent: 'space-around',
 		marginBottom: '15px',
-		gap: '10px'
+		gap: '20px'
 	},
-	button: {
+	purpleButton: {
 		padding: '5px',
-		borderRadius: '5px',
-		border: 'none',
-		cursor: 'pointer',
-		fontWeight: 'bold',
 		minWidth: '100px',
 		height: '50px',
-		background: '#01A299',
-		color: '#FFF',
+		backgroundColor: '#5600E8',
+		color: '#F2F2F2',
+		fontFamily: '"Itim", cursive;',
+		display: 'flex',
+		alignItems: 'center',
+		justifyContent: 'space-around',
+		borderRadius: '10px',
+		cursor: 'pointer',
+		outline: 'none',
+		border: '3px solid #F2F2F2',
+		fontSize: '1rem',
 		'&:hover': {
-			background: '#00D9CE'
+			border: '3px solid #5600E8',
+			backgroundColor: '#F2F2F2',
+			color: '#5600E8'
 		}
 	},
-	badButton: {
-		background: '#B00020',
+	failButton: {
+		backgroundColor: '#FF001E',
+		border: '3px solid #FF001E',
 		'&:hover': {
-			background: '#E6002A'
+			border: '3px solid #FF001E',
+			backgroundColor: '#F2F2F2',
+			color: '#FF001E'
 		}
 	},
-	goodButton: {
-		background: '#16a600',
+	correctButton: {
+		backgroundColor: '#28FC03',
+		border: '3px solid #28FC03',
 		'&:hover': {
-			background: '#28fc03'
+			border: '3px solid #28FC03',
+			backgroundColor: '#F2F2F2',
+			color: '#28FC03'
 		}
 	},
 	speaker: {
@@ -57,38 +75,56 @@ export const useStyles = makeStyles({
 		height: '120px',
 		marginBottom: '60px',
 		cursor: 'pointer',
-		color: '#01A299',
+		color: '#5600E8',
 		'&:hover': {
-			color: '#00D9CE'
+			transform: 'scale(1.2)'
 		}
 	},
-	fail: {
-		marginBottom: '10px'
+	progressText: {
+		fontFamily: 'inherit',
+		color: 'inherit',
+		marginBottom: '10px',
+		fontSize: '1.5rem'
+	},
+	failText: {
+		fontFamily: 'inherit',
+		color: '#FF001E',
+		fontSize: '1.2em'
+	},
+	correctText: {
+		fontFamily: 'inherit',
+		color: '#28FC03',
+		fontSize: '1.2em'
 	},
 	loader: {
 		position: 'absolute',
+		color: '#5600E8',
 		top: '50%',
 		left: '50%'
 	},
+	savannaWord: {
+		marginBottom: '300px',
+		fontSize: '2rem',
+		fontFamily: '"Itim", cursive;'
+	},
 	fullScreenBtn: {
 		position: 'absolute',
-		right: '0',
-		bottom: '0',
+		right: '20px',
+		bottom: '20px',
 		border: 'none',
 		outline: 'none',
 		cursor: 'pointer',
 		fontWeight: 'bold',
 		width: '50px',
 		height: '50px',
-		background: 'white',
-		color: '#FFF'
+		background: 'inherit'
 	},
 	fullScreenIcon: {
 		cursor: 'pointer',
 		fontSize: '50px',
-		color: '#01A299',
+		color: '#5600E8',
 		'&:hover': {
-			color: '#00D9CE'
+			transform: 'scale(1.2)'
 		}
 	},
 	series: {
@@ -110,7 +146,7 @@ export const useStyles = makeStyles({
 		flexWrap: 'wrap',
 		alignItems: 'center',
 		justifyContent: 'center',
-		marginBottom: '20px',
+		margin: '20px 0px 10px 0px',
 		gap: '10px'
 	},
 	imageWrap: {
@@ -141,18 +177,12 @@ export const useStyles = makeStyles({
 	badOverlay: {
 		zIndex: '1',
 		opacity: '0.4',
-		background: '#B00020',
-		'&:hover': {
-			background: '#E6002A'
-		}
+		background: '#FF001E'
 	},
 	goodOverlay: {
 		zIndex: '1',
 		opacity: '0.4',
-		background: '#16a600',
-		'&:hover': {
-			background: '#28fc03'
-		}
+		background: '#28FC03'
 	},
 	image: {
 		position: 'absolute',
@@ -163,18 +193,23 @@ export const useStyles = makeStyles({
 		borderRadius: 'inherit',
 		cursor: 'pointer'
 	},
-	word: {
-		marginBottom: '10px'
+	currentWord: {
+		fontSize: '3rem',
+		fontFamily: 'inherit'
 	},
-	meaning: {
-		marginBottom: '30px'
+	example: {
+		margin: '10px',
+		fontSize: '1.5rem',
+		fontFamily: 'inherit',
+		alignSelf: 'center'
 	},
 	finishLine: {
-		backgroundColor: 'red',
+		marginBottom: '10px',
+		backgroundColor: '#5600E8',
 		width: '80%',
+		maxWidth: '800px',
 		height: '3px',
 		color: 'red',
-		border: 'none',
-		marginBottom: '10px'
+		border: 'none'
 	}
 });

@@ -56,7 +56,7 @@ export const DictionaryPage = () => {
 			<Box className={classes.buttonBox}>
 				{levels.map((item, index) => (
 					<LevelButton
-						key={index}
+						key={`${index}${item}level-dictionary`}
 						click={() => handleLevelsClick(index)}
 						group={item}
 						isActive={index === activeLevel ? true : false}
@@ -66,7 +66,7 @@ export const DictionaryPage = () => {
 			<ul className={classes.typeBox}>
 				{wordCategories.map((item, index) => (
 					<Button
-						key={index}
+						key={`${index}${item}category-dictionary`}
 						onClick={() => handleWordsButtonClick(index)}
 						variant="contained"
 						className={
@@ -81,12 +81,12 @@ export const DictionaryPage = () => {
 				<React.Fragment>
 					<h4 className={classes.subtitle}>Можешь запустить игру с этими словами</h4>
 					<ul className={classes.typeBox}>
-						{gameCardsContent.map((game) => {
+						{gameCardsContent.map((game, index) => {
 							return (
 								<Button className={classes.typeButton} variant="contained" size="medium">
 									<Link
 										className={classes.link}
-										key={game.name}
+										key={`${game.name}${index}game-dictionary`}
 										to={{
 											pathname: game.to
 										}}
@@ -108,7 +108,7 @@ export const DictionaryPage = () => {
 					)}
 					<ul className={classes.wordList}>
 						{activeWords.map((word) => {
-							return <WordCard key={`${word._id}${word.word}`} word={word} />;
+							return <WordCard key={`${word._id}${word.word}dictionary-word`} word={word} />;
 						})}
 					</ul>
 					{Math.ceil(userWords.length / 20) > 1 && (

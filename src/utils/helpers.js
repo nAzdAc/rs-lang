@@ -51,3 +51,10 @@ export function getWordsForPlay(allWords, userWords) {
 		return filteredArr;
 	}
 }
+
+export function getOffset(num, maxNum) {
+	const circumference = 2 * Math.PI * 52;
+	const percent = 100 - (maxNum - num) / maxNum * 100;
+	const offset = circumference - percent / 100 * circumference;
+	return offset;
+}

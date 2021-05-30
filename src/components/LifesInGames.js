@@ -2,16 +2,28 @@ import Rating from '@material-ui/lab/Rating';
 import { withStyles } from '@material-ui/core/styles';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import { Box } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 
 const StyledRating = withStyles({
 	iconFilled: {
-		color: 'red'
+		color: '#FF001E'
 	}
 })(Rating);
 
+const useStyles = makeStyles({
+	lifesContainer: {
+		'& .MuiRating-root': {
+			'& .MuiRating-iconEmpty': {
+				color: '#BB86FC'
+			}
+		}
+	}
+});
+
 export const LifesInGames = ({ lifes }) => {
+	const classes = useStyles();
 	return (
-		<Box component="fieldset" mb={3} borderColor="transparent">
+		<Box className={classes.lifesContainer} component="fieldset" mb={3} borderColor="transparent">
 			<StyledRating
 				name="customized-color"
 				readOnly={true}

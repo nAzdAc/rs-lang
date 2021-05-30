@@ -25,12 +25,7 @@ body {
   background-color: #F2F2F2;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-}
-
-.slide-word.entering {
+.entering {
   animation: slideDown 5s forwards;
 }
 

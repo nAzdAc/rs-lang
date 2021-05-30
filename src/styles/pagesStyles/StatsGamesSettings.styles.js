@@ -35,7 +35,7 @@ export const useStyles = makeStyles({
 	},
 	gameTitle: {
 		fontSize: '3.5rem',
-		marginBottom: '25px',
+		marginBottom: '10px',
 		fontFamily: '"Itim", cursive;',
 		marginRight: 'auto',
 		'@media (max-width: 768px)': {

@@ -120,7 +120,7 @@ export const useStyles = makeStyles({
 		}
 	},
 	correctText: {
-		color: 'red',
+		color: '#28FC03',
 		fontSize: '2.5rem',
 		'@media (max-width: 1300px)': {
 			fontSize: '2rem'
@@ -128,12 +128,12 @@ export const useStyles = makeStyles({
 		'@media (max-width: 1000px)': {
 			fontSize: '1.5rem'
 		},
-		'@media (max-width: 800px)': {
-			fontSize: '1.25rem'
+		'@media (max-width: 768px)': {
+			fontSize: '1.1rem'
 		}
 	},
 	failText: {
-		color: 'green',
+		color: '#FF001E',
 		fontSize: '2.5rem',
 		'@media (max-width: 1300px)': {
 			fontSize: '2rem'
@@ -141,8 +141,8 @@ export const useStyles = makeStyles({
 		'@media (max-width: 1000px)': {
 			fontSize: '1.5rem'
 		},
-		'@media (max-width: 800px)': {
-			fontSize: '1.25rem'
+		'@media (max-width: 768px)': {
+			fontSize: '1.1rem'
 		}
 	},
 	englishText: {

@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import Typography from '@material-ui/core/Typography';
 import FullscreenIcon from '@material-ui/icons/Fullscreen';
 import FullscreenExitIcon from '@material-ui/icons/FullscreenExit';
 import successSong from '../assets/sounds/success.mp3';
@@ -18,6 +17,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { deleteLevel } from '../redux/actions';
 import { useStyles } from '../styles/pagesStyles/Games.styles';
 import { fourKeyCode } from '../utils/constants';
+import { GamesProgressBar } from '../components/GamesProgressBar';
+import { Howler } from 'howler';
 
 export const SavannaPage = (props) => {
 	const classes = useStyles();
@@ -80,11 +81,11 @@ export const SavannaPage = (props) => {
 					setCurrentSeries((prev) => prev + 1);
 					setCorrectAnswers((prev) => [ ...prev, currentWord ]);
 					audioSuccess.play();
-					const goodButton = four.current.find((button) => button.value === value);
-					goodButton.classList.add(classes.goodButton);
+					const correctButton = four.current.find((button) => button.value === value);
+					correctButton.classList.add(classes.correctButton);
 					setBlock(true);
 					setTimeout(() => {
-						goodButton.classList.remove(classes.goodButton);
+						correctButton.classList.remove(classes.correctButton);
 						setCurrentNumber((prev) => prev + 1);
 						setBlock(false);
 					}, 2000);
@@ -95,14 +96,14 @@ export const SavannaPage = (props) => {
 					setFailAnswers((prev) => [ ...prev, currentWord ]);
 					audioFail2.play();
 					setLifes((prev) => prev - 1);
-					const goodButton = four.current.find((button) => button.value === currentWord.word);
-					const badButton = four.current.find((button) => button.value === value);
-					goodButton.classList.add(classes.goodButton);
-					badButton.classList.add(classes.badButton);
+					const correctButton = four.current.find((button) => button.value === currentWord.word);
+					const failButton = four.current.find((button) => button.value === value);
+					correctButton.classList.add(classes.correctButton);
+					failButton.classList.add(classes.failButton);
 					setBlock(true);
 					setTimeout(() => {
-						goodButton.classList.remove(classes.goodButton);
-						badButton.classList.remove(classes.badButton);
+						correctButton.classList.remove(classes.correctButton);
+						failButton.classList.remove(classes.failButton);
 						setCurrentNumber((prev) => prev + 1);
 						setBlock(false);
 					}, 2000);
@@ -114,17 +115,17 @@ export const SavannaPage = (props) => {
 				setFailAnswers((prev) => [ ...prev, currentWord ]);
 				audioFail2.play();
 				setLifes((prev) => prev - 1);
-				const goodButton = four.current.find((button) => button.value === value);
-				goodButton.classList.add(classes.goodButton);
+				const correctButton = four.current.find((button) => button.value === value);
+				correctButton.classList.add(classes.correctButton);
 				setBlock(true);
 				setTimeout(() => {
-					goodButton.classList.remove(classes.goodButton);
+					correctButton.classList.remove(classes.correctButton);
 					setCurrentNumber((prev) => prev + 1);
 					setBlock(false);
 				}, 2000);
 			}
 		},
-		[ audioFail2, audioSuccess, block, classes.badButton, classes.goodButton, currentSeries, currentWord, endGame ]
+		[ audioFail2, audioSuccess, block, classes.failButton, classes.correctButton, currentSeries, currentWord, endGame ]
 	);
 
 	useEffect(
@@ -133,7 +134,7 @@ export const SavannaPage = (props) => {
 				audioFon.play();
 			}
 			return () => {
-				audioFon.stop();
+				Howler.stop();
 			};
 		},
 		[ endGame, audioFon, musicVolume ]
@@ -233,6 +234,7 @@ export const SavannaPage = (props) => {
 				/>
 			) : wordsArray.length && fourButtons.length ? (
 				<div ref={gameBoard} className={classes.gameContainer}>
+					<GamesProgressBar currentNumber={currentNumber} allNumber={wordsArray.length} />
 					<button onClick={() => goFullScreen(gameBoard.current)} className={classes.fullScreenBtn}>
 						{fullScreen ? (
 							<FullscreenExitIcon className={classes.fullScreenIcon} />
@@ -242,14 +244,9 @@ export const SavannaPage = (props) => {
 					</button>
 					<Transition in={!block} timeout={5000} onEntered={(event) => answer(event.dataset.name, false)}>
 						{(state) => (
-							<Typography
-								data-name={currentWord.word}
-								className={`slide-word ${state}`}
-								variant="h3"
-								style={{ marginBottom: '310px' }}
-							>
+							<h3 data-name={currentWord.word} className={`${classes.savannaWord} ${state}`}>
 								{currentWord.wordTranslate}
-							</Typography>
+							</h3>
 						)}
 					</Transition>
 					<hr className={classes.finishLine} />
@@ -262,7 +259,7 @@ export const SavannaPage = (props) => {
 									key={index}
 									onClick={(event) => answer(event.target.value, true)}
 									value={item.word}
-									className={classes.button}
+									className={classes.purpleButton}
 								>
 									{item.word}
 								</button>
@@ -271,10 +268,14 @@ export const SavannaPage = (props) => {
 					</div>
 					<div ref={seriesContainer} className={classes.series} />
 					<LifesInGames lifes={lifes} />
-					<Typography variant="subtitle1" className={classes.correct}>{`Правильные ответы: ${correctAnswers.length ||
-						0}`}</Typography>
-					<Typography color="secondary" variant="subtitle1" className={classes.fail}>{`Ошибки: ${failAnswers.length ||
-						0}`}</Typography>
+					<h4 className={classes.progressText}>
+						Правильные ответы:&#160;
+						<span className={classes.correctText}>{correctAnswers.length || 0}</span>
+					</h4>
+					<h4 className={classes.progressText}>
+						Ошибки:&#160;
+						<span className={classes.failText}>{failAnswers.length || 0}</span>
+					</h4>
 				</div>
 			) : (
 				<CircularProgress className={classes.loader} />

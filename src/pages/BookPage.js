@@ -77,7 +77,7 @@ export const BookPage = () => {
 								<Button className={classes.typeButton} variant="contained" size="medium">
 									<Link
 										className={classes.link}
-										key={game.name}
+										key={`${game.name}game-book`}
 										to={{
 											pathname: game.to
 										}}
@@ -97,7 +97,7 @@ export const BookPage = () => {
 					/>
 					<ul className={classes.wordList}>
 						{activeWords.map((word) => {
-							return <WordCard key={`${word._id}${word.word}`} word={word} />;
+							return <WordCard key={`${word._id}${word.wordTranslate}-word-book`} word={word} />;
 						})}
 					</ul>
 					<Pagination
