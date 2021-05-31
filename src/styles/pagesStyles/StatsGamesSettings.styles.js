@@ -137,14 +137,6 @@ export const useStyles = makeStyles({
 			backgroundColor: '#F2F2F2'
 		}
 	},
-	// buttonZalupa: {
-	// 	color: 'yellow',
-	// 	backgroundColor: 'green'
-	// },
-	// zalupaPanel: {
-	// 	backgroundColor: '#5600E8',
-	// 	color: '#F2F2F2'
-	// },
 	formCard: {
 		width: '90%',
 		maxWidth: '500px',

@@ -6,7 +6,6 @@ export const useStyles = makeStyles({
 		display: 'flex',
 		flexDirection: 'column',
 		alignItems: 'center',
-		justifyContent: 'center',
 		fontFamily: '"Itim", cursive;',
 		background: '#F2F2F2'
 	},

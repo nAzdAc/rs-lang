@@ -1,135 +1,90 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Typography } from '@material-ui/core';
-import SpeakerIcon from '@material-ui/icons/Speaker';
 import { showTitle } from '../utils/showTitle';
 import winSong from '../assets/sounds/win.mp3';
 import defeatSong from '../assets/sounds/defeat.mp3';
 import { createSound } from '../utils/helpers';
-import { SavannaStatsCard } from './SavannaStatsCard';
 import { useStyles } from '../styles/componentsStyles/GameStats.styles';
 import { useSelector } from 'react-redux';
-import { originURL } from '../utils/backRoutes';
 import { useGames } from '../hooks/games.hook';
+import { Howler } from 'howler';
+import { GamePieChart } from './GamePieChart';
+import { GameRow } from './GameRow';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import CancelIcon from '@material-ui/icons/Cancel';
 
 export const GameStats = ({ allSeries, correctAnswers, failAnswers, lifes, gameName }) => {
 	const classes = useStyles();
 	const { postStats } = useGames();
-	const { soundVolume, wordVolume } = useSelector((state) => state.settings);
+	const { soundVolume } = useSelector((state) => state.settings);
 	const [ title, setTitle ] = useState('');
 	const audioWin = useMemo(() => createSound(winSong, soundVolume), [ soundVolume ]);
 	const audioDefeat = useMemo(() => createSound(defeatSong, soundVolume), [ soundVolume ]);
+	const [ addStats, setAddStats ] = useState(false);
 
 	useEffect(
 		() => {
-			postStats('sprint', correctAnswers, failAnswers, allSeries);
-			if (lifes === 0) {
+			postStats(gameName, correctAnswers, failAnswers, allSeries);
+			if (lifes <= 0 || !correctAnswers.length || failAnswers.length > 5) {
 				audioDefeat.play();
 			} else {
-				if (failAnswers.length < 6) {
-					audioWin.play();
-				} else {
-					audioDefeat.play();
-				}
+				audioWin.play();
 			}
 			setTitle(showTitle(failAnswers.length, correctAnswers.length, lifes));
-			return () => {
-				audioWin.stop();
-				audioDefeat.stop();
-			};
 		},
-		[ failAnswers, audioWin, audioDefeat, correctAnswers, lifes, postStats, allSeries ]
+		[ failAnswers, audioWin, audioDefeat, correctAnswers, lifes, postStats, allSeries, gameName ]
 	);
 
-	function repeat(event) {
-		const src = event.currentTarget.value;
-		const audioWord = createSound(`${originURL}/${src}`, wordVolume, 0.9);
-		audioWord.play();
-	}
+	useEffect(
+		() => {
+			return () => {
+				Howler.stop();
+			};
+		},
+		[ audioWin, audioDefeat ]
+	);
 
 	return (
-		<div className={classes.root}>
-			<Typography className={classes.title} variant="h3" id="transition-modal-title">
-				{title}
-			</Typography>
-			<Typography className={classes.subtitle} variant="h4">{`Верных ответов: ${correctAnswers.length}`}</Typography>
-			<div className={classes.rowsWrap}>
-				{correctAnswers &&
-					correctAnswers.map((item, index) => {
-						return (
-							<React.Fragment>
-								{gameName === 'match' ? (
-									<SavannaStatsCard key={index} item={item} fail={false} />
-								) : (
-									<div key={index} className={classes.row}>
-										{item.audio ? (
-											<button value={item.audio} onClick={repeat} className={classes.button}>
-												<SpeakerIcon value={item.audio} onClick={repeat} className={classes.goodSpeaker} />
-											</button>
-										) : (
-											''
-										)}
-										{item.transcription ? (
-											<Typography className={classes.rowItem} variant="h6">
-												{item.transcription}
-											</Typography>
-										) : (
-											''
-										)}
-										{item.word ? (
-											<Typography className={classes.rowItem} variant="h6">
-												{`${item.word} - `}
-											</Typography>
-										) : (
-											''
-										)}
-										{item.wordTranslate ? <Typography variant="h6">{item.wordTranslate}</Typography> : ''}
-									</div>
-								)}
-							</React.Fragment>
-						);
-					})}
-			</div>
-			<Typography
-				className={classes.subtitle}
-				color="secondary"
-				variant="h4"
-			>{`Ошибок: ${failAnswers.length}`}</Typography>
-			<div className={classes.rowsWrap}>
-				{failAnswers &&
-					failAnswers.map((item, index) => {
-						return (
-							<React.Fragment>
-								{gameName === 'match' ? (
-									<SavannaStatsCard key={index} item={item} fail={true} />
-								) : (
-									<div key={index} className={classes.row}>
-										{item.audio ? (
-											<button value={item.audio} onClick={repeat} className={classes.button}>
-												<SpeakerIcon value={item.audio} onClick={repeat} className={classes.badSpeaker} />
-											</button>
-										) : (
-											''
-										)}
-										{item.transcription ? (
-											<Typography className={classes.rowItem} variant="h6">
-												{item.transcription}
-											</Typography>
-										) : (
-											''
-										)}
-										{item.word ? (
-											<Typography className={classes.rowItem} variant="h6">
-												{`${item.word} - `}
-											</Typography>
-										) : (
-											''
-										)}
-										{item.wordTranslate ? <Typography variant="h6">{item.wordTranslate}</Typography> : ''}
-									</div>
-								)}
-							</React.Fragment>
-						);
-					})}
+		<div className={classes.gameStatsRoot}>
+			<h3 className={classes.gameStatsTitle}>{title}</h3>
+			<div className={classes.contentContainer}>
+				{addStats ? (
+					<div className={classes.tableContainer}>
+						<Table className={classes.table}>
+							<TableHead>
+								<TableRow>
+									<TableCell>Слово</TableCell>
+									<TableCell>Перевод</TableCell>
+									<TableCell>Транскрипция</TableCell>
+									<TableCell>Аудио</TableCell>
+									<TableCell>
+										<CancelIcon className={classes.cancelIcon} onClick={() => setAddStats(false)} />
+									</TableCell>
+								</TableRow>
+							</TableHead>
+							<TableBody>
+								{failAnswers.map((answer, index) => {
+									return <GameRow color="#FF001E" answer={answer} />;
+								})}
+								{correctAnswers.map((answer, index) => {
+									return <GameRow color="#28FC03" answer={answer} />;
+								})}
+							</TableBody>
+						</Table>
+					</div>
+				) : (
+					<GamePieChart
+						data={[
+							{ name: 'Правильно:', value: failAnswers.length },
+							{ name: 'Ошибочно: ', value: correctAnswers.length }
+						]}
+						all={correctAnswers.length + failAnswers.length}
+						showAddStats={() => setAddStats(true)}
+					/>
+				)}
 			</div>
 		</div>
 	);

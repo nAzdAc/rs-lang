@@ -23,7 +23,7 @@ export const useStyles = makeStyles({
 	cardImage: {
 		width: '200px',
 		height: '200px',
-		borderRadius: '4px',
+		borderRadius: '5px',
 		marginRight: '10px',
 		'@media (max-width: 600px)': {
 			width: '150px',

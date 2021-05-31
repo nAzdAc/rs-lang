@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import { Chart } from './Chart';
+import { StatsBarChart } from './StatsBarChart';
 import { useState } from 'react';
 import { GameStatsTable } from './GameStatsTable';
 import { TodayStatsTable } from './TodayStatsTable';
@@ -76,11 +76,11 @@ export const StatisticsTabs = () => {
 						<h4 style={{ margin: '10px' }} className={classes.subtitle1}>
 							Сколько всего слов вы изучили
 						</h4>
-						<Chart data={statistics.learnedWordsTotal} />
+						<StatsBarChart data={statistics.learnedWordsTotal} />
 						<h4 style={{ margin: '10px' }} className={classes.subtitle1}>
 							Прогресс изучения слов по дням
 						</h4>
-						<Chart data={statistics.learnedWordsPerDate} />
+						<StatsBarChart data={statistics.learnedWordsPerDate} />
 					</React.Fragment>
 				)}
 			</TabPanel>

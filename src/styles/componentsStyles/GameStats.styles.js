@@ -1,92 +1,87 @@
 import { makeStyles } from '@material-ui/core/styles';
 
 export const useStyles = makeStyles({
-	root: {
+	gameStatsRoot: {
+		padding: '20px',
 		display: 'flex',
 		flexDirection: 'column',
 		flexWrap: 'wrap',
 		alignItems: 'center',
-		paddingTop: '30px',
-		width: '100%'
+		color: '#5600E8',
+		fontFamily: '"Itim", cursive;',
+		background: '#F2F2F2',
+		gap: '15px'
 	},
-	title: {
-		marginBottom: '20px'
+	gameStatsTitle: {
+		fontSize: '3rem',
+		fontFamily: 'inherit',
+		marginRight: 'auto',
+		'@media (max-width: 768px)': {
+			fontSize: '1.8rem'
+		}
 	},
-	subtitle: {
-		marginTop: '10px',
-		marginBottom: '10px'
-	},
-	rowsWrap: {
-		display: 'flex',
-		flexDirection: 'column',
-		alignItems: 'flex-start',
-		width: '90%',
-		marginBottom: '30px'
-	},
-	row: {
+	contentContainer: {
 		width: '100%',
 		display: 'flex',
 		alignItems: 'center',
-		marginBottom: '5px'
+		justifyContent: 'center'
 	},
-	rowItem: {
-		marginRight: '10px'
+	tableContainer: {
+		backgroundColor: 'inherit',
+		fontFamily: 'inherit',
+		color: 'inherit',
+		height: '450px',
+		overflowY: 'scroll',
+		width: '100%',
+		maxWidth: '700px',
+		boxShadow: '3px 0px 10px 3px rgba(0,0,0,0.25)',
+		'&::-webkit-scrollbar': {
+			width: '5px',
+			height: '5px'
+		},
+		'&::-webkit-scrollbar-thumb': {
+			borderRadius: '20px',
+			backgroundColor: '#5600E8'
+		}
 	},
-	button: {
-		marginRight: '10px',
-		border: 'none',
-		outline: 'none',
+	table: {
+		'& .MuiTableRow-root': {
+			padding: '5px',
+			'& .MuiTableCell-head': {
+				fontSize: '1.3rem',
+				fontWeight: '600',
+				color: 'inherit',
+				fontFamily: 'inherit',
+				padding: '10px',
+				textAlign: 'center',
+				'@media (max-width: 768px)': {
+					fontSize: '1rem'
+				},
+				'@media (max-width: 550px)': {
+					fontSize: '0.85rem'
+				}
+			},
+			'& .MuiTableCell-body': {
+				fontSize: '1.1rem',
+				color: 'inherit',
+				fontFamily: 'inherit',
+				padding: '5px',
+				textAlign: 'center',
+				'@media (max-width: 768px)': {
+					fontSize: '0.85rem'
+				},
+				'@media (max-width: 550px)': {
+					fontSize: '0.75rem'
+				}
+			}
+		}
+	},
+	cancelIcon: {
 		cursor: 'pointer',
-		fontWeight: 'bold',
-		width: '30px',
+		width: '40px',
 		height: '40px',
-		background: 'white',
-		color: '#FFF'
-	},
-	goodSpeaker: {
-		cursor: 'pointer',
-		color: '#01A299',
 		'&:hover': {
-			color: '#00D9CE'
+			transform: 'scale(1.2)'
 		}
-	},
-	badSpeaker: {
-		cursor: 'pointer',
-		color: '#f50057',
-		'&:hover': {
-			color: '#f74383'
-		}
-	},
-	cardsContainer: {
-		display: 'flex',
-		flexWrap: 'wrap'
-	},
-	savannaContainer: {
-		display: 'flex',
-    flexDirection: 'row',
-		alignItems: 'center',
-		justifyContent: 'space-between',
-		width: '100%',
-		height: '300px',
-	},
-  image: {
-    width: '200px',
-    height: '200px',
-    marginRight: '40px',
-  },
-	content: {
-    display: 'flex',
-    flexDirection: 'column',
-		alignItems: 'center',
-		justifyContent: 'space-between',
-  },
-  textMeaning: {
-    marginBottom: '30px',
-  },
-  translate: {
-    fontWeight: 'bold',
-  },
-  failColor: {
-    color: '#f50057',
-  }
+	}
 });
