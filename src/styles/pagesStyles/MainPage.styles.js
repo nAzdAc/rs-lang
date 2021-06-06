@@ -2,12 +2,13 @@ import { makeStyles } from '@material-ui/core/styles';
 
 export const useStyles = makeStyles({
 	root: {
-		backgroundColor: '#F2F2F2',
 		padding: '10px 10px 10px 20px',
 		display: 'flex',
 		flexDirection: 'column',
+		backgroundColor: 'inherit',
+		fontFamily: 'inherit',
 		'& > header': {
-			backgroundColor: '#5600e8'
+			backgroundColor: '#5600E8'
 		}
 	},
 	logo: {
@@ -15,7 +16,7 @@ export const useStyles = makeStyles({
 		fontSize: '96px',
 		lineHeight: '112px',
 		fontWeight: '400',
-		color: '#5600E8',
+		color: 'inherit',
 		'@media (max-width: 768px)': {
 			fontSize: '70px'
 		}
@@ -23,8 +24,8 @@ export const useStyles = makeStyles({
 	title: {
 		fontSize: '4rem',
 		marginBottom: '10px',
-		fontFamily: '"Itim", cursive;',
-		color: '#5600E8',
+		fontFamily: 'inherit',
+		color: 'inherit',
 		marginRight: 'auto',
 		'@media (max-width: 768px)': {
 			fontSize: '3rem'
@@ -33,8 +34,8 @@ export const useStyles = makeStyles({
 	subtitle: {
 		marginBottom: '20px',
 		fontSize: '50px',
-		color: '#5600E8',
-		fontFamily: '"Itim", cursive;',
+		color: 'inherit',
+		fontFamily: 'inherit',
 		'@media (max-width: 768px)': {
 			fontSize: '35px'
 		}
@@ -43,12 +44,14 @@ export const useStyles = makeStyles({
 		fontSize: '1.5rem',
 		fontWeight: '650',
 		marginRight: 'auto',
-		margin: '15px'
+		margin: '15px',
+		fontFamily: 'inherit'
 	},
 	subtitle2: {
 		fontSize: '1.05rem',
 		fontWeight: '500',
-		margin: 'auto'
+		margin: 'auto',
+		color: 'inherit'
 	},
 	video: {
 		margin: '15px 0px',
@@ -59,17 +62,18 @@ export const useStyles = makeStyles({
 		height: '400px'
 	},
 	textImgWrapper: {
-		color: '#5600E8',
+		color: 'inherit',
 		display: 'flex',
 		flexDirection: 'column'
 	},
 	text: {
-		fontFamily: '"Itim", cursive;',
+		fontFamily: 'inherit',
 		fontWeight: '500',
 		margin: '10px 0px'
 	},
 	advantagesSection: {
-		backgroundColor: '#F2F2F2',
+		color: 'inherit',
+		backgroundColor: 'inherit',
 		width: '85%',
 		borderRadius: '5px',
 		padding: '30px',
@@ -93,7 +97,7 @@ export const useStyles = makeStyles({
 		textAlign: 'center',
 		minWidth: '200px',
 		margin: '10px',
-		color: '#5600E8'
+		color: 'inherit'
 	},
 	advantageImg: {
 		width: '100px',
@@ -106,7 +110,7 @@ export const useStyles = makeStyles({
 		flexWrap: 'wrap'
 	},
 	developerCard: {
-		backgroundColor: '#F2F2F2',
+		backgroundColor: 'inherit',
 		boxShadow: '3px 0px 10px 3px rgba(0,0,0,0.25)',
 		margin: '20px',
 		padding: '10px',
@@ -116,11 +120,14 @@ export const useStyles = makeStyles({
 		alignItems: 'center',
 		justifyContent: 'space-evenly',
 		gap: '10px',
-		color: '#5600E8'
+		color: 'inherit'
 	},
 	developerImg: {
 		width: '300px',
 		borderRadius: 'inherit'
+	},
+	githubLink: {
+		color: 'inherit'
 	},
 	githubWrap: {
 		display: 'flex',
@@ -129,7 +136,7 @@ export const useStyles = makeStyles({
 		gap: '10px',
 		cursor: 'pointer'
 	},
-	gitImage: {
-		color: '#5600E8'
+	githubImage: {
+		fontSize: '30px'
 	}
 });

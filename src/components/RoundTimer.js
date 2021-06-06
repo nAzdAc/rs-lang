@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { getOffset } from '../utils/helpers';
+import { useSelector } from 'react-redux';
 
 const useStyles = makeStyles({
 	timerContainer: {
@@ -16,14 +17,14 @@ const useStyles = makeStyles({
 		display: 'flex',
 		alignItems: 'center',
 		justifyContent: 'center',
-		background: '#F2F2F2',
+		backgroundColor: 'inherit',
 		width: '80px',
 		height: '80px',
 		position: 'absolute',
 		borderRadius: '50%',
 		fontSize: '40px',
-		fontFamily: '"Itim", cursive;',
-		color: '#5600E8',
+		fontFamily: 'inherit',
+		color: 'inherit',
 		zIndex: '3'
 	},
 	circle: {
@@ -37,6 +38,7 @@ const useStyles = makeStyles({
 export const RoundTimer = ({ seconds }) => {
 	const classes = useStyles();
 	const circleRef = useRef();
+	const { theme } = useSelector((state) => state.settings);
 
 	useEffect(
 		() => {
@@ -51,7 +53,7 @@ export const RoundTimer = ({ seconds }) => {
 				<circle
 					ref={circleRef}
 					className={classes.circle}
-					stroke="#5600E8"
+					stroke={theme === 'dark' ? '#E38600' : '#5600E8'}
 					strokeWidth="15"
 					cx="60"
 					cy="60"

@@ -11,21 +11,19 @@ import { toggleScreen } from '../utils/fullScreen';
 import { LifesInGames } from '../components/LifesInGames';
 import { Howler } from 'howler';
 import { useGames } from '../hooks/games.hook';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { useStyles } from '../styles/pagesStyles/Games.styles';
 import { fourKeyCode } from '../utils/constants';
 import { originURL } from '../utils/backRoutes';
-import { deleteLevel } from '../redux/actions';
+import { setActiveWords, setLevel } from '../redux/actions';
 import { GamesProgressBar } from '../components/GamesProgressBar';
 
 export const AudioPage = () => {
 	const classes = useStyles();
 	const dispatch = useDispatch();
 	const { getWords } = useGames();
-	const { soundVolume, wordVolume } = useSelector((state) => state.settings);
+	const { soundVolume, wordVolume, theme } = useSelector((state) => state.settings);
 	const [ endGame, setEndGame ] = useState(false);
 	const [ wordsArray, setWordsArray ] = useState([]);
 	const [ correctAnswers, setCorrectAnswers ] = useState([]);
@@ -187,7 +185,8 @@ export const AudioPage = () => {
 	useEffect(
 		() => {
 			return () => {
-				dispatch(deleteLevel());
+				dispatch(setLevel(null));
+				dispatch(setActiveWords([]));
 			};
 		},
 		[ dispatch ]
@@ -210,7 +209,6 @@ export const AudioPage = () => {
 
 	return (
 		<div className={classes.root}>
-			<ToastContainer />
 			{endGame ? (
 				<GameStats
 					allSeries={allSeries}
@@ -240,7 +238,7 @@ export const AudioPage = () => {
 									key={index}
 									onClick={(event) => answer(event.target.value)}
 									value={item.word}
-									className={classes.purpleButton}
+									className={theme === 'dark' ? classes.darkButton : classes.lightButton}
 								>
 									{item.wordTranslate}
 								</button>

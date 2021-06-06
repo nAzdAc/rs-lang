@@ -49,7 +49,7 @@ export const GameRow = ({ answer, color }) => {
 					</button>
 				</TableCell>
 			</TableRow>
-			<TableRow>
+			<TableRow key={`${answer.word}fail${answer._id}`}>
 				<TableCell colSpan={6}>
 					<Collapse in={addInfo} timeout="auto" unmountOnExit>
 						<Box className={classes.addContainer}>

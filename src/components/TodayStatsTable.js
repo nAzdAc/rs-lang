@@ -5,23 +5,48 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import { useSelector } from 'react-redux';
 
 const useStyles = makeStyles({
-	table: {
+	lightTable: {
 		boxShadow: '3px 0px 10px 3px rgba(0,0,0,0.25)',
 		minWidth: '300px',
 		maxWidth: '400px',
-		color: '#5600E8',
-		fontFamily: '"Itim", cursive;',
+		color: 'inherit',
+		fontFamily: 'inherit',
+		borderColor: '#BB86FC',
 		'& .MuiTableRow-root': {
 			'& .MuiTableCell-head': {
 				fontWeight: '600',
 				color: 'inherit',
-				fontFamily: 'inherit'
+				fontFamily: 'inherit',
+				borderColor: 'inherit'
 			},
 			'& .MuiTableCell-body': {
 				color: 'inherit',
-				fontFamily: 'inherit'
+				fontFamily: 'inherit',
+				borderColor: 'inherit'
+			}
+		}
+	},
+	darkTable: {
+		boxShadow: '3px 0px 10px 3px rgba(0,0,0,0.25)',
+		minWidth: '300px',
+		maxWidth: '400px',
+		color: 'inherit',
+		fontFamily: 'inherit',
+		borderColor: '#FCCA81',
+		'& .MuiTableRow-root': {
+			'& .MuiTableCell-head': {
+				fontWeight: '600',
+				color: 'inherit',
+				fontFamily: 'inherit',
+				borderColor: 'inherit'
+			},
+			'& .MuiTableCell-body': {
+				color: 'inherit',
+				fontFamily: 'inherit',
+				borderColor: 'inherit'
 			}
 		}
 	}
@@ -29,9 +54,14 @@ const useStyles = makeStyles({
 
 export const TodayStatsTable = ({ learnedWordsToday, percentToday }) => {
 	const classes = useStyles();
+	const { theme } = useSelector((state) => state.settings);
 
 	return (
-		<Table className={classes.table} size="small" aria-label="a dense table">
+		<Table
+			className={theme === 'dark' ? classes.darkTable : classes.lightTable}
+			size="small"
+			aria-label="a dense table"
+		>
 			<TableHead>
 				<TableRow>
 					<TableCell>Показатель</TableCell>

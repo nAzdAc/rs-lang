@@ -28,10 +28,10 @@ export const useStyles = makeStyles({
 			transform: 'scale(1.2)'
 		},
 		'@media (max-width: 900px)': {
-			fontSize: '1.8rem'
+			fontSize: '2rem'
 		},
 		'@media (max-width: 600px)': {
-			fontSize: '1.35rem'
+			fontSize: '1.5rem'
 		}
 	},
 	addContainer: {

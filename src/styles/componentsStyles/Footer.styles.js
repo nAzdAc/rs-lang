@@ -1,28 +1,40 @@
 import { makeStyles } from '@material-ui/core/styles';
 
 export const useStyles = makeStyles({
-	footer: {
+	lightFooter: {
 		width: '100%',
 		height: '70px',
-		backgroundColor: '#5600E8',
 		display: 'flex',
 		justifyContent: 'space-around',
-		alignItems: 'center'
+		alignItems: 'center',
+		backgroundColor: '#5600E8',
+		fontFamily: '"Itim", cursive;',
+		color: '#F2F2F2'
+	},
+	darkFooter: {
+		width: '100%',
+		height: '70px',
+		display: 'flex',
+		justifyContent: 'space-around',
+		alignItems: 'center',
+		backgroundColor: '#e38600',
+		fontFamily: '"Lato", sans-serif;',
+		color: '#141414'
 	},
 	year: {
 		fontSize: '28px',
-		color: '#F2F2F2',
+		color: 'inherit',
 		'@media (max-width: 730px)': {
 			fontSize: '20px'
 		}
 	},
 	developers: {
-		color: '#F2F2F2'
+		color: 'inherit'
 	},
 	githubLink: {
 		fontSize: '20px',
 		margin: '10px',
-		color: '#F2F2F2',
+		color: 'inherit',
 		'@media (max-width: 730px)': {
 			fontSize: '14px'
 		},

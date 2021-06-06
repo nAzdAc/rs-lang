@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import Box from '@material-ui/core/Box';
 import Visibility from '@material-ui/icons/Visibility';
@@ -8,18 +8,17 @@ import InputLabel from '@material-ui/core/InputLabel';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import FormControl from '@material-ui/core/FormControl';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
-import { ToastContainer } from 'react-toastify';
-// import { useMessage } from '../hooks/message.hook';
-import 'react-toastify/dist/ReactToastify.css';
+import { useMessage } from '../hooks/message.hook';
 import { CssTextField, useStyles } from '../styles/pagesStyles/StatsGamesSettings.styles';
 import { useDispatch, useSelector } from 'react-redux';
-import { reduxLogin } from '../redux/actions';
+import { signIn } from '../redux/actions';
 import { Container } from '@material-ui/core';
 
 export const SignInPage = () => {
 	const dispatch = useDispatch();
-	// const message = useMessage();
+	const showMessage = useMessage();
 	const { token } = useSelector((state) => state.userData);
+	const { theme } = useSelector((state) => state.settings);
 	const classes = useStyles();
 	const [ form, setForm ] = useState({
 		email: '',
@@ -42,13 +41,15 @@ export const SignInPage = () => {
 	const handleFormChange = (e) => {
 		setForm({ ...form, [e.target.name]: e.target.value });
 	};
-	async function handleSubmit(e) {
-		e.preventDefault();
-		try {
-			dispatch(reduxLogin(form));
-			// message(data.message, 200);
-		} catch (e) {}
-	}
+
+	const handleSubmit = useCallback(
+		async (event) => {
+			event.preventDefault();
+			const { text, code } = await dispatch(signIn(form));
+			showMessage(text, code);
+		},
+		[ dispatch, form, showMessage ]
+	);
 
 	if (!!token) {
 		return <Redirect to="/book" />;
@@ -95,17 +96,20 @@ export const SignInPage = () => {
 								labelWidth={70}
 							/>
 						</FormControl>
-						<ToastContainer />
 						<span className={classes.info}>От 4 до 12 символов</span>
 						<Box className={classes.buttonBox}>
-							<button type="submit" className={`${classes.purpleButton} ${classes.containedButton}`}>
+							<button
+								style={{ width: '130px' }}
+								type="submit"
+								className={theme === 'dark' ? classes.darkButton : classes.lightButton}
+							>
 								Войти
 							</button>
-							<button className={`${classes.purpleButton} ${classes.outlainedButton}`}>
-								<Link className={classes.link} to={'/signup'}>
+							<Link className={classes.link} to={'/signup'}>
+								<button className={theme === 'dark' ? classes.outlainedDarkButton : classes.outlainedLightButton}>
 									Регистрация
-								</Link>
-							</button>
+								</button>
+							</Link>
 						</Box>
 					</form>
 				</div>

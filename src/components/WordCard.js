@@ -10,15 +10,17 @@ import { useDispatch, useSelector } from 'react-redux';
 import classNames from 'classnames/bind';
 import { updateUserWord } from '../redux/actions';
 import { Howler } from 'howler';
+import { useMessage } from '../hooks/message.hook';
 
 export const WordCard = ({ word }) => {
 	// console.log(word._id);
 	// console.log(typeof word.deleted);
 	const classes = useStyles();
 	const dispatch = useDispatch();
+	const showMessage = useMessage();
 	const styles = classNames.bind(classes);
 	const starIcon = styles({ bigCardIcon: true }, { goldIcon: word.difficult });
-	const { wordVolume } = useSelector((state) => state.settings);
+	const { wordVolume, theme } = useSelector((state) => state.settings);
 	const { token } = useSelector((state) => state.userData);
 	const [ additionalInfo, setAdditionalInfo ] = useState(false);
 
@@ -42,7 +44,11 @@ export const WordCard = ({ word }) => {
 			value: event.currentTarget.value
 		};
 		console.log(body);
-		dispatch(updateUserWord(body, token));
+		if (!token) {
+			return showMessage('Для добавления / удаления слов необходимо авторизоваться', 400);
+		}
+		const { text, code } = await dispatch(updateUserWord(body, token));
+		showMessage(text, code);
 	};
 
 	return (
@@ -57,7 +63,7 @@ export const WordCard = ({ word }) => {
 								data-name="deleted"
 								id={word._id}
 								value={word.deleted}
-								className={classes.deleteButton}
+								className={theme === 'dark' ? classes.darkDeleteButton : classes.lightDeleteButton}
 								onClick={updateWord}
 							>
 								Восстановить

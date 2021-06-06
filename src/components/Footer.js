@@ -1,3 +1,4 @@
+import { useSelector } from 'react-redux';
 import { images } from '../assets/images/imagesRequire';
 import { useStyles } from '../styles/componentsStyles/Footer.styles';
 
@@ -22,9 +23,10 @@ const gitAccounts = [
 
 export const Footer = () => {
 	const classes = useStyles();
+	const { theme } = useSelector((state) => state.settings);
 
 	return (
-		<footer className={classes.footer}>
+		<footer className={theme === 'dark' ? classes.darkFooter : classes.lightFooter}>
 			<p className={classes.year}>2021</p>
 			<div className={classes.developers}>
 				{gitAccounts.map((acc) => (

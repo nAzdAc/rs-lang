@@ -1,37 +1,97 @@
 import { makeStyles } from '@material-ui/core/styles';
 
 export const useStyles = makeStyles({
-	app: {
+	lightApp: {
 		display: 'flex',
 		flexDirection: 'column',
 		justifyContent: 'space-between',
 		minHeight: '100%',
-		backgroundColor: '#F2F2F2'
+		backgroundColor: '#F2F2F2',
+		fontFamily: '"Itim", cursive;',
+		color: '#5600E8'
 	},
-	header: {
+	darkApp: {
+		display: 'flex',
+		flexDirection: 'column',
+		justifyContent: 'space-between',
+		minHeight: '100%',
+		backgroundColor: '#141414',
+		fontFamily: '"Lato", sans-serif;',
+		color: '#e38600'
+	},
+	lightHeader: {
 		width: '100%',
 		height: '80px',
 		display: 'flex',
 		justifyContent: 'space-between',
 		alignItems: 'center',
 		gap: '5px',
-		backgroundColor: '#5600E8'
+		backgroundColor: '#5600E8',
+		color: '#F2F2F2',
+		fontFamily: 'inherit'
+	},
+	darkHeader: {
+		width: '100%',
+		height: '80px',
+		display: 'flex',
+		justifyContent: 'space-between',
+		alignItems: 'center',
+		gap: '5px',
+		backgroundColor: '#e38600',
+		color: '#141414',
+		fontFamily: 'inherit'
 	},
 	link: {
-		textDecoration: 'none'
+		textDecoration: 'none',
+		fontFamily: 'inherit',
+		color: 'inherit'
 	},
 	logo: {
 		margin: '0px 10px 0px 10px',
 		width: '400px',
 		fontFamily: '"Permanent Marker", cursive',
 		fontSize: '55px',
-		color: '#F2F2F2',
+		color: 'inherit',
 		'@media (max-width: 950px)': {
 			fontSize: '40px',
 			width: '300px'
 		},
 		'@media (max-width: 768px)': {
 			fontSize: '30px'
+		}
+	},
+	lightToast: {
+		fontFamily: 'inherit',
+		'& .Toastify__toast': {
+			fontFamily: 'inherit',
+			fontWeight: 'bold',
+			background: '#F2F2F2',
+			color: '#5600E8',
+			'& .Toastify__close-button': {
+				color: '#5600E8',
+				opacity: '1'
+			},
+			'& .Toastify__progress-bar': {
+				background: '#5600E8',
+				height: '8px'
+			}
+		}
+	},
+	darkToast: {
+		fontFamily: 'inherit',
+		'& .Toastify__toast': {
+			fontFamily: 'inherit',
+			fontWeight: 'bold',
+			background: '#141414',
+			color: '#E38600',
+			'& .Toastify__close-button': {
+				color: '#E38600',
+				opacity: '1'
+			},
+			'& .Toastify__progress-bar': {
+				background: '#E38600',
+				height: '8px'
+			}
 		}
 	}
 });

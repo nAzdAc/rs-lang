@@ -3,6 +3,7 @@ import { withStyles } from '@material-ui/core/styles';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import { Box } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import { useSelector } from 'react-redux';
 
 const StyledRating = withStyles({
 	iconFilled: {
@@ -11,10 +12,17 @@ const StyledRating = withStyles({
 })(Rating);
 
 const useStyles = makeStyles({
-	lifesContainer: {
+	lightLifesContainer: {
 		'& .MuiRating-root': {
 			'& .MuiRating-iconEmpty': {
 				color: '#BB86FC'
+			}
+		}
+	},
+	darkLifesContainer: {
+		'& .MuiRating-root': {
+			'& .MuiRating-iconEmpty': {
+				color: '#FCCA81'
 			}
 		}
 	}
@@ -22,8 +30,14 @@ const useStyles = makeStyles({
 
 export const LifesInGames = ({ lifes }) => {
 	const classes = useStyles();
+	const { theme } = useSelector((state) => state.settings);
 	return (
-		<Box className={classes.lifesContainer} component="fieldset" mb={3} borderColor="transparent">
+		<Box
+			className={theme === 'dark' ? classes.darkLifesContainer : classes.lightLifesContainer}
+			component="fieldset"
+			mb={3}
+			borderColor="transparent"
+		>
 			<StyledRating
 				name="customized-color"
 				readOnly={true}

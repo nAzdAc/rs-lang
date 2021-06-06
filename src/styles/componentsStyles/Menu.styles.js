@@ -6,13 +6,15 @@ export const useStyles = makeStyles({
 		display: 'flex',
 		alignItems: 'center',
 		justifyContent: 'space-evenly',
-		zIndex: '2'
+		zIndex: '2',
+		fontFamily: 'inherit',
+		color: 'inherit'
 	},
 	link: {
-		fontFamily: '"Itim", cursive;',
-		color: '#F2F2F2',
+		fontFamily: 'inherit',
+		color: 'inherit',
 		'& .MuiSvgIcon-root': {
-			color: '#F2F2F2',
+			color: 'inherit',
 			display: 'none',
 			'&:hover, &:focus': {
 				transform: 'rotate(360deg)',
@@ -24,8 +26,8 @@ export const useStyles = makeStyles({
 		}
 	},
 	text: {
-		color: '#F2F2F2',
-		fontFamily: '"Itim", cursive;',
+		color: 'inherit',
+		fontFamily: 'inherit',
 		fontSize: '24px',
 		'&:hover': {
 			textDecoration: 'underline'

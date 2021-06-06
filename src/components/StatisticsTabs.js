@@ -35,6 +35,7 @@ export const StatisticsTabs = () => {
 	const classes = useStyles();
 	const [ value, setValue ] = useState(0);
 	const { statistics } = useSelector((state) => state);
+	const { theme } = useSelector((state) => state.settings);
 
 	useEffect(
 		() => {
@@ -48,9 +49,9 @@ export const StatisticsTabs = () => {
 
 	return (
 		<React.Fragment>
-			<AppBar className={classes.tab} position="static">
+			<AppBar className={theme === 'dark' ? classes.darkTab : classes.lightTab} position="static">
 				<Tabs value={value} onChange={handleChange} aria-label="simple tabs example">
-					<Tab className={classes.buttonZalupa} label="В цифрах" {...a11yProps(0)} />
+					<Tab label="В цифрах" {...a11yProps(0)} />
 					<Tab label="На графиках" {...a11yProps(1)} />
 				</Tabs>
 			</AppBar>

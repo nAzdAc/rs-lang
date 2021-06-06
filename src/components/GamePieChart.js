@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { PieChart, Pie, Sector, ResponsiveContainer } from 'recharts';
 import { makeStyles } from '@material-ui/core/styles';
+import { useSelector } from 'react-redux';
 
 const useStyles = makeStyles({
 	pieChartContainer: {
-		width: '420px',
+		width: '450px',
 		height: '300px',
 		overflow: 'hidden'
 	}
@@ -18,7 +19,7 @@ const renderActiveShape = (props) => {
 	const cos = Math.cos(-RADIAN * midAngle);
 	const sx = cx + (outerRadius + 10) * cos;
 	const sy = cy + (outerRadius + 10) * sin;
-	const mx = cx + (outerRadius + 30) * cos;
+	const mx = cx + outerRadius * cos;
 	const my = cy + (outerRadius + 30) * sin;
 	const ex = mx + (cos >= 0 ? 1 : -1) * 22;
 	const ey = my;
@@ -58,13 +59,13 @@ const renderActiveShape = (props) => {
 			<path d={`M${sx},${sy}L${mx},${my}L${ex},${ey}`} stroke={fill} fill="none" />
 			<circle cx={ex} cy={ey} r={2} fill={fill} stroke="none" />
 			<text
-				x={ex + (cos >= 0 ? 1 : -1) * 12}
+				x={ex + (cos >= 0 ? 1 : -1) * 5}
 				y={ey}
 				textAnchor={textAnchor}
 				fill={fill}
 				fontSize="13px"
 			>{`${payload.name} ${value}/${value / percent}`}</text>
-			<text fontSize="13px" x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey} dy={18} textAnchor={textAnchor} fill={fill}>
+			<text fontSize="13px" x={ex + (cos >= 0 ? 1 : -1) * 5} y={ey} dy={18} textAnchor={textAnchor} fill={fill}>
 				{`( ${(percent * 100).toFixed(2)}% )`}
 			</text>
 		</g>
@@ -73,6 +74,15 @@ const renderActiveShape = (props) => {
 
 export const GamePieChart = ({ data, all, showAddStats }) => {
 	const [ activeIndex, setActiveIndex ] = useState(0);
+	const { theme } = useSelector((state) => state.settings);
+
+	useEffect(
+		() => {
+			console.log(data);
+			console.log(all);
+		},
+		[ data, all ]
+	);
 
 	const onPieEnter = (_, index) => {
 		setActiveIndex(index);
@@ -91,7 +101,7 @@ export const GamePieChart = ({ data, all, showAddStats }) => {
 						cy="50%"
 						innerRadius={60}
 						outerRadius={80}
-						fill="#5600E8"
+						fill={theme === 'dark' ? '#E38600' : '#5600E8'}
 						dataKey="value"
 						onMouseEnter={onPieEnter}
 						onClick={showAddStats}

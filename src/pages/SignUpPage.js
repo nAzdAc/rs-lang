@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Box from '@material-ui/core/Box';
 import Visibility from '@material-ui/icons/Visibility';
@@ -10,15 +10,14 @@ import FormControl from '@material-ui/core/FormControl';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import { backRoutes } from '../utils/backRoutes';
 import { useMessage } from '../hooks/message.hook';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import { CssTextField, useStyles } from '../styles/pagesStyles/StatsGamesSettings.styles';
 import { useSelector } from 'react-redux';
 import { Container } from '@material-ui/core';
 
 export const SignUpPage = () => {
-	const message = useMessage();
+	const showMessage = useMessage();
 	const { token } = useSelector((state) => state.userData);
+	const { theme } = useSelector((state) => state.settings);
 	const classes = useStyles();
 	const [ form, setForm ] = useState({
 		name: '',
@@ -44,30 +43,38 @@ export const SignUpPage = () => {
 		setForm({ ...form, [e.target.name]: e.target.value });
 	};
 
-	async function handleSubmit(e) {
-		e.preventDefault();
-		try {
-			const res = await fetch(backRoutes.signUp, {
-				method: 'POST',
-				withCredentials: true,
-				headers: {
-					Accept: 'application/json',
-					'Content-Type': 'application/json',
-					Authorization: `Bearer ${token}`
-				},
-				body: JSON.stringify({ ...form })
-			});
-			const json = await res.json();
-			console.log(json);
-			message(json.message, 200);
-			setForm({
-				name: '',
-				email: '',
-				password: ''
-			});
-			setValues({ password: '', showPassword: false });
-		} catch (e) {}
-	}
+	const handleSubmit = useCallback(
+		async (e) => {
+			e.preventDefault();
+			try {
+				const res = await fetch(backRoutes.signUp, {
+					method: 'POST',
+					withCredentials: true,
+					headers: {
+						Accept: 'application/json',
+						'Content-Type': 'application/json',
+						Authorization: `Bearer ${token}`
+					},
+					body: JSON.stringify({ ...form })
+				});
+				console.log(res);
+				const json = await res.json();
+				console.log(json);
+				showMessage(json.message, res.status || 200);
+				setForm({
+					name: '',
+					email: '',
+					password: ''
+				});
+				setValues({ password: '', showPassword: false });
+			} catch (e) {
+				console.log(e);
+				console.log(e.message);
+				return showMessage('Возникла проблема с регистрацией. Попробуйте позже', 404);
+			}
+		},
+		[ form, showMessage, token ]
+	);
 
 	return (
 		<Container className={classes.root}>
@@ -118,17 +125,20 @@ export const SignUpPage = () => {
 							labelWidth={70}
 						/>
 					</FormControl>
-					<ToastContainer />
-					<span className={classes.info}>От 4 до 15 символов</span>
+					<span className={classes.info}>От 4 до 12 символов</span>
 					<Box className={classes.buttonBox}>
-						<button type="submit" className={`${classes.purpleButton} ${classes.containedButton}`}>
+						<button
+							style={{ width: '130px' }}
+							type="submit"
+							className={theme === 'dark' ? classes.darkButton : classes.lightButton}
+						>
 							Выполнить
 						</button>
-						<button className={`${classes.purpleButton} ${classes.outlainedButton}`}>
-							<Link className={classes.link} to={'/signIn'}>
+						<Link className={classes.link} to={'/signIn'}>
+							<button className={theme === 'dark' ? classes.outlainedDarkButton : classes.outlainedLightButton}>
 								Вход
-							</Link>
-						</button>
+							</button>
+						</Link>
 					</Box>
 				</form>
 			</div>

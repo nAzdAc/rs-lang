@@ -10,10 +10,8 @@ import { GameStats } from '../components/GameStats';
 import { toggleScreen } from '../utils/fullScreen';
 import { LifesInGames } from '../components/LifesInGames';
 import { useGames } from '../hooks/games.hook';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import { useSelector, useDispatch } from 'react-redux';
-import { deleteLevel } from '../redux/actions';
+import { setActiveWords, setLevel } from '../redux/actions';
 import { useStyles } from '../styles/pagesStyles/Games.styles';
 import { fourKeyCode } from '../utils/constants';
 import { originURL } from '../utils/backRoutes';
@@ -166,7 +164,8 @@ export const MatchPage = () => {
 	useEffect(
 		() => {
 			return () => {
-				dispatch(deleteLevel());
+				dispatch(setLevel(null));
+				dispatch(setActiveWords([]));
 			};
 		},
 		[ dispatch ]
@@ -198,7 +197,6 @@ export const MatchPage = () => {
 
 	return (
 		<div className={classes.root}>
-			<ToastContainer />
 			{endGame ? (
 				<GameStats
 					allSeries={allSeries}

@@ -1,15 +1,10 @@
 import { useCallback } from 'react';
 import { backRoutes } from '../utils/backRoutes';
 import { getRandomInt } from '../utils/helpers';
-import { useMessage } from './message.hook';
-import { useDispatch, useSelector } from 'react-redux';
-import { reduxPostStats } from '../redux/actions';
+import { useSelector } from 'react-redux';
 
 export const useGames = () => {
-	const dispatch = useDispatch();
-	const { token } = useSelector((state) => state.userData);
 	const { level, activeWords } = useSelector((state) => state);
-	const message = useMessage();
 
 	const getWords = useCallback(
 		async () => {
@@ -43,16 +38,5 @@ export const useGames = () => {
 		[ level, activeWords ]
 	);
 
-	const postStats = useCallback(
-		async (gameName, correctArr, failArr, seriesArr) => {
-			if (!token) {
-				return message('Статистика не была обновлена, авторизуйтесь');
-			}
-			if (!correctArr.length && !failArr.length) return;
-			dispatch(reduxPostStats(token, gameName, correctArr, failArr, seriesArr));
-		},
-		[ dispatch, message, token ]
-	);
-
-	return { postStats, getWords };
+	return { getWords };
 };

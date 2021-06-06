@@ -1,26 +1,30 @@
 import {
-	SHOW_MESSAGE,
-	HIDE_MESSAGE,
-	SHOW_LOADER,
-	HIDE_LOADER,
+	IS_BLOCK,
+	IS_LOADER,
+	TOAST,
 	SIGN_IN,
 	SIGN_UP,
 	UPLOAD_AVATAR,
-	SET_VOLUME,
-	FETCH_SETTINGS,
+	SET_SETTINGS,
+	POST_SETTINGS,
 	LOG_OUT,
 	SET_LEVEL,
-	DELETE_LEVEL,
 	SET_ACTIVE_WORDS,
 	UPDATE_USER_WORD,
 	POST_STATS,
-	SET_NAME
+	SET_NAME,
+	SET_THEME
 } from './types';
 
 const initialState = {
+	block: false,
 	level: null,
 	loading: false,
-	message: null,
+	message: {
+		text: '',
+		code: 404,
+		time: 3000
+	},
 	userData: {
 		userName: '',
 		userId: '',
@@ -34,7 +38,8 @@ const initialState = {
 		difficultWord: true,
 		deleteWord: true,
 		translateWord: true,
-		translateSentences: true
+		translateSentences: true,
+		theme: 'light'
 	},
 	userWords: [],
 	activeWords: [],
@@ -70,20 +75,16 @@ export function rootReducer(state = initialState, action) {
 			};
 		case UPLOAD_AVATAR:
 			return { ...state, userData: { ...state.userData, avatarURL: action.payload } };
-		case SHOW_LOADER:
-			return { ...state, loading: true };
-		case HIDE_LOADER:
-			return { ...state, loading: false };
-		case SHOW_MESSAGE:
-			return { ...state, message: action.payload };
-		case HIDE_MESSAGE:
-			return { ...state, message: null };
-		case SET_VOLUME:
+		case IS_LOADER:
+			return { ...state, loading: action.payload };
+		case IS_BLOCK:
+			return { ...state, block: action.payload };
+		case TOAST:
+			return { ...state, message: { ...action.payload } };
+		case SET_SETTINGS:
 			return { ...state, settings: { ...state.settings, ...action.payload } };
 		case SET_LEVEL:
 			return { ...state, level: action.payload };
-		case DELETE_LEVEL:
-			return { ...state, level: null };
 		case SET_NAME:
 			return {
 				...state,
@@ -92,10 +93,17 @@ export function rootReducer(state = initialState, action) {
 					userName: action.payload
 				}
 			};
-		case FETCH_SETTINGS:
+		case SET_THEME:
+			return {
+				...state,
+				settings: {
+					...state.settings,
+					theme: action.payload
+				}
+			};
+		case POST_SETTINGS:
 			return { ...state, settings: { ...action.payload } };
 		case POST_STATS:
-			console.log(action);
 			return { ...state, statistics: { ...action.payload.statistics }, userWords: [ ...action.payload.userWords ] };
 		default:
 			return state;

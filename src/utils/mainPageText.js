@@ -15,22 +15,26 @@ export const MAIN_PAGE_TEXT = {
 
 export const ADVANTAGES = [
 	{
-		svg: icons.chart,
+		lightSvg: icons.lightChart,
+		darkSvg: icons.darkChart,
 		title: 'Результаты',
 		description: 'Статитика по дням'
 	},
 	{
-		svg: icons.six,
+		lightSvg: icons.lightSix,
+		darkSvg: icons.darkSix,
 		title: 'Разделов',
 		description: 'Возрастающая сложность'
 	},
 	{
-		svg: icons.game,
+		lightSvg: icons.lightGame,
+		darkSvg: icons.darkGame,
 		title: '4 игры',
 		description: 'Интересно и полезно'
 	},
 	{
-		svg: icons.dictionary,
+		lightSvg: icons.lightDictionary,
+		darkSvg: icons.darkDictionary,
 		title: 'Словарь',
 		description: 'на основе ваших достижений'
 	}

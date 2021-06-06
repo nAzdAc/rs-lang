@@ -2,9 +2,9 @@ import { makeStyles } from '@material-ui/core/styles';
 
 export const useStyles = makeStyles({
 	wordCard: {
-		fontFamily: '"Itim", cursive;',
-		color: '#5600E8',
-		backgroundColor: '#F2F2F2',
+		fontFamily: 'inherit',
+		color: 'inherit',
+		backgroundColor: 'inherit',
 		boxShadow: '3px 0px 10px 3px rgba(0,0,0,0.25)',
 		display: 'flex',
 		flexDirection: 'column',
@@ -46,10 +46,10 @@ export const useStyles = makeStyles({
 			marginBottom: '50px'
 		}
 	},
-	deleteButton: {
+	lightDeleteButton: {
 		background: '#5600E8',
 		color: '#F2F2F2',
-		fontFamily: '"Itim", cursive;',
+		fontFamily: 'inherit',
 		fontSize: '0.8rem',
 		display: 'flex',
 		alignItems: 'center',
@@ -61,7 +61,32 @@ export const useStyles = makeStyles({
 		outline: 'none',
 		fontWeight: 'bold',
 		height: '36px',
-		marginRight: '10px',
+		marginRight: '12px',
+		marginLeft: '5px',
+		'&:hover': {
+			transform: 'scale(1.2)'
+		},
+		'@media (max-width: 768px)': {
+			fontSize: '0.65rem'
+		}
+	},
+	darkDeleteButton: {
+		background: '#E38600',
+		color: '#141414',
+		fontFamily: 'inherit',
+		fontSize: '0.8rem',
+		display: 'flex',
+		alignItems: 'center',
+		justifyContent: 'space-around',
+		cursor: 'pointer',
+		border: 'none',
+		borderRadius: '6px',
+		padding: '5px',
+		outline: 'none',
+		fontWeight: 'bold',
+		height: '36px',
+		marginRight: '12px',
+		marginLeft: '5px',
 		'&:hover': {
 			transform: 'scale(1.2)'
 		},
@@ -75,12 +100,13 @@ export const useStyles = makeStyles({
 		outline: 'none',
 		cursor: 'pointer',
 		fontWeight: 'bold',
-		background: 'inherit'
+		background: 'inherit',
+		color: 'inherit'
 	},
 	bigCardIcon: {
 		cursor: 'pointer',
 		fontSize: '3rem',
-		color: '#5600E8',
+		color: 'inherit',
 		'&:hover': {
 			transform: 'scale(1.2)'
 		},
@@ -108,7 +134,7 @@ export const useStyles = makeStyles({
 	littleCardIcon: {
 		cursor: 'pointer',
 		fontSize: '2rem',
-		color: '#5600E8',
+		color: 'inherit',
 		'&:hover': {
 			transform: 'scale(1.2)'
 		},
@@ -146,8 +172,8 @@ export const useStyles = makeStyles({
 		}
 	},
 	englishText: {
-		fontFamily: '"Itim", cursive;',
-		color: '#5600E8',
+		fontFamily: 'inherit',
+		color: 'inherit',
 		fontWeight: '600',
 		fontSize: '2rem',
 		'@media (max-width: 1300px)': {
@@ -164,7 +190,7 @@ export const useStyles = makeStyles({
 		}
 	},
 	translateText: {
-		color: '#5600E8',
+		color: 'inherit',
 		fontStyle: 'italic',
 		fontSize: '2rem',
 		'@media (max-width: 1300px)': {
@@ -217,6 +243,16 @@ export const useStyles = makeStyles({
 		marginTop: '30px'
 	},
 	goldIcon: {
-		color: 'gold'
+		color: '#FFD700',
+		fontSize: '3.5rem',
+		'&:hover': {
+			transform: 'scale(1.2)'
+		},
+		'@media (max-width: 800px)': {
+			fontSize: '2.5rem'
+		},
+		'@media (max-width: 600px)': {
+			fontSize: '2rem'
+		}
 	}
 });

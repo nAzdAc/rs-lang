@@ -1,10 +1,12 @@
 import { MAIN_PAGE_TEXT, DEVELOPERS, ADVANTAGES } from '../utils/mainPageText';
 import { useStyles } from '../styles/pagesStyles/MainPage.styles';
-import { icons } from '../assets/icons/IconsRequire';
 import { Container, Paper } from '@material-ui/core';
+import { useSelector } from 'react-redux';
+import GitHubIcon from '@material-ui/icons/GitHub';
 
 export const MainPage = () => {
 	const classes = useStyles();
+	const { theme } = useSelector((state) => state.settings);
 	return (
 		<Container className={classes.root}>
 			<h1 className={classes.logo}>{MAIN_PAGE_TEXT.TITLE}</h1>
@@ -29,7 +31,11 @@ export const MainPage = () => {
 					{ADVANTAGES.map((advantage, i) => {
 						return (
 							<div className={classes.advantage} key={i}>
-								<img className={classes.advantageImg} src={advantage.svg} alt={advantage.title} />
+								<img
+									className={classes.advantageImg}
+									src={theme === 'dark' ? advantage.darkSvg : advantage.lightSvg}
+									alt={advantage.title}
+								/>
 								<span style={{ margin: 'auto' }} className={classes.subtitle1}>
 									{advantage.title}
 								</span>
@@ -45,15 +51,15 @@ export const MainPage = () => {
 			<section>
 				<h3 className={classes.title}>Разработчики</h3>
 				<div className={classes.developers}>
-					{DEVELOPERS.map((developer, i) => {
+					{DEVELOPERS.map((developer, index) => {
 						return (
-							<Paper className={classes.developerCard} key={i}>
+							<Paper className={classes.developerCard} key={index}>
 								<img className={classes.developerImg} src={developer.photo} alt={developer.name} />
 								<h4 className={classes.subtitle1}>{developer.name}</h4>
 								<span className={classes.subtitle2}>{developer.description}</span>
-								<a target="_blank" rel="noopener noreferrer" href={developer.git_link}>
+								<a className={classes.githubLink} target="_blank" rel="noopener noreferrer" href={developer.git_link}>
 									<div className={classes.githubWrap}>
-										<img className={classes.gitImage} src={icons.git} alt="git" />
+										<GitHubIcon className={classes.githubImage} />
 										<span className={classes.subtitle2}>{developer.git_name}</span>
 									</div>
 								</a>

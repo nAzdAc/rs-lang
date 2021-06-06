@@ -11,10 +11,8 @@ import { Transition } from 'react-transition-group';
 import { toggleScreen } from '../utils/fullScreen';
 import { LifesInGames } from '../components/LifesInGames';
 import { useGames } from '../hooks/games.hook';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import { useSelector, useDispatch } from 'react-redux';
-import { deleteLevel } from '../redux/actions';
+import { setActiveWords, setLevel } from '../redux/actions';
 import { useStyles } from '../styles/pagesStyles/Games.styles';
 import { fourKeyCode } from '../utils/constants';
 import { GamesProgressBar } from '../components/GamesProgressBar';
@@ -24,7 +22,7 @@ export const SavannaPage = (props) => {
 	const classes = useStyles();
 	const dispatch = useDispatch();
 	const { getWords } = useGames();
-	const { soundVolume, musicVolume } = useSelector((state) => state.settings);
+	const { soundVolume, musicVolume, theme } = useSelector((state) => state.settings);
 	const [ endGame, setEndGame ] = useState(false);
 	const [ wordsArray, setWordsArray ] = useState([]);
 	const [ correctAnswers, setCorrectAnswers ] = useState([]);
@@ -62,13 +60,6 @@ export const SavannaPage = (props) => {
 			playWords();
 		},
 		[ playWords ]
-	);
-
-	useEffect(
-		() => {
-			console.log(block);
-		},
-		[ block ]
 	);
 
 	const answer = useCallback(
@@ -211,7 +202,8 @@ export const SavannaPage = (props) => {
 	useEffect(
 		() => {
 			return () => {
-				dispatch(deleteLevel());
+				dispatch(setLevel(null));
+				dispatch(setActiveWords([]));
 			};
 		},
 		[ dispatch ]
@@ -223,7 +215,6 @@ export const SavannaPage = (props) => {
 	}
 	return (
 		<div className={classes.root}>
-			<ToastContainer />
 			{endGame ? (
 				<GameStats
 					allSeries={allSeries}
@@ -249,7 +240,7 @@ export const SavannaPage = (props) => {
 							</h3>
 						)}
 					</Transition>
-					<hr className={classes.finishLine} />
+					<hr className={theme === 'dark' ? classes.darkFinishLine : classes.lightFinishLine} />
 					<div className={classes.buttonsWrap}>
 						{fourButtons.map((item, index) => {
 							return (
@@ -259,7 +250,7 @@ export const SavannaPage = (props) => {
 									key={index}
 									onClick={(event) => answer(event.target.value, true)}
 									value={item.word}
-									className={classes.purpleButton}
+									className={theme === 'dark' ? classes.darkButton : classes.lightButton}
 								>
 									{item.word}
 								</button>

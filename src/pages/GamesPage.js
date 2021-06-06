@@ -12,7 +12,7 @@ import { LevelButton } from '../components/LevelButton';
 import { levels } from '../utils/constants';
 import { useDispatch, useSelector } from 'react-redux';
 import { useStyles } from '../styles/pagesStyles/StatsGamesSettings.styles';
-import { deleteLevel, setLevel } from '../redux/actions';
+import { setLevel } from '../redux/actions';
 
 const Games = () => {
 	const classes = useStyles();
@@ -20,7 +20,7 @@ const Games = () => {
 	const { level } = useSelector((state) => state);
 	function handleLevelsClick(index) {
 		if (index === level) {
-			dispatch(deleteLevel());
+			dispatch(setLevel(null));
 		} else {
 			dispatch(setLevel(index));
 		}

@@ -9,12 +9,10 @@ import { createSound, getRandomInt } from '../utils/helpers';
 import { GameStats } from '../components/GameStats';
 import { toggleScreen } from '../utils/fullScreen';
 import { useGames } from '../hooks/games.hook';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import { useSelector, useDispatch } from 'react-redux';
 import { useStyles } from '../styles/pagesStyles/Games.styles';
 import { yesNoKeyCode } from '../utils/constants';
-import { deleteLevel } from '../redux/actions';
+import { setActiveWords, setLevel } from '../redux/actions';
 import { GamesProgressBar } from '../components/GamesProgressBar';
 import { RoundTimer } from '../components/RoundTimer';
 import { Howler } from 'howler';
@@ -22,7 +20,7 @@ import { Howler } from 'howler';
 export const SprintPage = () => {
 	const classes = useStyles();
 	const dispatch = useDispatch();
-	const { soundVolume, musicVolume } = useSelector((state) => state.settings);
+	const { soundVolume, musicVolume, theme } = useSelector((state) => state.settings);
 	const { getWords } = useGames();
 	const [ endGame, setEndGame ] = useState(false);
 	const [ seconds, setSeconds ] = useState(60);
@@ -156,7 +154,8 @@ export const SprintPage = () => {
 	useEffect(
 		() => {
 			return () => {
-				dispatch(deleteLevel());
+				dispatch(setLevel(null));
+				dispatch(setActiveWords([]));
 			};
 		},
 		[ dispatch ]
@@ -176,7 +175,6 @@ export const SprintPage = () => {
 
 	return (
 		<div className={classes.root}>
-			<ToastContainer />
 			{endGame ? (
 				<GameStats allSeries={allSeries} gameName="sprint" correctAnswers={correctAnswers} failAnswers={failAnswers} />
 			) : wordsArray.length && currentWord && currentRussianWord ? (
@@ -194,14 +192,14 @@ export const SprintPage = () => {
 					<div ref={seriesContainer} className={classes.series} />
 					<div className={classes.buttonsWrap}>
 						<button
-							className={`${classes.purpleButton} ${classes.failButton}`}
+							className={theme === 'dark' ? classes.darkFailButton : classes.lightFailButton}
 							onClick={(event) => answer(event.target.value)}
 							value={false}
 						>
 							НЕ ВЕРНО
 						</button>
 						<button
-							className={`${classes.purpleButton} ${classes.correctButton}`}
+							className={theme === 'dark' ? classes.darkCorrectButton : classes.lightCorrectButton}
 							onClick={(event) => answer(event.target.value)}
 							value={true}
 						>

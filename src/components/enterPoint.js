@@ -1,20 +1,20 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Avatar from '@material-ui/core/Avatar';
-import Typography from '@material-ui/core/Typography';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { useStyles } from '../styles/componentsStyles/EnterPoint.styles';
 import { useDispatch, useSelector } from 'react-redux';
-import { reduxLogOut } from '../redux/actions';
+import { logOut } from '../redux/actions';
 import { frontRoutes } from '../utils/frontRoutes';
 
 export const EnterPoint = () => {
 	const classes = useStyles();
 	const dispatch = useDispatch();
 	const { token, avatarURL, userName } = useSelector((state) => state.userData);
+	const { theme } = useSelector((state) => state.settings);
 
 	const handleLogOut = () => {
-		dispatch(reduxLogOut());
+		dispatch(logOut());
 	};
 
 	return (
@@ -23,15 +23,13 @@ export const EnterPoint = () => {
 				<div className={classes.root}>
 					<div className={classes.avatarWrap}>
 						<Avatar className={classes.avatar} alt={userName || ''} title={userName || ''} src={avatarURL} />
-						<Typography variant="body2" className={classes.name}>
-							{userName || 'raccon :)'}
-						</Typography>
+						<p className={classes.name}>{userName || 'raccon :)'}</p>
 					</div>
 					<ExitToAppIcon className={classes.logout} onClick={handleLogOut} />
 				</div>
 			) : (
 				<Link to={frontRoutes.signIn} className={classes.link}>
-					<button className={`${classes.button}`}>Войти</button>
+					<button className={theme === 'dark' ? classes.darkButton : classes.lightButton}>Войти</button>
 				</Link>
 			)}
 		</React.Fragment>

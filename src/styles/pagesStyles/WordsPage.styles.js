@@ -2,9 +2,9 @@ import { makeStyles } from '@material-ui/core/styles';
 
 export const useStyles = makeStyles({
 	root: {
-		fontFamily: '"Itim", cursive;',
-		color: '#5600E8',
-		backgroundColor: '#F2F2F2',
+		fontFamily: 'inherit',
+		color: 'inherit',
+		backgroundColor: 'inherit',
 		width: '100%',
 		display: 'flex',
 		flexDirection: 'column',
@@ -30,15 +30,22 @@ export const useStyles = makeStyles({
 			gap: '20px'
 		}
 	},
-	typeBox: {
+	lightTypeBox: {
 		color: '#F2F2F2',
 		backgroundColor: '#5600E8',
 		width: '100%',
 		display: 'flex',
 		marginBottom: '20px'
 	},
-	typeButton: {
-		fontFamily: '"Itim", cursive;',
+	darkTypeBox: {
+		color: '#141414',
+		backgroundColor: '#E38600',
+		width: '100%',
+		display: 'flex',
+		marginBottom: '20px'
+	},
+	lightTypeButton: {
+		fontFamily: 'inherit',
 		width: '100%',
 		height: '50px',
 		fontSize: '0.95rem',
@@ -56,37 +63,76 @@ export const useStyles = makeStyles({
 			fontSize: '0.65rem'
 		}
 	},
-	typeButtonActive: {
-		borderBottom: '5px solid #F2F2F2',
-		marginBottom: '-5px'
+	lightTypeButtonActive: {
+		borderBottom: '7px solid #BB86FC',
+		marginBottom: '-7px'
+	},
+	darkTypeButton: {
+		fontFamily: 'inherit',
+		width: '100%',
+		height: '50px',
+		fontSize: '0.95rem',
+		fontWeight: '600',
+		color: '#141414',
+		backgroundColor: '#E38600',
+		borderRadius: '0',
+		padding: '2px',
+		'&:hover': {
+			color: '#E38600',
+			backgroundColor: '#141414',
+			boxShadow: '3px 0px 10px 3px rgba(0,0,0,0.25)'
+		},
+		'@media (max-width: 768px)': {
+			fontSize: '0.65rem'
+		}
+	},
+	darkTypeButtonActive: {
+		borderBottom: '7px solid #FCCA81',
+		marginBottom: '-7px'
 	},
 	subtitle: {
 		marginBottom: '20px',
 		fontSize: '2.5rem',
-		color: '#5600E8',
-		fontFamily: '"Itim", cursive;',
 		'@media (max-width: 768px)': {
 			fontSize: '1.8rem'
 		}
 	},
 	link: {
-		fontFamily: '"Itim", cursive;',
+		fontFamily: 'inherit',
 		fontWeight: '600',
 		textDecoration: 'none',
 		color: 'inherit',
 		width: '100%',
 		height: '100%'
 	},
-	pagination: {
+	lightPagination: {
 		display: 'flex',
 		margin: '25px',
 		justifyContent: 'center',
 		'& li': {
-			color: '#5600E8',
-			fontFamily: '"Itim", cursive;',
+			color: 'inherit',
+			fontFamily: 'inherit',
 			'& .MuiPaginationItem-textPrimary.Mui-selected': {
 				backgroundColor: '#5600E8',
 				color: '#F2F2F2'
+			},
+			'& .MuiPaginationItem-root': {
+				fontSize: '1.1rem',
+				fontWeight: 'bold',
+				color: 'inherit'
+			}
+		}
+	},
+	darkPagination: {
+		display: 'flex',
+		margin: '25px',
+		justifyContent: 'center',
+		'& li': {
+			color: 'inherit',
+			fontFamily: 'inherit',
+			'& .MuiPaginationItem-textPrimary.Mui-selected': {
+				backgroundColor: '#E38600',
+				color: '#141414'
 			},
 			'& .MuiPaginationItem-root': {
 				fontSize: '1.1rem',
@@ -114,10 +160,10 @@ export const useStyles = makeStyles({
 		alignItems: 'center',
 		gap: '20px'
 	},
-	levelTitle: {
+	lightLevelTitle: {
 		fontSize: '4.3rem',
 		marginBottom: '25px',
-		fontFamily: '"Itim", cursive;',
+		fontFamily: 'inherit',
 		marginRight: 'auto',
 		color: (group) =>
 			group === 0
@@ -127,6 +173,23 @@ export const useStyles = makeStyles({
 					: group === 2
 						? '#7F39FB'
 						: group === 3 ? '#6200EE' : group === 4 ? '#5600E8' : group === 5 ? '#3700B3' : '#3700B3',
+		'@media (max-width: 768px)': {
+			fontSize: '3.3rem'
+		}
+	},
+	darkLevelTitle: {
+		fontSize: '4.3rem',
+		marginBottom: '25px',
+		fontFamily: 'inherit',
+		marginRight: 'auto',
+		color: (group) =>
+			group === 1
+				? '#FCCA81'
+				: group === 2
+					? '#FCBD60'
+					: group === 3
+						? '#FAAC39'
+						: group === 4 ? '#FC9F14' : group === 5 ? '#E38600' : group === 6 ? '#B86D00' : '#FCCA81',
 		'@media (max-width: 768px)': {
 			fontSize: '3.3rem'
 		}

@@ -18,6 +18,7 @@ export const DictionaryPage = () => {
 	const classes = useStyles();
 	const dispatch = useDispatch();
 	const { token } = useSelector((state) => state.userData);
+	const { theme } = useSelector((state) => state.settings);
 	const { userWords, activeWords } = useSelector((state) => state);
 	const [ page, setPage ] = useState(1);
 	const [ count, setCount ] = useState(null);
@@ -63,44 +64,71 @@ export const DictionaryPage = () => {
 					/>
 				))}
 			</Box>
-			<ul className={classes.typeBox}>
+			<ul className={theme === 'dark' ? classes.darkTypeBox : classes.lightTypeBox}>
 				{wordCategories.map((item, index) => (
-					<Button
-						key={`${index}${item}category-dictionary`}
-						onClick={() => handleWordsButtonClick(index)}
-						variant="contained"
-						className={
-							index === activeSection ? `${classes.typeButton} ${classes.typeButtonActive}` : `${classes.typeButton}`
-						}
-					>
-						{item.text}
-					</Button>
+					<React.Fragment>
+						{theme === 'dark' ? (
+							<Button
+								key={`${index}${item}category-dictionary`}
+								onClick={() => handleWordsButtonClick(index)}
+								variant="contained"
+								className={
+									index === activeSection ? (
+										`${classes.darkTypeButton} ${classes.darkTypeButtonActive}`
+									) : (
+										`${classes.darkTypeButton}`
+									)
+								}
+							>
+								{item.text}
+							</Button>
+						) : (
+							<Button
+								key={`${index}${item}category-dictionary`}
+								onClick={() => handleWordsButtonClick(index)}
+								variant="contained"
+								className={
+									index === activeSection ? (
+										`${classes.lightTypeButton} ${classes.lightTypeButtonActive}`
+									) : (
+										`${classes.lightTypeButton}`
+									)
+								}
+							>
+								{item.text}
+							</Button>
+						)}
+					</React.Fragment>
 				))}
 			</ul>
 			{activeWords.length ? (
 				<React.Fragment>
 					<h4 className={classes.subtitle}>Можешь запустить игру с этими словами</h4>
-					<ul className={classes.typeBox}>
-						{gameCardsContent.map((game, index) => {
+					<ul className={theme === 'dark' ? classes.darkTypeBox : classes.lightTypeBox}>
+						{gameCardsContent.map((game) => {
 							return (
-								<Button className={classes.typeButton} variant="contained" size="medium">
-									<Link
-										className={classes.link}
-										key={`${game.name}${index}game-dictionary`}
-										to={{
-											pathname: game.to
-										}}
+								<Link
+									className={classes.link}
+									key={`${game.name}game-book`}
+									to={{
+										pathname: game.to
+									}}
+								>
+									<Button
+										className={theme === 'dark' ? classes.darkTypeButton : classes.lightTypeButton}
+										variant="contained"
+										size="medium"
 									>
 										{game.name}
-									</Link>
-								</Button>
+									</Button>
+								</Link>
 							);
 						})}
 					</ul>
 					{Math.ceil(userWords.length / 20) > 1 && (
 						<Pagination
 							page={page}
-							className={classes.pagination}
+							className={theme === 'dark' ? classes.darkPagination : classes.lightPagination}
 							onChange={handlePaginationChange}
 							count={Math.ceil(count / 20)}
 							color="primary"
@@ -114,7 +142,7 @@ export const DictionaryPage = () => {
 					{Math.ceil(userWords.length / 20) > 1 && (
 						<Pagination
 							page={page}
-							className={classes.pagination}
+							className={theme === 'dark' ? classes.darkPagination : classes.lightPagination}
 							onChange={handlePaginationChange}
 							count={Math.ceil(count / 20)}
 							color="primary"
