@@ -350,11 +350,18 @@ export const LightSlider = withStyles({
 		height: '24px',
 		width: '24px',
 		marginTop: '-8px',
-		marginLeft: '-12px'
+		marginLeft: '-12px',
+		'&:hover': {
+			boxShadow: '0px 0px 0px 8px rgb(85, 0, 232, 0.2)'
+		}
 	},
 	active: {},
 	valueLabel: {
-		left: 'calc(-50% + 8px)'
+		left: 'calc(-50% + 8px)',
+		'& > span > span': {
+			color: '#F2F2F2',
+			fontWeight: 'bold'
+		}
 	},
 	track: {
 		height: '8px'
@@ -393,11 +400,18 @@ export const DarkSlider = withStyles({
 		height: '24px',
 		width: '24px',
 		marginTop: '-8px',
-		marginLeft: '-12px'
+		marginLeft: '-12px',
+		'&:hover': {
+			boxShadow: '0px 0px 0px 8px rgb(227, 134, 0, 0.2)'
+		}
 	},
 	active: {},
 	valueLabel: {
-		left: 'calc(-50% + 8px)'
+		left: 'calc(-50% + 8px)',
+		'& > span > span': {
+			color: '#141414',
+			fontWeight: 'bold'
+		}
 	},
 	track: {
 		height: '8px'

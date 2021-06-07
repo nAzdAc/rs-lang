@@ -24,6 +24,10 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-color: #F2F2F2;
 }
+html, body {
+  scrollbar-color: #458245 #714826;     /* «цвет ползунка» «цвет полосы скроллбара» */
+  scrollbar-width: auto;  /* толщина */
+}
 
 .entering {
   animation: slideDown 5s forwards;

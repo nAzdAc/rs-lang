@@ -13,6 +13,7 @@ export const backRoutes = {
 	statistics: getRoute('statistics'),
 	updateWord: getRoute('updateWord'),
 	setName: getRoute('name'),
+	postTheme: getRoute('theme'),
 	getWordsPage(group = 0, page = 0) {
 		return `${originURL}/words?group=${group}&page=${page}`;
 	}

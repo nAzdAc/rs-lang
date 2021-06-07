@@ -62,7 +62,7 @@ export const useStyles = makeStyles({
 	},
 	lightToast: {
 		fontFamily: 'inherit',
-		'& .Toastify__toast': {
+		'& .Toastify__toast--success': {
 			fontFamily: 'inherit',
 			fontWeight: 'bold',
 			background: '#F2F2F2',
@@ -73,13 +73,32 @@ export const useStyles = makeStyles({
 			},
 			'& .Toastify__progress-bar': {
 				background: '#5600E8',
-				height: '8px'
+				height: '6px',
+				margin: '5px',
+				borderRadius: '10px'
+			}
+		},
+		'& .Toastify__toast--error': {
+			padding: '15px',
+			fontFamily: 'inherit',
+			fontWeight: 'bold',
+			background: '#FF001E',
+			color: '#FFF',
+			'& .Toastify__close-button': {
+				color: '#FFF',
+				opacity: '1'
+			},
+			'& .Toastify__progress-bar': {
+				background: '#FFF',
+				height: '6px',
+				margin: '5px',
+				borderRadius: '10px'
 			}
 		}
 	},
 	darkToast: {
 		fontFamily: 'inherit',
-		'& .Toastify__toast': {
+		'& .Toastify__toast--success': {
 			fontFamily: 'inherit',
 			fontWeight: 'bold',
 			background: '#141414',
@@ -90,7 +109,26 @@ export const useStyles = makeStyles({
 			},
 			'& .Toastify__progress-bar': {
 				background: '#E38600',
-				height: '8px'
+				height: '6px',
+				margin: '5px',
+				borderRadius: '10px'
+			}
+		},
+		'& .Toastify__toast--error': {
+			padding: '15px',
+			fontFamily: 'inherit',
+			fontWeight: 'bold',
+			background: '#FF001E',
+			color: '#FFF',
+			'& .Toastify__close-button': {
+				color: '#FFF',
+				opacity: '1'
+			},
+			'& .Toastify__progress-bar': {
+				background: '#FFF',
+				height: '6px',
+				margin: '5px',
+				borderRadius: '10px'
 			}
 		}
 	}

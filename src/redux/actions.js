@@ -13,8 +13,7 @@ import {
 	SIGN_IN,
 	UPDATE_USER_WORD,
 	UPLOAD_AVATAR,
-	POST_SETTINGS,
-	SET_THEME
+	POST_SETTINGS
 } from './types';
 
 export function isBlock(value) {
@@ -52,6 +51,7 @@ export function showToast(message) {
 }
 
 export function setSettings(name, value) {
+	console.log(`${name} - ${value}`);
 	return {
 		type: SET_SETTINGS,
 		payload: {
@@ -71,14 +71,6 @@ export function logOut() {
 	localStorage.removeItem(LOCAL_STORAGE_KEY.userData);
 	return {
 		type: LOG_OUT
-	};
-}
-
-export function changeTheme(value) {
-	console.log(value);
-	return {
-		type: SET_THEME,
-		payload: value
 	};
 }
 
@@ -169,6 +161,9 @@ export function signIn(value) {
 
 export function postSettings(name, value, token) {
 	return async (dispatch) => {
+		console.log(name);
+		console.log(value);
+		if (!name || !value) return;
 		try {
 			const res = await fetch(backRoutes.settings, {
 				method: 'POST',
@@ -184,7 +179,7 @@ export function postSettings(name, value, token) {
 			const json = await res.json();
 			console.log(json);
 			dispatch({ type: POST_SETTINGS, payload: json.settings });
-			return { text: json.message, code: json.http_code || 200 };
+			return { code: json.http_code || 200, text: json.message };
 		} catch (e) {
 			console.log(e);
 			console.log(e.message);
@@ -223,7 +218,7 @@ export function uploadAvatar(file, token) {
 	};
 }
 
-export function setName(name, token) {
+export function postName(name, token) {
 	return async (dispatch) => {
 		try {
 			console.log(name);

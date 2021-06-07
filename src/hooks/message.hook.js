@@ -3,9 +3,10 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 export const useMessage = () => {
-	return useCallback((text) => {
+	return useCallback((text, code) => {
 		if (!text) return;
-		toast.error(text, {
+		const type = code === 200 ? 'success' : 'error';
+		toast[type](text, {
 			position: 'top-right',
 			autoClose: 2500,
 			hideProgressBar: false,

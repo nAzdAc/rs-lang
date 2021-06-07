@@ -62,7 +62,7 @@ export const useStyles = makeStyles(() => ({
 		width: '84px',
 		height: '36px',
 		background: 'inherit',
-		border: '3px solid #1f2c38',
+		border: '3px solid #141414',
 		color: 'inherit',
 		marginRight: '10px',
 		'&:hover': {

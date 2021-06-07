@@ -45,7 +45,7 @@ export const WordCard = ({ word }) => {
 		};
 		console.log(body);
 		if (!token) {
-			return showMessage('Для добавления / удаления слов необходимо авторизоваться', 400);
+			return showMessage('Для добавления / удаления слов необходимо авторизоваться', 404);
 		}
 		const { text, code } = await dispatch(updateUserWord(body, token));
 		showMessage(text, code);

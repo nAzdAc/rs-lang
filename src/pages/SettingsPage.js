@@ -8,7 +8,7 @@ import {
 	CssTextField,
 	DarkSwitch
 } from '../styles/pagesStyles/StatsGamesSettings.styles';
-import { setSettings, uploadAvatar, setName, postSettings, changeTheme } from '../redux/actions';
+import { setSettings, uploadAvatar, postName, postSettings } from '../redux/actions';
 import { useDispatch, useSelector } from 'react-redux';
 import { useMessage } from '../hooks/message.hook';
 import { Container, Paper } from '@material-ui/core';
@@ -39,7 +39,8 @@ export const SettingsPage = () => {
 		() => {
 			[ musicSlider.current, soundSlider.current, wordSlider.current ].forEach((elem) => {
 				elem.addEventListener('mouseup', async (event) => {
-					if (!token) return showMessage('Рекомендуем авторизоваться, тогда настройки будут всегда с вами :)', 600);
+					dispatch(setSettings(event.target.ariaValueText, event.target.ariaValueNow));
+					if (!token) return showMessage('Рекомендуем авторизоваться, тогда настройки будут всегда с вами :)', 200);
 					const { text, code } = await dispatch(
 						postSettings(event.target.ariaValueText, event.target.ariaValueNow, token)
 					);
@@ -56,22 +57,22 @@ export const SettingsPage = () => {
 
 	const handleSwitch = useCallback(
 		async (event) => {
-			dispatch(setSettings(event.target.name, event.target.checked, token));
-			if (!token) return showMessage('Рекомендуем авторизоваться, тогда настройки будут всегда с вами :)', 600);
+			dispatch(setSettings(event.target.name, event.target.checked));
+			if (!token) return showMessage('Рекомендуем авторизоваться, тогда настройки будут всегда с вами :)', 200);
 			const { text, code } = await dispatch(postSettings(event.target.name, event.target.checked, token));
 			showMessage(text, code);
 		},
 		[ dispatch, showMessage, token ]
 	);
 
-	const changeAvatar = async (e) => {
+	const changeAvatar = async (event) => {
 		if (!token) {
-			return showMessage('Для загрузки фото необходимо авторизоваться.', 400);
+			return showMessage('Для загрузки фото необходимо авторизоваться.', 404);
 		}
-		if (!e.target.files[0]) {
-			return showMessage('Выберите файл', 400);
+		if (!event.target.files[0]) {
+			return showMessage('Выберите файл', 404);
 		}
-		const { text, code } = await dispatch(uploadAvatar(e.target.files[0], token));
+		const { text, code } = await dispatch(uploadAvatar(event.target.files[0], token));
 		showMessage(text, code);
 	};
 
@@ -79,20 +80,22 @@ export const SettingsPage = () => {
 		setNewName(event.target.value);
 	};
 
-	const handleTheme = (event) => {
+	const handleTheme = async (event) => {
 		const newTheme = event.target.value === 'dark' ? 'light' : 'dark';
-		console.log(event.target.value);
-		dispatch(changeTheme(newTheme));
+		dispatch(setSettings('theme', newTheme));
+		if (!token) return showMessage('Рекомендуем авторизоваться, тогда выбранная тема будет всегда с вами :)', 200);
+		const { text, code } = await dispatch(postSettings('theme', newTheme, token));
+		showMessage(text, code);
 	};
 
 	const changeName = useCallback(
 		async (event) => {
 			event.preventDefault();
-			if (!newName) return showMessage('Вы ничего не ввели. Никнейм не изменён', 400);
-			if (!token) return showMessage('Для изменения никнейма необходимо авторизоваться', 400);
-			const { text, code } = await dispatch(setName(newName, token));
-			showMessage(text, code);
 			setNewName('');
+			if (!token) return showMessage('Для изменения никнейма необходимо авторизоваться', 404);
+			if (!newName) return showMessage('Вы ничего не ввели. Никнейм не изменён', 404);
+			const { text, code } = await dispatch(postName(newName, token));
+			showMessage(text, code);
 		},
 		[ dispatch, newName, showMessage, token ]
 	);

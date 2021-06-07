@@ -12,8 +12,7 @@ import {
 	SET_ACTIVE_WORDS,
 	UPDATE_USER_WORD,
 	POST_STATS,
-	SET_NAME,
-	SET_THEME
+	SET_NAME
 } from './types';
 
 const initialState = {
@@ -91,14 +90,6 @@ export function rootReducer(state = initialState, action) {
 				userData: {
 					...state.userData,
 					userName: action.payload
-				}
-			};
-		case SET_THEME:
-			return {
-				...state,
-				settings: {
-					...state.settings,
-					theme: action.payload
 				}
 			};
 		case POST_SETTINGS:
