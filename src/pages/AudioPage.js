@@ -20,10 +20,10 @@ import { setActiveWords, setLevel } from '../redux/actions';
 import { GamesProgressBar } from '../components/GamesProgressBar';
 
 export const AudioPage = () => {
-	const classes = useStyles();
+	const { soundVolume, wordVolume, theme } = useSelector((state) => state.settings);
+	const classes = useStyles({ theme });
 	const dispatch = useDispatch();
 	const { getWords } = useGames();
-	const { soundVolume, wordVolume, theme } = useSelector((state) => state.settings);
 	const [ endGame, setEndGame ] = useState(false);
 	const [ wordsArray, setWordsArray ] = useState([]);
 	const [ correctAnswers, setCorrectAnswers ] = useState([]);
@@ -75,10 +75,10 @@ export const AudioPage = () => {
 				seriesContainer.current.innerHTML += ' <img src="https://img.icons8.com/color/48/000000/hand-drawn-star.png"/>';
 				setCurrentSeries((prev) => prev + 1);
 				const correctButton = four.current.find((button) => button.value === word);
-				correctButton.classList.add(classes.correctButton);
+				correctButton.className = classes.correctButton;
 				setBlock(true);
 				setTimeout(() => {
-					correctButton.classList.remove(classes.correctButton);
+					correctButton.className = classes.button;
 					setCurrentNumber((prev) => prev + 1);
 					setBlock(false);
 				}, 2000);
@@ -90,12 +90,12 @@ export const AudioPage = () => {
 				seriesContainer.current.innerHTML = '';
 				const correctButton = four.current.find((button) => button.value === currentWord.word);
 				const failButton = four.current.find((button) => button.value === word);
-				correctButton.classList.add(classes.correctButton);
-				failButton.classList.add(classes.failButton);
+				correctButton.className = classes.correctButton;
+				failButton.className = classes.failButton;
 				setBlock(true);
 				setTimeout(() => {
-					correctButton.classList.remove(classes.correctButton);
-					failButton.classList.remove(classes.failButton);
+					correctButton.className = classes.button;
+					failButton.className = classes.button;
 					setCurrentNumber((prev) => prev + 1);
 					setBlock(false);
 				}, 2000);
@@ -103,7 +103,17 @@ export const AudioPage = () => {
 				setLifes((prev) => prev - 1);
 			}
 		},
-		[ audioFail2, audioSuccess, block, classes.failButton, classes.correctButton, currentSeries, currentWord, endGame ]
+		[
+			block,
+			endGame,
+			currentWord,
+			classes.correctButton,
+			classes.button,
+			classes.failButton,
+			audioSuccess,
+			audioFail2,
+			currentSeries
+		]
 	);
 
 	useEffect(
@@ -235,10 +245,10 @@ export const AudioPage = () => {
 								<button
 									disabled={block}
 									ref={(btn) => setFourRef(btn, index)}
-									key={index}
+									key={`${item.word}Audio`}
 									onClick={(event) => answer(event.target.value)}
 									value={item.word}
-									className={theme === 'dark' ? classes.darkButton : classes.lightButton}
+									className={classes.button}
 								>
 									{item.wordTranslate}
 								</button>

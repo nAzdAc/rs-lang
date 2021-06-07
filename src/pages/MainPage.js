@@ -28,9 +28,9 @@ export const MainPage = () => {
 			<Paper className={classes.advantagesSection}>
 				<h3 className={classes.subtitle}>Ключевые преимущества</h3>
 				<div className={classes.advantagesWrapper}>
-					{ADVANTAGES.map((advantage, i) => {
+					{ADVANTAGES.map((advantage) => {
 						return (
-							<div className={classes.advantage} key={i}>
+							<div className={classes.advantage} key={`${advantage.title}advng-Main`}>
 								<img
 									className={classes.advantageImg}
 									src={theme === 'dark' ? advantage.darkSvg : advantage.lightSvg}
@@ -51,9 +51,9 @@ export const MainPage = () => {
 			<section>
 				<h3 className={classes.title}>Разработчики</h3>
 				<div className={classes.developers}>
-					{DEVELOPERS.map((developer, index) => {
+					{DEVELOPERS.map((developer) => {
 						return (
-							<Paper className={classes.developerCard} key={index}>
+							<Paper className={classes.developerCard} key={`${developer.name}dvlprs-Main`}>
 								<img className={classes.developerImg} src={developer.photo} alt={developer.name} />
 								<h4 className={classes.subtitle1}>{developer.name}</h4>
 								<span className={classes.subtitle2}>{developer.description}</span>

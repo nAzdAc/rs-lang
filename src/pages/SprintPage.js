@@ -18,9 +18,9 @@ import { RoundTimer } from '../components/RoundTimer';
 import { Howler } from 'howler';
 
 export const SprintPage = () => {
-	const classes = useStyles();
-	const dispatch = useDispatch();
 	const { soundVolume, musicVolume, theme } = useSelector((state) => state.settings);
+	const classes = useStyles({ theme });
+	const dispatch = useDispatch();
 	const { getWords } = useGames();
 	const [ endGame, setEndGame ] = useState(false);
 	const [ seconds, setSeconds ] = useState(60);
@@ -191,18 +191,10 @@ export const SprintPage = () => {
 					<h4 className={classes.currentWord}>{`${currentWord.word || ''} = ${currentRussianWord || ''}`}</h4>
 					<div ref={seriesContainer} className={classes.series} />
 					<div className={classes.buttonsWrap}>
-						<button
-							className={theme === 'dark' ? classes.darkFailButton : classes.lightFailButton}
-							onClick={(event) => answer(event.target.value)}
-							value={false}
-						>
+						<button className={classes.failButton} onClick={(event) => answer(event.target.value)} value={false}>
 							НЕ ВЕРНО
 						</button>
-						<button
-							className={theme === 'dark' ? classes.darkCorrectButton : classes.lightCorrectButton}
-							onClick={(event) => answer(event.target.value)}
-							value={true}
-						>
+						<button className={classes.correctButton} onClick={(event) => answer(event.target.value)} value={true}>
 							ВЕРНО
 						</button>
 					</div>

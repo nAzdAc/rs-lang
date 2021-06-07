@@ -29,7 +29,7 @@ export const useStyles = makeStyles(() => ({
 			transform: 'scale(1.2)'
 		}
 	},
-	lightButton: {
+	button: (props) => ({
 		fontFamily: 'inherit',
 		display: 'flex',
 		alignItems: 'center',
@@ -42,33 +42,14 @@ export const useStyles = makeStyles(() => ({
 		width: '84px',
 		height: '36px',
 		background: 'inherit',
-		border: '3px solid #F2F2F2',
+		border: '3px solid',
+		borderColor: props.theme === 'dark' ? '#141414' : '#F2F2F2',
 		color: 'inherit',
 		marginRight: '10px',
 		'&:hover': {
 			transform: 'scale(1.2)'
 		}
-	},
-	darkButton: {
-		fontFamily: 'inherit',
-		display: 'flex',
-		alignItems: 'center',
-		justifyContent: 'space-around',
-		fontSize: '1rem',
-		cursor: 'pointer',
-		borderRadius: '6px',
-		outline: 'none',
-		fontWeight: '600',
-		width: '84px',
-		height: '36px',
-		background: 'inherit',
-		border: '3px solid #141414',
-		color: 'inherit',
-		marginRight: '10px',
-		'&:hover': {
-			transform: 'scale(1.2)'
-		}
-	},
+	}),
 	link: {
 		textDecoration: 'none',
 		color: 'inherit'

@@ -30,12 +30,12 @@ export const useStyles = makeStyles({
 		marginBottom: '15px',
 		gap: '20px'
 	},
-	lightButton: {
+	button: (props) => ({
 		padding: '3px',
 		minWidth: '100px',
 		height: '50px',
-		backgroundColor: '#5600E8',
-		color: '#F2F2F2',
+		backgroundColor: props.theme === 'dark' ? '#E38600' : '#5600E8',
+		color: props.theme === 'dark' ? '#141414' : '#F2F2F2',
 		fontFamily: 'inherit',
 		fontWeight: 'bold',
 		display: 'flex',
@@ -44,41 +44,21 @@ export const useStyles = makeStyles({
 		borderRadius: '10px',
 		cursor: 'pointer',
 		outline: 'none',
-		border: '3px solid #F2F2F2',
+		border: '3px solid',
+		borderColor: props.theme === 'dark' ? '#141414' : '#F2F2F2',
 		fontSize: '1rem',
 		'&:hover': {
-			border: '3px solid #5600E8',
-			backgroundColor: '#F2F2F2',
-			color: '#5600E8'
+			border: '3px solid',
+			borderColor: props.theme === 'dark' ? '#E38600' : '#5600E8',
+			backgroundColor: props.theme === 'dark' ? '#141414' : '#F2F2F2',
+			color: props.theme === 'dark' ? '#E38600' : '#5600E8'
 		}
-	},
-	darkButton: {
+	}),
+	failButton: (props) => ({
 		padding: '3px',
 		minWidth: '100px',
 		height: '50px',
-		backgroundColor: '#E38600',
-		color: '#141414',
-		fontFamily: 'inherit',
-		fontWeight: 'bold',
-		display: 'flex',
-		alignItems: 'center',
-		justifyContent: 'space-around',
-		borderRadius: '10px',
-		cursor: 'pointer',
-		outline: 'none',
-		border: '3px solid #141414',
-		fontSize: '1rem',
-		'&:hover': {
-			border: '3px solid #E38600',
-			backgroundColor: '#141414',
-			color: '#E38600'
-		}
-	},
-	lightFailButton: {
-		padding: '3px',
-		minWidth: '100px',
-		height: '50px',
-		color: '#F2F2F2',
+		color: props.theme === 'dark' ? '#141414' : '#F2F2F2',
 		fontFamily: 'inherit',
 		fontWeight: 'bold',
 		display: 'flex',
@@ -92,37 +72,15 @@ export const useStyles = makeStyles({
 		border: '3px solid #FF001E',
 		'&:hover': {
 			border: '3px solid #FF001E',
-			backgroundColor: '#F2F2F2',
+			backgroundColor: props.theme === 'dark' ? '#141414' : '#F2F2F2',
 			color: '#FF001E'
 		}
-	},
-	darkFailButton: {
+	}),
+	correctButton: (props) => ({
 		padding: '3px',
 		minWidth: '100px',
 		height: '50px',
-		color: '#141414',
-		fontFamily: 'inherit',
-		fontWeight: 'bold',
-		display: 'flex',
-		alignItems: 'center',
-		justifyContent: 'space-around',
-		borderRadius: '10px',
-		cursor: 'pointer',
-		outline: 'none',
-		fontSize: '1rem',
-		backgroundColor: '#FF001E',
-		border: '3px solid #FF001E',
-		'&:hover': {
-			border: '3px solid #FF001E',
-			backgroundColor: '#141414',
-			color: '#FF001E'
-		}
-	},
-	lightCorrectButton: {
-		padding: '3px',
-		minWidth: '100px',
-		height: '50px',
-		color: '#F2F2F2',
+		color: props.theme === 'dark' ? '#141414' : '#F2F2F2',
 		fontFamily: 'inherit',
 		fontWeight: 'bold',
 		display: 'flex',
@@ -136,32 +94,10 @@ export const useStyles = makeStyles({
 		border: '3px solid #28FC03',
 		'&:hover': {
 			border: '3px solid #28FC03',
-			backgroundColor: '#F2F2F2',
+			backgroundColor: props.theme === 'dark' ? '#141414' : '#F2F2F2',
 			color: '#28FC03'
 		}
-	},
-	darkCorrectButton: {
-		padding: '3px',
-		minWidth: '100px',
-		height: '50px',
-		color: '#141414',
-		fontFamily: 'inherit',
-		fontWeight: 'bold',
-		display: 'flex',
-		alignItems: 'center',
-		justifyContent: 'space-around',
-		borderRadius: '10px',
-		cursor: 'pointer',
-		outline: 'none',
-		fontSize: '1rem',
-		backgroundColor: '#28FC03',
-		border: '3px solid #28FC03',
-		'&:hover': {
-			border: '3px solid #28FC03',
-			backgroundColor: '#141414',
-			color: '#28FC03'
-		}
-	},
+	}),
 	speaker: {
 		width: '150px',
 		height: '120px',
@@ -296,22 +232,12 @@ export const useStyles = makeStyles({
 		fontFamily: 'inherit',
 		alignSelf: 'center'
 	},
-	lightFinishLine: {
+	finishLine: (props) => ({
 		marginBottom: '10px',
-		backgroundColor: '#5600E8',
+		backgroundColor: props.theme === 'dark' ? '#E38600' : '#5600E8',
 		width: '80%',
 		maxWidth: '800px',
 		height: '3px',
-		color: 'red',
 		border: 'none'
-	},
-	darkFinishLine: {
-		marginBottom: '10px',
-		backgroundColor: '#E38600',
-		width: '80%',
-		maxWidth: '800px',
-		height: '3px',
-		color: 'red',
-		border: 'none'
-	}
+	})
 });

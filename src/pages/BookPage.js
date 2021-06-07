@@ -10,13 +10,13 @@ import { Button, CircularProgress } from '@material-ui/core';
 import { WordCard } from '../components/WordCard';
 
 export const BookPage = () => {
-	const { userWords, activeWords } = useSelector((state) => state);
 	const { theme } = useSelector((state) => state.settings);
+	const { userWords, activeWords } = useSelector((state) => state);
 	let match = useRouteMatch().path;
 	let group = match[match.length - 1] - 1;
 	const [ page, setPage ] = useState(1);
 	const dispatch = useDispatch();
-	const classes = useStyles(group);
+	const classes = useStyles({ theme, group });
 
 	const fetchWords = useCallback(
 		async () => {
@@ -68,26 +68,21 @@ export const BookPage = () => {
 
 	return (
 		<React.Fragment>
-			<h2 className={theme === 'dark' ? classes.darkLevelTitle : classes.lightLevelTitle}>{`Уровень сложности ${group +
-				1}`}</h2>
+			<h2 className={classes.levelTitle}>{`Уровень сложности ${group + 1}`}</h2>
 			{activeWords.length ? (
 				<React.Fragment>
 					<h4 className={classes.subtitle}>Можешь запустить игру с этими словами</h4>
-					<ul className={theme === 'dark' ? classes.darkTypeBox : classes.lightTypeBox}>
+					<ul className={classes.typeBox}>
 						{gameCardsContent.map((game) => {
 							return (
 								<Link
 									className={classes.link}
-									key={`${game.name}game-book`}
+									key={`${game.name}game-Book`}
 									to={{
 										pathname: game.to
 									}}
 								>
-									<Button
-										className={theme === 'dark' ? classes.darkTypeButton : classes.lightTypeButton}
-										variant="contained"
-										size="medium"
-									>
+									<Button className={classes.typeButton} variant="contained" size="medium">
 										{game.name}
 									</Button>
 								</Link>
@@ -97,7 +92,7 @@ export const BookPage = () => {
 					{
 						<Pagination
 							page={page}
-							className={theme === 'dark' ? classes.darkPagination : classes.lightPagination}
+							className={classes.pagination}
 							onChange={handlePaginationChange}
 							count={30}
 							color="primary"
@@ -105,12 +100,12 @@ export const BookPage = () => {
 					}
 					<ul className={classes.wordList}>
 						{activeWords.map((word) => {
-							return <WordCard key={`${word._id}${word.wordTranslate}-word-book`} word={word} />;
+							return <WordCard key={`${word._id}word-Book`} word={word} />;
 						})}
 					</ul>
 					<Pagination
 						page={page}
-						className={theme === 'dark' ? classes.darkPagination : classes.lightPagination}
+						className={classes.pagination}
 						onChange={handlePaginationChange}
 						count={30}
 						color="primary"

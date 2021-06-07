@@ -8,10 +8,10 @@ import { logOut } from '../redux/actions';
 import { frontRoutes } from '../utils/frontRoutes';
 
 export const EnterPoint = () => {
-	const classes = useStyles();
+	const { theme } = useSelector((state) => state.settings);
+	const classes = useStyles({ theme });
 	const dispatch = useDispatch();
 	const { token, avatarURL, userName } = useSelector((state) => state.userData);
-	const { theme } = useSelector((state) => state.settings);
 
 	const handleLogOut = () => {
 		dispatch(logOut());
@@ -29,7 +29,7 @@ export const EnterPoint = () => {
 				</div>
 			) : (
 				<Link to={frontRoutes.signIn} className={classes.link}>
-					<button className={theme === 'dark' ? classes.darkButton : classes.lightButton}>Войти</button>
+					<button className={classes.button}>Войти</button>
 				</Link>
 			)}
 		</React.Fragment>

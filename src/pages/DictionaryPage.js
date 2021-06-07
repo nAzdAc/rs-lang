@@ -15,10 +15,10 @@ import { setActiveWords } from '../redux/actions';
 import { WordCard } from '../components/WordCard';
 
 export const DictionaryPage = () => {
-	const classes = useStyles();
+	const { theme } = useSelector((state) => state.settings);
+	const classes = useStyles({ theme });
 	const dispatch = useDispatch();
 	const { token } = useSelector((state) => state.userData);
-	const { theme } = useSelector((state) => state.settings);
 	const { userWords, activeWords } = useSelector((state) => state);
 	const [ page, setPage ] = useState(1);
 	const [ count, setCount ] = useState(null);
@@ -57,68 +57,41 @@ export const DictionaryPage = () => {
 			<Box className={classes.buttonBox}>
 				{levels.map((item, index) => (
 					<LevelButton
-						key={`${index}${item}level-dictionary`}
+						key={`${item}levels-Dict`}
 						click={() => handleLevelsClick(index)}
 						group={item}
 						isActive={index === activeLevel ? true : false}
 					/>
 				))}
 			</Box>
-			<ul className={theme === 'dark' ? classes.darkTypeBox : classes.lightTypeBox}>
+			<ul className={classes.typeBox}>
 				{wordCategories.map((item, index) => (
-					<React.Fragment>
-						{theme === 'dark' ? (
-							<Button
-								key={`${index}${item}category-dictionary`}
-								onClick={() => handleWordsButtonClick(index)}
-								variant="contained"
-								className={
-									index === activeSection ? (
-										`${classes.darkTypeButton} ${classes.darkTypeButtonActive}`
-									) : (
-										`${classes.darkTypeButton}`
-									)
-								}
-							>
-								{item.text}
-							</Button>
-						) : (
-							<Button
-								key={`${index}${item}category-dictionary`}
-								onClick={() => handleWordsButtonClick(index)}
-								variant="contained"
-								className={
-									index === activeSection ? (
-										`${classes.lightTypeButton} ${classes.lightTypeButtonActive}`
-									) : (
-										`${classes.lightTypeButton}`
-									)
-								}
-							>
-								{item.text}
-							</Button>
-						)}
-					</React.Fragment>
+					<Button
+						key={`${item.text}category-Dict`}
+						onClick={() => handleWordsButtonClick(index)}
+						variant="contained"
+						className={
+							index === activeSection ? `${classes.typeButton} ${classes.typeButtonActive}` : `${classes.typeButton}`
+						}
+					>
+						{item.text}
+					</Button>
 				))}
 			</ul>
 			{activeWords.length ? (
 				<React.Fragment>
 					<h4 className={classes.subtitle}>Можешь запустить игру с этими словами</h4>
-					<ul className={theme === 'dark' ? classes.darkTypeBox : classes.lightTypeBox}>
+					<ul className={classes.typeBox}>
 						{gameCardsContent.map((game) => {
 							return (
 								<Link
 									className={classes.link}
-									key={`${game.name}game-book`}
+									key={`${game.name}game-Dict`}
 									to={{
 										pathname: game.to
 									}}
 								>
-									<Button
-										className={theme === 'dark' ? classes.darkTypeButton : classes.lightTypeButton}
-										variant="contained"
-										size="medium"
-									>
+									<Button className={classes.typeButton} variant="contained" size="medium">
 										{game.name}
 									</Button>
 								</Link>
@@ -128,7 +101,7 @@ export const DictionaryPage = () => {
 					{Math.ceil(userWords.length / 20) > 1 && (
 						<Pagination
 							page={page}
-							className={theme === 'dark' ? classes.darkPagination : classes.lightPagination}
+							className={classes.pagination}
 							onChange={handlePaginationChange}
 							count={Math.ceil(count / 20)}
 							color="primary"
@@ -136,13 +109,13 @@ export const DictionaryPage = () => {
 					)}
 					<ul className={classes.wordList}>
 						{activeWords.map((word) => {
-							return <WordCard key={`${word._id}${word.word}dictionary-word`} word={word} />;
+							return <WordCard key={`${word._id}word-Dict`} word={word} />;
 						})}
 					</ul>
 					{Math.ceil(userWords.length / 20) > 1 && (
 						<Pagination
 							page={page}
-							className={theme === 'dark' ? classes.darkPagination : classes.lightPagination}
+							className={classes.pagination}
 							onChange={handlePaginationChange}
 							count={Math.ceil(count / 20)}
 							color="primary"

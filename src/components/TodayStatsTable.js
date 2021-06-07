@@ -8,13 +8,13 @@ import TableRow from '@material-ui/core/TableRow';
 import { useSelector } from 'react-redux';
 
 const useStyles = makeStyles({
-	lightTable: {
+	table: (props) => ({
 		boxShadow: '3px 0px 10px 3px rgba(0,0,0,0.25)',
 		minWidth: '300px',
 		maxWidth: '400px',
 		color: 'inherit',
 		fontFamily: 'inherit',
-		borderColor: '#BB86FC',
+		borderColor: props.theme === 'dark' ? '#FCCA81' : '#BB86FC',
 		'& .MuiTableRow-root': {
 			'& .MuiTableCell-head': {
 				fontWeight: '600',
@@ -28,40 +28,15 @@ const useStyles = makeStyles({
 				borderColor: 'inherit'
 			}
 		}
-	},
-	darkTable: {
-		boxShadow: '3px 0px 10px 3px rgba(0,0,0,0.25)',
-		minWidth: '300px',
-		maxWidth: '400px',
-		color: 'inherit',
-		fontFamily: 'inherit',
-		borderColor: '#FCCA81',
-		'& .MuiTableRow-root': {
-			'& .MuiTableCell-head': {
-				fontWeight: '600',
-				color: 'inherit',
-				fontFamily: 'inherit',
-				borderColor: 'inherit'
-			},
-			'& .MuiTableCell-body': {
-				color: 'inherit',
-				fontFamily: 'inherit',
-				borderColor: 'inherit'
-			}
-		}
-	}
+	})
 });
 
 export const TodayStatsTable = ({ learnedWordsToday, percentToday }) => {
-	const classes = useStyles();
 	const { theme } = useSelector((state) => state.settings);
+	const classes = useStyles({ theme });
 
 	return (
-		<Table
-			className={theme === 'dark' ? classes.darkTable : classes.lightTable}
-			size="small"
-			aria-label="a dense table"
-		>
+		<Table className={classes.table} size="small" aria-label="a dense table">
 			<TableHead>
 				<TableRow>
 					<TableCell>Показатель</TableCell>

@@ -21,33 +21,19 @@ const useStyles = makeStyles({
 		fontWeight: 'bold',
 		marginTop: '8px'
 	},
-	lightProgressBarWrap: {
+	progressBarWrap: (props) => ({
 		display: 'flex',
 		flexDirection: 'column',
 		width: '100%',
 		'& .MuiLinearProgress-root': {
-			backgroundColor: '#BB86FC',
+			backgroundColor: props.theme === 'dark' ? '#FCCA81' : '#BB86FC',
 			height: '6px',
 			borderRadius: '20px',
 			'& .MuiLinearProgress-barColorPrimary': {
-				backgroundColor: '#5600E8'
+				backgroundColor: props.theme === 'dark' ? '#E38600' : '#5600E8'
 			}
 		}
-	},
-	darkProgressBarWrap: {
-		display: 'flex',
-		flexDirection: 'column',
-		width: '100%',
-		'& .MuiLinearProgress-root': {
-			backgroundColor: '#FCCA81',
-			height: '6px',
-			borderRadius: '20px',
-			color: 'red',
-			'& .MuiLinearProgress-bar': {
-				backgroundColor: '#E38600'
-			}
-		}
-	},
+	}),
 	overBarText: {
 		margin: '0 auto',
 		fontSize: '0.8rem',
@@ -57,13 +43,13 @@ const useStyles = makeStyles({
 });
 
 export const GamesProgressBar = ({ currentNumber, allNumber }) => {
-	const classes = useStyles();
 	const { theme } = useSelector((state) => state.settings);
+	const classes = useStyles({ theme });
 
 	return (
 		<Box className={classes.progressContainer}>
 			<span className={classes.sideBarText}>{currentNumber}</span>
-			<Box className={theme === 'dark' ? classes.darkProgressBarWrap : classes.lightProgressBarWrap}>
+			<Box className={classes.progressBarWrap}>
 				<span className={classes.overBarText}>{`${Math.round(currentNumber / allNumber * 100)} %`}</span>
 				<LinearProgress variant="determinate" value={currentNumber / allNumber * 100} />
 			</Box>

@@ -46,9 +46,9 @@ export const useStyles = makeStyles({
 			marginBottom: '50px'
 		}
 	},
-	lightDeleteButton: {
-		background: '#5600E8',
-		color: '#F2F2F2',
+	deleteButton: (props) => ({
+		background: props.theme === 'dark' ? '#E38600' : '#5600E8',
+		color: props.theme === 'dark' ? '#141414' : '#F2F2F2',
 		fontFamily: 'inherit',
 		fontSize: '0.8rem',
 		display: 'flex',
@@ -69,31 +69,7 @@ export const useStyles = makeStyles({
 		'@media (max-width: 768px)': {
 			fontSize: '0.65rem'
 		}
-	},
-	darkDeleteButton: {
-		background: '#E38600',
-		color: '#141414',
-		fontFamily: 'inherit',
-		fontSize: '0.8rem',
-		display: 'flex',
-		alignItems: 'center',
-		justifyContent: 'space-around',
-		cursor: 'pointer',
-		border: 'none',
-		borderRadius: '6px',
-		padding: '5px',
-		outline: 'none',
-		fontWeight: 'bold',
-		height: '36px',
-		marginRight: '12px',
-		marginLeft: '5px',
-		'&:hover': {
-			transform: 'scale(1.2)'
-		},
-		'@media (max-width: 768px)': {
-			fontSize: '0.65rem'
-		}
-	},
+	}),
 	iconWrap: {
 		marginRight: '5px',
 		border: 'none',

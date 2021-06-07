@@ -67,12 +67,12 @@ export const useStyles = makeStyles({
 		borderRadius: '50%',
 		margin: '20px'
 	},
-	lightButton: {
+	button: (props) => ({
 		padding: '3px',
 		width: '100%',
 		height: '36px',
-		background: '#5600E8',
-		color: '#F2F2F2',
+		background: props.theme === 'dark' ? '#E38600' : '#5600E8',
+		color: props.theme === 'dark' ? '#141414' : '#F2F2F2',
 		fontFamily: 'inherit',
 		display: 'flex',
 		alignItems: 'center',
@@ -85,27 +85,8 @@ export const useStyles = makeStyles({
 		'&:hover': {
 			transform: 'scale(1.2)'
 		}
-	},
-	darkButton: {
-		padding: '3px',
-		width: '100%',
-		height: '36px',
-		background: '#E38600',
-		color: '#141414',
-		fontFamily: 'inherit',
-		display: 'flex',
-		alignItems: 'center',
-		justifyContent: 'space-around',
-		borderRadius: '6px',
-		cursor: 'pointer',
-		outline: 'none',
-		border: 'none',
-		fontSize: '1rem',
-		'&:hover': {
-			transform: 'scale(1.2)'
-		}
-	},
-	outlainedLightButton: {
+	}),
+	outlainedButton: (props) => ({
 		padding: '3px',
 		height: '36px',
 		fontFamily: 'inherit',
@@ -117,34 +98,15 @@ export const useStyles = makeStyles({
 		outline: 'none',
 		fontSize: '1rem',
 		width: '130px',
-		background: '#F2F2F2',
-		color: '#5600E8',
-		border: '3px solid #5600E8',
+		background: props.theme === 'dark' ? '#141414' : '#F2F2F2',
+		color: props.theme === 'dark' ? '#E38600' : '#5600E8',
+		border: '3px solid',
+		borderColor: props.theme === 'dark' ? '#E38600' : '#5600E8',
 		marginLeft: '40px',
 		'&:hover': {
 			transform: 'scale(1.2)'
 		}
-	},
-	outlainedDarkButton: {
-		padding: '3px',
-		height: '36px',
-		fontFamily: 'inherit',
-		display: 'flex',
-		alignItems: 'center',
-		justifyContent: 'space-around',
-		borderRadius: '6px',
-		cursor: 'pointer',
-		outline: 'none',
-		fontSize: '1rem',
-		width: '130px',
-		background: '#141414',
-		color: '#E38600',
-		border: '3px solid #E38600',
-		marginLeft: '40px',
-		'&:hover': {
-			transform: 'scale(1.2)'
-		}
-	},
+	}),
 	buttonBox: {
 		display: 'flex',
 		flexWrap: 'wrap',
@@ -182,30 +144,18 @@ export const useStyles = makeStyles({
 		width: '100%',
 		maxWidth: '600px'
 	},
-	lightTab: {
-		backgroundColor: '#5600E8',
-		color: '#F2F2F2',
+	tab: (props) => ({
+		backgroundColor: props.theme === 'dark' ? '#E38600' : '#5600E8',
+		color: props.theme === 'dark' ? '#141414' : '#F2F2F2',
 		'& .MuiTab-root': {
 			fontWeight: '600',
 			fontFamily: 'inherit'
 		},
 		'& .MuiTabs-indicator': {
 			height: '4px',
-			backgroundColor: '#BB86FC'
+			backgroundColor: props.theme === 'dark' ? '#FCCA81' : '#BB86FC'
 		}
-	},
-	darkTab: {
-		backgroundColor: '#E38600',
-		color: '#141414',
-		'& .MuiTab-root': {
-			fontWeight: '600',
-			fontFamily: 'inherit'
-		},
-		'& .MuiTabs-indicator': {
-			height: '4px',
-			backgroundColor: '#FCCA81'
-		}
-	},
+	}),
 	formCard: {
 		width: '90%',
 		maxWidth: '500px',
@@ -284,36 +234,22 @@ export const useStyles = makeStyles({
 	}
 });
 
-export const LightSwitch = withStyles({
-	switchBase: {
-		color: '#BB86FC',
+export const SettingsSwitch = withStyles({
+	switchBase: (props) => ({
+		color: props.theme === 'dark' ? '#FCCA81' : '#BB86FC',
 		'&$checked': {
 			color: 'inherit'
 		},
 		'&$checked  + $track': {
-			backgroundColor: '#5600E8'
+			backgroundColor: props.theme === 'dark' ? '#E38600' : '#5600E8'
 		}
-	},
-	checked: {},
-	track: {
-		backgroundColor: '#BB86FC'
-	}
-})(Switch);
-
-export const DarkSwitch = withStyles({
-	switchBase: {
-		color: '#FCCA81',
-		'&$checked': {
-			color: 'inherit'
-		},
-		'&$checked  + $track': {
-			backgroundColor: '#E38600'
-		}
-	},
-	checked: {},
-	track: {
-		backgroundColor: '#FCCA81'
-	}
+	}),
+	checked: (props) => ({
+		color: props.theme === 'dark' ? '#E38600' : '#5600E8'
+	}),
+	track: (props) => ({
+		backgroundColor: props.theme === 'dark' ? '#FCCA81' : '#BB86FC'
+	})
 })(Switch);
 
 export const marks = [
@@ -339,96 +275,46 @@ export const marks = [
 	}
 ];
 
-export const LightSlider = withStyles({
-	root: {
+export const SettingsSlider = withStyles({
+	root: (props) => ({
 		width: '200px',
-		color: '#5600E8',
+		color: props.theme === 'dark' ? '#E38600' : '#5600E8',
 		height: '8px',
-		fontFamily: '"Itim", cursive;'
-	},
-	thumb: {
+		fontFamily: props.theme === 'dark' ? '"Lato", sans-serif;' : '"Itim", cursive;'
+	}),
+	thumb: (props) => ({
 		height: '24px',
 		width: '24px',
 		marginTop: '-8px',
 		marginLeft: '-12px',
 		'&:hover': {
-			boxShadow: '0px 0px 0px 8px rgb(85, 0, 232, 0.2)'
+			boxShadow: props.theme ? '0px 0px 0px 8px rgb(227, 134, 0, 0.2)' : '0px 0px 0px 8px rgb(85, 0, 232, 0.2)'
 		}
-	},
+	}),
 	active: {},
-	valueLabel: {
+	valueLabel: (props) => ({
 		left: 'calc(-50% + 8px)',
 		'& > span > span': {
-			color: '#F2F2F2',
+			color: props.theme === 'dark' ? '#141414' : '#F2F2F2',
 			fontWeight: 'bold'
 		}
-	},
+	}),
 	track: {
 		height: '8px'
 	},
-	rail: {
+	rail: (props) => ({
 		height: '8px',
-		color: '#BB86FC'
-	},
+		color: props.theme === 'dark' ? '#FCCA81' : '#BB86FC'
+	}),
 	mark: {
 		color: 'inherit',
 		height: 12,
 		width: 2
 	},
-	markLabel: {
-		color: '#BB86FC',
+	markLabel: (props) => ({
+		color: props.theme === 'dark' ? '#FCCA81' : '#BB86FC',
 		fontFamily: 'inherit'
-	},
-	markLabelActive: {
-		color: 'inherit'
-	},
-	markActive: {
-		opacity: 2,
-		color: 'inherit',
-		backgroundColor: 'currentColor'
-	}
-})(Slider);
-
-export const DarkSlider = withStyles({
-	root: {
-		width: '200px',
-		color: '#E38600',
-		height: '8px',
-		fontFamily: '"Lato", sans-serif;'
-	},
-	thumb: {
-		height: '24px',
-		width: '24px',
-		marginTop: '-8px',
-		marginLeft: '-12px',
-		'&:hover': {
-			boxShadow: '0px 0px 0px 8px rgb(227, 134, 0, 0.2)'
-		}
-	},
-	active: {},
-	valueLabel: {
-		left: 'calc(-50% + 8px)',
-		'& > span > span': {
-			color: '#141414',
-			fontWeight: 'bold'
-		}
-	},
-	track: {
-		height: '8px'
-	},
-	rail: {
-		height: '8px',
-		color: '#FCCA81'
-	},
-	mark: {
-		color: 'inherit',
-		height: 12,
-		width: 2
-	},
-	markLabel: {
-		color: '#FCCA81',
-		fontFamily: 'inherit'
-	},
+	}),
 	markLabelActive: {
 		color: 'inherit'
 	},

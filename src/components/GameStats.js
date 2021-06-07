@@ -18,10 +18,10 @@ import { useMessage } from '../hooks/message.hook';
 import { postStats } from '../redux/actions';
 
 export const GameStats = ({ allSeries, correctAnswers, failAnswers, lifes, gameName }) => {
-	const classes = useStyles();
+	const { soundVolume, theme } = useSelector((state) => state.settings);
+	const classes = useStyles({ theme });
 	const message = useMessage();
 	const dispatch = useDispatch();
-	const { soundVolume, theme } = useSelector((state) => state.settings);
 	const { token } = useSelector((state) => state.userData);
 	const [ title, setTitle ] = useState('');
 	const audioWin = useMemo(() => createSound(winSong, soundVolume), [ soundVolume ]);
@@ -59,8 +59,8 @@ export const GameStats = ({ allSeries, correctAnswers, failAnswers, lifes, gameN
 			<h3 className={classes.gameStatsTitle}>{title}</h3>
 			<div className={classes.contentContainer}>
 				{addStats ? (
-					<div className={theme === 'dark' ? classes.darkTableContainer : classes.lightTableContainer}>
-						<Table className={theme === 'dark' ? classes.darkTable : classes.lightTable}>
+					<div className={classes.tableContainer}>
+						<Table className={classes.table}>
 							<TableHead>
 								<TableRow>
 									<TableCell>Слово</TableCell>
@@ -74,10 +74,10 @@ export const GameStats = ({ allSeries, correctAnswers, failAnswers, lifes, gameN
 							</TableHead>
 							<TableBody>
 								{failAnswers.map((answer, index) => {
-									return <GameRow color="#FF001E" answer={answer} />;
+									return <GameRow key={`${answer.word}fail-GameStats`} color="#FF001E" answer={answer} />;
 								})}
 								{correctAnswers.map((answer, index) => {
-									return <GameRow color="#28FC03" answer={answer} />;
+									return <GameRow key={`${answer.word}correct-GameStats`} color="#28FC03" answer={answer} />;
 								})}
 							</TableBody>
 						</Table>

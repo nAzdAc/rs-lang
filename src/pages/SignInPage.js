@@ -15,11 +15,11 @@ import { signIn } from '../redux/actions';
 import { Container } from '@material-ui/core';
 
 export const SignInPage = () => {
+	const { theme } = useSelector((state) => state.settings);
+	const classes = useStyles({ theme });
 	const dispatch = useDispatch();
 	const showMessage = useMessage();
 	const { token } = useSelector((state) => state.userData);
-	const { theme } = useSelector((state) => state.settings);
-	const classes = useStyles();
 	const [ form, setForm ] = useState({
 		email: '',
 		password: ''
@@ -98,17 +98,11 @@ export const SignInPage = () => {
 						</FormControl>
 						<span className={classes.info}>От 4 до 12 символов</span>
 						<Box className={classes.buttonBox}>
-							<button
-								style={{ width: '130px' }}
-								type="submit"
-								className={theme === 'dark' ? classes.darkButton : classes.lightButton}
-							>
+							<button style={{ width: '130px' }} type="submit" className={classes.button}>
 								Войти
 							</button>
 							<Link className={classes.link} to={'/signup'}>
-								<button className={theme === 'dark' ? classes.outlainedDarkButton : classes.outlainedLightButton}>
-									Регистрация
-								</button>
+								<button className={classes.outlainedButton}>Регистрация</button>
 							</Link>
 						</Box>
 					</form>

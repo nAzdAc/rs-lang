@@ -15,12 +15,12 @@ import { useMessage } from '../hooks/message.hook';
 export const WordCard = ({ word }) => {
 	// console.log(word._id);
 	// console.log(typeof word.deleted);
-	const classes = useStyles();
+	const { wordVolume, theme } = useSelector((state) => state.settings);
+	const classes = useStyles({ theme });
 	const dispatch = useDispatch();
 	const showMessage = useMessage();
 	const styles = classNames.bind(classes);
 	const starIcon = styles({ bigCardIcon: true }, { goldIcon: word.difficult });
-	const { wordVolume, theme } = useSelector((state) => state.settings);
 	const { token } = useSelector((state) => state.userData);
 	const [ additionalInfo, setAdditionalInfo ] = useState(false);
 
@@ -63,7 +63,7 @@ export const WordCard = ({ word }) => {
 								data-name="deleted"
 								id={word._id}
 								value={word.deleted}
-								className={theme === 'dark' ? classes.darkDeleteButton : classes.lightDeleteButton}
+								className={classes.deleteButton}
 								onClick={updateWord}
 							>
 								Восстановить

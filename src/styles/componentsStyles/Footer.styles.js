@@ -1,26 +1,16 @@
 import { makeStyles } from '@material-ui/core/styles';
 
 export const useStyles = makeStyles({
-	lightFooter: {
+	footer: (props) => ({
 		width: '100%',
 		height: '70px',
 		display: 'flex',
 		justifyContent: 'space-around',
 		alignItems: 'center',
-		backgroundColor: '#5600E8',
-		fontFamily: '"Itim", cursive;',
-		color: '#F2F2F2'
-	},
-	darkFooter: {
-		width: '100%',
-		height: '70px',
-		display: 'flex',
-		justifyContent: 'space-around',
-		alignItems: 'center',
-		backgroundColor: '#e38600',
-		fontFamily: '"Lato", sans-serif;',
-		color: '#141414'
-	},
+		backgroundColor: props.theme === 'dark' ? '#E38600' : '#5600E8',
+		fontFamily: props.theme === 'dark' ? '"Lato", sans-serif;' : '"Itim", cursive;',
+		color: props.theme === 'dark' ? '#141414' : '#F2F2F2'
+	}),
 	year: {
 		fontSize: '28px',
 		color: 'inherit',

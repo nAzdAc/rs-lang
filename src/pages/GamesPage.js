@@ -32,7 +32,7 @@ const Games = () => {
 			<Box className={classes.buttonBox}>
 				{levels.map((item, index) => (
 					<LevelButton
-						key={index}
+						key={`${item}levels-Games`}
 						click={() => handleLevelsClick(index)}
 						group={item}
 						isActive={index === level ? true : false}
@@ -43,7 +43,7 @@ const Games = () => {
 			<div className={classes.cardsWrap}>
 				{gameCardsContent.map((card, index) => {
 					return (
-						<div key={index}>
+						<div key={`${card.name}game-Games`}>
 							<GameCard name={card.name} todo={card.todo} to={card.to} />
 						</div>
 					);

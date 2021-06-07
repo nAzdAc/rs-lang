@@ -42,7 +42,7 @@ export const useStyles = makeStyles({
 		alignItems: 'center',
 		justifyContent: 'space-around',
 		gap: '20px',
-		padding: '10px'
+		padding: '10px 0px'
 	},
 	addImage: {
 		width: '200px',

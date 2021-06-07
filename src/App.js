@@ -11,13 +11,13 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useSelector } from 'react-redux';
 
 export const App = () => {
-	const classes = useStyles();
-	const routes = useRoutes();
 	const { theme } = useSelector((state) => state.settings);
+	const classes = useStyles({ theme });
+	const routes = useRoutes();
 	return (
 		<Router>
-			<div className={theme === 'dark' ? classes.darkApp : classes.lightApp}>
-				<header className={theme === 'dark' ? classes.darkHeader : classes.lightHeader}>
+			<div className={classes.app}>
+				<header className={classes.header}>
 					<Link to="/" className={classes.logo}>
 						RS Lang
 					</Link>
@@ -25,7 +25,7 @@ export const App = () => {
 					<EnterPoint />
 				</header>
 				<React.Fragment>{routes}</React.Fragment>
-				<ToastContainer className={theme === 'dark' ? classes.darkToast : classes.lightToast} />
+				<ToastContainer className={classes.toast} />
 				<Footer />
 			</div>
 		</Router>

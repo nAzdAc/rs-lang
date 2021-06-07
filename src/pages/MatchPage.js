@@ -218,7 +218,7 @@ export const MatchPage = () => {
 					<div className={classes.imagesContainer}>
 						{fourImages.map((image, index) => {
 							return (
-								<div key={index} className={classes.imageWrap}>
+								<div key={`${image.image}Match`} className={classes.imageWrap}>
 									<div data-name={image.image} ref={(elem) => setFourRef(elem, index)} className={classes.overlay} />
 									<img
 										className={classes.image}

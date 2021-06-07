@@ -1,46 +1,26 @@
 import { makeStyles } from '@material-ui/core/styles';
 
 export const useStyles = makeStyles({
-	lightApp: {
+	app: (props) => ({
 		display: 'flex',
 		flexDirection: 'column',
 		justifyContent: 'space-between',
 		minHeight: '100%',
-		backgroundColor: '#F2F2F2',
-		fontFamily: '"Itim", cursive;',
-		color: '#5600E8'
-	},
-	darkApp: {
-		display: 'flex',
-		flexDirection: 'column',
-		justifyContent: 'space-between',
-		minHeight: '100%',
-		backgroundColor: '#141414',
-		fontFamily: '"Lato", sans-serif;',
-		color: '#e38600'
-	},
-	lightHeader: {
+		backgroundColor: props.theme === 'dark' ? '#141414' : '#F2F2F2',
+		color: props.theme === 'dark' ? '#E38600' : '#5600E8',
+		fontFamily: props.theme === 'dark' ? '"Lato", sans-serif;' : '"Itim", cursive;'
+	}),
+	header: (props) => ({
 		width: '100%',
 		height: '80px',
 		display: 'flex',
 		justifyContent: 'space-between',
 		alignItems: 'center',
 		gap: '5px',
-		backgroundColor: '#5600E8',
-		color: '#F2F2F2',
+		color: props.theme === 'dark' ? '#141414' : '#F2F2F2',
+		backgroundColor: props.theme === 'dark' ? '#E38600' : '#5600E8',
 		fontFamily: 'inherit'
-	},
-	darkHeader: {
-		width: '100%',
-		height: '80px',
-		display: 'flex',
-		justifyContent: 'space-between',
-		alignItems: 'center',
-		gap: '5px',
-		backgroundColor: '#e38600',
-		color: '#141414',
-		fontFamily: 'inherit'
-	},
+	}),
 	link: {
 		textDecoration: 'none',
 		fontFamily: 'inherit',
@@ -60,19 +40,19 @@ export const useStyles = makeStyles({
 			fontSize: '30px'
 		}
 	},
-	lightToast: {
+	toast: (props) => ({
 		fontFamily: 'inherit',
 		'& .Toastify__toast--success': {
 			fontFamily: 'inherit',
 			fontWeight: 'bold',
-			background: '#F2F2F2',
-			color: '#5600E8',
+			backgroundColor: props.theme === 'dark' ? '#141414' : '#F2F2F2',
+			color: props.theme === 'dark' ? '#E38600' : '#5600E8',
 			'& .Toastify__close-button': {
-				color: '#5600E8',
+				color: props.theme === 'dark' ? '#E38600' : '#5600E8',
 				opacity: '1'
 			},
 			'& .Toastify__progress-bar': {
-				background: '#5600E8',
+				backgroundColor: props.theme === 'dark' ? '#E38600' : '#5600E8',
 				height: '6px',
 				margin: '5px',
 				borderRadius: '10px'
@@ -82,54 +62,18 @@ export const useStyles = makeStyles({
 			padding: '15px',
 			fontFamily: 'inherit',
 			fontWeight: 'bold',
-			background: '#FF001E',
+			backgroundColor: '#FF001E',
 			color: '#FFF',
 			'& .Toastify__close-button': {
 				color: '#FFF',
 				opacity: '1'
 			},
 			'& .Toastify__progress-bar': {
-				background: '#FFF',
+				backgroundColor: '#FFF',
 				height: '6px',
 				margin: '5px',
 				borderRadius: '10px'
 			}
 		}
-	},
-	darkToast: {
-		fontFamily: 'inherit',
-		'& .Toastify__toast--success': {
-			fontFamily: 'inherit',
-			fontWeight: 'bold',
-			background: '#141414',
-			color: '#E38600',
-			'& .Toastify__close-button': {
-				color: '#E38600',
-				opacity: '1'
-			},
-			'& .Toastify__progress-bar': {
-				background: '#E38600',
-				height: '6px',
-				margin: '5px',
-				borderRadius: '10px'
-			}
-		},
-		'& .Toastify__toast--error': {
-			padding: '15px',
-			fontFamily: 'inherit',
-			fontWeight: 'bold',
-			background: '#FF001E',
-			color: '#FFF',
-			'& .Toastify__close-button': {
-				color: '#FFF',
-				opacity: '1'
-			},
-			'& .Toastify__progress-bar': {
-				background: '#FFF',
-				height: '6px',
-				margin: '5px',
-				borderRadius: '10px'
-			}
-		}
-	}
+	})
 });

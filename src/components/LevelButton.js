@@ -4,13 +4,13 @@ import { makeStyles } from '@material-ui/core/styles';
 import { useSelector } from 'react-redux';
 
 export const useStyles = makeStyles({
-	lightButton: {
+	button: (props) => ({
 		width: '72px',
 		minWidth: '36px',
 		height: '72px',
 		fontWeight: '600',
 		fontSize: '52px',
-		color: '#F2F2F2',
+		color: props.theme === 'dark' ? '#141414' : '#F2F2F2',
 		fontStyle: 'inherit',
 		'@media (max-width: 768px)': {
 			width: '57px',
@@ -18,79 +18,49 @@ export const useStyles = makeStyles({
 			fontSize: '27px'
 		},
 		'&:hover': {
-			color: '#5600E8',
-			backgroundColor: '#F2F2F2',
+			color: props.theme === 'dark' ? '#E38600' : '#5600E8',
+			backgroundColor: props.theme === 'dark' ? '#141414' : '#F2F2F2',
 			boxShadow: '3px 0px 10px 3px rgba(0,0,0,0.25)'
 		},
-		backgroundColor: (group) =>
-			group === 1
-				? '#BB86FC'
-				: group === 2
-					? '#985EFF'
-					: group === 3
-						? '#7F39FB'
-						: group === 4 ? '#7314FA' : group === 5 ? '#5600E8' : group === 6 ? '#3700B3' : '#BB86FC'
-	},
-	lightButtonActive: {
-		borderBottom: '7px solid #F2F2F2',
-		marginBottom: '-7px'
-	},
-	darkButton: {
-		width: '72px',
-		minWidth: '36px',
-		height: '72px',
-		fontWeight: '600',
-		fontSize: '52px',
-		color: '#141414',
-		fontStyle: 'inherit',
-		'@media (max-width: 768px)': {
-			width: '57px',
-			height: '57px',
-			fontSize: '27px'
-		},
-		'&:hover': {
-			color: '#E38600',
-			backgroundColor: '#141414',
-			boxShadow: '3px 0px 10px 3px rgba(0,0,0,0.25)'
-		},
-		backgroundColor: (group) =>
-			group === 1
-				? '#FCCA81'
-				: group === 2
-					? '#FCBD60'
-					: group === 3
-						? '#FAAC39'
-						: group === 4 ? '#FC9F14' : group === 5 ? '#E38600' : group === 6 ? '#B86D00' : '#FCCA81'
-	},
-	darkButtonActive: {
-		borderBottom: '7px solid black',
-		marginBottom: '-7px'
-	}
+		backgroundColor:
+			props.theme === 'dark'
+				? props.group === 1
+					? '#FCCA81'
+					: props.group === 2
+						? '#FCBD60'
+						: props.group === 3
+							? '#FAAC39'
+							: props.group === 4
+								? '#FC9F14'
+								: props.group === 5 ? '#E38600' : props.group === 6 ? '#B86D00' : '#FCCA81'
+				: props.group === 1
+					? '#BB86FC'
+					: props.group === 2
+						? '#985EFF'
+						: props.group === 3
+							? '#7F39FB'
+							: props.group === 4
+								? '#7314FA'
+								: props.group === 5 ? '#5600E8' : props.group === 6 ? '#3700B3' : '#BB86FC'
+	}),
+	buttonActive: (props) => ({
+		borderBottom: '7px solid',
+		marginBottom: '-7px',
+		borderColor: props.theme === 'dark' ? '#141414' : '#F2F2F2'
+	})
 });
 
 export const LevelButton = ({ group, isActive, click, ...atr }) => {
-	const classes = useStyles(group);
 	const { theme } = useSelector((state) => state.settings);
+	const classes = useStyles({ group, theme });
 
 	return (
-		<React.Fragment>
-			{theme === 'dark' ? (
-				<Button
-					onClick={click}
-					className={isActive ? `${classes.darkButton} ${classes.darkButtonActive}` : `${classes.darkButton}`}
-					variant="contained"
-				>
-					{group}
-				</Button>
-			) : (
-				<Button
-					onClick={click}
-					className={isActive ? `${classes.lightButton} ${classes.lightButtonActive}` : `${classes.lightButton}`}
-					variant="contained"
-				>
-					{group}
-				</Button>
-			)}
-		</React.Fragment>
+		<Button
+			onClick={click}
+			className={isActive ? `${classes.button} ${classes.buttonActive}` : `${classes.button}`}
+			variant="contained"
+		>
+			{group}
+		</Button>
 	);
 };

@@ -1,12 +1,10 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import {
 	useStyles,
-	LightSlider,
-	DarkSlider,
-	LightSwitch,
+	SettingsSlider,
 	marks,
 	CssTextField,
-	DarkSwitch
+	SettingsSwitch
 } from '../styles/pagesStyles/StatsGamesSettings.styles';
 import { setSettings, uploadAvatar, postName, postSettings } from '../redux/actions';
 import { useDispatch, useSelector } from 'react-redux';
@@ -27,9 +25,9 @@ export const SettingsPage = () => {
 		translateWord,
 		theme
 	} = useSelector((state) => state.settings);
+	const classes = useStyles({ theme });
 	const { token, avatarURL } = useSelector((state) => state.userData);
 	const showMessage = useMessage();
-	const classes = useStyles();
 	const soundSlider = useRef();
 	const musicSlider = useRef();
 	const wordSlider = useRef();
@@ -108,159 +106,87 @@ export const SettingsPage = () => {
 					<h4 className={classes.subtitle1}>Отображение кнопок</h4>
 					<div className={classes.buttonsWrapper}>
 						<h6 className={classes.subtitle2}>Сложное слово</h6>
-						{theme === 'dark' ? (
-							<DarkSwitch
-								aria-valuetext="difficultWord"
-								name="difficultWord"
-								data-name="difficultWord"
-								onChange={handleSwitch}
-								checked={difficultWord}
-							/>
-						) : (
-							<LightSwitch
-								aria-valuetext="difficultWord"
-								name="difficultWord"
-								data-name="difficultWord"
-								onChange={handleSwitch}
-								checked={difficultWord}
-							/>
-						)}
+						<SettingsSwitch
+							aria-valuetext="difficultWord"
+							name="difficultWord"
+							data-name="difficultWord"
+							onChange={handleSwitch}
+							checked={difficultWord}
+							theme={theme}
+						/>
 					</div>
 					<div className={classes.buttonsWrapper}>
 						<h6 className={classes.subtitle2}>Удалить слово</h6>
-						{theme === 'dark' ? (
-							<DarkSwitch
-								aria-valuetext="deleteWord"
-								name="deleteWord"
-								data-name="deleteWord"
-								onChange={handleSwitch}
-								checked={deleteWord}
-							/>
-						) : (
-							<LightSwitch
-								aria-valuetext="deleteWord"
-								name="deleteWord"
-								data-name="deleteWord"
-								onChange={handleSwitch}
-								checked={deleteWord}
-							/>
-						)}
+						<SettingsSwitch
+							aria-valuetext="deleteWord"
+							name="deleteWord"
+							data-name="deleteWord"
+							onChange={handleSwitch}
+							checked={deleteWord}
+							theme={theme}
+						/>
 					</div>
 					<h4 className={classes.subtitle1}>Отображение перевода</h4>
 					<div className={classes.buttonsWrapper} style={{ width: '250px' }}>
 						<h6 className={classes.subtitle2}>Перевод слов</h6>
-						{theme === 'dark' ? (
-							<DarkSwitch
-								aria-valuetext="translateWord"
-								name="translateWord"
-								data-name="translateWord"
-								onChange={handleSwitch}
-								checked={translateWord}
-							/>
-						) : (
-							<LightSwitch
-								aria-valuetext="translateWord"
-								name="translateWord"
-								data-name="translateWord"
-								onChange={handleSwitch}
-								checked={translateWord}
-							/>
-						)}
+						<SettingsSwitch
+							aria-valuetext="translateWord"
+							name="translateWord"
+							data-name="translateWord"
+							onChange={handleSwitch}
+							checked={translateWord}
+							theme={theme}
+						/>
 					</div>
 					<div className={classes.buttonsWrapper} style={{ width: '250px' }}>
 						<h6 className={classes.subtitle2}>Перевод предложений</h6>
-						{theme === 'dark' ? (
-							<DarkSwitch
-								aria-valuetext="translateSentences"
-								name="translateSentences"
-								data-name="translateSentences"
-								onChange={handleSwitch}
-								checked={translateSentences}
-							/>
-						) : (
-							<LightSwitch
-								aria-valuetext="translateSentences"
-								name="translateSentences"
-								data-name="translateSentences"
-								onChange={handleSwitch}
-								checked={translateSentences}
-							/>
-						)}
+						<SettingsSwitch
+							aria-valuetext="translateSentences"
+							name="translateSentences"
+							data-name="translateSentences"
+							onChange={handleSwitch}
+							checked={translateSentences}
+							theme={theme}
+						/>
 					</div>
 				</Paper>
 				<Paper className={classes.card}>
 					<h6 className={classes.subtitle1}>Громкость музыки</h6>
-					{theme === 'dark' ? (
-						<DarkSlider
-							marks={marks}
-							valueLabelDisplay="auto"
-							aria-label="pretto slider"
-							aria-valuetext="musicVolume"
-							data-name="musicVolume"
-							ref={musicSlider}
-							value={musicVolume}
-							onChange={handleVolume}
-						/>
-					) : (
-						<LightSlider
-							marks={marks}
-							valueLabelDisplay="auto"
-							aria-label="pretto slider"
-							aria-valuetext="musicVolume"
-							data-name="musicVolume"
-							ref={musicSlider}
-							value={musicVolume}
-							onChange={handleVolume}
-						/>
-					)}
+					<SettingsSlider
+						marks={marks}
+						valueLabelDisplay="auto"
+						aria-label="pretto slider"
+						aria-valuetext="musicVolume"
+						data-name="musicVolume"
+						ref={musicSlider}
+						value={musicVolume}
+						onChange={handleVolume}
+						theme={theme}
+					/>
 					<h6 className={classes.subtitle1}>Громкость звуков</h6>
-					{theme === 'dark' ? (
-						<DarkSlider
-							marks={marks}
-							valueLabelDisplay="auto"
-							aria-label="pretto slider"
-							aria-valuetext="soundVolume"
-							data-name="soundVolume"
-							ref={soundSlider}
-							value={soundVolume}
-							onChange={handleVolume}
-						/>
-					) : (
-						<LightSlider
-							marks={marks}
-							valueLabelDisplay="auto"
-							aria-label="pretto slider"
-							aria-valuetext="soundVolume"
-							data-name="soundVolume"
-							ref={soundSlider}
-							value={soundVolume}
-							onChange={handleVolume}
-						/>
-					)}
+					<SettingsSlider
+						marks={marks}
+						valueLabelDisplay="auto"
+						aria-label="pretto slider"
+						aria-valuetext="soundVolume"
+						data-name="soundVolume"
+						ref={soundSlider}
+						value={soundVolume}
+						onChange={handleVolume}
+						theme={theme}
+					/>
 					<h6 className={classes.subtitle1}>Громкость произношения слов</h6>
-					{theme === 'dark' ? (
-						<DarkSlider
-							marks={marks}
-							valueLabelDisplay="auto"
-							aria-label="pretto slider"
-							aria-valuetext="wordVolume"
-							data-name="wordVolume"
-							ref={wordSlider}
-							value={wordVolume}
-							onChange={handleVolume}
-						/>
-					) : (
-						<LightSlider
-							marks={marks}
-							valueLabelDisplay="auto"
-							aria-label="pretto slider"
-							aria-valuetext="wordVolume"
-							data-name="wordVolume"
-							ref={wordSlider}
-							value={wordVolume}
-							onChange={handleVolume}
-						/>
-					)}
+					<SettingsSlider
+						marks={marks}
+						valueLabelDisplay="auto"
+						aria-label="pretto slider"
+						aria-valuetext="wordVolume"
+						data-name="wordVolume"
+						ref={wordSlider}
+						value={wordVolume}
+						onChange={handleVolume}
+						theme={theme}
+					/>
 				</Paper>
 				<Paper className={classes.card}>
 					<img
@@ -271,7 +197,7 @@ export const SettingsPage = () => {
 							'http://res.cloudinary.com/nazdac/image/upload/v1616652013/travelAppFolder/dmlfcuvyr79gpkbgg639.jpg'
 						}
 					/>
-					<label htmlFor="file" className={theme === 'dark' ? classes.darkButton : classes.lightButton}>
+					<label htmlFor="file" className={classes.button}>
 						+ ИЗМЕНИТЬ АВАТАР
 					</label>
 					<input style={{ display: 'none' }} type="file" id="file" accept="image/*" onChange={changeAvatar} />
@@ -284,15 +210,11 @@ export const SettingsPage = () => {
 							value={newName}
 							onChange={handleName}
 						/>
-						<button type="submit" className={theme === 'dark' ? classes.darkButton : classes.lightButton}>
+						<button type="submit" className={classes.button}>
 							+ ИЗМЕНИТЬ НИКНЕЙМ
 						</button>
 					</form>
-					<button
-						value={theme}
-						onClick={handleTheme}
-						className={theme === 'dark' ? classes.darkButton : classes.lightButton}
-					>
+					<button value={theme} onClick={handleTheme} className={classes.button}>
 						{theme === 'dark' ? <Brightness3Icon /> : <WbSunnyIcon />}
 						+ ИЗМЕНИТЬ ТЕМУ
 					</button>

@@ -13,12 +13,15 @@ import { useMessage } from '../hooks/message.hook';
 import { CssTextField, useStyles } from '../styles/pagesStyles/StatsGamesSettings.styles';
 import { useSelector } from 'react-redux';
 import { Container } from '@material-ui/core';
+import { useInput } from '../hooks/input.hook';
 
 export const SignUpPage = () => {
-	const showMessage = useMessage();
-	const { token } = useSelector((state) => state.userData);
 	const { theme } = useSelector((state) => state.settings);
-	const classes = useStyles();
+	const classes = useStyles({ theme });
+	const showMessage = useMessage();
+	const email = useInput('', { isEmpty: true });
+	const password = useInput('', { isEmpty: false, minLength: 6 });
+	const { token } = useSelector((state) => state.userData);
 	const [ form, setForm ] = useState({
 		name: '',
 		email: '',
@@ -83,23 +86,20 @@ export const SignUpPage = () => {
 				<form className={classes.form} noValidate onSubmit={handleSubmit}>
 					<CssTextField
 						variant="outlined"
-						name="name"
-						label="Имя"
-						type="text"
-						id="name"
-						value={form.name}
-						onChange={handleFormChange}
-					/>
-					<span className={classes.info}>Не более 15 символов</span>
-					<CssTextField
-						variant="outlined"
 						id="email"
 						label="Электропочта"
 						name="email"
 						autoFocus
-						value={form.email}
-						onChange={handleFormChange}
+						value={email.value}
+						onChange={email.onChange}
+						onBlur={email.onBlur}
 					/>
+					{/* {email.isDirty && email.isEmpty ? (
+						<span style={{ color: 'red' }} className={classes.info}>
+							Поле не может быть пустым
+						</span>
+					) : (
+					)} */}
 					<span className={classes.info}>Используйте настоящую</span>
 					<FormControl className={classes.field} value={form.password} onChange={handleFormChange} variant="outlined">
 						<InputLabel htmlFor="outlined-adornment-password">Пароль</InputLabel>
@@ -107,8 +107,9 @@ export const SignUpPage = () => {
 							name="password"
 							id="outlined-adornment-password"
 							type={values.showPassword ? 'text' : 'password'}
-							value={values.password}
-							onChange={handleChange('password')}
+							value={password.value}
+							onChange={password.onChange}
+							onBlur={password.onBlur}
 							endAdornment={
 								<InputAdornment position="end">
 									<IconButton
@@ -126,18 +127,22 @@ export const SignUpPage = () => {
 						/>
 					</FormControl>
 					<span className={classes.info}>От 4 до 12 символов</span>
+					<CssTextField
+						variant="outlined"
+						name="name"
+						label="Имя"
+						type="text"
+						id="name"
+						value={form.name}
+						onChange={handleFormChange}
+					/>
+					<span className={classes.info}>Не более 15 символов</span>
 					<Box className={classes.buttonBox}>
-						<button
-							style={{ width: '130px' }}
-							type="submit"
-							className={theme === 'dark' ? classes.darkButton : classes.lightButton}
-						>
+						<button style={{ width: '130px' }} type="submit" className={classes.button}>
 							Выполнить
 						</button>
 						<Link className={classes.link} to={'/signIn'}>
-							<button className={theme === 'dark' ? classes.outlainedDarkButton : classes.outlainedLightButton}>
-								Вход
-							</button>
+							<button className={classes.outlainedButton}>Вход</button>
 						</Link>
 					</Box>
 				</form>

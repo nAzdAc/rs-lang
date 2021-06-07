@@ -19,10 +19,10 @@ import { GamesProgressBar } from '../components/GamesProgressBar';
 import { Howler } from 'howler';
 
 export const SavannaPage = (props) => {
-	const classes = useStyles();
+	const { soundVolume, musicVolume, theme } = useSelector((state) => state.settings);
+	const classes = useStyles({ theme });
 	const dispatch = useDispatch();
 	const { getWords } = useGames();
-	const { soundVolume, musicVolume, theme } = useSelector((state) => state.settings);
 	const [ endGame, setEndGame ] = useState(false);
 	const [ wordsArray, setWordsArray ] = useState([]);
 	const [ correctAnswers, setCorrectAnswers ] = useState([]);
@@ -73,10 +73,10 @@ export const SavannaPage = (props) => {
 					setCorrectAnswers((prev) => [ ...prev, currentWord ]);
 					audioSuccess.play();
 					const correctButton = four.current.find((button) => button.value === value);
-					correctButton.classList.add(classes.correctButton);
+					correctButton.className = classes.correctButton;
 					setBlock(true);
 					setTimeout(() => {
-						correctButton.classList.remove(classes.correctButton);
+						correctButton.className = classes.button;
 						setCurrentNumber((prev) => prev + 1);
 						setBlock(false);
 					}, 2000);
@@ -89,12 +89,12 @@ export const SavannaPage = (props) => {
 					setLifes((prev) => prev - 1);
 					const correctButton = four.current.find((button) => button.value === currentWord.word);
 					const failButton = four.current.find((button) => button.value === value);
-					correctButton.classList.add(classes.correctButton);
-					failButton.classList.add(classes.failButton);
+					correctButton.className = classes.correctButton;
+					failButton.className = classes.failButton;
 					setBlock(true);
 					setTimeout(() => {
-						correctButton.classList.remove(classes.correctButton);
-						failButton.classList.remove(classes.failButton);
+						correctButton.className = classes.button;
+						failButton.className = classes.button;
 						setCurrentNumber((prev) => prev + 1);
 						setBlock(false);
 					}, 2000);
@@ -107,16 +107,26 @@ export const SavannaPage = (props) => {
 				audioFail2.play();
 				setLifes((prev) => prev - 1);
 				const correctButton = four.current.find((button) => button.value === value);
-				correctButton.classList.add(classes.correctButton);
+				correctButton.className = classes.correctButton;
 				setBlock(true);
 				setTimeout(() => {
-					correctButton.classList.remove(classes.correctButton);
+					correctButton.className = classes.button;
 					setCurrentNumber((prev) => prev + 1);
 					setBlock(false);
 				}, 2000);
 			}
 		},
-		[ audioFail2, audioSuccess, block, classes.failButton, classes.correctButton, currentSeries, currentWord, endGame ]
+		[
+			classes.correctButton,
+			classes.failButton,
+			classes.button,
+			block,
+			endGame,
+			currentWord,
+			audioSuccess,
+			audioFail2,
+			currentSeries
+		]
 	);
 
 	useEffect(
@@ -240,17 +250,17 @@ export const SavannaPage = (props) => {
 							</h3>
 						)}
 					</Transition>
-					<hr className={theme === 'dark' ? classes.darkFinishLine : classes.lightFinishLine} />
+					<hr className={classes.finishLine} />
 					<div className={classes.buttonsWrap}>
 						{fourButtons.map((item, index) => {
 							return (
 								<button
 									ref={(btn) => setFourRef(btn, index)}
 									disabled={block}
-									key={index}
+									key={`${item.word}Savanna`}
 									onClick={(event) => answer(event.target.value, true)}
 									value={item.word}
-									className={theme === 'dark' ? classes.darkButton : classes.lightButton}
+									className={classes.button}
 								>
 									{item.word}
 								</button>

@@ -20,7 +20,7 @@ export const LevelPage = () => {
 				<Box className={classes.buttonBox}>
 					{bookLinks.map((link, index) => {
 						return (
-							<NavLink key={index} className={classes.link} to={`book${link.to}`}>
+							<NavLink key={`${link.to}bookLinks-LvlBtns`} className={classes.link} to={`book${link.to}`}>
 								<LevelButton group={index + 1} />
 							</NavLink>
 						);
@@ -35,7 +35,7 @@ export const LevelPage = () => {
 			{isBookRoute && <LevelsButtons />}
 			<Switch>
 				{bookLinks.map((link, index) => (
-					<Route path={`${path}${link.to}`} key={index}>
+					<Route path={`${path}${link.to}`} key={`${link.to}bookLinks-Level`}>
 						<BookPage />
 					</Route>
 				))}

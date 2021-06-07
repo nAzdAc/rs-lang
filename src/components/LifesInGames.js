@@ -12,32 +12,20 @@ const StyledRating = withStyles({
 })(Rating);
 
 const useStyles = makeStyles({
-	lightLifesContainer: {
+	lifesContainer: (props) => ({
 		'& .MuiRating-root': {
 			'& .MuiRating-iconEmpty': {
-				color: '#BB86FC'
+				color: props.theme === 'dark' ? '#FCCA81' : '#BB86FC'
 			}
 		}
-	},
-	darkLifesContainer: {
-		'& .MuiRating-root': {
-			'& .MuiRating-iconEmpty': {
-				color: '#FCCA81'
-			}
-		}
-	}
+	})
 });
 
 export const LifesInGames = ({ lifes }) => {
-	const classes = useStyles();
 	const { theme } = useSelector((state) => state.settings);
+	const classes = useStyles({ theme });
 	return (
-		<Box
-			className={theme === 'dark' ? classes.darkLifesContainer : classes.lightLifesContainer}
-			component="fieldset"
-			mb={3}
-			borderColor="transparent"
-		>
+		<Box className={classes.lifesContainer} component="fieldset" mb={3} borderColor="transparent">
 			<StyledRating
 				name="customized-color"
 				readOnly={true}

@@ -22,15 +22,21 @@ const gitAccounts = [
 ];
 
 export const Footer = () => {
-	const classes = useStyles();
 	const { theme } = useSelector((state) => state.settings);
+	const classes = useStyles({ theme });
 
 	return (
-		<footer className={theme === 'dark' ? classes.darkFooter : classes.lightFooter}>
+		<footer className={classes.footer}>
 			<p className={classes.year}>2021</p>
 			<div className={classes.developers}>
 				{gitAccounts.map((acc) => (
-					<a className={classes.githubLink} target="_blank" key={acc.url} rel="noopener noreferrer" href={acc.url}>
+					<a
+						className={classes.githubLink}
+						target="_blank"
+						key={`${acc.url}Footer`}
+						rel="noopener noreferrer"
+						href={acc.url}
+					>
 						{acc.name}
 					</a>
 				))}
