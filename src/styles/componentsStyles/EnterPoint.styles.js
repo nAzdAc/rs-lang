@@ -30,7 +30,8 @@ export const useStyles = makeStyles(() => ({
 		marginRight: '10px',
 		cursor: props.theme === 'dark' ? `url(${icons.darkPointer}), pointer` : `url(${icons.lightPointer}), pointer`,
 		'&:hover': {
-			transform: 'scale(1.2)'
+			transform: 'rotate(360deg)',
+			transition: '0.5s'
 		}
 	}),
 	button: (props) => ({
@@ -51,7 +52,7 @@ export const useStyles = makeStyles(() => ({
 		color: 'inherit',
 		marginRight: '10px',
 		'&:hover': {
-			transform: 'scale(1.2)'
+			transform: 'scale(1.1)'
 		}
 	}),
 	link: {

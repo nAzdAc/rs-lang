@@ -52,7 +52,8 @@ export const useStyles = makeStyles({
 		'&:hover': {
 			color: props.theme === 'dark' ? '#E38600' : '#5600E8',
 			backgroundColor: props.theme === 'dark' ? '#141414' : '#F2F2F2',
-			boxShadow: '3px 0px 10px 3px rgba(0,0,0,0.25)'
+			boxShadow:
+				props.theme === 'dark' ? '3px 0px 10px 3px rgba(227, 134, 0, 0.5)' : '3px 0px 10px 3px rgba(86, 0, 232, 0.6)'
 		},
 		'@media (max-width: 768px)': {
 			fontSize: '0.65rem'

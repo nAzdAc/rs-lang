@@ -6,7 +6,8 @@ export const useStyles = makeStyles({
 		fontFamily: 'inherit',
 		color: 'inherit',
 		backgroundColor: 'inherit',
-		boxShadow: '3px 0px 10px 3px rgba(0,0,0,0.25)',
+		boxShadow:
+			props.theme === 'dark' ? '3px 0px 10px 3px rgba(227, 134, 0, 0.5)' : '3px 0px 10px 3px rgba(86, 0, 232, 0.6)',
 		display: 'flex',
 		flexDirection: 'column',
 		flexWrap: 'wrap',
@@ -65,7 +66,7 @@ export const useStyles = makeStyles({
 		marginRight: '12px',
 		marginLeft: '5px',
 		'&:hover': {
-			transform: 'scale(1.2)'
+			transform: 'scale(1.1)'
 		},
 		'@media (max-width: 768px)': {
 			fontSize: '0.65rem'
@@ -85,7 +86,7 @@ export const useStyles = makeStyles({
 		fontSize: '3rem',
 		color: 'inherit',
 		'&:hover': {
-			transform: 'scale(1.2)'
+			transform: 'scale(1.1)'
 		},
 		'@media (max-width: 800px)': {
 			fontSize: '2rem'
@@ -113,7 +114,7 @@ export const useStyles = makeStyles({
 		fontSize: '2rem',
 		color: 'inherit',
 		'&:hover': {
-			transform: 'scale(1.2)'
+			transform: 'scale(1.1)'
 		},
 		'@media (max-width: 800px)': {
 			fontSize: '1.5rem'
@@ -223,7 +224,7 @@ export const useStyles = makeStyles({
 		color: '#FFD700',
 		fontSize: '3.5rem',
 		'&:hover': {
-			transform: 'scale(1.2)'
+			transform: 'scale(1.1)'
 		},
 		'@media (max-width: 800px)': {
 			fontSize: '2.5rem'

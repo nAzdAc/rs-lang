@@ -36,7 +36,8 @@ export const useStyles = makeStyles({
 		overflowY: 'scroll',
 		width: '100%',
 		maxWidth: '700px',
-		boxShadow: '3px 0px 10px 3px rgba(0,0,0,0.25)',
+		boxShadow:
+			props.theme === 'dark' ? '3px 0px 10px 3px rgba(227, 134, 0, 0.5)' : '3px 0px 10px 3px rgba(86, 0, 232, 0.6)',
 		'&::-webkit-scrollbar': {
 			width: '5px',
 			height: '5px'
@@ -86,7 +87,7 @@ export const useStyles = makeStyles({
 		width: '40px',
 		height: '40px',
 		'&:hover': {
-			transform: 'scale(1.2)'
+			transform: 'scale(1.1)'
 		}
 	})
 });

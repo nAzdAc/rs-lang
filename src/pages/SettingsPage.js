@@ -9,7 +9,7 @@ import {
 import { setSettings, uploadAvatar, postName, postSettings } from '../redux/actions';
 import { useDispatch, useSelector } from 'react-redux';
 import { useMessage } from '../hooks/message.hook';
-import { Container, Paper } from '@material-ui/core';
+import { Container } from '@material-ui/core';
 import WbSunnyIcon from '@material-ui/icons/WbSunny';
 import Brightness3Icon from '@material-ui/icons/Brightness3';
 
@@ -103,130 +103,136 @@ export const SettingsPage = () => {
 		<Container className={classes.root}>
 			<h2 className={classes.title}>Настройки</h2>
 			<div className={classes.cardsWrap}>
-				<Paper className={classes.card}>
-					<h4 className={classes.subtitle1}>Отображение кнопок</h4>
-					<div className={classes.buttonsWrapper}>
-						<h6 className={classes.subtitle2}>Сложное слово</h6>
-						<SettingsSwitch
+				<div className={classes.card}>
+					<div className={classes.cardItem}>
+						<h4 className={classes.subtitle1}>Отображение кнопок</h4>
+						<div className={classes.buttonsWrapper}>
+							<h6 className={classes.subtitle2}>Сложное слово</h6>
+							<SettingsSwitch
+								disabled={block}
+								aria-valuetext="difficultWord"
+								name="difficultWord"
+								data-name="difficultWord"
+								onChange={handleSwitch}
+								checked={difficultWord}
+								theme={theme}
+							/>
+						</div>
+						<div className={classes.buttonsWrapper}>
+							<h6 className={classes.subtitle2}>Удалить слово</h6>
+							<SettingsSwitch
+								disabled={block}
+								aria-valuetext="deleteWord"
+								name="deleteWord"
+								data-name="deleteWord"
+								onChange={handleSwitch}
+								checked={deleteWord}
+								theme={theme}
+							/>
+						</div>
+						<h4 className={classes.subtitle1}>Отображение перевода</h4>
+						<div className={classes.buttonsWrapper} style={{ width: '250px' }}>
+							<h6 className={classes.subtitle2}>Перевод слов</h6>
+							<SettingsSwitch
+								disabled={block}
+								aria-valuetext="translateWord"
+								name="translateWord"
+								data-name="translateWord"
+								onChange={handleSwitch}
+								checked={translateWord}
+								theme={theme}
+							/>
+						</div>
+						<div className={classes.buttonsWrapper} style={{ width: '250px' }}>
+							<h6 className={classes.subtitle2}>Перевод предложений</h6>
+							<SettingsSwitch
+								disabled={block}
+								aria-valuetext="translateSentences"
+								name="translateSentences"
+								data-name="translateSentences"
+								onChange={handleSwitch}
+								checked={translateSentences}
+								theme={theme}
+							/>
+						</div>
+					</div>
+				</div>
+				<div className={classes.card}>
+					<div className={classes.cardItem}>
+						<h6 className={classes.subtitle1}>Громкость музыки</h6>
+						<SettingsSlider
 							disabled={block}
-							aria-valuetext="difficultWord"
-							name="difficultWord"
-							data-name="difficultWord"
-							onChange={handleSwitch}
-							checked={difficultWord}
+							marks={marks}
+							valueLabelDisplay="auto"
+							aria-label="pretto slider"
+							aria-valuetext="musicVolume"
+							data-name="musicVolume"
+							ref={musicSlider}
+							value={musicVolume}
+							onChange={handleVolume}
+							theme={theme}
+						/>
+						<h6 className={classes.subtitle1}>Громкость звуков</h6>
+						<SettingsSlider
+							disabled={block}
+							marks={marks}
+							valueLabelDisplay="auto"
+							aria-label="pretto slider"
+							aria-valuetext="soundVolume"
+							data-name="soundVolume"
+							ref={soundSlider}
+							value={soundVolume}
+							onChange={handleVolume}
+							theme={theme}
+						/>
+						<h6 className={classes.subtitle1}>Громкость произношения слов</h6>
+						<SettingsSlider
+							disabled={block}
+							marks={marks}
+							valueLabelDisplay="auto"
+							aria-label="pretto slider"
+							aria-valuetext="wordVolume"
+							data-name="wordVolume"
+							ref={wordSlider}
+							value={wordVolume}
+							onChange={handleVolume}
 							theme={theme}
 						/>
 					</div>
-					<div className={classes.buttonsWrapper}>
-						<h6 className={classes.subtitle2}>Удалить слово</h6>
-						<SettingsSwitch
-							disabled={block}
-							aria-valuetext="deleteWord"
-							name="deleteWord"
-							data-name="deleteWord"
-							onChange={handleSwitch}
-							checked={deleteWord}
-							theme={theme}
+				</div>
+				<div className={classes.card}>
+					<div className={classes.cardItem}>
+						<img
+							alt="avatar"
+							className={classes.avatarImage}
+							src={
+								avatarURL ||
+								'http://res.cloudinary.com/nazdac/image/upload/v1616652013/travelAppFolder/dmlfcuvyr79gpkbgg639.jpg'
+							}
 						/>
-					</div>
-					<h4 className={classes.subtitle1}>Отображение перевода</h4>
-					<div className={classes.buttonsWrapper} style={{ width: '250px' }}>
-						<h6 className={classes.subtitle2}>Перевод слов</h6>
-						<SettingsSwitch
-							disabled={block}
-							aria-valuetext="translateWord"
-							name="translateWord"
-							data-name="translateWord"
-							onChange={handleSwitch}
-							checked={translateWord}
-							theme={theme}
-						/>
-					</div>
-					<div className={classes.buttonsWrapper} style={{ width: '250px' }}>
-						<h6 className={classes.subtitle2}>Перевод предложений</h6>
-						<SettingsSwitch
-							disabled={block}
-							aria-valuetext="translateSentences"
-							name="translateSentences"
-							data-name="translateSentences"
-							onChange={handleSwitch}
-							checked={translateSentences}
-							theme={theme}
-						/>
-					</div>
-				</Paper>
-				<Paper className={classes.card}>
-					<h6 className={classes.subtitle1}>Громкость музыки</h6>
-					<SettingsSlider
-						disabled={block}
-						marks={marks}
-						valueLabelDisplay="auto"
-						aria-label="pretto slider"
-						aria-valuetext="musicVolume"
-						data-name="musicVolume"
-						ref={musicSlider}
-						value={musicVolume}
-						onChange={handleVolume}
-						theme={theme}
-					/>
-					<h6 className={classes.subtitle1}>Громкость звуков</h6>
-					<SettingsSlider
-						disabled={block}
-						marks={marks}
-						valueLabelDisplay="auto"
-						aria-label="pretto slider"
-						aria-valuetext="soundVolume"
-						data-name="soundVolume"
-						ref={soundSlider}
-						value={soundVolume}
-						onChange={handleVolume}
-						theme={theme}
-					/>
-					<h6 className={classes.subtitle1}>Громкость произношения слов</h6>
-					<SettingsSlider
-						disabled={block}
-						marks={marks}
-						valueLabelDisplay="auto"
-						aria-label="pretto slider"
-						aria-valuetext="wordVolume"
-						data-name="wordVolume"
-						ref={wordSlider}
-						value={wordVolume}
-						onChange={handleVolume}
-						theme={theme}
-					/>
-				</Paper>
-				<Paper className={classes.card}>
-					<img
-						alt="avatar"
-						className={classes.avatarImage}
-						src={
-							avatarURL ||
-							'http://res.cloudinary.com/nazdac/image/upload/v1616652013/travelAppFolder/dmlfcuvyr79gpkbgg639.jpg'
-						}
-					/>
-					<label htmlFor="file" className={classes.button}>
-						+ ИЗМЕНИТЬ АВАТАР
-					</label>
-					<input style={{ display: 'none' }} type="file" id="file" accept="image/*" onChange={changeAvatar} />
-					<form style={{ marginTop: '20px' }} className={classes.form} onSubmit={changeName}>
-						<CssTextField
-							className={classes.nameField}
-							label="Введите Никнейм"
-							variant="outlined"
-							id="outlined-input"
-							value={newName}
-							onChange={handleName}
-						/>
-						<button style={{ margin: '20px 0px' }} disabled={block} type="submit" className={classes.button}>
-							+ ИЗМЕНИТЬ НИКНЕЙМ
+						<label htmlFor="file" className={classes.button}>
+							+ ИЗМЕНИТЬ АВАТАР
+						</label>
+						<input style={{ display: 'none' }} type="file" id="file" accept="image/*" onChange={changeAvatar} />
+						<form style={{ marginTop: '20px' }} className={classes.form} onSubmit={changeName}>
+							<CssTextField
+								className={classes.nameField}
+								label="Введите Никнейм"
+								variant="outlined"
+								id="outlined-input"
+								value={newName}
+								onChange={handleName}
+							/>
+							<button style={{ margin: '20px 0px' }} disabled={block} type="submit" className={classes.button}>
+								+ ИЗМЕНИТЬ НИКНЕЙМ
+							</button>
+						</form>
+						<button disabled={block} value={theme} onClick={handleTheme} className={classes.button}>
+							{theme === 'dark' ? <Brightness3Icon /> : <WbSunnyIcon />}
+							+ ИЗМЕНИТЬ ТЕМУ
 						</button>
-					</form>
-					<button disabled={block} value={theme} onClick={handleTheme} className={classes.button}>
-						{theme === 'dark' ? <Brightness3Icon /> : <WbSunnyIcon />}
-						+ ИЗМЕНИТЬ ТЕМУ
-					</button>
-				</Paper>
+					</div>
+				</div>
 			</div>
 		</Container>
 	);

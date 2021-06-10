@@ -26,7 +26,7 @@ export const useStyles = makeStyles({
 		fontSize: '2.5rem',
 		color: 'inherit',
 		'&:hover': {
-			transform: 'scale(1.2)'
+			transform: 'scale(1.1)'
 		},
 		'@media (max-width: 900px)': {
 			fontSize: '2rem'

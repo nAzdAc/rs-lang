@@ -106,7 +106,7 @@ export const useStyles = makeStyles({
 		cursor: props.theme === 'dark' ? `url(${icons.darkPointer}), default` : `url(${icons.lightPointer}), default`,
 		color: 'inherit',
 		'&:hover': {
-			transform: 'scale(1.2)'
+			transform: 'scale(1.1)'
 		}
 	}),
 	progressText: {
@@ -154,7 +154,7 @@ export const useStyles = makeStyles({
 		fontSize: '50px',
 		color: 'inherit',
 		'&:hover': {
-			transform: 'scale(1.2)'
+			transform: 'scale(1.1)'
 		}
 	}),
 	series: {

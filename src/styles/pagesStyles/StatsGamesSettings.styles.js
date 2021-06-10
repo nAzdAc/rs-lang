@@ -84,7 +84,7 @@ export const useStyles = makeStyles({
 		border: 'none',
 		fontSize: '1rem',
 		'&:hover': {
-			transform: 'scale(1.2)'
+			transform: 'scale(1.1)'
 		}
 	}),
 	outlainedButton: (props) => ({
@@ -105,7 +105,7 @@ export const useStyles = makeStyles({
 		borderColor: props.theme === 'dark' ? '#E38600' : '#5600E8',
 		marginLeft: '40px',
 		'&:hover': {
-			transform: 'scale(1.2)'
+			transform: 'scale(1.1)'
 		}
 	}),
 	buttonBox: {
@@ -116,21 +116,29 @@ export const useStyles = makeStyles({
 	},
 	cardsWrap: {
 		display: 'flex',
-		flexWrap: 'wrap'
+		flexWrap: 'wrap',
+		gap: '20px'
 	},
 	card: {
+		perspective: '1000px',
+		transformStyle: 'preserve-3d',
 		backgroundColor: 'inherit',
 		color: 'inherit',
 		fontFamily: 'inherit',
-		padding: '20px 30px 20px 30px',
-		width: '230px',
-		margin: '20px',
+		width: '300px',
+		margin: '20px'
+	},
+	cardItem: (props) => ({
 		display: 'flex',
 		flexDirection: 'column',
-		gap: '10px',
 		alignItems: 'center',
-		boxShadow: '3px 0px 10px 3px rgba(0,0,0,0.25)'
-	},
+		gap: '10px',
+		padding: '20px',
+		transition: 'transform 0.2s',
+		color: props.theme === 'dark' ? '#E38600' : '#5600E8',
+		boxShadow:
+			props.theme === 'dark' ? '3px 0px 10px 3px rgba(227, 134, 0, 0.5)' : '3px 0px 10px 3px rgba(86, 0, 232, 0.6)'
+	}),
 	cardTitle: {
 		marginBottom: '10px',
 		marginRight: 'auto'
@@ -138,7 +146,11 @@ export const useStyles = makeStyles({
 	cardText: {
 		marginBottom: '10px'
 	},
-	link: { textDecoration: 'none', color: 'inherit', fontStyle: 'inherit' },
+	link: {
+		textDecoration: 'none',
+		color: 'inherit',
+		fontStyle: 'inherit'
+	},
 	tabsContainer: {
 		backgroundColor: 'inherit',
 		color: 'inherit',
@@ -158,11 +170,12 @@ export const useStyles = makeStyles({
 			backgroundColor: props.theme === 'dark' ? '#FCCA81' : '#BB86FC'
 		}
 	}),
-	formCard: {
+	formCard: (props) => ({
 		width: '90%',
 		maxWidth: '500px',
 		padding: '20px',
-		boxShadow: '3px 0px 10px 3px rgba(0,0,0,0.25)',
+		boxShadow:
+			props.theme === 'dark' ? '3px 0px 10px 3px rgba(227, 134, 0, 0.5)' : '3px 0px 10px 3px rgba(86, 0, 232, 0.6)',
 		display: 'flex',
 		flexDirection: 'column',
 		alignItems: 'center',
@@ -170,7 +183,7 @@ export const useStyles = makeStyles({
 		'& .MuiInputBase-root': {
 			color: 'inherit'
 		}
-	},
+	}),
 	form: (props) => ({
 		width: '100%',
 		display: 'flex',

@@ -43,9 +43,9 @@ const Games = () => {
 			<div className={classes.cardsWrap}>
 				{gameCardsContent.map((card, index) => {
 					return (
-						<div key={`${card.name}game-Games`}>
+						<React.Fragment key={`${card.name}game-Games`}>
 							<GameCard name={card.name} todo={card.todo} to={card.to} />
-						</div>
+						</React.Fragment>
 					);
 				})}
 			</div>

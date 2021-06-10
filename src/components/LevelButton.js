@@ -8,7 +8,9 @@ export const useStyles = makeStyles({
 	buttonActive: (props) => ({
 		borderBottom: '7px solid',
 		marginBottom: '-7px',
-		borderColor: props.theme === 'dark' ? '#141414' : '#F2F2F2'
+		borderColor: props.theme === 'dark' ? '#141414' : '#F2F2F2',
+		boxShadow:
+			props.theme === 'dark' ? '3px 0px 10px 3px rgba(227, 134, 0, 0.5)' : '3px 0px 10px 3px rgba(86, 0, 232, 0.6)'
 	}),
 	button: (props) => ({
 		cursor: props.theme === 'dark' ? `url(${icons.darkPointer}), default` : `url(${icons.lightPointer}), default`,
@@ -28,8 +30,7 @@ export const useStyles = makeStyles({
 			marginBottom: '0px',
 			borderBottom: '0px solid',
 			color: props.theme === 'dark' ? '#E38600' : '#5600E8',
-			backgroundColor: props.theme === 'dark' ? '#141414' : '#F2F2F2',
-			boxShadow: '3px 0px 10px 3px rgba(0,0,0,0.25)'
+			backgroundColor: props.theme === 'dark' ? '#141414' : '#F2F2F2'
 		},
 		backgroundColor:
 			props.theme === 'dark'

@@ -73,7 +73,7 @@ export const useStyles = makeStyles({
 		fontWeight: '500',
 		margin: '10px 0px'
 	},
-	advantagesSection: {
+	advantagesSection: (props) => ({
 		color: 'inherit',
 		backgroundColor: 'inherit',
 		width: '85%',
@@ -81,8 +81,9 @@ export const useStyles = makeStyles({
 		padding: '30px',
 		marginBottom: '30px',
 		marginTop: '10px',
-		boxShadow: '3px 0px 10px 3px rgba(0,0,0,0.25)'
-	},
+		boxShadow:
+			props.theme === 'dark' ? '3px 0px 10px 3px rgba(227, 134, 0, 0.5)' : '3px 0px 10px 3px rgba(86, 0, 232, 0.6)'
+	}),
 	advantagesWrapper: {
 		display: 'flex',
 		justifyContent: 'space-evenly',
@@ -111,9 +112,10 @@ export const useStyles = makeStyles({
 		justifyContent: 'center',
 		flexWrap: 'wrap'
 	},
-	developerCard: {
+	developerCard: (props) => ({
 		backgroundColor: 'inherit',
-		boxShadow: '3px 0px 10px 3px rgba(0,0,0,0.25)',
+		boxShadow:
+			props.theme === 'dark' ? '3px 0px 10px 3px rgba(227, 134, 0, 0.5)' : '3px 0px 10px 3px rgba(86, 0, 232, 0.6)',
 		margin: '20px',
 		padding: '10px',
 		width: '350px',
@@ -123,7 +125,7 @@ export const useStyles = makeStyles({
 		justifyContent: 'space-evenly',
 		gap: '10px',
 		color: 'inherit'
-	},
+	}),
 	developerImg: {
 		width: '300px',
 		borderRadius: 'inherit'
