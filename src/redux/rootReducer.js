@@ -1,7 +1,6 @@
 import {
 	IS_BLOCK,
 	IS_LOADER,
-	TOAST,
 	SIGN_IN,
 	SIGN_UP,
 	UPLOAD_AVATAR,
@@ -19,11 +18,6 @@ const initialState = {
 	block: false,
 	level: null,
 	loading: false,
-	message: {
-		text: '',
-		code: 404,
-		time: 3000
-	},
 	userData: {
 		userName: '',
 		userId: '',
@@ -78,8 +72,6 @@ export function rootReducer(state = initialState, action) {
 			return { ...state, loading: action.payload };
 		case IS_BLOCK:
 			return { ...state, block: action.payload };
-		case TOAST:
-			return { ...state, message: { ...action.payload } };
 		case SET_SETTINGS:
 			return { ...state, settings: { ...state.settings, ...action.payload } };
 		case SET_LEVEL:

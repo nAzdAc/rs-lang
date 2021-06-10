@@ -9,16 +9,19 @@ import { EnterPoint } from './components/EnterPoint';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useSelector } from 'react-redux';
+import { frontRoutes } from './utils/frontRoutes';
 
 export const App = () => {
 	const { theme } = useSelector((state) => state.settings);
-	const classes = useStyles({ theme });
+	const { block } = useSelector((state) => state);
+	const classes = useStyles({ theme, block });
 	const routes = useRoutes();
+
 	return (
 		<Router>
 			<div className={classes.app}>
 				<header className={classes.header}>
-					<Link to="/" className={classes.logo}>
+					<Link to={block ? '#!' : `${frontRoutes.main}`} className={classes.logo}>
 						RS Lang
 					</Link>
 					<Menu />

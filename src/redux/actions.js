@@ -4,7 +4,6 @@ import {
 	IS_BLOCK,
 	SET_SETTINGS,
 	IS_LOADER,
-	TOAST,
 	LOG_OUT,
 	POST_STATS,
 	SET_ACTIVE_WORDS,
@@ -27,26 +26,6 @@ export function isLoader(value) {
 	return {
 		type: IS_LOADER,
 		payload: value
-	};
-}
-
-export function toast(message) {
-	return {
-		type: TOAST,
-		payload: { ...message }
-	};
-}
-
-export function showToast(message) {
-	console.log(message);
-	return async (dispatch) => {
-		dispatch({ type: TOAST, payload: message });
-		setTimeout(
-			() => {
-				dispatch({ type: TOAST, payload: {} });
-			},
-			[ message.time || 3000 ]
-		);
 	};
 }
 
@@ -82,6 +61,7 @@ export function setActiveWords(arr) {
 
 export function updateUserWord(object, token) {
 	return async (dispatch) => {
+		dispatch(isBlock(true));
 		try {
 			const res = await fetch(backRoutes.updateWord, {
 				method: 'POST',
@@ -97,10 +77,12 @@ export function updateUserWord(object, token) {
 			const json = await res.json();
 			console.log(json);
 			dispatch({ type: UPDATE_USER_WORD, payload: json.userWords });
+			dispatch(isBlock(false));
 			return { text: json.message, code: json.http_code || 200 };
 		} catch (e) {
 			console.log(e);
 			console.log(e.message);
+			dispatch(isBlock(false));
 			return { text: 'Возникла проблема с изменением статуса слова. Попробуйте позже', code: 404 };
 		}
 	};
@@ -109,6 +91,7 @@ export function updateUserWord(object, token) {
 export function signIn(value) {
 	return async (dispatch) => {
 		try {
+			dispatch(isBlock(true));
 			// dispatch(showLoader());
 			console.log(value);
 			const res = await fetch(backRoutes.signIn, {
@@ -123,6 +106,7 @@ export function signIn(value) {
 			console.log(res);
 			const json = await res.json();
 			if (res.status !== 200) {
+				dispatch(isBlock(false));
 				return { text: json.message, code: res.status };
 			}
 			console.log(json);
@@ -143,17 +127,13 @@ export function signIn(value) {
 			localStorage.setItem(LOCAL_STORAGE_KEY.userSettings, JSON.stringify(payload.settings));
 			localStorage.setItem(LOCAL_STORAGE_KEY.userWords, JSON.stringify(payload.userWords));
 			dispatch({ type: SIGN_IN, payload });
-			dispatch(
-				showToast({
-					text: json.message,
-					code: res.status
-				})
-			);
 			// dispatch(hideLoader());
+			dispatch(isBlock(false));
 			return { text: json.message, code: json.http_code || 200 };
 		} catch (e) {
 			console.log(e);
 			console.log(e.message);
+			dispatch(isBlock(false));
 			return { text: 'Возникла проблема с входом на страницу. Попробуйте позже', code: 404 };
 		}
 	};
@@ -161,9 +141,13 @@ export function signIn(value) {
 
 export function postSettings(name, value, token) {
 	return async (dispatch) => {
+		dispatch(isBlock(true));
 		console.log(name);
 		console.log(value);
-		if (!name || !value) return;
+		if (!name || !value) {
+			dispatch(isBlock(false));
+			return;
+		}
 		try {
 			const res = await fetch(backRoutes.settings, {
 				method: 'POST',
@@ -179,16 +163,19 @@ export function postSettings(name, value, token) {
 			const json = await res.json();
 			console.log(json);
 			dispatch({ type: POST_SETTINGS, payload: json.settings });
+			dispatch(isBlock(false));
 			return { code: json.http_code || 200, text: json.message };
 		} catch (e) {
 			console.log(e);
 			console.log(e.message);
+			dispatch(isBlock(false));
 			return { text: 'Возникла проблема с изменением настроек. Попробуйте позже', code: 404 };
 		}
 	};
 }
 export function uploadAvatar(file, token) {
 	return async (dispatch) => {
+		dispatch(isBlock(true));
 		try {
 			console.log(file);
 			console.log(token);
@@ -209,10 +196,12 @@ export function uploadAvatar(file, token) {
 				const updateLocal = { ...local, avatarURL: json.avatarURL };
 				localStorage.setItem(LOCAL_STORAGE_KEY.userData, JSON.stringify(updateLocal));
 			}
+			dispatch(isBlock(false));
 			return { text: json.message, code: json.http_code || 200 };
 		} catch (e) {
 			console.log(e);
 			console.log(e.message);
+			dispatch(isBlock(false));
 			return { text: 'Возникла проблема с загрузкой вашего аватара. Попробуйте позже', code: 404 };
 		}
 	};
@@ -221,6 +210,7 @@ export function uploadAvatar(file, token) {
 export function postName(name, token) {
 	return async (dispatch) => {
 		try {
+			dispatch(isBlock(true));
 			console.log(name);
 			console.log(token);
 			const res = await fetch(backRoutes.setName, {
@@ -237,10 +227,12 @@ export function postName(name, token) {
 			const json = await res.json();
 			console.log(json);
 			dispatch({ type: SET_NAME, payload: json.name });
+			dispatch(isBlock(false));
 			return { text: json.message, code: json.http_code || 200 };
 		} catch (e) {
 			console.log(e);
 			console.log(e.message);
+			dispatch(isBlock(false));
 			return { text: 'Возникла проблема с изменением вашего никнейма. Попробуйте позже', code: 404 };
 		}
 	};
@@ -248,6 +240,7 @@ export function postName(name, token) {
 
 export function postStats(token, gameName, correctArr, failArr, seriesArr) {
 	return async (dispatch) => {
+		dispatch(isBlock(true));
 		try {
 			const res = await fetch(backRoutes.statistics, {
 				method: 'POST',
@@ -266,7 +259,6 @@ export function postStats(token, gameName, correctArr, failArr, seriesArr) {
 			});
 			const json = await res.json();
 			console.log(json);
-			// message(json.message, 200);
 			dispatch({
 				type: POST_STATS,
 				payload: {
@@ -274,9 +266,13 @@ export function postStats(token, gameName, correctArr, failArr, seriesArr) {
 					userWords: json.userWords
 				}
 			});
+			dispatch(isBlock(false));
+			return { text: json.message, code: json.http_code || 200 };
 		} catch (e) {
 			console.log(e);
 			console.log(e.message);
+			dispatch(isBlock(false));
+			return { text: 'Возникла проблема с отправкой вашей статистики. Статистика не обновлена', code: 404 };
 		}
 	};
 }

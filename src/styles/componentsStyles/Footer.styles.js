@@ -1,4 +1,5 @@
 import { makeStyles } from '@material-ui/core/styles';
+import { icons } from '../../assets/icons/IconsRequire';
 
 export const useStyles = makeStyles({
 	footer: (props) => ({
@@ -8,7 +9,7 @@ export const useStyles = makeStyles({
 		justifyContent: 'space-around',
 		alignItems: 'center',
 		backgroundColor: props.theme === 'dark' ? '#E38600' : '#5600E8',
-		fontFamily: props.theme === 'dark' ? '"Lato", sans-serif;' : '"Itim", cursive;',
+		fontFamily: 'inherit',
 		color: props.theme === 'dark' ? '#141414' : '#F2F2F2'
 	}),
 	year: {
@@ -21,21 +22,31 @@ export const useStyles = makeStyles({
 	developers: {
 		color: 'inherit'
 	},
-	githubLink: {
+	githubLink: (props) => ({
+		cursor: props.theme === 'dark' ? `url(${icons.darkPointer}), pointer` : `url(${icons.lightPointer}), pointer`,
 		fontSize: '20px',
 		margin: '10px',
+		padding: '20px 0px',
 		color: 'inherit',
 		'@media (max-width: 730px)': {
 			fontSize: '14px'
 		},
 		'&:hover': {
-			textDecoration: 'underline'
+			textDecoration: 'underline',
+			cursor: props.theme === 'dark' ? `url(${icons.darkPointer}), pointer` : `url(${icons.lightPointer}), pointer`
 		}
-	},
+	}),
+	imageWrap: (props) => ({
+		cursor: props.theme === 'dark' ? `url(${icons.darkPointer}), pointer` : `url(${icons.lightPointer}), pointer`
+	}),
 	schoolImage: {
 		'@media (max-width: 730px)': {
 			width: '70px',
 			height: '30px'
 		}
-	}
+	},
+	schoolLink: (props) => ({
+		padding: '5px',
+		cursor: props.theme === 'dark' ? `url(${icons.darkPointer}), pointer` : `url(${icons.lightPointer}), pointer`
+	})
 });

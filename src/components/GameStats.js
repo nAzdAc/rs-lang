@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState, useCallback } from 'react';
 import { showTitle } from '../utils/showTitle';
 import winSong from '../assets/sounds/win.mp3';
 import defeatSong from '../assets/sounds/defeat.mp3';
@@ -20,7 +20,7 @@ import { postStats } from '../redux/actions';
 export const GameStats = ({ allSeries, correctAnswers, failAnswers, lifes, gameName }) => {
 	const { soundVolume, theme } = useSelector((state) => state.settings);
 	const classes = useStyles({ theme });
-	const message = useMessage();
+	const showMessage = useMessage();
 	const dispatch = useDispatch();
 	const { token } = useSelector((state) => state.userData);
 	const [ title, setTitle ] = useState('');
@@ -28,21 +28,29 @@ export const GameStats = ({ allSeries, correctAnswers, failAnswers, lifes, gameN
 	const audioDefeat = useMemo(() => createSound(defeatSong, soundVolume), [ soundVolume ]);
 	const [ addStats, setAddStats ] = useState(false);
 
+	const sendUserStats = useCallback(
+		async () => {
+			if (!token) {
+				return showMessage('Статистика не была обновлена, авторизуйтесь');
+			}
+			if (!correctAnswers.length && !failAnswers.length) return;
+			const { text, code } = await dispatch(postStats(token, gameName, correctAnswers, failAnswers, allSeries));
+			showMessage(text, code);
+		},
+		[ allSeries, correctAnswers, dispatch, failAnswers, gameName, showMessage, token ]
+	);
+
 	useEffect(
 		() => {
-			if (!token) {
-				return message('Статистика не была обновлена, авторизуйтесь');
-			}
+			sendUserStats();
 			setTitle(showTitle(failAnswers.length, correctAnswers.length, lifes));
 			if (lifes <= 0 || !correctAnswers.length || failAnswers.length > 5) {
 				audioDefeat.play();
 			} else {
 				audioWin.play();
 			}
-			if (!correctAnswers.length && !failAnswers.length) return;
-			dispatch(postStats(token, gameName, correctAnswers, failAnswers, allSeries));
 		},
-		[ failAnswers, audioWin, audioDefeat, correctAnswers, lifes, allSeries, gameName, token, dispatch, message ]
+		[ audioDefeat, audioWin, correctAnswers.length, failAnswers.length, lifes, sendUserStats ]
 	);
 
 	useEffect(

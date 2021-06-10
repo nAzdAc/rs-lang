@@ -1,4 +1,5 @@
 import { makeStyles } from '@material-ui/core/styles';
+import { icons } from '../../assets/icons/IconsRequire';
 
 export const useStyles = makeStyles({
 	list: {
@@ -10,7 +11,8 @@ export const useStyles = makeStyles({
 		fontFamily: 'inherit',
 		color: 'inherit'
 	},
-	link: {
+	link: (props) => ({
+		cursor: props.theme === 'dark' ? `url(${icons.darkPointer}), pointer` : `url(${icons.lightPointer}), pointer`,
 		fontFamily: 'inherit',
 		color: 'inherit',
 		'& .MuiSvgIcon-root': {
@@ -24,7 +26,7 @@ export const useStyles = makeStyles({
 				display: 'block'
 			}
 		}
-	},
+	}),
 	text: {
 		color: 'inherit',
 		fontFamily: 'inherit',

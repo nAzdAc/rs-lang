@@ -1,4 +1,5 @@
 export const frontRoutes = {
+	main: '/',
 	book: '/book',
 	settings: '/settings',
 	stats: '/stats',

@@ -1,14 +1,15 @@
 import { makeStyles } from '@material-ui/core/styles';
-
+import { icons } from '../../assets/icons/IconsRequire';
 export const useStyles = makeStyles({
 	app: (props) => ({
 		display: 'flex',
+		cursor: props.theme === 'dark' ? `url(${icons.darkCursor}), default` : `url(${icons.lightCursor}), default`,
 		flexDirection: 'column',
 		justifyContent: 'space-between',
 		minHeight: '100%',
 		backgroundColor: props.theme === 'dark' ? '#141414' : '#F2F2F2',
 		color: props.theme === 'dark' ? '#E38600' : '#5600E8',
-		fontFamily: props.theme === 'dark' ? '"Lato", sans-serif;' : '"Itim", cursive;'
+		fontFamily: '"Itim", cursive;'
 	}),
 	header: (props) => ({
 		width: '100%',
@@ -21,12 +22,8 @@ export const useStyles = makeStyles({
 		backgroundColor: props.theme === 'dark' ? '#E38600' : '#5600E8',
 		fontFamily: 'inherit'
 	}),
-	link: {
-		textDecoration: 'none',
-		fontFamily: 'inherit',
-		color: 'inherit'
-	},
-	logo: {
+	logo: (props) => ({
+		cursor: props.theme === 'dark' ? `url(${icons.darkPointer}), pointer` : `url(${icons.lightPointer}), pointer`,
 		margin: '0px 10px 0px 10px',
 		width: '400px',
 		fontFamily: '"Permanent Marker", cursive',
@@ -39,10 +36,12 @@ export const useStyles = makeStyles({
 		'@media (max-width: 768px)': {
 			fontSize: '30px'
 		}
-	},
+	}),
 	toast: (props) => ({
+		cursor: props.theme === 'dark' ? `url(${icons.darkPointer}), pointer` : `url(${icons.lightPointer}), pointer`,
 		fontFamily: 'inherit',
 		'& .Toastify__toast--success': {
+			cursor: props.theme === 'dark' ? `url(${icons.darkPointer}), pointer` : `url(${icons.lightPointer}), pointer`,
 			fontFamily: 'inherit',
 			fontWeight: 'bold',
 			backgroundColor: props.theme === 'dark' ? '#141414' : '#F2F2F2',
@@ -59,6 +58,7 @@ export const useStyles = makeStyles({
 			}
 		},
 		'& .Toastify__toast--error': {
+			cursor: props.theme === 'dark' ? `url(${icons.darkPointer}), pointer` : `url(${icons.lightPointer}), pointer`,
 			padding: '15px',
 			fontFamily: 'inherit',
 			fontWeight: 'bold',

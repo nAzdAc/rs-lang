@@ -166,13 +166,6 @@ export const SprintPage = () => {
 		toggleScreen(elem);
 	}
 
-	useEffect(
-		() => {
-			console.log(seconds);
-		},
-		[ seconds ]
-	);
-
 	return (
 		<div className={classes.root}>
 			{endGame ? (

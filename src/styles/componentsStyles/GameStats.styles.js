@@ -1,4 +1,5 @@
 import { makeStyles } from '@material-ui/core/styles';
+import { icons } from '../../assets/icons/IconsRequire';
 
 export const useStyles = makeStyles({
 	gameStatsRoot: {
@@ -80,12 +81,12 @@ export const useStyles = makeStyles({
 			}
 		}
 	}),
-	cancelIcon: {
-		cursor: 'pointer',
+	cancelIcon: (props) => ({
+		cursor: props.theme === 'dark' ? `url(${icons.darkPointer}), pointer` : `url(${icons.lightPointer}), pointer`,
 		width: '40px',
 		height: '40px',
 		'&:hover': {
 			transform: 'scale(1.2)'
 		}
-	}
+	})
 });

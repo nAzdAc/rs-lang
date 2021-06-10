@@ -1,4 +1,5 @@
 import { makeStyles } from '@material-ui/core/styles';
+import { icons } from '../../assets/icons/IconsRequire';
 
 export const useStyles = makeStyles({
 	root: {
@@ -46,6 +47,7 @@ export const useStyles = makeStyles({
 		color: 'inherit',
 		backgroundColor: 'inherit',
 		borderRadius: '0',
+		cursor: props.theme === 'dark' ? `url(${icons.darkPointer}), default` : `url(${icons.lightPointer}), default`,
 		padding: '2px',
 		'&:hover': {
 			color: props.theme === 'dark' ? '#E38600' : '#5600E8',
@@ -77,17 +79,21 @@ export const useStyles = makeStyles({
 		height: '100%'
 	},
 	pagination: (props) => ({
+		cursor: props.theme === 'dark' ? `url(${icons.darkPointer}), default` : `url(${icons.lightPointer}), default`,
 		display: 'flex',
 		margin: '25px',
 		justifyContent: 'center',
 		'& li': {
+			cursor: props.theme === 'dark' ? `url(${icons.darkPointer}), default` : `url(${icons.lightPointer}), default`,
 			color: 'inherit',
 			fontFamily: 'inherit',
 			'& .MuiPaginationItem-textPrimary.Mui-selected': {
+				cursor: props.theme === 'dark' ? `url(${icons.darkPointer}), default` : `url(${icons.lightPointer}), default`,
 				backgroundColor: props.theme === 'dark' ? '#E38600' : '#5600E8',
 				color: props.theme === 'dark' ? '#141414' : '#F2F2F2'
 			},
 			'& .MuiPaginationItem-root': {
+				cursor: props.theme === 'dark' ? `url(${icons.darkPointer}), default` : `url(${icons.lightPointer}), default`,
 				fontSize: '1.1rem',
 				fontWeight: 'bold',
 				color: 'inherit'

@@ -1,25 +1,36 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export const useValidation = (value, validations) => {
-	const [ isEmpty, setEmpty ] = useState(true);
-	const [ minLengthError, setMinLengthError ] = useState(false);
+	const [ passwordMinLengthErrorText, setPasswordMinLegthErrorText ] = useState('');
+	const [ passwordMaxLengthErrorText, setPasswordMaxLengthErrorText ] = useState('');
+	const [ emailIsEmailErrorText, setEmailIsEmailErrorText ] = useState('');
+	const [ nameMaxLengthErrorText, setNameMaxLengthErrorText ] = useState('');
 
 	useEffect(
 		() => {
 			for (const validation in validations) {
-				switch (validation) {
-					case 'minLength':
-						value.length < validations[validation] ? setMinLengthError(true) : setMinLengthError(false);
-						break;
-
-					case 'isEmpty':
-						value ? setEmpty(false) : setEmpty(true);
-						break;
+				if (validation === 'passwordMinLength') {
+					value.length < validations[validation]
+						? setPasswordMinLegthErrorText('Пароль должен быть больше 4 символов')
+						: setPasswordMinLegthErrorText('');
+				} else if (validation === 'passwordMaxLength') {
+					value.length > validations[validation]
+						? setPasswordMaxLengthErrorText('Пароль должен быть меньше 12 символов')
+						: setPasswordMaxLengthErrorText('');
+				} else if (validation === 'emailIsEmail') {
+					const emailRegExp = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+					emailRegExp.test(String(value).toLowerCase())
+						? setEmailIsEmailErrorText('')
+						: setEmailIsEmailErrorText('Электропочта не соответствует шаблону');
+				} else if (validation === 'nameMaxLength') {
+					value.length > validations[validation]
+						? setNameMaxLengthErrorText('Это что у вас за имя такое больше чем 15 символов?)')
+						: setNameMaxLengthErrorText('');
 				}
 			}
 		},
-		[ value ]
+		[ validations, value ]
 	);
 
-	return { isEmpty, minLengthError };
+	return { emailIsEmailErrorText, passwordMinLengthErrorText, passwordMaxLengthErrorText, nameMaxLengthErrorText };
 };

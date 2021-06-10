@@ -16,6 +16,7 @@ export const WordCard = ({ word }) => {
 	// console.log(word._id);
 	// console.log(typeof word.deleted);
 	const { wordVolume, theme } = useSelector((state) => state.settings);
+	const { block } = useSelector((state) => state);
 	const classes = useStyles({ theme });
 	const dispatch = useDispatch();
 	const showMessage = useMessage();
@@ -60,6 +61,7 @@ export const WordCard = ({ word }) => {
 					<div className={classes.infoPanel}>
 						{word.deleted ? (
 							<button
+								disabled={block}
 								data-name="deleted"
 								id={word._id}
 								value={word.deleted}
@@ -71,6 +73,7 @@ export const WordCard = ({ word }) => {
 						) : (
 							<React.Fragment>
 								<button
+									disabled={block}
 									data-name="deleted"
 									id={word._id}
 									value={word.deleted}
@@ -81,6 +84,7 @@ export const WordCard = ({ word }) => {
 								</button>
 
 								<button
+									disabled={block}
 									data-name="difficult"
 									id={word._id}
 									value={word.difficult}

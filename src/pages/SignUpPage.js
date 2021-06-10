@@ -11,22 +11,22 @@ import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import { backRoutes } from '../utils/backRoutes';
 import { useMessage } from '../hooks/message.hook';
 import { CssTextField, useStyles } from '../styles/pagesStyles/StatsGamesSettings.styles';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Container } from '@material-ui/core';
 import { useInput } from '../hooks/input.hook';
+import { frontRoutes } from '../utils/frontRoutes';
+import { isBlock } from '../redux/actions';
 
 export const SignUpPage = () => {
+	const dispatch = useDispatch();
+	const { block } = useSelector((state) => state);
 	const { theme } = useSelector((state) => state.settings);
 	const classes = useStyles({ theme });
 	const showMessage = useMessage();
-	const email = useInput('', { isEmpty: true });
-	const password = useInput('', { isEmpty: false, minLength: 6 });
+	const email = useInput('', { emailIsEmail: true });
+	const password = useInput('', { passwordMinLength: 4, passwordMaxLength: 12 });
+	const name = useInput('', { nameMaxLength: 15 });
 	const { token } = useSelector((state) => state.userData);
-	const [ form, setForm ] = useState({
-		name: '',
-		email: '',
-		password: ''
-	});
 
 	const [ values, setValues ] = useState({
 		password: '',
@@ -38,17 +38,22 @@ export const SignUpPage = () => {
 	const handleMouseDownPassword = (event) => {
 		event.preventDefault();
 	};
-	const handleChange = (prop) => (event) => {
-		setValues({ ...values, [prop]: event.target.value });
-	};
-
-	const handleFormChange = (e) => {
-		setForm({ ...form, [e.target.name]: e.target.value });
-	};
 
 	const handleSubmit = useCallback(
 		async (e) => {
 			e.preventDefault();
+			if (!name.isDirty || !password.isDirty) {
+				return showMessage('Уберите фокус со всех полей чтобы мы могли их провалидировать :)');
+			}
+			if (
+				name.nameMaxLengthErrorText ||
+				password.passwordMaxLengthErrorText ||
+				password.passwordMinLengthErrorText ||
+				email.emailIsEmailErrorText
+			) {
+				return showMessage('Некорректно введены данные :(');
+			}
+			dispatch(isBlock(true));
 			try {
 				const res = await fetch(backRoutes.signUp, {
 					method: 'POST',
@@ -58,25 +63,28 @@ export const SignUpPage = () => {
 						'Content-Type': 'application/json',
 						Authorization: `Bearer ${token}`
 					},
-					body: JSON.stringify({ ...form })
+					body: JSON.stringify({ email: email.value, password: password.value, name: name.value })
 				});
 				console.log(res);
 				const json = await res.json();
 				console.log(json);
 				showMessage(json.message, res.status || 200);
-				setForm({
-					name: '',
-					email: '',
-					password: ''
-				});
+				name.setValue('');
+				email.setValue('');
+				password.setValue('');
+				name.setDirty(false);
+				email.setDirty(false);
+				password.setDirty(false);
 				setValues({ password: '', showPassword: false });
+				dispatch(isBlock(false));
 			} catch (e) {
 				console.log(e);
 				console.log(e.message);
+				dispatch(isBlock(false));
 				return showMessage('Возникла проблема с регистрацией. Попробуйте позже', 404);
 			}
 		},
-		[ form, showMessage, token ]
+		[ dispatch, email, name, password, showMessage, token ]
 	);
 
 	return (
@@ -94,14 +102,14 @@ export const SignUpPage = () => {
 						onChange={email.onChange}
 						onBlur={email.onBlur}
 					/>
-					{/* {email.isDirty && email.isEmpty ? (
-						<span style={{ color: 'red' }} className={classes.info}>
-							Поле не может быть пустым
+					{email.isDirty && email.emailIsEmailErrorText ? (
+						<span style={{ color: 'red', fontWeight: 'bold' }} className={classes.info}>
+							{email.emailIsEmailErrorText}
 						</span>
 					) : (
-					)} */}
-					<span className={classes.info}>Используйте настоящую</span>
-					<FormControl className={classes.field} value={form.password} onChange={handleFormChange} variant="outlined">
+						<span className={classes.info}>Используйте настоящую</span>
+					)}
+					<FormControl className={classes.field} value={password.value} variant="outlined">
 						<InputLabel htmlFor="outlined-adornment-password">Пароль</InputLabel>
 						<OutlinedInput
 							name="password"
@@ -126,22 +134,35 @@ export const SignUpPage = () => {
 							labelWidth={70}
 						/>
 					</FormControl>
-					<span className={classes.info}>От 4 до 12 символов</span>
+					{password.isDirty && (password.passwordMinLengthErrorText || password.passwordMaxLengthErrorText) ? (
+						<span style={{ color: 'red', fontWeight: 'bold' }} className={classes.info}>
+							{password.passwordMinLengthErrorText || password.passwordMaxLengthErrorText}
+						</span>
+					) : (
+						<span className={classes.info}>От 4 до 12 символов</span>
+					)}
 					<CssTextField
 						variant="outlined"
 						name="name"
 						label="Имя"
 						type="text"
 						id="name"
-						value={form.name}
-						onChange={handleFormChange}
+						value={name.value}
+						onChange={name.onChange}
+						onBlur={name.onBlur}
 					/>
-					<span className={classes.info}>Не более 15 символов</span>
+					{name.isDirty && name.nameMaxLengthErrorText ? (
+						<span style={{ color: 'red', fontWeight: 'bold' }} className={classes.info}>
+							{name.nameMaxLengthErrorText}
+						</span>
+					) : (
+						<span className={classes.info}>Не более 15 символов. Иначе будете енотиком :)</span>
+					)}
 					<Box className={classes.buttonBox}>
-						<button style={{ width: '130px' }} type="submit" className={classes.button}>
+						<button disabled={block} style={{ width: '130px' }} type="submit" className={classes.button}>
 							Выполнить
 						</button>
-						<Link className={classes.link} to={'/signIn'}>
+						<Link className={classes.link} to={block ? '#!' : frontRoutes.signIn}>
 							<button className={classes.outlainedButton}>Вход</button>
 						</Link>
 					</Box>

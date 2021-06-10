@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useValidation } from './validation.hook';
 
 export const useInput = (initValue, validations) => {
@@ -16,6 +16,8 @@ export const useInput = (initValue, validations) => {
 
 	return {
 		value,
+		setValue,
+		setDirty,
 		onChange,
 		onBlur,
 		isDirty,

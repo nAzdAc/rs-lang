@@ -1,7 +1,8 @@
 import { makeStyles } from '@material-ui/core/styles';
+import { icons } from '../../assets/icons/IconsRequire';
 
 export const useStyles = makeStyles({
-	wordCard: {
+	wordCard: (props) => ({
 		fontFamily: 'inherit',
 		color: 'inherit',
 		backgroundColor: 'inherit',
@@ -12,8 +13,8 @@ export const useStyles = makeStyles({
 		alignItems: 'center',
 		gap: '15px',
 		padding: '10px 5px',
-		cursor: 'pointer'
-	},
+		cursor: props.theme === 'dark' ? `url(${icons.darkPointer}), default` : `url(${icons.lightPointer}), default`
+	}),
 	mainInfo: {
 		fontFamily: 'inherit',
 		display: 'flex',
@@ -54,7 +55,7 @@ export const useStyles = makeStyles({
 		display: 'flex',
 		alignItems: 'center',
 		justifyContent: 'space-around',
-		cursor: 'pointer',
+		cursor: props.theme === 'dark' ? `url(${icons.darkPointer}), default` : `url(${icons.lightPointer}), default`,
 		border: 'none',
 		borderRadius: '6px',
 		padding: '5px',
@@ -70,17 +71,17 @@ export const useStyles = makeStyles({
 			fontSize: '0.65rem'
 		}
 	}),
-	iconWrap: {
+	iconWrap: (props) => ({
 		marginRight: '5px',
 		border: 'none',
 		outline: 'none',
-		cursor: 'pointer',
+		cursor: props.theme === 'dark' ? `url(${icons.darkPointer}), default` : `url(${icons.lightPointer}), default`,
 		fontWeight: 'bold',
 		background: 'inherit',
 		color: 'inherit'
-	},
-	bigCardIcon: {
-		cursor: 'pointer',
+	}),
+	bigCardIcon: (props) => ({
+		cursor: props.theme === 'dark' ? `url(${icons.darkPointer}), default` : `url(${icons.lightPointer}), default`,
 		fontSize: '3rem',
 		color: 'inherit',
 		'&:hover': {
@@ -92,7 +93,7 @@ export const useStyles = makeStyles({
 		'@media (max-width: 600px)': {
 			fontSize: '1.5rem'
 		}
-	},
+	}),
 	cardUnitWrap: {
 		display: 'flex',
 		flexWrap: 'wrap',
@@ -107,8 +108,8 @@ export const useStyles = makeStyles({
 		alignText: 'center',
 		flexWrap: 'wrap'
 	},
-	littleCardIcon: {
-		cursor: 'pointer',
+	littleCardIcon: (props) => ({
+		cursor: props.theme === 'dark' ? `url(${icons.darkPointer}), default` : `url(${icons.lightPointer}), default`,
 		fontSize: '2rem',
 		color: 'inherit',
 		'&:hover': {
@@ -120,7 +121,7 @@ export const useStyles = makeStyles({
 		'@media (max-width: 600px)': {
 			fontSize: '1rem'
 		}
-	},
+	}),
 	correctText: {
 		color: '#28FC03',
 		fontSize: '2.5rem',

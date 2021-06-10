@@ -1,4 +1,5 @@
 import { makeStyles } from '@material-ui/core/styles';
+import { icons } from '../../assets/icons/IconsRequire';
 
 export const useStyles = makeStyles({
 	root: {
@@ -53,14 +54,15 @@ export const useStyles = makeStyles({
 		margin: 'auto',
 		color: 'inherit'
 	},
-	video: {
+	video: (props) => ({
 		margin: '15px 0px',
 		border: 'none',
 		borderRadius: '5px',
 		width: '100%',
 		maxWidth: '700px',
-		height: '400px'
-	},
+		height: '400px',
+		cursor: props.theme === 'dark' ? `url(${icons.darkPointer}), default` : `url(${icons.lightPointer}), default`
+	}),
 	textImgWrapper: {
 		color: 'inherit',
 		display: 'flex',
@@ -126,15 +128,15 @@ export const useStyles = makeStyles({
 		width: '300px',
 		borderRadius: 'inherit'
 	},
-	githubLink: {
-		color: 'inherit'
-	},
+	githubLink: (props) => ({
+		color: 'inherit',
+		cursor: props.theme === 'dark' ? `url(${icons.darkPointer}), pointer` : `url(${icons.lightPointer}), pointer`
+	}),
 	githubWrap: {
 		display: 'flex',
 		alignItems: 'center',
 		justifyContent: 'center',
-		gap: '10px',
-		cursor: 'pointer'
+		gap: '10px'
 	},
 	githubImage: {
 		fontSize: '30px'

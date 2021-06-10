@@ -1,18 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { PieChart, Pie, Sector, ResponsiveContainer } from 'recharts';
 import { makeStyles } from '@material-ui/core/styles';
 import { useSelector } from 'react-redux';
+import { icons } from '../assets/icons/IconsRequire';
 
 const useStyles = makeStyles({
-	pieChartContainer: {
+	pieChartContainer: (props) => ({
 		width: '450px',
 		height: '300px',
-		overflow: 'hidden'
-	}
+		overflow: 'hidden',
+		'& > div': {
+			cursor: props.theme === 'dark' ? `url(${icons.darkPointer}), pointer` : `url(${icons.lightPointer}), pointer`
+		}
+	})
 });
 
 const renderActiveShape = (props) => {
-	// console.log(props);
 	const RADIAN = Math.PI / 180;
 	const { cx, cy, midAngle, innerRadius, outerRadius, startAngle, endAngle, fill, payload, percent, value } = props;
 	const sin = Math.sin(-RADIAN * midAngle);
@@ -58,13 +61,9 @@ const renderActiveShape = (props) => {
 			/>
 			<path d={`M${sx},${sy}L${mx},${my}L${ex},${ey}`} stroke={fill} fill="none" />
 			<circle cx={ex} cy={ey} r={2} fill={fill} stroke="none" />
-			<text
-				x={ex + (cos >= 0 ? 1 : -1) * 5}
-				y={ey}
-				textAnchor={textAnchor}
-				fill={fill}
-				fontSize="13px"
-			>{`${payload.name} ${value}/${value / percent}`}</text>
+			<text x={ex + (cos >= 0 ? 1 : -1) * 5} y={ey} textAnchor={textAnchor} fill={fill} fontSize="13px">
+				{percent ? `${payload.name} ${value}/${value / percent}` : `${payload.name} ${percent}`}
+			</text>
 			<text fontSize="13px" x={ex + (cos >= 0 ? 1 : -1) * 5} y={ey} dy={18} textAnchor={textAnchor} fill={fill}>
 				{`( ${(percent * 100).toFixed(2)}% )`}
 			</text>
@@ -76,14 +75,6 @@ export const GamePieChart = ({ data, all, showAddStats }) => {
 	const [ activeIndex, setActiveIndex ] = useState(0);
 	const { theme } = useSelector((state) => state.settings);
 
-	useEffect(
-		() => {
-			console.log(data);
-			console.log(all);
-		},
-		[ data, all ]
-	);
-
 	const onPieEnter = (_, index) => {
 		setActiveIndex(index);
 	};
@@ -92,8 +83,9 @@ export const GamePieChart = ({ data, all, showAddStats }) => {
 	return (
 		<div className={classes.pieChartContainer}>
 			<ResponsiveContainer width="100%" height="100%">
-				<PieChart>
+				<PieChart style={{ cursor: 'inherit' }} className={classes.chartWrap}>
 					<Pie
+						style={{ color: 'red' }}
 						activeIndex={activeIndex}
 						activeShape={renderActiveShape}
 						data={data}

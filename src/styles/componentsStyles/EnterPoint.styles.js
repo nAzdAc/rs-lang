@@ -1,4 +1,5 @@
 import { makeStyles } from '@material-ui/core/styles';
+import { icons } from '../../assets/icons/IconsRequire';
 
 export const useStyles = makeStyles(() => ({
 	root: {
@@ -14,28 +15,31 @@ export const useStyles = makeStyles(() => ({
 		alignItems: 'center',
 		justifyContent: 'center',
 		color: 'inherit',
-		width: '90px'
+		width: '70px'
 	},
 	avatar: {
 		marginBottom: '3px',
 		width: '55px',
 		height: '55px'
 	},
-	logout: {
+	logout: (props) => ({
+		width: '25px',
+		height: '25px',
 		color: 'inherit',
-		cursor: 'pointer',
+		padding: '10px',
 		marginRight: '10px',
+		cursor: props.theme === 'dark' ? `url(${icons.darkPointer}), pointer` : `url(${icons.lightPointer}), pointer`,
 		'&:hover': {
 			transform: 'scale(1.2)'
 		}
-	},
+	}),
 	button: (props) => ({
 		fontFamily: 'inherit',
 		display: 'flex',
 		alignItems: 'center',
 		justifyContent: 'space-around',
 		fontSize: '1rem',
-		cursor: 'pointer',
+		cursor: props.theme === 'dark' ? `url(${icons.darkPointer}), pointer` : `url(${icons.lightPointer}), pointer`,
 		borderRadius: '6px',
 		outline: 'none',
 		fontWeight: '600',

@@ -1,6 +1,5 @@
 export const IS_BLOCK = 'IS_BLOCK';
 export const IS_LOADER = 'IS_LOADER';
-export const TOAST = 'TOAST';
 export const SET_SETTINGS = 'SET_SETTINGS';
 export const POST_SETTINGS = 'POST_SETTINGS';
 export const SIGN_IN = 'SIGN_IN';

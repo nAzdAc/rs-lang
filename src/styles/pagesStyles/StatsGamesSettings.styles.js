@@ -2,6 +2,7 @@ import Switch from '@material-ui/core/Switch';
 import Slider from '@material-ui/core/Slider';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import { TextField } from '@material-ui/core';
+import { icons } from '../../assets/icons/IconsRequire';
 
 export const useStyles = makeStyles({
 	root: {
@@ -78,7 +79,7 @@ export const useStyles = makeStyles({
 		alignItems: 'center',
 		justifyContent: 'space-around',
 		borderRadius: '6px',
-		cursor: 'pointer',
+		cursor: props.theme === 'dark' ? `url(${icons.darkPointer}), default` : `url(${icons.lightPointer}), default`,
 		outline: 'none',
 		border: 'none',
 		fontSize: '1rem',
@@ -94,7 +95,7 @@ export const useStyles = makeStyles({
 		alignItems: 'center',
 		justifyContent: 'space-around',
 		borderRadius: '6px',
-		cursor: 'pointer',
+		cursor: props.theme === 'dark' ? `url(${icons.darkPointer}), default` : `url(${icons.lightPointer}), default`,
 		outline: 'none',
 		fontSize: '1rem',
 		width: '130px',
@@ -148,6 +149,7 @@ export const useStyles = makeStyles({
 		backgroundColor: props.theme === 'dark' ? '#E38600' : '#5600E8',
 		color: props.theme === 'dark' ? '#141414' : '#F2F2F2',
 		'& .MuiTab-root': {
+			cursor: props.theme === 'dark' ? `url(${icons.darkPointer}), pointer` : `url(${icons.lightPointer}), pointer`,
 			fontWeight: '600',
 			fontFamily: 'inherit'
 		},
@@ -169,14 +171,19 @@ export const useStyles = makeStyles({
 			color: 'inherit'
 		}
 	},
-	form: {
+	form: (props) => ({
 		width: '100%',
 		display: 'flex',
 		flexDirection: 'column',
 		'& > div': {
 			margin: '0px'
+		},
+		'& .MuiInputBase-root': {
+			'& .MuiOutlinedInput-input': {
+				cursor: props.theme === 'dark' ? `url(${icons.darkInput}), default` : `url(${icons.lightInput}), default`
+			}
 		}
-	},
+	}),
 	info: {
 		fontSize: '0.8rem',
 		margin: '0px 0px 25px 10px',
@@ -191,9 +198,10 @@ export const useStyles = makeStyles({
 			color: 'inherit'
 		}
 	},
-	passwordIcon: {
-		color: 'inherit'
-	},
+	passwordIcon: (props) => ({
+		color: 'inherit',
+		cursor: props.theme === 'dark' ? `url(${icons.darkPointer}), default` : `url(${icons.lightPointer}), default`
+	}),
 	field: {
 		color: 'inherit',
 		fontFamily: 'inherit',
@@ -236,6 +244,7 @@ export const useStyles = makeStyles({
 
 export const SettingsSwitch = withStyles({
 	switchBase: (props) => ({
+		cursor: props.theme === 'dark' ? `url(${icons.darkPointer}), pointer` : `url(${icons.lightPointer}), pointer`,
 		color: props.theme === 'dark' ? '#FCCA81' : '#BB86FC',
 		'&$checked': {
 			color: 'inherit'
@@ -277,12 +286,14 @@ export const marks = [
 
 export const SettingsSlider = withStyles({
 	root: (props) => ({
+		cursor: props.theme === 'dark' ? `url(${icons.darkPointer}), pointer` : `url(${icons.lightPointer}), pointer`,
 		width: '200px',
 		color: props.theme === 'dark' ? '#E38600' : '#5600E8',
 		height: '8px',
-		fontFamily: props.theme === 'dark' ? '"Lato", sans-serif;' : '"Itim", cursive;'
+		fontFamily: '"Itim", cursive;'
 	}),
 	thumb: (props) => ({
+		cursor: props.theme === 'dark' ? `url(${icons.darkPointer}), pointer` : `url(${icons.lightPointer}), pointer`,
 		height: '24px',
 		width: '24px',
 		marginTop: '-8px',
@@ -326,7 +337,8 @@ export const SettingsSlider = withStyles({
 })(Slider);
 
 export const CssTextField = withStyles({
-	root: {
+	root: (props) => ({
+		cursor: props.theme === 'dark' ? `url(${icons.darkPointer}), pointer` : `url(${icons.lightPointer}), pointer`,
 		'& label.Mui-focused': {
 			color: 'inherit',
 			fontFamily: 'inherit'
@@ -357,5 +369,5 @@ export const CssTextField = withStyles({
 				fontFamily: 'inherit'
 			}
 		}
-	}
+	})
 })(TextField);

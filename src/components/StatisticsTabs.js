@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
@@ -36,13 +36,6 @@ export const StatisticsTabs = () => {
 	const classes = useStyles({ theme });
 	const [ value, setValue ] = useState(0);
 	const { statistics } = useSelector((state) => state);
-
-	useEffect(
-		() => {
-			console.log(statistics);
-		},
-		[ statistics ]
-	);
 	const handleChange = (event, newValue) => {
 		setValue(newValue);
 	};

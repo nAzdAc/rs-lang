@@ -2,9 +2,16 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import { useSelector } from 'react-redux';
+import { icons } from '../assets/icons/IconsRequire';
 
 export const useStyles = makeStyles({
+	buttonActive: (props) => ({
+		borderBottom: '7px solid',
+		marginBottom: '-7px',
+		borderColor: props.theme === 'dark' ? '#141414' : '#F2F2F2'
+	}),
 	button: (props) => ({
+		cursor: props.theme === 'dark' ? `url(${icons.darkPointer}), default` : `url(${icons.lightPointer}), default`,
 		width: '72px',
 		minWidth: '36px',
 		height: '72px',
@@ -18,6 +25,8 @@ export const useStyles = makeStyles({
 			fontSize: '27px'
 		},
 		'&:hover': {
+			marginBottom: '0px',
+			borderBottom: '0px solid',
 			color: props.theme === 'dark' ? '#E38600' : '#5600E8',
 			backgroundColor: props.theme === 'dark' ? '#141414' : '#F2F2F2',
 			boxShadow: '3px 0px 10px 3px rgba(0,0,0,0.25)'
@@ -42,11 +51,6 @@ export const useStyles = makeStyles({
 							: props.group === 4
 								? '#7314FA'
 								: props.group === 5 ? '#5600E8' : props.group === 6 ? '#3700B3' : '#BB86FC'
-	}),
-	buttonActive: (props) => ({
-		borderBottom: '7px solid',
-		marginBottom: '-7px',
-		borderColor: props.theme === 'dark' ? '#141414' : '#F2F2F2'
 	})
 });
 

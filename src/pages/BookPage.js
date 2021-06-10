@@ -10,6 +10,7 @@ import { Button, CircularProgress } from '@material-ui/core';
 import { WordCard } from '../components/WordCard';
 
 export const BookPage = () => {
+	const { block } = useSelector((state) => state);
 	const { theme } = useSelector((state) => state.settings);
 	const { userWords, activeWords } = useSelector((state) => state);
 	let match = useRouteMatch().path;
@@ -79,7 +80,7 @@ export const BookPage = () => {
 									className={classes.link}
 									key={`${game.name}game-Book`}
 									to={{
-										pathname: game.to
+										pathname: block ? '#!' : `${game.to}`
 									}}
 								>
 									<Button className={classes.typeButton} variant="contained" size="medium">

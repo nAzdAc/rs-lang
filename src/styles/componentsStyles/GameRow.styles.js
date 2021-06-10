@@ -1,4 +1,5 @@
 import { makeStyles } from '@material-ui/core/styles';
+import { icons } from '../../assets/icons/IconsRequire';
 
 export const useStyles = makeStyles({
 	translateText: {
@@ -11,17 +12,17 @@ export const useStyles = makeStyles({
 		color: 'inherit',
 		fontWeight: '600'
 	},
-	iconWrap: {
+	iconWrap: (props) => ({
 		marginRight: '5px',
 		border: 'none',
 		outline: 'none',
-		cursor: 'pointer',
+		cursor: props.theme === 'dark' ? `url(${icons.darkPointer}), default` : `url(${icons.lightPointer}), default`,
 		fontWeight: 'bold',
 		background: 'inherit',
 		color: 'inherit'
-	},
-	icon: {
-		cursor: 'pointer',
+	}),
+	icon: (props) => ({
+		cursor: props.theme === 'dark' ? `url(${icons.darkPointer}), default` : `url(${icons.lightPointer}), default`,
 		fontSize: '2.5rem',
 		color: 'inherit',
 		'&:hover': {
@@ -33,7 +34,7 @@ export const useStyles = makeStyles({
 		'@media (max-width: 600px)': {
 			fontSize: '1.5rem'
 		}
-	},
+	}),
 	addContainer: {
 		backgroundColor: 'inherit',
 		fontFamily: 'inherit',

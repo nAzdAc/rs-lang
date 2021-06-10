@@ -7,30 +7,32 @@ import { frontRoutes } from '../utils/frontRoutes';
 import { useSelector } from 'react-redux';
 
 export const Menu = () => {
-	const classes = useStyles();
+	const { theme } = useSelector((state) => state.settings);
+	const classes = useStyles({ theme });
 	const { token } = useSelector((state) => state.userData);
+	const { block } = useSelector((state) => state);
 
 	return (
 		<List className={classes.list}>
-			<Link to={frontRoutes.book} className={classes.link}>
+			<Link to={block ? '#!' : `${frontRoutes.book}`} className={classes.link}>
 				<MenuBook className={classes.icon} />
 				<span className={classes.text}>Книга</span>
 			</Link>
-			<Link to={frontRoutes.games} className={classes.link}>
+			<Link to={block ? '#!' : `${frontRoutes.games}`} className={classes.link}>
 				<VideogameAsset className={classes.icon} />
 				<span className={classes.text}>Игры</span>
 			</Link>
-			<Link to={frontRoutes.settings} className={classes.link}>
+			<Link to={block ? '#!' : `${frontRoutes.settings}`} className={classes.link}>
 				<Settings className={classes.icon} />
 				<span className={classes.text}>Настройки</span>
 			</Link>
 			{!!token && (
 				<React.Fragment>
-					<Link to={frontRoutes.dictionary} className={classes.link}>
+					<Link to={block ? '#!' : `${frontRoutes.dictionary}`} className={classes.link}>
 						<Bookmarks className={classes.icon} />
 						<span className={classes.text}>Словарь</span>
 					</Link>
-					<Link to={frontRoutes.stats} className={classes.link}>
+					<Link to={block ? '#!' : `${frontRoutes.stats}`} className={classes.link}>
 						<ShowChart className={classes.icon} />
 						<span className={classes.text}>Статистика</span>
 					</Link>

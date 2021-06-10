@@ -5,8 +5,9 @@ import { useSelector } from 'react-redux';
 import GitHubIcon from '@material-ui/icons/GitHub';
 
 export const MainPage = () => {
-	const classes = useStyles();
 	const { theme } = useSelector((state) => state.settings);
+	const classes = useStyles({ theme });
+
 	return (
 		<Container className={classes.root}>
 			<h1 className={classes.logo}>{MAIN_PAGE_TEXT.TITLE}</h1>
