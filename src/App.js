@@ -5,7 +5,6 @@ import { Menu } from './components/Menu';
 import { Link } from 'react-router-dom';
 import { useStyles } from './styles/pagesStyles/App.styles';
 import { useRoutes } from './hooks/routes.hook';
-import { EnterPoint } from './components/EnterPoint';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useSelector } from 'react-redux';
@@ -25,7 +24,6 @@ export const App = () => {
 						RS Lang
 					</Link>
 					<Menu />
-					<EnterPoint />
 				</header>
 				<React.Fragment>{routes}</React.Fragment>
 				<ToastContainer className={classes.toast} />
