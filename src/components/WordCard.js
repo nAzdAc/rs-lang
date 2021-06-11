@@ -7,21 +7,18 @@ import { useStyles } from '../styles/componentsStyles/WordCard.styles';
 import { Paper } from '@material-ui/core';
 import { convertText, createSound } from '../utils/helpers';
 import { useDispatch, useSelector } from 'react-redux';
-import classNames from 'classnames/bind';
 import { updateUserWord } from '../redux/actions';
 import { Howler } from 'howler';
 import { useMessage } from '../hooks/message.hook';
 
 export const WordCard = ({ word }) => {
-	// console.log(word._id);
-	// console.log(typeof word.deleted);
-	const { wordVolume, theme } = useSelector((state) => state.settings);
+	const { wordVolume, theme, difficultWord, deleteWord, translateWord, translateSentences } = useSelector(
+		(state) => state.settings
+	);
 	const { block } = useSelector((state) => state);
 	const classes = useStyles({ theme });
 	const dispatch = useDispatch();
 	const showMessage = useMessage();
-	const styles = classNames.bind(classes);
-	const starIcon = styles({ bigCardIcon: true }, { goldIcon: word.difficult });
 	const { token } = useSelector((state) => state.userData);
 	const [ additionalInfo, setAdditionalInfo ] = useState(false);
 
@@ -42,8 +39,10 @@ export const WordCard = ({ word }) => {
 		const body = {
 			wordId: event.currentTarget.id,
 			name: event.currentTarget.dataset.name,
-			value: event.currentTarget.value
+			value: event.currentTarget.value,
+			wordName: event.currentTarget.dataset.wordName
 		};
+		console.log(event.currentTarget.dataset.wordName);
 		console.log(body);
 		if (!token) {
 			return showMessage('Для добавления / удаления слов необходимо авторизоваться', 404);
@@ -63,6 +62,7 @@ export const WordCard = ({ word }) => {
 							<button
 								disabled={block}
 								data-name="deleted"
+								data-word-name={word.word}
 								id={word._id}
 								value={word.deleted}
 								className={classes.deleteButton}
@@ -72,27 +72,33 @@ export const WordCard = ({ word }) => {
 							</button>
 						) : (
 							<React.Fragment>
-								<button
-									disabled={block}
-									data-name="deleted"
-									id={word._id}
-									value={word.deleted}
-									onClick={updateWord}
-									className={classes.iconWrap}
-								>
-									<DeleteIcon className={classes.bigCardIcon} />
-								</button>
+								{deleteWord && (
+									<button
+										disabled={block}
+										data-name="deleted"
+										data-word-name={word.word}
+										id={word._id}
+										value={word.deleted}
+										onClick={updateWord}
+										className={classes.iconWrap}
+									>
+										<DeleteIcon className={classes.bigCardIcon} />
+									</button>
+								)}
 
-								<button
-									disabled={block}
-									data-name="difficult"
-									id={word._id}
-									value={word.difficult}
-									onClick={updateWord}
-									className={classes.iconWrap}
-								>
-									<GradeIcon className={starIcon} />
-								</button>
+								{difficultWord && (
+									<button
+										disabled={block}
+										data-name="difficult"
+										data-word-name={word.word}
+										id={word._id}
+										value={word.difficult}
+										onClick={updateWord}
+										className={classes.iconWrap}
+									>
+										<GradeIcon style={{ color: word.difficult ? '#FFD700' : 'inherit' }} className={classes.starIcon} />
+									</button>
+								)}
 							</React.Fragment>
 						)}
 						<h4 className={classes.infoText}>
@@ -110,9 +116,9 @@ export const WordCard = ({ word }) => {
 							<button className={classes.iconWrap} value={word.audio} onClick={play}>
 								<PlayCircleFilledIcon className={classes.bigCardIcon} />
 							</button>
-							<h4 className={classes.wordText}>{`${word.word} ${word.transcription} \u2014 `}</h4>
+							<h4 className={classes.wordText}>{`${word.word} ${word.transcription}`}</h4>
 						</div>
-						<h4 className={classes.wordText}>{`${word.wordTranslate}`}</h4>
+						{translateWord && <h4 className={classes.wordText}>{` \u2014 ${word.wordTranslate}`}</h4>}
 					</div>
 				</div>
 			</div>
@@ -127,7 +133,7 @@ export const WordCard = ({ word }) => {
 								<p className={classes.englishText}>{convertText(word.textMeaning)}</p>
 							</div>
 						</div>
-						<p className={classes.translateText}>{word.textMeaningTranslate}</p>
+						{translateSentences && <p className={classes.translateText}>{word.textMeaningTranslate}</p>}
 					</div>
 
 					<div className={classes.cardContent}>
@@ -139,7 +145,7 @@ export const WordCard = ({ word }) => {
 								<p className={classes.englishText}>{convertText(word.textExample)}</p>
 							</div>
 						</div>
-						<p className={classes.translateText}>{word.textExampleTranslate}</p>
+						{translateSentences && <p className={classes.translateText}>{word.textExampleTranslate}</p>}
 					</div>
 				</div>
 			)}

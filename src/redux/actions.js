@@ -144,9 +144,10 @@ export function postSettings(name, value, token) {
 		dispatch(isBlock(true));
 		console.log(name);
 		console.log(value);
-		if (!name || !value) {
+		console.log(typeof value);
+		if (!name || typeof value === undefined) {
 			dispatch(isBlock(false));
-			return;
+			return { text: 'Возникла проблема с изменением настроек. Попробуйте позже', code: 404 };
 		}
 		try {
 			const res = await fetch(backRoutes.settings, {

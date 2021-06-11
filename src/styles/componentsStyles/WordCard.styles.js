@@ -220,8 +220,7 @@ export const useStyles = makeStyles({
 		alignSelf: 'auto',
 		marginTop: '30px'
 	},
-	goldIcon: {
-		color: '#FFD700',
+	starIcon: {
 		fontSize: '3.5rem',
 		'&:hover': {
 			transform: 'scale(1.1)'

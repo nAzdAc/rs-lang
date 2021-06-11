@@ -35,6 +35,7 @@ export const DictionaryPage = () => {
 	};
 
 	const handleLevelsClick = (index) => {
+		console.log(index);
 		if (index === activeLevel) {
 			setActiveLevel(null);
 		} else {
@@ -94,7 +95,7 @@ export const DictionaryPage = () => {
 										pathname: block ? '#!' : game.to
 									}}
 								>
-									<Button className={classes.typeButton} variant="contained" size="medium">
+									<Button disabled={block} className={classes.typeButton} variant="contained" size="medium">
 										{game.name}
 									</Button>
 								</Link>
