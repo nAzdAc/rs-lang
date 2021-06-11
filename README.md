@@ -1,18 +1,22 @@
-# RS-lang
+## RS-lang
 
-# Play, learn and talk in English
+# RS-School / React-2021Q1 / Third Task
 
-1. Сlone the repository.
-2. Open client folder.
-3. Run `npm install`
-4. Run `npm start`
+## Deploy:   ***https://nazdac-rs-lang.netlify.app/***
+
+
+Task: ***https://github.com/rolling-scopes-school/tasks/blob/master/tasks/react/react-rslang.md***
+
+
+Score: 473 / 500
+
+## Old deploy: ***https://best-rs-lang.netlify.app/***
 
 # Game Keyboard Control
 
 1. Sprint.
 
 true - 'enter' or 1 on Numpad,
-
 false - 'space' or 2 on Numpad;
 
 2. Audio, Match, Savanna.
