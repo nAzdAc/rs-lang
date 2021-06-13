@@ -1,4 +1,4 @@
-# RS-lang
+## RS-lang
 
 # RS-School / React-2021Q1 / Third Task
 
@@ -9,14 +9,13 @@ Task: ***https://github.com/rolling-scopes-school/tasks/blob/master/tasks/react/
 
 Score: 473 / 500
 
-## Old deploy: ***https://best-rs-lang.netlify.app***
+## Old deploy: ***https://best-rs-lang.netlify.app/***
 
 # Game Keyboard Control
 
 1. Sprint.
 
 true - 'enter' or 1 on Numpad,
-
 false - 'space' or 2 on Numpad;
 
 2. Audio, Match, Savanna.
