@@ -42,7 +42,14 @@ export const StatisticsTabs = () => {
 
 	return (
 		<React.Fragment>
-			<AppBar className={classes.tab} position="static">
+			<AppBar
+				style={{
+					color: theme === 'dark' ? '#141414' : '#F2F2F2',
+					backgroundColor: theme === 'dark' ? '#FCCA81' : '#BB86FC'
+				}}
+				className={classes.tab}
+				position="static"
+			>
 				<Tabs value={value} onChange={handleChange} aria-label="simple tabs example">
 					<Tab label="В цифрах" {...a11yProps(0)} />
 					<Tab label="На графиках" {...a11yProps(1)} />

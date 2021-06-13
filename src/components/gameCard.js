@@ -4,7 +4,6 @@ import { NavLink } from 'react-router-dom';
 import { useStyles } from '../styles/pagesStyles/StatsGamesSettings.styles';
 
 export const GameCard = ({ name, todo, to }) => {
-	const { block } = useSelector((state) => state);
 	const { theme } = useSelector((state) => state.settings);
 	const classes = useStyles({ theme });
 	const { level } = useSelector((state) => state);
@@ -44,7 +43,7 @@ export const GameCard = ({ name, todo, to }) => {
 			<div ref={cardItemRef} className={classes.cardItem}>
 				<h4 className={classes.subtitle1}>{name}</h4>
 				<p className={classes.subtitle2}>{todo}</p>
-				<NavLink to={block ? '#!' : `${to}`} className={classes.link}>
+				<NavLink to={to} className={classes.link}>
 					{level !== null && (
 						<button ref={buttonRef} className={classes.button}>
 							Начать

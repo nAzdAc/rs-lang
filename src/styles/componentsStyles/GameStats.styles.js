@@ -60,10 +60,22 @@ export const useStyles = makeStyles({
 				textAlign: 'center',
 				borderColor: 'inherit',
 				'@media (max-width: 768px)': {
-					fontSize: '1rem'
+					fontSize: '1rem',
+					fontWeight: '600',
+					color: 'inherit',
+					fontFamily: 'inherit',
+					padding: '10px',
+					textAlign: 'center',
+					borderColor: 'inherit'
 				},
 				'@media (max-width: 550px)': {
-					fontSize: '0.85rem'
+					fontSize: '0.85rem',
+					fontWeight: '600',
+					color: 'inherit',
+					fontFamily: 'inherit',
+					padding: '10px',
+					textAlign: 'center',
+					borderColor: 'inherit'
 				}
 			},
 			'& .MuiTableCell-body': {
@@ -77,7 +89,7 @@ export const useStyles = makeStyles({
 					fontSize: '0.85rem'
 				},
 				'@media (max-width: 550px)': {
-					fontSize: '0.75rem'
+					fontSize: '0.6rem'
 				}
 			}
 		}

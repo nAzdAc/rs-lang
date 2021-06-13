@@ -16,7 +16,6 @@ import { Container } from '@material-ui/core';
 import { frontRoutes } from '../utils/frontRoutes';
 
 export const SignInPage = () => {
-	const { block } = useSelector((state) => state);
 	const { theme } = useSelector((state) => state.settings);
 	const classes = useStyles({ theme });
 	const dispatch = useDispatch();
@@ -100,10 +99,10 @@ export const SignInPage = () => {
 						</FormControl>
 						<span className={classes.info}>От 4 до 12 символов</span>
 						<Box className={classes.buttonBox}>
-							<button disabled={block} style={{ width: '130px' }} type="submit" className={classes.button}>
+							<button style={{ width: '130px' }} type="submit" className={classes.button}>
 								Войти
 							</button>
-							<Link className={classes.link} to={block ? '#!' : `${frontRoutes.signUp}`}>
+							<Link className={classes.link} to={frontRoutes.signUp}>
 								<button className={classes.outlainedButton}>Регистрация</button>
 							</Link>
 						</Box>

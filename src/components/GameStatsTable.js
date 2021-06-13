@@ -1,35 +1,11 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import { useSelector } from 'react-redux';
-
-const useStyles = makeStyles({
-	table: (props) => ({
-		boxShadow:
-			props.theme === 'dark' ? '3px 0px 10px 3px rgba(227, 134, 0, 0.5)' : '3px 0px 10px 3px rgba(86, 0, 232, 0.6)',
-		minWidth: '300px',
-		color: 'inherit',
-		fontFamily: 'inherit',
-		borderColor: props.theme === 'dark' ? '#FCCA81' : '#BB86FC',
-		'& .MuiTableRow-root': {
-			'& .MuiTableCell-head': {
-				fontWeight: '600',
-				color: 'inherit',
-				fontFamily: 'inherit',
-				borderColor: 'inherit'
-			},
-			'& .MuiTableCell-body': {
-				color: 'inherit',
-				fontFamily: 'inherit',
-				borderColor: 'inherit'
-			}
-		}
-	})
-});
+import { useStyles } from '../styles/componentsStyles/GameStats.styles';
 
 export const GameStatsTable = ({ rows }) => {
 	const { theme } = useSelector((state) => state.settings);

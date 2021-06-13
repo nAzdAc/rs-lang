@@ -15,7 +15,6 @@ import { setActiveWords } from '../redux/actions';
 import { WordCard } from '../components/WordCard';
 
 export const DictionaryPage = () => {
-	const { block } = useSelector((state) => state);
 	const { theme } = useSelector((state) => state.settings);
 	const classes = useStyles({ theme });
 	const dispatch = useDispatch();
@@ -59,7 +58,6 @@ export const DictionaryPage = () => {
 			<Box className={classes.buttonBox}>
 				{levels.map((item, index) => (
 					<LevelButton
-						disabled={block}
 						key={`${item}levels-Dict`}
 						click={() => handleLevelsClick(index)}
 						group={item}
@@ -70,7 +68,6 @@ export const DictionaryPage = () => {
 			<ul className={classes.typeBox}>
 				{wordCategories.map((item, index) => (
 					<Button
-						disabled={block}
 						key={`${item.text}category-Dict`}
 						onClick={() => handleWordsButtonClick(index)}
 						variant="contained"
@@ -92,10 +89,10 @@ export const DictionaryPage = () => {
 									className={classes.link}
 									key={`${game.name}game-Dict`}
 									to={{
-										pathname: block ? '#!' : game.to
+										pathname: game.to
 									}}
 								>
-									<Button disabled={block} className={classes.typeButton} variant="contained" size="medium">
+									<Button className={classes.typeButton} variant="contained" size="medium">
 										{game.name}
 									</Button>
 								</Link>

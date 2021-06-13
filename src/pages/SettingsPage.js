@@ -25,7 +25,6 @@ export const SettingsPage = () => {
 		translateWord,
 		theme
 	} = useSelector((state) => state.settings);
-	const { block } = useSelector((state) => state);
 	const classes = useStyles({ theme });
 	const { token, avatarURL } = useSelector((state) => state.userData);
 	const showMessage = useMessage();
@@ -109,7 +108,6 @@ export const SettingsPage = () => {
 						<div className={classes.buttonsWrapper}>
 							<h6 className={classes.subtitle2}>Сложное слово</h6>
 							<SettingsSwitch
-								disabled={block}
 								aria-valuetext="difficultWord"
 								name="difficultWord"
 								data-name="difficultWord"
@@ -121,7 +119,6 @@ export const SettingsPage = () => {
 						<div className={classes.buttonsWrapper}>
 							<h6 className={classes.subtitle2}>Удалить слово</h6>
 							<SettingsSwitch
-								disabled={block}
 								aria-valuetext="deleteWord"
 								name="deleteWord"
 								data-name="deleteWord"
@@ -134,7 +131,6 @@ export const SettingsPage = () => {
 						<div className={classes.buttonsWrapper} style={{ width: '250px' }}>
 							<h6 className={classes.subtitle2}>Перевод слов</h6>
 							<SettingsSwitch
-								disabled={block}
 								aria-valuetext="translateWord"
 								name="translateWord"
 								data-name="translateWord"
@@ -146,7 +142,6 @@ export const SettingsPage = () => {
 						<div className={classes.buttonsWrapper} style={{ width: '250px' }}>
 							<h6 className={classes.subtitle2}>Перевод предложений</h6>
 							<SettingsSwitch
-								disabled={block}
 								aria-valuetext="translateSentences"
 								name="translateSentences"
 								data-name="translateSentences"
@@ -161,7 +156,6 @@ export const SettingsPage = () => {
 					<div className={classes.cardItem}>
 						<h6 className={classes.subtitle1}>Громкость музыки</h6>
 						<SettingsSlider
-							disabled={block}
 							marks={marks}
 							valueLabelDisplay="auto"
 							aria-label="pretto slider"
@@ -174,7 +168,6 @@ export const SettingsPage = () => {
 						/>
 						<h6 className={classes.subtitle1}>Громкость звуков</h6>
 						<SettingsSlider
-							disabled={block}
 							marks={marks}
 							valueLabelDisplay="auto"
 							aria-label="pretto slider"
@@ -187,7 +180,6 @@ export const SettingsPage = () => {
 						/>
 						<h6 className={classes.subtitle1}>Громкость произношения слов</h6>
 						<SettingsSlider
-							disabled={block}
 							marks={marks}
 							valueLabelDisplay="auto"
 							aria-label="pretto slider"
@@ -223,11 +215,11 @@ export const SettingsPage = () => {
 								value={newName}
 								onChange={handleName}
 							/>
-							<button style={{ margin: '20px 0px' }} disabled={block} type="submit" className={classes.button}>
+							<button style={{ margin: '20px 0px' }} type="submit" className={classes.button}>
 								+ ИЗМЕНИТЬ НИКНЕЙМ
 							</button>
 						</form>
-						<button disabled={block} value={theme} onClick={handleTheme} className={classes.button}>
+						<button value={theme} onClick={handleTheme} className={classes.button}>
 							{theme === 'dark' ? <Brightness3Icon /> : <WbSunnyIcon />}
 							+ ИЗМЕНИТЬ ТЕМУ
 						</button>

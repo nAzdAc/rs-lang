@@ -125,12 +125,12 @@ export const useStyles = makeStyles({
 		color: '#28FC03',
 		fontSize: '1.2em'
 	},
-	loader: {
+	loader: (props) => ({
 		position: 'absolute',
-		color: '#5600E8',
+		color: props.theme === 'dark' ? '#E38600' : '#5600E8',
 		top: '50%',
 		left: '50%'
-	},
+	}),
 	savannaWord: {
 		marginBottom: '300px',
 		fontSize: '2rem',

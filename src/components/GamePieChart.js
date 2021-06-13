@@ -9,7 +9,7 @@ const useStyles = makeStyles({
 		width: '450px',
 		height: '300px',
 		overflow: 'hidden',
-		'& > div': {
+		'&': {
 			cursor: props.theme === 'dark' ? `url(${icons.darkPointer}), pointer` : `url(${icons.lightPointer}), pointer`
 		}
 	})
@@ -74,12 +74,12 @@ const renderActiveShape = (props) => {
 export const GamePieChart = ({ data, all, showAddStats }) => {
 	const [ activeIndex, setActiveIndex ] = useState(0);
 	const { theme } = useSelector((state) => state.settings);
+	const classes = useStyles({ theme });
 
 	const onPieEnter = (_, index) => {
 		setActiveIndex(index);
 	};
 
-	const classes = useStyles();
 	return (
 		<div className={classes.pieChartContainer}>
 			<ResponsiveContainer width="100%" height="100%">

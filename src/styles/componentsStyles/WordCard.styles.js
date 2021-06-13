@@ -89,10 +89,10 @@ export const useStyles = makeStyles({
 			transform: 'scale(1.1)'
 		},
 		'@media (max-width: 800px)': {
-			fontSize: '2rem'
+			fontSize: '2.4rem'
 		},
 		'@media (max-width: 600px)': {
-			fontSize: '1.5rem'
+			fontSize: '1.8rem'
 		}
 	}),
 	cardUnitWrap: {
@@ -111,16 +111,16 @@ export const useStyles = makeStyles({
 	},
 	littleCardIcon: (props) => ({
 		cursor: props.theme === 'dark' ? `url(${icons.darkPointer}), default` : `url(${icons.lightPointer}), default`,
-		fontSize: '2rem',
+		fontSize: '2.2rem',
 		color: 'inherit',
 		'&:hover': {
 			transform: 'scale(1.1)'
 		},
 		'@media (max-width: 800px)': {
-			fontSize: '1.5rem'
+			fontSize: '1.8rem'
 		},
 		'@media (max-width: 600px)': {
-			fontSize: '1rem'
+			fontSize: '1.4rem'
 		}
 	}),
 	correctText: {

@@ -8,7 +8,6 @@ import { logOut } from '../redux/actions';
 import { frontRoutes } from '../utils/frontRoutes';
 
 export const EnterPoint = () => {
-	const { block } = useSelector((state) => state);
 	const { theme } = useSelector((state) => state.settings);
 	const classes = useStyles({ theme });
 	const dispatch = useDispatch();
@@ -29,7 +28,7 @@ export const EnterPoint = () => {
 					<ExitToAppIcon className={classes.logout} onClick={handleLogOut} />
 				</div>
 			) : (
-				<Link to={block ? '#!' : `${frontRoutes.signIn}`} className={classes.link}>
+				<Link to={frontRoutes.signIn} className={classes.link}>
 					<button className={classes.button}>Войти</button>
 				</Link>
 			)}

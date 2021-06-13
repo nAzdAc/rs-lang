@@ -1,5 +1,7 @@
 import { makeStyles } from '@material-ui/core/styles';
 import { icons } from '../../assets/icons/IconsRequire';
+import { images } from '../../assets/images/imagesRequire';
+
 export const useStyles = makeStyles({
 	app: (props) => ({
 		display: 'flex',
@@ -9,7 +11,25 @@ export const useStyles = makeStyles({
 		minHeight: '100%',
 		backgroundColor: props.theme === 'dark' ? '#141414' : '#F2F2F2',
 		color: props.theme === 'dark' ? '#E38600' : '#5600E8',
-		fontFamily: '"Itim", cursive;'
+		fontFamily: '"Itim", cursive;',
+		position: 'relative',
+		'&::after': {
+			content: '""',
+			position: 'absolute',
+			top: '0',
+			left: '0',
+			width: '100%',
+			height: '100%',
+			cursor: 'inherit',
+			transition: 'all 0.5s ease 0s',
+			background:
+				props.theme === 'dark'
+					? `rgba(227, 134, 0, 0.8) url(${images.downloadGif}) center / 300px no-repeat`
+					: `rgba(86, 0, 232, 0.8) url(${images.downloadGif}) center / 300px no-repeat`,
+			zIndex: '20',
+			visibility: props.block ? 'visible' : 'hidden',
+			opacity: props.block ? '1' : '0'
+		}
 	}),
 	header: (props) => ({
 		width: '100%',

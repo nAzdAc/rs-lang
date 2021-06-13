@@ -19,7 +19,6 @@ import { isBlock } from '../redux/actions';
 
 export const SignUpPage = () => {
 	const dispatch = useDispatch();
-	const { block } = useSelector((state) => state);
 	const { theme } = useSelector((state) => state.settings);
 	const classes = useStyles({ theme });
 	const showMessage = useMessage();
@@ -159,10 +158,10 @@ export const SignUpPage = () => {
 						<span className={classes.info}>Не более 15 символов. Иначе будете енотиком :)</span>
 					)}
 					<Box className={classes.buttonBox}>
-						<button disabled={block} style={{ width: '130px' }} type="submit" className={classes.button}>
+						<button style={{ width: '130px' }} type="submit" className={classes.button}>
 							Выполнить
 						</button>
-						<Link className={classes.link} to={block ? '#!' : frontRoutes.signIn}>
+						<Link className={classes.link} to={frontRoutes.signIn}>
 							<button className={classes.outlainedButton}>Вход</button>
 						</Link>
 					</Box>
