@@ -37,6 +37,9 @@ export const SettingsPage = () => {
 		() => {
 			[ musicSlider.current, soundSlider.current, wordSlider.current ].forEach((elem) => {
 				elem.addEventListener('mouseup', async (event) => {
+					if (!event.target.ariaValueText || event.target.ariaValueNow === null) {
+						return showMessage('Этот ползунок часто заедает! Попробуйте аккуратно его перетянуть :)');
+					}
 					dispatch(setSettings(event.target.ariaValueText, event.target.ariaValueNow));
 					if (!token) return showMessage('Рекомендуем авторизоваться, тогда настройки будут всегда с вами :)', 200);
 					const { text, code } = await dispatch(
@@ -50,6 +53,9 @@ export const SettingsPage = () => {
 	);
 
 	const handleVolume = (event, newValue) => {
+		if (!event.target.ariaValueText || newValue === null) {
+			return;
+		}
 		dispatch(setSettings(event.target.ariaValueText, newValue));
 	};
 
@@ -69,6 +75,12 @@ export const SettingsPage = () => {
 		}
 		if (!event.target.files[0]) {
 			return showMessage('Выберите файл', 404);
+		}
+		if (![ 'image/jpeg', 'image/png', 'image/gif' ].includes(event.target.files[0].type)) {
+			return showMessage('Разрешены только изображения', 404);
+		}
+		if (event.target.files[0].size > 2 * 1024 * 1024) {
+			return showMessage('Аватарка должна быть менее 2МБ', 404);
 		}
 		const { text, code } = await dispatch(uploadAvatar(event.target.files[0], token));
 		showMessage(text, code);
@@ -158,7 +170,6 @@ export const SettingsPage = () => {
 						<SettingsSlider
 							marks={marks}
 							valueLabelDisplay="auto"
-							aria-label="pretto slider"
 							aria-valuetext="musicVolume"
 							data-name="musicVolume"
 							ref={musicSlider}
@@ -170,7 +181,6 @@ export const SettingsPage = () => {
 						<SettingsSlider
 							marks={marks}
 							valueLabelDisplay="auto"
-							aria-label="pretto slider"
 							aria-valuetext="soundVolume"
 							data-name="soundVolume"
 							ref={soundSlider}
@@ -182,7 +192,6 @@ export const SettingsPage = () => {
 						<SettingsSlider
 							marks={marks}
 							valueLabelDisplay="auto"
-							aria-label="pretto slider"
 							aria-valuetext="wordVolume"
 							data-name="wordVolume"
 							ref={wordSlider}
@@ -205,7 +214,13 @@ export const SettingsPage = () => {
 						<label htmlFor="file" className={classes.button}>
 							+ ИЗМЕНИТЬ АВАТАР
 						</label>
-						<input style={{ display: 'none' }} type="file" id="file" accept="image/*" onChange={changeAvatar} />
+						<input
+							style={{ display: 'none' }}
+							type="file"
+							id="file"
+							accept=".jpg, .png, .gif"
+							onChange={changeAvatar}
+						/>
 						<form style={{ marginTop: '20px' }} className={classes.form} onSubmit={changeName}>
 							<CssTextField
 								className={classes.nameField}

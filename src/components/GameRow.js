@@ -12,8 +12,8 @@ import { useStyles } from '../styles/componentsStyles/GameRow.styles';
 
 export const GameRow = ({ answer, color }) => {
 	const [ addInfo, setAddInfo ] = useState(false);
-	const { wordVolume } = useSelector((state) => state.settings);
-	const classes = useStyles();
+	const { wordVolume, theme } = useSelector((state) => state.settings);
+	const classes = useStyles({ theme });
 
 	function repeat(event) {
 		const src = event.currentTarget.value;

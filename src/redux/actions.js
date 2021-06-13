@@ -142,13 +142,6 @@ export function signIn(value) {
 export function postSettings(name, value, token) {
 	return async (dispatch) => {
 		dispatch(isBlock(true));
-		console.log(name);
-		console.log(value);
-		console.log(typeof value);
-		if (!name || typeof value === undefined) {
-			dispatch(isBlock(false));
-			return { text: 'Возникла проблема с изменением настроек. Попробуйте позже', code: 404 };
-		}
 		try {
 			const res = await fetch(backRoutes.settings, {
 				method: 'POST',

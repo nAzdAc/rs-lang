@@ -158,8 +158,6 @@ export const useStyles = makeStyles({
 		maxWidth: '600px'
 	},
 	tab: (props) => ({
-		backgroundColor: props.theme === 'dark' ? '#E38600' : '#5600E8',
-		color: props.theme === 'dark' ? '#141414' : '#F2F2F2',
 		'& .MuiTab-root': {
 			cursor: props.theme === 'dark' ? `url(${icons.darkPointer}), pointer` : `url(${icons.lightPointer}), pointer`,
 			fontWeight: '600',
@@ -167,7 +165,7 @@ export const useStyles = makeStyles({
 		},
 		'& .MuiTabs-indicator': {
 			height: '4px',
-			backgroundColor: props.theme === 'dark' ? '#FCCA81' : '#BB86FC'
+			backgroundColor: props.theme === 'dark' ? '#E38600' : '#5600E8'
 		}
 	}),
 	formCard: (props) => ({

@@ -32,7 +32,7 @@ export const useStyles = makeStyles({
 		backgroundColor: 'inherit',
 		fontFamily: 'inherit',
 		color: 'inherit',
-		height: '450px',
+		maxHeight: '450px',
 		overflowY: 'scroll',
 		width: '100%',
 		maxWidth: '700px',
@@ -48,49 +48,34 @@ export const useStyles = makeStyles({
 		}
 	}),
 	table: (props) => ({
+		boxShadow:
+			props.theme === 'dark' ? '3px 0px 10px 3px rgba(227, 134, 0, 0.5)' : '3px 0px 10px 3px rgba(86, 0, 232, 0.6)',
 		'& .MuiTableRow-root': {
+			fontSize: '1.4rem',
 			padding: '0px',
 			borderColor: props.theme === 'dark' ? '#FCCA81' : '#BB86FC',
+			'@media (max-width: 768px)': {
+				fontSize: '1.1rem'
+			},
+			'@media (max-width: 600px)': {
+				fontSize: '0.8rem'
+			},
 			'& .MuiTableCell-head': {
-				fontSize: '1.3rem',
+				fontSize: '1em',
 				fontWeight: '600',
 				color: 'inherit',
 				fontFamily: 'inherit',
 				padding: '10px',
 				textAlign: 'center',
-				borderColor: 'inherit',
-				'@media (max-width: 768px)': {
-					fontSize: '1rem',
-					fontWeight: '600',
-					color: 'inherit',
-					fontFamily: 'inherit',
-					padding: '10px',
-					textAlign: 'center',
-					borderColor: 'inherit'
-				},
-				'@media (max-width: 550px)': {
-					fontSize: '0.85rem',
-					fontWeight: '600',
-					color: 'inherit',
-					fontFamily: 'inherit',
-					padding: '10px',
-					textAlign: 'center',
-					borderColor: 'inherit'
-				}
+				borderColor: 'inherit'
 			},
 			'& .MuiTableCell-body': {
-				fontSize: '1.1rem',
+				fontSize: '0.8em',
 				color: 'inherit',
 				fontFamily: 'inherit',
 				padding: '0px',
 				textAlign: 'center',
-				borderColor: 'inherit',
-				'@media (max-width: 768px)': {
-					fontSize: '0.85rem'
-				},
-				'@media (max-width: 550px)': {
-					fontSize: '0.6rem'
-				}
+				borderColor: 'inherit'
 			}
 		}
 	}),

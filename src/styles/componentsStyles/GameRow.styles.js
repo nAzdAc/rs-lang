@@ -16,13 +16,13 @@ export const useStyles = makeStyles({
 		marginRight: '5px',
 		border: 'none',
 		outline: 'none',
-		cursor: props.theme === 'dark' ? `url(${icons.darkPointer}), default` : `url(${icons.lightPointer}), default`,
+		cursor: props.theme === 'dark' ? `url(${icons.darkPointer}), pointer` : `url(${icons.lightPointer}), pointer`,
 		fontWeight: 'bold',
 		background: 'inherit',
 		color: 'inherit'
 	}),
 	icon: (props) => ({
-		cursor: props.theme === 'dark' ? `url(${icons.darkPointer}), default` : `url(${icons.lightPointer}), default`,
+		cursor: props.theme === 'dark' ? `url(${icons.darkPointer}), pointer` : `url(${icons.lightPointer}), pointer`,
 		fontSize: '2.5rem',
 		color: 'inherit',
 		'&:hover': {

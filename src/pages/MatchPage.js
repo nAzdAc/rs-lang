@@ -18,10 +18,10 @@ import { originURL } from '../utils/backRoutes';
 import { GamesProgressBar } from '../components/GamesProgressBar';
 
 export const MatchPage = () => {
-	const classes = useStyles();
 	const dispatch = useDispatch();
 	const { getWords } = useGames();
-	const { soundVolume, musicVolume } = useSelector((state) => state.settings);
+	const { soundVolume, musicVolume, theme } = useSelector((state) => state.settings);
+	const classes = useStyles({ theme });
 	const [ endGame, setEndGame ] = useState(false);
 	const [ wordsArray, setWordsArray ] = useState([]);
 	const [ correctAnswers, setCorrectAnswers ] = useState([]);
