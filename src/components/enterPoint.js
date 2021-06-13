@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { logOut } from '../redux/actions';
 import { frontRoutes } from '../utils/frontRoutes';
 
-export const EnterPoint = () => {
+const EnterPoint = () => {
 	const { theme } = useSelector((state) => state.settings);
 	const classes = useStyles({ theme });
 	const dispatch = useDispatch();
@@ -35,3 +35,5 @@ export const EnterPoint = () => {
 		</React.Fragment>
 	);
 };
+
+export default EnterPoint;
