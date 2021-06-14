@@ -23,8 +23,8 @@ export const SignUpPage = () => {
 	const classes = useStyles({ theme });
 	const showMessage = useMessage();
 	const email = useInput('', { emailIsEmail: true });
-	const password = useInput('', { passwordMinLength: 4, passwordMaxLength: 12 });
-	const name = useInput('', { nameMaxLength: 15 });
+	const password = useInput('', { passwordIsPassword: true });
+	const name = useInput('', { nameIsName: true });
 	const { token } = useSelector((state) => state.userData);
 
 	const [ values, setValues ] = useState({
@@ -42,14 +42,9 @@ export const SignUpPage = () => {
 		async (e) => {
 			e.preventDefault();
 			if (!name.isDirty || !password.isDirty) {
-				return showMessage('Уберите фокус со всех полей чтобы мы могли их провалидировать :)');
+				return showMessage('Необходимо заполнить все поля');
 			}
-			if (
-				name.nameMaxLengthErrorText ||
-				password.passwordMaxLengthErrorText ||
-				password.passwordMinLengthErrorText ||
-				email.emailIsEmailErrorText
-			) {
+			if (name.nameErrorText || password.passwordErrorText || email.emailErrorText) {
 				return showMessage('Некорректно введены данные :(');
 			}
 			dispatch(isBlock(true));
@@ -94,19 +89,19 @@ export const SignUpPage = () => {
 					<CssTextField
 						variant="outlined"
 						id="email"
-						label="Электропочта"
+						label="Email"
 						name="email"
 						autoFocus
 						value={email.value}
 						onChange={email.onChange}
 						onBlur={email.onBlur}
 					/>
-					{email.isDirty && email.emailIsEmailErrorText ? (
+					{email.isDirty && email.emailErrorText ? (
 						<span style={{ color: 'red', fontWeight: 'bold' }} className={classes.info}>
-							{email.emailIsEmailErrorText}
+							{email.emailErrorText}
 						</span>
 					) : (
-						<span className={classes.info}>Используйте настоящую</span>
+						<span className={classes.info}>Используйте настоящую, чтобы мы могли отправить вам письмо</span>
 					)}
 					<FormControl className={classes.field} value={password.value} variant="outlined">
 						<InputLabel htmlFor="outlined-adornment-password">Пароль</InputLabel>
@@ -133,9 +128,9 @@ export const SignUpPage = () => {
 							labelWidth={70}
 						/>
 					</FormControl>
-					{password.isDirty && (password.passwordMinLengthErrorText || password.passwordMaxLengthErrorText) ? (
+					{password.isDirty && password.passwordErrorText ? (
 						<span style={{ color: 'red', fontWeight: 'bold' }} className={classes.info}>
-							{password.passwordMinLengthErrorText || password.passwordMaxLengthErrorText}
+							{password.passwordErrorText}
 						</span>
 					) : (
 						<span className={classes.info}>От 4 до 12 символов</span>
@@ -150,12 +145,12 @@ export const SignUpPage = () => {
 						onChange={name.onChange}
 						onBlur={name.onBlur}
 					/>
-					{name.isDirty && name.nameMaxLengthErrorText ? (
+					{name.isDirty && name.nameErrorText ? (
 						<span style={{ color: 'red', fontWeight: 'bold' }} className={classes.info}>
-							{name.nameMaxLengthErrorText}
+							{name.nameErrorText}
 						</span>
 					) : (
-						<span className={classes.info}>Не более 15 символов. Иначе будете енотиком :)</span>
+						<span className={classes.info}>От 1 до 15 символов</span>
 					)}
 					<Box className={classes.buttonBox}>
 						<button style={{ width: '130px' }} type="submit" className={classes.button}>

@@ -12,6 +12,7 @@ import { useMessage } from '../hooks/message.hook';
 import { Container } from '@material-ui/core';
 import WbSunnyIcon from '@material-ui/icons/WbSunny';
 import Brightness3Icon from '@material-ui/icons/Brightness3';
+import { useInput } from '../hooks/input.hook';
 
 export const SettingsPage = () => {
 	const dispatch = useDispatch();
@@ -26,12 +27,15 @@ export const SettingsPage = () => {
 		theme
 	} = useSelector((state) => state.settings);
 	const classes = useStyles({ theme });
-	const { token, avatarURL } = useSelector((state) => state.userData);
+	const { token, avatarURL, userEmail } = useSelector((state) => state.userData);
 	const showMessage = useMessage();
 	const soundSlider = useRef();
 	const musicSlider = useRef();
 	const wordSlider = useRef();
 	const [ newName, setNewName ] = useState('');
+	const email = useInput(`${userEmail || ''}`, { emailIsEmail: true });
+	const previewRef = useRef();
+	const screenshotRef = useRef();
 
 	useEffect(
 		() => {
@@ -86,8 +90,52 @@ export const SettingsPage = () => {
 		showMessage(text, code);
 	};
 
+	const changeScreenshot = async (event) => {
+		console.log(event.target.files[0]);
+		if (![ 'image/jpeg', 'image/png', 'image/gif' ].includes(event.target.files[0].type)) {
+			return showMessage('Разрешены только изображения', 404);
+		}
+		if (event.target.files[0].size > 2 * 1024 * 1024) {
+			return showMessage('Аватарка должна быть менее 2МБ', 404);
+		}
+
+		const reader = new FileReader();
+		reader.onload = function(e) {
+			previewRef.current.innerHTML = `<img src="${e.target.result}" alt="СКРИНШОТ">`;
+		};
+		reader.onerror = function() {
+			showMessage('Произошла какая-то ошибка с добавлением скриншота', 404);
+		};
+		reader.readAsDataURL(event.target.files[0]);
+	};
+
 	const handleName = (event) => {
 		setNewName(event.target.value);
+	};
+
+	const sendMessage = async (event) => {
+		event.preventDefault();
+		// const form = document.getElementById('messageForm');
+		// console.log(form);
+		// console.log(event);
+		// console.log(screenshotRef.current.files[0]);
+		console.log(event.target);
+		const formData = new FormData(event.target);
+		console.log(formData);
+		formData.append('image', screenshotRef.current.files[0]);
+		console.log(formData);
+		// const res = await fetch('', {
+		// 	method: 'POST',
+		// 	withCredentials: true,
+		// 	headers: {
+		// 		Accept: 'application/json',
+		// 		'Content-Type': 'application/json'
+		// 	},
+		// 	body: formData
+		// });
+		// const json = await res.json();
+		// console.log(res);
+		// console.log(json);
 	};
 
 	const handleTheme = async (event) => {
@@ -211,13 +259,13 @@ export const SettingsPage = () => {
 								'http://res.cloudinary.com/nazdac/image/upload/v1616652013/travelAppFolder/dmlfcuvyr79gpkbgg639.jpg'
 							}
 						/>
-						<label htmlFor="file" className={classes.button}>
+						<label htmlFor="avatarFile" className={classes.button}>
 							+ ИЗМЕНИТЬ АВАТАР
 						</label>
 						<input
 							style={{ display: 'none' }}
 							type="file"
-							id="file"
+							id="avatarFile"
 							accept=".jpg, .png, .gif"
 							onChange={changeAvatar}
 						/>
@@ -238,6 +286,52 @@ export const SettingsPage = () => {
 							{theme === 'dark' ? <Brightness3Icon /> : <WbSunnyIcon />}
 							+ ИЗМЕНИТЬ ТЕМУ
 						</button>
+					</div>
+				</div>
+
+				<div className={classes.card}>
+					<div className={classes.cardItem}>
+						<form id="messageForm" style={{ marginTop: '20px' }} className={classes.form} onSubmit={sendMessage}>
+							<CssTextField
+								className={classes.nameField}
+								label="Электропочта"
+								variant="outlined"
+								id="message-email"
+								value={email.value}
+								onChange={email.onChange}
+								onBlur={email.onBlur}
+								name="mail"
+							/>
+							{email.isDirty && email.emailIsEmailErrorText ? (
+								<span style={{ color: 'red', fontWeight: 'bold' }} className={classes.info}>
+									{email.emailIsEmailErrorText}
+								</span>
+							) : (
+								<span className={classes.info}>Адрес, на который мы обязательно вам ответим</span>
+							)}
+							<textarea
+								className={classes.messageArea}
+								id="message-area"
+								name="message"
+								placeholder="Здесь вы может оставить отзыв или сообщить об ошибке"
+							/>
+							<label style={{ marginBottom: '20px' }} htmlFor="screenshotFile" className={classes.button}>
+								+ ДОБАВИТЬ СКРИНШОТ
+							</label>
+							<input
+								name="image"
+								ref={screenshotRef}
+								style={{ display: 'none' }}
+								type="file"
+								id="screenshotFile"
+								accept=".jpg, .png, .gif"
+								onChange={changeScreenshot}
+							/>
+							<div style={{ margin: '0 auto' }} ref={previewRef} className={classes.preview} />
+							<button style={{ marginTop: '20px' }} type="submit" className={classes.button}>
+								+ ОТПРАВИТЬ СООБЩЕНИЕ
+							</button>
+						</form>
 					</div>
 				</div>
 			</div>

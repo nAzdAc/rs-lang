@@ -68,6 +68,48 @@ export const useStyles = makeStyles({
 		borderRadius: '50%',
 		margin: '20px'
 	},
+	messageArea: (props) => ({
+		boxSizing: 'border-box',
+		minHeight: '100px',
+		width: '100%',
+		resize: 'vertical',
+		marginBottom: '20px',
+		color: 'inherit',
+		fontFamily: 'inherit',
+		cursor: props.theme === 'dark' ? `url(${icons.darkInput}), text` : `url(${icons.lightInput}), text`,
+		fontSize: '1rem',
+		background: 'inherit',
+		border: '1px solid',
+		borderColor: props.theme === 'dark' ? '#E38600' : '#5600E8',
+		borderRadius: '5px',
+		outline: 'none',
+		'&::-webkit-input-placeholder': {
+			color: 'inherit',
+			opacity: '0.6'
+		},
+		'&::-webkit-scrollbar': {
+			cursor: 'pointer',
+			width: '5px',
+			height: '5px'
+		},
+		'&::-webkit-scrollbar-thumb': {
+			borderRadius: '20px',
+			backgroundColor: props.theme === 'dark' ? '#E38600' : '#5600E8'
+		},
+		'& placeholder': {
+			color: 'red'
+		},
+		'&:focus': {
+			border: '2px solid'
+		}
+	}),
+	preview: {
+		width: '100%',
+		'& img': {
+			width: '100%'
+		}
+	},
+	screenShot: {},
 	button: (props) => ({
 		padding: '3px',
 		width: '100%',
@@ -190,6 +232,7 @@ export const useStyles = makeStyles({
 			margin: '0px'
 		},
 		'& .MuiInputBase-root': {
+			fontFamily: 'inherit',
 			'& .MuiOutlinedInput-input': {
 				cursor: props.theme === 'dark' ? `url(${icons.darkInput}), default` : `url(${icons.lightInput}), default`
 			}

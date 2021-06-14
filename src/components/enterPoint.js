@@ -25,7 +25,9 @@ export const EnterPoint = () => {
 						<Avatar className={classes.avatar} alt={userName || ''} title={userName || ''} src={avatarURL} />
 						<p className={classes.name}>{userName || 'Енотик :)'}</p>
 					</div>
-					<ExitToAppIcon className={classes.logout} onClick={handleLogOut} />
+					<Link to={frontRoutes.signIn} className={classes.link}>
+						<ExitToAppIcon className={classes.logout} onClick={handleLogOut} />
+					</Link>
 				</div>
 			) : (
 				<Link to={frontRoutes.signIn} className={classes.link}>

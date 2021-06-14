@@ -115,7 +115,8 @@ export function signIn(value) {
 					avatarURL: json.avatarURL,
 					token: json.token,
 					userId: json.userId,
-					userName: json.userName
+					userName: json.userName,
+					userEmail: json.userEmail
 				},
 				settings: {
 					...json.settings
