@@ -43,7 +43,7 @@ export const useStyles = makeStyles(() => ({
 		cursor: props.theme === 'dark' ? `url(${icons.darkPointer}), pointer` : `url(${icons.lightPointer}), pointer`,
 		borderRadius: '6px',
 		outline: 'none',
-		fontWeight: '600',
+		fontWeight: '400',
 		width: '84px',
 		height: '36px',
 		background: 'inherit',
@@ -60,7 +60,8 @@ export const useStyles = makeStyles(() => ({
 		color: 'inherit'
 	},
 	name: {
-		fontSize: '0.9rem',
+		letterSpacing: '1px',
+		fontSize: '1.1rem',
 		color: 'inherit'
 	}
 }));

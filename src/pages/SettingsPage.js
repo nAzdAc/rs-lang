@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useCallback } from 'react';
+import React, { useEffect, useRef, useCallback } from 'react';
 import {
 	useStyles,
 	SettingsSlider,
@@ -33,9 +33,9 @@ export const SettingsPage = () => {
 	const soundSlider = useRef();
 	const musicSlider = useRef();
 	const wordSlider = useRef();
-	const [ newName, setNewName ] = useState('');
 	const email = useInput(`${userEmail || ''}`, { emailIsEmail: true });
 	const message = useInput('', { messageIsMessage: true });
+	const name = useInput('', { nameIsName: true });
 	const previewRef = useRef();
 	const screenshotRef = useRef();
 
@@ -111,10 +111,6 @@ export const SettingsPage = () => {
 		reader.readAsDataURL(event.target.files[0]);
 	};
 
-	const handleName = (event) => {
-		setNewName(event.target.value);
-	};
-
 	const sendMessage = async (event) => {
 		event.preventDefault();
 		if ((!email.isDirty && !email.value) || !message.isDirty) {
@@ -150,13 +146,16 @@ export const SettingsPage = () => {
 	const changeName = useCallback(
 		async (event) => {
 			event.preventDefault();
-			setNewName('');
+			if (name.nameErrorText) {
+				return showMessage('Некорректно введены данные :(');
+			}
+			name.setValue('');
 			if (!token) return showMessage('Для изменения никнейма необходимо авторизоваться', 404);
-			if (!newName) return showMessage('Вы ничего не ввели. Никнейм не изменён', 404);
-			const { text, code } = await dispatch(postName(newName, token));
+			if (!name.value) return showMessage('Вы ничего не ввели. Никнейм не изменён', 404);
+			const { text, code } = await dispatch(postName(name.value, token));
 			showMessage(text, code);
 		},
-		[ dispatch, newName, showMessage, token ]
+		[ dispatch, name, showMessage, token ]
 	);
 
 	return (
@@ -276,14 +275,22 @@ export const SettingsPage = () => {
 								label="Введите Никнейм"
 								variant="outlined"
 								id="outlined-input"
-								value={newName}
-								onChange={handleName}
+								value={name.value}
+								onChange={name.onChange}
+								onBlur={name.onBlur}
 							/>
-							<button style={{ margin: '20px 0px' }} type="submit" className={classes.button}>
+							{name.isDirty && name.nameErrorText ? (
+								<span style={{ color: 'red', fontWeight: 'bold' }} className={classes.info}>
+									{name.nameErrorText}
+								</span>
+							) : (
+								<span className={classes.info}>От 1 до 15 символов</span>
+							)}
+							<button type="submit" className={classes.button}>
 								+ ИЗМЕНИТЬ НИКНЕЙМ
 							</button>
 						</form>
-						<button value={theme} onClick={handleTheme} className={classes.button}>
+						<button style={{ marginTop: '10px' }} value={theme} onClick={handleTheme} className={classes.button}>
 							{theme === 'dark' ? <Brightness3Icon /> : <WbSunnyIcon />}
 							+ ИЗМЕНИТЬ ТЕМУ
 						</button>
@@ -292,7 +299,7 @@ export const SettingsPage = () => {
 
 				<div className={classes.card}>
 					<div className={classes.cardItem}>
-						<form id="messageForm" style={{ marginTop: '20px' }} className={classes.form} onSubmit={sendMessage}>
+						<form id="messageForm" className={classes.form} onSubmit={sendMessage}>
 							<CssTextField
 								className={classes.nameField}
 								label="Электронная почта"
@@ -338,7 +345,7 @@ export const SettingsPage = () => {
 								onChange={changeScreenshot}
 							/>
 							<div style={{ margin: '0 auto' }} ref={previewRef} className={classes.preview} />
-							<button style={{ marginTop: '20px' }} type="submit" className={classes.button}>
+							<button type="submit" className={classes.button}>
 								+ ОТПРАВИТЬ СООБЩЕНИЕ
 							</button>
 						</form>

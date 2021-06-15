@@ -97,14 +97,14 @@ export const WordCard = ({ word }) => {
 								)}
 							</React.Fragment>
 						)}
-						<h4 className={classes.infoText}>
+						<p className={classes.infoText}>
 							Правильно:&#160;
 							<span className={classes.correctText}>{word.correct || 0}&#160;</span>
-						</h4>
-						<h4 className={classes.infoText}>
+						</p>
+						<p className={classes.infoText}>
 							Ошибочно:&#160;
 							<span className={classes.failText}>{word.fail || 0}</span>
-						</h4>
+						</p>
 					</div>
 
 					<div className={classes.cardUnitWrap}>
@@ -112,9 +112,12 @@ export const WordCard = ({ word }) => {
 							<button className={classes.iconWrap} value={word.audio} onClick={play}>
 								<PlayCircleFilledIcon className={classes.bigCardIcon} />
 							</button>
-							<h4 className={classes.wordText}>{`${word.word} ${word.transcription}`}</h4>
+							<p className={classes.wordText}>{`${word.word} `}</p>
+							<p style={{ fontFamily: 'roboto' }} className={classes.wordText}>
+								{word.transcription}
+							</p>
 						</div>
-						{translateWord && <h4 className={classes.wordText}>{` \u2014 ${word.wordTranslate}`}</h4>}
+						{translateWord && <p className={classes.wordText}>{` \u2014 ${word.wordTranslate}`}</p>}
 					</div>
 				</div>
 			</div>

@@ -19,7 +19,7 @@ const useStyles = makeStyles({
 			padding: '0px',
 			borderColor: props.theme === 'dark' ? '#FCCA81' : '#BB86FC',
 			'& .MuiTableCell-head': {
-				fontWeight: '600',
+				fontWeight: '400',
 				color: 'inherit',
 				fontFamily: 'inherit',
 				borderColor: 'inherit',

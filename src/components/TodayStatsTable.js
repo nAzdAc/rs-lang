@@ -18,7 +18,7 @@ const useStyles = makeStyles({
 		borderColor: props.theme === 'dark' ? '#FCCA81' : '#BB86FC',
 		'& .MuiTableRow-root': {
 			'& .MuiTableCell-head': {
-				fontWeight: '600',
+				fontWeight: '400',
 				color: 'inherit',
 				fontFamily: 'inherit',
 				borderColor: 'inherit'

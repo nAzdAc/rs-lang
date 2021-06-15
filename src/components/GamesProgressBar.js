@@ -18,7 +18,7 @@ const useStyles = makeStyles({
 	},
 	sideBarText: {
 		fontSize: '1.25rem',
-		fontWeight: 'bold',
+		fontWeight: '400',
 		marginTop: '8px'
 	},
 	progressBarWrap: (props) => ({
@@ -36,8 +36,8 @@ const useStyles = makeStyles({
 	}),
 	overBarText: {
 		margin: '0 auto',
-		fontSize: '0.8rem',
-		fontWeight: 'bold',
+		fontSize: '1rem',
+		fontWeight: '400',
 		marginBottom: '3px'
 	}
 });

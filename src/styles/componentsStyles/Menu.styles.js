@@ -13,7 +13,7 @@ export const useStyles = makeStyles({
 	},
 	link: (props) => ({
 		cursor: props.theme === 'dark' ? `url(${icons.darkPointer}), pointer` : `url(${icons.lightPointer}), pointer`,
-		fontFamily: 'inherit',
+		fontFamily: props.theme === 'dark' ? 'darkTitle' : 'lightTitle',
 		color: 'inherit',
 		'& .MuiSvgIcon-root': {
 			color: 'inherit',

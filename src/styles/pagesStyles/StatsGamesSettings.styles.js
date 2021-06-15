@@ -30,36 +30,36 @@ export const useStyles = makeStyles({
 			color: 'inherit'
 		}
 	},
-	title: {
+	title: (props) => ({
 		color: 'inherit',
 		fontSize: '5rem',
 		marginBottom: '25px',
-		fontFamily: 'inherit',
+		fontFamily: props.theme === 'dark' ? 'darkTitle' : 'lightTitle',
 		marginRight: 'auto',
 		'@media (max-width: 768px)': {
 			fontSize: '3.5rem'
 		}
-	},
-	gameTitle: {
+	}),
+	gameTitle: (props) => ({
 		fontSize: '3.5rem',
 		marginBottom: '10px',
-		fontFamily: 'inherit',
+		fontFamily: props.theme === 'dark' ? 'darkTitle' : 'lightTitle',
 		marginRight: 'auto',
 		'@media (max-width: 768px)': {
 			fontSize: '2.5rem'
 		}
-	},
-	subtitle1: {
-		fontFamily: 'inherit',
+	}),
+	subtitle1: (props) => ({
+		fontFamily: props.theme === 'dark' ? 'darkTitle' : 'lightTitle',
 		fontSize: '1.5rem',
 		fontWeight: '650',
 		marginRight: 'auto',
 		marginBottom: '15px'
-	},
+	}),
 	subtitle2: {
 		fontFamily: 'inherit',
 		fontSize: '1.05rem',
-		fontWeight: '500',
+		fontWeight: '400',
 		marginRight: 'auto'
 	},
 	avatarImage: {
@@ -69,6 +69,7 @@ export const useStyles = makeStyles({
 		margin: '20px'
 	},
 	messageArea: (props) => ({
+		padding: '10px',
 		boxSizing: 'border-box',
 		minHeight: '100px',
 		width: '100%',
@@ -84,7 +85,7 @@ export const useStyles = makeStyles({
 		outline: 'none',
 		'&::-webkit-input-placeholder': {
 			color: 'inherit',
-			opacity: '0.6'
+			opacity: '0.8'
 		},
 		'&::-webkit-scrollbar': {
 			cursor: 'pointer',
@@ -201,7 +202,7 @@ export const useStyles = makeStyles({
 	tab: (props) => ({
 		'& .MuiTab-root': {
 			cursor: props.theme === 'dark' ? `url(${icons.darkPointer}), pointer` : `url(${icons.lightPointer}), pointer`,
-			fontWeight: '600',
+			fontWeight: '400',
 			fontFamily: 'inherit'
 		},
 		'& .MuiTabs-indicator': {
@@ -238,8 +239,8 @@ export const useStyles = makeStyles({
 		}
 	}),
 	info: {
-		fontSize: '0.8rem',
-		margin: '0px 0px 25px 10px',
+		fontSize: '0.9rem',
+		margin: '3px 0px 25px 10px',
 		opacity: '0.8'
 	},
 	passwordField: {
@@ -343,7 +344,7 @@ export const SettingsSlider = withStyles({
 		width: '200px',
 		color: props.theme === 'dark' ? '#E38600' : '#5600E8',
 		height: '8px',
-		fontFamily: '"Itim", cursive;'
+		fontFamily: 'inherit'
 	}),
 	thumb: (props) => ({
 		cursor: props.theme === 'dark' ? `url(${icons.darkPointer}), pointer` : `url(${icons.lightPointer}), pointer`,
@@ -360,7 +361,7 @@ export const SettingsSlider = withStyles({
 		left: 'calc(-50% + 8px)',
 		'& > span > span': {
 			color: props.theme === 'dark' ? '#141414' : '#F2F2F2',
-			fontWeight: 'bold'
+			fontWeight: '400'
 		}
 	}),
 	track: {

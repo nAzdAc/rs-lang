@@ -11,7 +11,7 @@ export const useStyles = makeStyles({
 		minHeight: '100%',
 		backgroundColor: props.theme === 'dark' ? '#141414' : '#F2F2F2',
 		color: props.theme === 'dark' ? '#E38600' : '#5600E8',
-		fontFamily: '"Itim", cursive;',
+		fontFamily: props.theme === 'dark' ? 'darkText' : 'lightText',
 		position: 'relative',
 		'&::after': {
 			content: '""',
@@ -46,24 +46,28 @@ export const useStyles = makeStyles({
 		cursor: props.theme === 'dark' ? `url(${icons.darkPointer}), pointer` : `url(${icons.lightPointer}), pointer`,
 		margin: '0px 10px 0px 10px',
 		width: '400px',
-		fontFamily: '"Permanent Marker", cursive',
+		fontFamily: 'logo',
+		fontWeight: '900',
 		fontSize: '55px',
 		color: 'inherit',
 		'@media (max-width: 950px)': {
-			fontSize: '40px',
+			margin: '-10px 10px 0px 10px',
+			fontSize: '45px',
 			width: '300px'
 		},
 		'@media (max-width: 768px)': {
-			fontSize: '30px'
+			margin: '-25px 10px 0px 10px',
+			fontSize: '35px'
 		}
 	}),
 	toast: (props) => ({
+		fontSize: '1.3rem',
 		cursor: props.theme === 'dark' ? `url(${icons.darkPointer}), pointer` : `url(${icons.lightPointer}), pointer`,
 		fontFamily: 'inherit',
 		'& .Toastify__toast--success': {
 			cursor: props.theme === 'dark' ? `url(${icons.darkPointer}), pointer` : `url(${icons.lightPointer}), pointer`,
 			fontFamily: 'inherit',
-			fontWeight: 'bold',
+			fontWeight: '400',
 			backgroundColor: props.theme === 'dark' ? '#141414' : '#F2F2F2',
 			color: props.theme === 'dark' ? '#E38600' : '#5600E8',
 			'& .Toastify__close-button': {
@@ -81,15 +85,15 @@ export const useStyles = makeStyles({
 			cursor: props.theme === 'dark' ? `url(${icons.darkPointer}), pointer` : `url(${icons.lightPointer}), pointer`,
 			padding: '15px',
 			fontFamily: 'inherit',
-			fontWeight: 'bold',
+			fontWeight: '400',
 			backgroundColor: '#FF001E',
-			color: '#FFF',
+			color: '#F2F2F2',
 			'& .Toastify__close-button': {
-				color: '#FFF',
+				color: '#F2F2F2',
 				opacity: '1'
 			},
 			'& .Toastify__progress-bar': {
-				backgroundColor: '#FFF',
+				backgroundColor: '#F2F2F2',
 				height: '6px',
 				margin: '5px',
 				borderRadius: '10px'

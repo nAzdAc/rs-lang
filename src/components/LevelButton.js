@@ -20,7 +20,7 @@ export const useStyles = makeStyles({
 		fontWeight: '600',
 		fontSize: '52px',
 		color: props.theme === 'dark' ? '#141414' : '#F2F2F2',
-		fontStyle: 'inherit',
+		fontFamily: props.theme === 'dark' ? 'darkTitle' : 'lightTitle',
 		'@media (max-width: 768px)': {
 			width: '57px',
 			height: '57px',

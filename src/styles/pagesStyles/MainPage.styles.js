@@ -13,44 +13,46 @@ export const useStyles = makeStyles({
 		}
 	},
 	logo: {
-		fontFamily: '"Permanent Marker", cursive',
+		fontFamily: 'logo',
+		marginTop: '0px',
 		fontSize: '96px',
 		lineHeight: '112px',
-		fontWeight: '400',
+		fontWeight: '900',
 		color: 'inherit',
 		'@media (max-width: 768px)': {
+			marginTop: '-15px',
 			fontSize: '70px'
 		}
 	},
-	title: {
+	title: (props) => ({
 		fontSize: '4rem',
 		marginBottom: '10px',
-		fontFamily: 'inherit',
+		fontFamily: props.theme === 'dark' ? 'darkTitle' : 'lightTitle',
 		color: 'inherit',
 		marginRight: 'auto',
 		'@media (max-width: 768px)': {
 			fontSize: '3rem'
 		}
-	},
-	subtitle: {
+	}),
+	subtitle: (props) => ({
 		marginBottom: '20px',
 		fontSize: '50px',
 		color: 'inherit',
-		fontFamily: 'inherit',
+		fontFamily: props.theme === 'dark' ? 'darkTitle' : 'lightTitle',
 		'@media (max-width: 768px)': {
 			fontSize: '35px'
 		}
-	},
-	subtitle1: {
+	}),
+	subtitle1: (props) => ({
 		fontSize: '1.5rem',
-		fontWeight: '650',
+		fontWeight: '400',
 		marginRight: 'auto',
 		margin: '15px',
-		fontFamily: 'inherit'
-	},
+		fontFamily: props.theme === 'dark' ? 'darkTitle' : 'lightTitle'
+	}),
 	subtitle2: {
 		fontSize: '1.05rem',
-		fontWeight: '500',
+		fontWeight: '400',
 		margin: 'auto',
 		color: 'inherit'
 	},
@@ -70,7 +72,7 @@ export const useStyles = makeStyles({
 	},
 	text: {
 		fontFamily: 'inherit',
-		fontWeight: '500',
+		fontWeight: '400',
 		margin: '10px 0px'
 	},
 	advantagesSection: (props) => ({

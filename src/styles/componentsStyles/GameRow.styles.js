@@ -10,7 +10,7 @@ export const useStyles = makeStyles({
 	englishText: {
 		fontFamily: 'inherit',
 		color: 'inherit',
-		fontWeight: '600'
+		fontWeight: '400'
 	},
 	iconWrap: (props) => ({
 		marginRight: '5px',

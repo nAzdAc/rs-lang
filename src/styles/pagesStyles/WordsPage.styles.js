@@ -13,14 +13,16 @@ export const useStyles = makeStyles({
 		justifyContent: 'center',
 		alignItems: 'center'
 	},
-	title: {
+	title: (props) => ({
+		marginTop: '20px',
+		fontFamily: props.theme === 'dark' ? 'darkTitle' : 'lightTitle',
 		fontSize: '5rem',
 		marginBottom: '25px',
 		marginRight: 'auto',
 		'@media (max-width: 768px)': {
 			fontSize: '3.5rem'
 		}
-	},
+	}),
 	buttonBox: {
 		display: 'flex',
 		flexWrap: 'wrap',
@@ -43,7 +45,7 @@ export const useStyles = makeStyles({
 		width: '100%',
 		height: '50px',
 		fontSize: '0.95rem',
-		fontWeight: '600',
+		fontWeight: '400',
 		color: 'inherit',
 		backgroundColor: 'inherit',
 		borderRadius: '0',
@@ -64,22 +66,24 @@ export const useStyles = makeStyles({
 		borderColor: props.theme === 'dark' ? '#FCCA81' : '#BB86FC',
 		marginBottom: '-7px'
 	}),
-	subtitle: {
+	subtitle: (props) => ({
+		fontFamily: props.theme === 'dark' ? 'darkTitle' : 'lightTitle',
 		marginBottom: '20px',
 		fontSize: '2.5rem',
 		'@media (max-width: 768px)': {
 			fontSize: '1.8rem'
 		}
-	},
+	}),
 	link: {
 		fontFamily: 'inherit',
-		fontWeight: '600',
+		fontWeight: '400',
 		textDecoration: 'none',
 		color: 'inherit',
 		width: '100%',
 		height: '100%'
 	},
 	pagination: (props) => ({
+		fontFamily: 'inherit',
 		cursor: props.theme === 'dark' ? `url(${icons.darkPointer}), default` : `url(${icons.lightPointer}), default`,
 		display: 'flex',
 		margin: '25px',
@@ -89,14 +93,15 @@ export const useStyles = makeStyles({
 			color: 'inherit',
 			fontFamily: 'inherit',
 			'& .MuiPaginationItem-textPrimary.Mui-selected': {
+				fontFamily: 'inherit',
 				cursor: props.theme === 'dark' ? `url(${icons.darkPointer}), default` : `url(${icons.lightPointer}), default`,
 				backgroundColor: props.theme === 'dark' ? '#E38600' : '#5600E8',
 				color: props.theme === 'dark' ? '#141414' : '#F2F2F2'
 			},
 			'& .MuiPaginationItem-root': {
+				fontFamily: 'inherit',
 				cursor: props.theme === 'dark' ? `url(${icons.darkPointer}), default` : `url(${icons.lightPointer}), default`,
-				fontSize: '1.1rem',
-				fontWeight: 'bold',
+				fontSize: '1.5rem',
 				color: 'inherit'
 			}
 		}
@@ -123,7 +128,7 @@ export const useStyles = makeStyles({
 	levelTitle: (props) => ({
 		fontSize: '4.3rem',
 		marginBottom: '25px',
-		fontFamily: 'inherit',
+		fontFamily: props.theme === 'dark' ? 'darkTitle' : 'lightTitle',
 		marginRight: 'auto',
 		color:
 			props.theme === 'dark'

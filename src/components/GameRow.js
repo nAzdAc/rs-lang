@@ -26,7 +26,7 @@ export const GameRow = ({ answer, color }) => {
 			<TableRow>
 				<TableCell className={classes.englishText}>{answer.word}</TableCell>
 				<TableCell className={classes.translateText}>{answer.wordTranslate}</TableCell>
-				<TableCell>{answer.transcription}</TableCell>
+				<TableCell style={{ fontFamily: 'roboto' }}>{answer.transcription}</TableCell>
 				<TableCell>
 					<button value={answer.audio} onClick={repeat} className={classes.iconWrap}>
 						<SpeakerIcon className={classes.icon} />

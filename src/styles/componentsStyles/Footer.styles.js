@@ -9,7 +9,7 @@ export const useStyles = makeStyles({
 		justifyContent: 'space-around',
 		alignItems: 'center',
 		backgroundColor: props.theme === 'dark' ? '#E38600' : '#5600E8',
-		fontFamily: 'inherit',
+		fontFamily: props.theme === 'dark' ? 'darkTitle' : 'lightTitle',
 		color: props.theme === 'dark' ? '#141414' : '#F2F2F2'
 	}),
 	year: {
@@ -17,6 +17,9 @@ export const useStyles = makeStyles({
 		color: 'inherit',
 		'@media (max-width: 730px)': {
 			fontSize: '20px'
+		},
+		'@media (max-width: 560px)': {
+			fontSize: '17px'
 		}
 	},
 	developers: {
@@ -30,6 +33,10 @@ export const useStyles = makeStyles({
 		color: 'inherit',
 		'@media (max-width: 730px)': {
 			fontSize: '14px'
+		},
+		'@media (max-width: 560px)': {
+			margin: '5px',
+			fontSize: '12px'
 		},
 		'&:hover': {
 			textDecoration: 'underline',

@@ -6,12 +6,14 @@ import { useHistory, Switch, Route, useRouteMatch } from 'react-router-dom';
 import { bookLinks } from '../utils/constants';
 import { BookPage } from './BookPage';
 import { useStyles } from '../styles/pagesStyles/StatsGamesSettings.styles';
+import { useSelector } from 'react-redux';
 
 export const LevelPage = () => {
-	const classes = useStyles();
+	const { theme } = useSelector((state) => state.settings);
 	const { location: { pathname } } = useHistory();
 	const isBookRoute = pathname.slice(1).split('/').length === 1;
 	const { path } = useRouteMatch();
+	const classes = useStyles({ theme });
 
 	const LevelsButtons = () => {
 		return (

@@ -5,9 +5,10 @@ import { useSelector } from 'react-redux';
 import { Container } from '@material-ui/core';
 
 export const StatsPage = () => {
-	const classes = useStyles();
+	const { theme } = useSelector((state) => state.settings);
 	const { token } = useSelector((state) => state.userData);
 	const { statistics } = useSelector((state) => state);
+	const classes = useStyles({ theme });
 
 	return (
 		<Container className={classes.root}>

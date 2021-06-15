@@ -62,7 +62,7 @@ export const useStyles = makeStyles({
 			},
 			'& .MuiTableCell-head': {
 				fontSize: '1em',
-				fontWeight: '600',
+				fontWeight: '400',
 				color: 'inherit',
 				fontFamily: 'inherit',
 				padding: '10px',

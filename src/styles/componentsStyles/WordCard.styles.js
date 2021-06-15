@@ -61,7 +61,7 @@ export const useStyles = makeStyles({
 		borderRadius: '6px',
 		padding: '5px',
 		outline: 'none',
-		fontWeight: 'bold',
+		fontWeight: '400',
 		height: '36px',
 		marginRight: '12px',
 		marginLeft: '5px',
@@ -152,7 +152,7 @@ export const useStyles = makeStyles({
 	englishText: {
 		fontFamily: 'inherit',
 		color: 'inherit',
-		fontWeight: '600',
+		fontWeight: '400',
 		fontSize: '2rem',
 		'@media (max-width: 1300px)': {
 			fontSize: '1.5rem'

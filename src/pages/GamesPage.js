@@ -15,7 +15,8 @@ import { useStyles } from '../styles/pagesStyles/StatsGamesSettings.styles';
 import { setLevel } from '../redux/actions';
 
 const Games = () => {
-	const classes = useStyles();
+	const { theme } = useSelector((state) => state.settings);
+	const classes = useStyles({ theme });
 	const dispatch = useDispatch();
 	const { level } = useSelector((state) => state);
 	function handleLevelsClick(index) {

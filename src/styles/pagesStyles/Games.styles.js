@@ -38,7 +38,7 @@ export const useStyles = makeStyles({
 		backgroundColor: props.theme === 'dark' ? '#E38600' : '#5600E8',
 		color: props.theme === 'dark' ? '#141414' : '#F2F2F2',
 		fontFamily: 'inherit',
-		fontWeight: 'bold',
+		fontWeight: '400',
 		display: 'flex',
 		alignItems: 'center',
 		justifyContent: 'space-around',
@@ -61,7 +61,7 @@ export const useStyles = makeStyles({
 		height: '50px',
 		color: props.theme === 'dark' ? '#141414' : '#F2F2F2',
 		fontFamily: 'inherit',
-		fontWeight: 'bold',
+		fontWeight: '400',
 		display: 'flex',
 		alignItems: 'center',
 		justifyContent: 'space-around',
@@ -83,7 +83,7 @@ export const useStyles = makeStyles({
 		height: '50px',
 		color: props.theme === 'dark' ? '#141414' : '#F2F2F2',
 		fontFamily: 'inherit',
-		fontWeight: 'bold',
+		fontWeight: '400',
 		display: 'flex',
 		alignItems: 'center',
 		justifyContent: 'space-around',
@@ -131,11 +131,11 @@ export const useStyles = makeStyles({
 		top: '50%',
 		left: '50%'
 	}),
-	savannaWord: {
+	savannaWord: (props) => ({
 		marginBottom: '300px',
 		fontSize: '2rem',
-		fontFamily: 'inherit'
-	},
+		fontFamily: props.theme === 'dark' ? 'darkTitle' : 'lightTitle'
+	}),
 	fullScreenBtn: (props) => ({
 		position: 'absolute',
 		right: '20px',

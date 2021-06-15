@@ -1,4 +1,30 @@
-@import url('https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap');
+@font-face {
+  font-family: 'roboto';
+  src: url('./assets/fonts/roboto.ttf');
+}
+@font-face {
+  font-family: 'logo';
+  src: url('./assets/fonts/logo.otf');
+}
+@font-face {
+  font-family: 'darkTitle';
+  src: url('./assets/fonts/darkTitle.ttf');
+}
+
+@font-face {
+  font-family: 'lightTitle';
+  src: url('./assets/fonts/lightTitle.otf');
+}
+
+@font-face {
+  font-family: 'lightText';
+  src: url('./assets/fonts/appetite.ttf');
+}
+
+@font-face {
+  font-family: 'darkText';
+  src: url('./assets/fonts/slim.ttf');
+}
 
 #root {
   margin: 0;

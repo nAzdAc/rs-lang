@@ -29,16 +29,16 @@ const renderActiveShape = (props) => {
 	const textAnchor = cos >= 0 ? 'start' : 'end';
 	return (
 		<g>
-			<text fontWeight="bold" fontSize="13px" x={cx} y={cy - 40} dy={8} textAnchor="middle" fill={fill}>
+			<text fontWeight="400" fontSize="13px" x={cx} y={cy - 40} dy={8} textAnchor="middle" fill={fill}>
 				Нажми,
 			</text>
-			<text fontWeight="bold" fontSize="13px" x={cx} y={cy - 20} dy={8} textAnchor="middle" fill={fill}>
+			<text fontWeight="400" fontSize="13px" x={cx} y={cy - 20} dy={8} textAnchor="middle" fill={fill}>
 				чтобы
 			</text>
-			<text fontWeight="bold" fontSize="13px" x={cx} y={cy} dy={8} textAnchor="middle" fill={fill}>
+			<text fontWeight="400" fontSize="13px" x={cx} y={cy} dy={8} textAnchor="middle" fill={fill}>
 				увидеть
 			</text>
-			<text fontWeight="bold" fontSize="13px" x={cx} y={cy + 20} dy={8} textAnchor="middle" fill={fill}>
+			<text fontWeight="400" fontSize="13px" x={cx} y={cy + 20} dy={8} textAnchor="middle" fill={fill}>
 				подробности
 			</text>
 			<Sector
