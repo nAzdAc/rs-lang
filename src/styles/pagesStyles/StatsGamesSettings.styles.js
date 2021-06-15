@@ -73,7 +73,6 @@ export const useStyles = makeStyles({
 		minHeight: '100px',
 		width: '100%',
 		resize: 'vertical',
-		marginBottom: '20px',
 		color: 'inherit',
 		fontFamily: 'inherit',
 		cursor: props.theme === 'dark' ? `url(${icons.darkInput}), text` : `url(${icons.lightInput}), text`,

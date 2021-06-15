@@ -13,6 +13,7 @@ import { Container } from '@material-ui/core';
 import WbSunnyIcon from '@material-ui/icons/WbSunny';
 import Brightness3Icon from '@material-ui/icons/Brightness3';
 import { useInput } from '../hooks/input.hook';
+import { backRoutes } from '../utils/backRoutes';
 
 export const SettingsPage = () => {
 	const dispatch = useDispatch();
@@ -34,6 +35,7 @@ export const SettingsPage = () => {
 	const wordSlider = useRef();
 	const [ newName, setNewName ] = useState('');
 	const email = useInput(`${userEmail || ''}`, { emailIsEmail: true });
+	const message = useInput('', { messageIsMessage: true });
 	const previewRef = useRef();
 	const screenshotRef = useRef();
 
@@ -115,27 +117,26 @@ export const SettingsPage = () => {
 
 	const sendMessage = async (event) => {
 		event.preventDefault();
-		// const form = document.getElementById('messageForm');
-		// console.log(form);
-		// console.log(event);
-		// console.log(screenshotRef.current.files[0]);
-		console.log(event.target);
+		if ((!email.isDirty && !email.value) || !message.isDirty) {
+			return showMessage('Поля электронной почты и сообщения обязательны для заполнения');
+		}
+		if (email.emailErrorText || message.messageErrorText) {
+			return showMessage('Некорректно введены данные :(');
+		}
 		const formData = new FormData(event.target);
-		console.log(formData);
 		formData.append('image', screenshotRef.current.files[0]);
-		console.log(formData);
-		// const res = await fetch('', {
-		// 	method: 'POST',
-		// 	withCredentials: true,
-		// 	headers: {
-		// 		Accept: 'application/json',
-		// 		'Content-Type': 'application/json'
-		// 	},
-		// 	body: formData
-		// });
-		// const json = await res.json();
-		// console.log(res);
-		// console.log(json);
+		try {
+			const res = await fetch(backRoutes.postFeedback, {
+				method: 'POST',
+				body: formData
+			});
+			const json = await res.json();
+			showMessage(json.message, res.status);
+		} catch (e) {
+			console.log(e);
+			console.log(e.message);
+			showMessage('Возникла какая-то ошибка с отправлением вашей обратной связи. Попробуйте позже :)', 404);
+		}
 	};
 
 	const handleTheme = async (event) => {
@@ -294,7 +295,7 @@ export const SettingsPage = () => {
 						<form id="messageForm" style={{ marginTop: '20px' }} className={classes.form} onSubmit={sendMessage}>
 							<CssTextField
 								className={classes.nameField}
-								label="Электропочта"
+								label="Электронная почта"
 								variant="outlined"
 								id="message-email"
 								value={email.value}
@@ -302,21 +303,30 @@ export const SettingsPage = () => {
 								onBlur={email.onBlur}
 								name="mail"
 							/>
-							{email.isDirty && email.emailIsEmailErrorText ? (
+							{email.isDirty && email.emailErrorText ? (
 								<span style={{ color: 'red', fontWeight: 'bold' }} className={classes.info}>
-									{email.emailIsEmailErrorText}
+									{email.emailErrorText}
 								</span>
 							) : (
 								<span className={classes.info}>Адрес, на который мы обязательно вам ответим</span>
 							)}
 							<textarea
 								className={classes.messageArea}
+								value={message.value}
+								onChange={message.onChange}
+								onBlur={message.onBlur}
 								id="message-area"
 								name="message"
 								placeholder="Здесь вы может оставить отзыв или сообщить об ошибке"
 							/>
-							<label style={{ marginBottom: '20px' }} htmlFor="screenshotFile" className={classes.button}>
-								+ ДОБАВИТЬ СКРИНШОТ
+							{message.isDirty &&
+							message.messageErrorText && (
+								<span style={{ color: 'red', fontWeight: 'bold' }} className={classes.info}>
+									{message.messageErrorText}
+								</span>
+							)}
+							<label style={{ margin: '20px 0px' }} htmlFor="screenshotFile" className={classes.button}>
+								+ ПРИКРЕПИТЬ ФОТО
 							</label>
 							<input
 								name="image"
