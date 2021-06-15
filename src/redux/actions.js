@@ -1,5 +1,4 @@
 import { backRoutes } from '../utils/backRoutes';
-import { LOCAL_STORAGE_KEY } from '../utils/constants';
 import {
 	IS_BLOCK,
 	SET_SETTINGS,
@@ -47,7 +46,7 @@ export function setLevel(value) {
 }
 
 export function logOut() {
-	localStorage.removeItem(LOCAL_STORAGE_KEY.userData);
+	localStorage.removeItem('appState');
 	return {
 		type: LOG_OUT
 	};
@@ -92,7 +91,6 @@ export function signIn(value) {
 	return async (dispatch) => {
 		try {
 			dispatch(isBlock(true));
-			// dispatch(showLoader());
 			console.log(value);
 			const res = await fetch(backRoutes.signIn, {
 				method: 'POST',
@@ -124,11 +122,7 @@ export function signIn(value) {
 				userWords: json.userWords,
 				statistics: json.statistics
 			};
-			localStorage.setItem(LOCAL_STORAGE_KEY.userData, JSON.stringify(payload.userData));
-			localStorage.setItem(LOCAL_STORAGE_KEY.userSettings, JSON.stringify(payload.settings));
-			localStorage.setItem(LOCAL_STORAGE_KEY.userWords, JSON.stringify(payload.userWords));
 			dispatch({ type: SIGN_IN, payload });
-			// dispatch(hideLoader());
 			dispatch(isBlock(false));
 			return { text: json.message, code: json.http_code || 200 };
 		} catch (e) {
@@ -187,9 +181,6 @@ export function uploadAvatar(file, token) {
 			console.log(json);
 			if (json.avatarURL) {
 				dispatch({ type: UPLOAD_AVATAR, payload: json.avatarURL });
-				const local = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY.userData));
-				const updateLocal = { ...local, avatarURL: json.avatarURL };
-				localStorage.setItem(LOCAL_STORAGE_KEY.userData, JSON.stringify(updateLocal));
 			}
 			dispatch(isBlock(false));
 			return { text: json.message, code: json.http_code || 200 };

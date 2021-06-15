@@ -73,9 +73,3 @@ export const bookLinks = [
 		text: 'Уровень 6'
 	}
 ];
-
-export const LOCAL_STORAGE_KEY = {
-	userSettings: 'userSettings',
-	userData: 'userData',
-	userWords: 'userWords'
-};

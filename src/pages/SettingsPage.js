@@ -150,6 +150,7 @@ export const SettingsPage = () => {
 				return showMessage('Некорректно введены данные :(');
 			}
 			name.setValue('');
+			name.setDirty(false);
 			if (!token) return showMessage('Для изменения никнейма необходимо авторизоваться', 404);
 			if (!name.value) return showMessage('Вы ничего не ввели. Никнейм не изменён', 404);
 			const { text, code } = await dispatch(postName(name.value, token));

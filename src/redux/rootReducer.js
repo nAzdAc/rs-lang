@@ -53,8 +53,7 @@ export function rootReducer(state = initialState, action) {
 			};
 		case LOG_OUT:
 			return {
-				...state,
-				userData: {}
+				...initialState
 			};
 		case SET_ACTIVE_WORDS:
 			return {
