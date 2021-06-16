@@ -89,27 +89,15 @@ export const BookPage = () => {
 							);
 						})}
 					</ul>
-					{
-						<Pagination
-							page={page}
-							className={classes.pagination}
-							onChange={handlePaginationChange}
-							count={30}
-							color="primary"
-						/>
-					}
+					{<Pagination page={page} className={classes.pagination} onChange={handlePaginationChange} count={30} />}
 					<ul className={classes.wordList}>
 						{activeWords.map((word) => {
-							return <WordCard key={`${word._id}word-Book`} word={word} />;
+							return (
+								<WordCard key={`${word._id}word-Book${word.deleted && 'del'}${word.difficult && 'diff'}`} word={word} />
+							);
 						})}
 					</ul>
-					<Pagination
-						page={page}
-						className={classes.pagination}
-						onChange={handlePaginationChange}
-						count={30}
-						color="primary"
-					/>
+					<Pagination page={page} className={classes.pagination} onChange={handlePaginationChange} count={30} />
 				</React.Fragment>
 			) : (
 				<CircularProgress color="inherit" />

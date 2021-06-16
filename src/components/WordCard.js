@@ -39,7 +39,8 @@ export const WordCard = ({ word }) => {
 			wordId: event.currentTarget.id,
 			name: event.currentTarget.dataset.name,
 			value: event.currentTarget.value,
-			wordName: event.currentTarget.dataset.wordName
+			wordName: event.currentTarget.dataset.wordName,
+			wordBody: word
 		};
 		console.log(event.currentTarget.dataset.wordName);
 		console.log(body);
@@ -57,7 +58,7 @@ export const WordCard = ({ word }) => {
 
 				<div className={classes.cardContent}>
 					<div className={classes.infoPanel}>
-						{word.deleted ? (
+						{word.deleted === true ? (
 							<button
 								data-name="deleted"
 								data-word-name={word.word}

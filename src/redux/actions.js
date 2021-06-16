@@ -60,6 +60,7 @@ export function setActiveWords(arr) {
 
 export function updateUserWord(object, token) {
 	return async (dispatch) => {
+		console.log(object);
 		dispatch(isBlock(true));
 		try {
 			const res = await fetch(backRoutes.updateWord, {

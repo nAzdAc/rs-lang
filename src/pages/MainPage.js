@@ -16,7 +16,7 @@ export const MainPage = () => {
 				src="https://www.youtube.com/embed/TR0ervSv3JY"
 				title="YouTube video player"
 				allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-				allowfullscreen
+				allowFullScreen
 			/>
 			<div className={classes.textImgWrapper}>
 				<p className={classes.text}>{MAIN_PAGE_TEXT.P1}</p>

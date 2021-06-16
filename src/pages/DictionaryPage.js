@@ -105,12 +105,13 @@ export const DictionaryPage = () => {
 							className={classes.pagination}
 							onChange={handlePaginationChange}
 							count={Math.ceil(count / 20)}
-							color="primary"
 						/>
 					)}
 					<ul className={classes.wordList}>
 						{activeWords.map((word) => {
-							return <WordCard key={`${word._id}word-Dict`} word={word} />;
+							return (
+								<WordCard key={`${word._id}word-Dict${word.deleted && 'del'}${word.difficult && 'diff'}`} word={word} />
+							);
 						})}
 					</ul>
 					{Math.ceil(userWords.length / 20) > 1 && (
@@ -119,7 +120,6 @@ export const DictionaryPage = () => {
 							className={classes.pagination}
 							onChange={handlePaginationChange}
 							count={Math.ceil(count / 20)}
-							color="primary"
 						/>
 					)}
 				</React.Fragment>
