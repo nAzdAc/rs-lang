@@ -89,7 +89,7 @@ export const SignUpPage = () => {
 					<CssTextField
 						variant="outlined"
 						id="email"
-						label="Email"
+						label="Электронная почта"
 						name="email"
 						autoFocus
 						value={email.value}

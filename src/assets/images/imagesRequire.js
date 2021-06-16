@@ -4,6 +4,5 @@ export const images = {
 	ivan: require('./ivan.png').default,
 	max: require('./max.png').default,
 	misha: require('./misha.png').default,
-	school: require('./rs.png').default,
-	downloadGif: require('./download.gif').default
+	school: require('./rs.png').default
 };

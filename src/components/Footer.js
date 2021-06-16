@@ -1,25 +1,9 @@
 import { useSelector } from 'react-redux';
 import { images } from '../assets/images/imagesRequire';
 import { useStyles } from '../styles/componentsStyles/Footer.styles';
-
-const gitAccounts = [
-	{
-		name: 'AGoravskiy',
-		url: 'https://github.com/AGoravskiy'
-	},
-	{
-		name: 'nAzdAc',
-		url: 'https://github.com/nAzdAc'
-	},
-	{
-		name: 'Nickolay-Kr',
-		url: 'https://github.com/Nicolay-kr'
-	},
-	{
-		name: 'ShvetsBy',
-		url: 'https://github.com/ShvetsBy'
-	}
-];
+import InstagramIcon from '@material-ui/icons/Instagram';
+import LinkedInIcon from '@material-ui/icons/LinkedIn';
+import GitHubIcon from '@material-ui/icons/GitHub';
 
 export const Footer = () => {
 	const { theme } = useSelector((state) => state.settings);
@@ -28,12 +12,18 @@ export const Footer = () => {
 	return (
 		<footer className={classes.footer}>
 			<p className={classes.year}>2021</p>
-			<div className={classes.developers}>
-				{gitAccounts.map((acc) => (
-					<a className={classes.githubLink} key={`${acc.url}Footer`} href={acc.url}>
-						{acc.name}
-					</a>
-				))}
+			<div className={classes.iconsWrap}>
+				<a className={classes.link} href="https://www.instagram.com/maxandreev1507/">
+					<InstagramIcon className={classes.icon} />
+				</a>
+
+				<a className={classes.link} href="https://www.linkedin.com/in/max-andreev/">
+					<LinkedInIcon className={classes.icon} />
+				</a>
+
+				<a className={classes.link} href="https://github.com/nAzdAc">
+					<GitHubIcon className={classes.icon} />
+				</a>
 			</div>
 			<div className={classes.imageWrap}>
 				<a className={classes.schoolLink} target="_blank" rel="noopener noreferrer" href="https://rs.school/react/">

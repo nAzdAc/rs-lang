@@ -1,8 +1,7 @@
-import { MAIN_PAGE_TEXT, DEVELOPERS, ADVANTAGES } from '../utils/mainPageText';
+import { MAIN_PAGE_TEXT, ADVANTAGES } from '../utils/mainPageText';
 import { useStyles } from '../styles/pagesStyles/MainPage.styles';
 import { Container, Paper } from '@material-ui/core';
 import { useSelector } from 'react-redux';
-import GitHubIcon from '@material-ui/icons/GitHub';
 
 export const MainPage = () => {
 	const { theme } = useSelector((state) => state.settings);
@@ -14,10 +13,10 @@ export const MainPage = () => {
 			<h2 className={classes.title}>{MAIN_PAGE_TEXT.SUBTITLE}</h2>
 			<iframe
 				className={classes.video}
-				src="https://www.youtube.com/embed/uRVv43J8jH0"
+				src="https://www.youtube.com/embed/TR0ervSv3JY"
 				title="YouTube video player"
 				allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-				allowFullScreen
+				allowfullscreen
 			/>
 			<div className={classes.textImgWrapper}>
 				<p className={classes.text}>{MAIN_PAGE_TEXT.P1}</p>
@@ -48,27 +47,6 @@ export const MainPage = () => {
 					})}
 				</div>
 			</Paper>
-
-			<section>
-				<h3 className={classes.title}>Разработчики</h3>
-				<div className={classes.developers}>
-					{DEVELOPERS.map((developer) => {
-						return (
-							<Paper className={classes.developerCard} key={`${developer.name}dvlprs-Main`}>
-								<img className={classes.developerImg} src={developer.photo} alt={developer.name} />
-								<h4 className={classes.subtitle1}>{developer.name}</h4>
-								<span className={classes.subtitle2}>{developer.description}</span>
-								<a className={classes.githubLink} target="_blank" rel="noopener noreferrer" href={developer.git_link}>
-									<div className={classes.githubWrap}>
-										<GitHubIcon className={classes.githubImage} />
-										<span className={classes.subtitle2}>{developer.git_name}</span>
-									</div>
-								</a>
-							</Paper>
-						);
-					})}
-				</div>
-			</section>
 		</Container>
 	);
 };

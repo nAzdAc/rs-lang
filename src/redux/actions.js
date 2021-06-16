@@ -82,7 +82,7 @@ export function updateUserWord(object, token) {
 			console.log(e);
 			console.log(e.message);
 			dispatch(isBlock(false));
-			return { text: 'Возникла проблема с изменением статуса слова. Попробуйте позже', code: 404 };
+			return { text: 'Возникла проблема с изменением статуса слова. Попробуйте позже.', code: 404 };
 		}
 	};
 }

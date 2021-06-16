@@ -112,7 +112,7 @@ export const BookPage = () => {
 					/>
 				</React.Fragment>
 			) : (
-				<CircularProgress />
+				<CircularProgress color="inherit" />
 			)}
 		</React.Fragment>
 	);

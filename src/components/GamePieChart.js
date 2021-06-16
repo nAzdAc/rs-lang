@@ -81,7 +81,7 @@ export const GamePieChart = ({ data, all, showAddStats }) => {
 	};
 
 	return (
-		<div className={classes.pieChartContainer}>
+		<div onClick={showAddStats} className={classes.pieChartContainer}>
 			<ResponsiveContainer width="100%" height="100%">
 				<PieChart style={{ cursor: 'inherit' }} className={classes.chartWrap}>
 					<Pie
@@ -96,7 +96,6 @@ export const GamePieChart = ({ data, all, showAddStats }) => {
 						fill={theme === 'dark' ? '#E38600' : '#5600E8'}
 						dataKey="value"
 						onMouseEnter={onPieEnter}
-						onClick={showAddStats}
 						name={all}
 					/>
 				</PieChart>

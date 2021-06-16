@@ -22,27 +22,34 @@ export const useStyles = makeStyles({
 			fontSize: '17px'
 		}
 	},
-	developers: {
+	iconsWrap: {
 		color: 'inherit'
 	},
-	githubLink: (props) => ({
+	link: (props) => ({
 		cursor: props.theme === 'dark' ? `url(${icons.darkPointer}), pointer` : `url(${icons.lightPointer}), pointer`,
-		fontSize: '20px',
-		margin: '10px',
-		padding: '20px 0px',
+		fontSize: '40px',
+		margin: '30px',
 		color: 'inherit',
 		'@media (max-width: 730px)': {
-			fontSize: '14px'
+			fontSize: '30px'
 		},
 		'@media (max-width: 560px)': {
-			margin: '5px',
-			fontSize: '12px'
+			margin: '20px',
+			fontSize: '25px'
 		},
 		'&:hover': {
 			textDecoration: 'underline',
 			cursor: props.theme === 'dark' ? `url(${icons.darkPointer}), pointer` : `url(${icons.lightPointer}), pointer`
 		}
 	}),
+	icon: {
+		color: 'inherit',
+		fontSize: 'inherit',
+		'&:hover': {
+			transform: 'rotate(360deg)',
+			transition: '0.5s'
+		}
+	},
 	imageWrap: (props) => ({
 		cursor: props.theme === 'dark' ? `url(${icons.darkPointer}), pointer` : `url(${icons.lightPointer}), pointer`
 	}),

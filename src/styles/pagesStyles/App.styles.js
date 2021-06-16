@@ -1,7 +1,5 @@
 import { makeStyles } from '@material-ui/core/styles';
 import { icons } from '../../assets/icons/IconsRequire';
-import { images } from '../../assets/images/imagesRequire';
-
 export const useStyles = makeStyles({
 	app: (props) => ({
 		display: 'flex',
@@ -12,24 +10,40 @@ export const useStyles = makeStyles({
 		backgroundColor: props.theme === 'dark' ? '#141414' : '#F2F2F2',
 		color: props.theme === 'dark' ? '#E38600' : '#5600E8',
 		fontFamily: props.theme === 'dark' ? 'darkText' : 'lightText',
-		position: 'relative',
-		'&::after': {
-			content: '""',
-			position: 'absolute',
-			top: '0',
-			left: '0',
-			width: '100%',
-			height: '100%',
-			cursor: 'inherit',
-			transition: 'all 0.5s ease 0s',
-			background:
-				props.theme === 'dark'
-					? `rgba(227, 134, 0, 0.8) url(${images.downloadGif}) center / 300px no-repeat`
-					: `rgba(86, 0, 232, 0.8) url(${images.downloadGif}) center / 300px no-repeat`,
-			zIndex: '20',
-			visibility: props.block ? 'visible' : 'hidden',
-			opacity: props.block ? '1' : '0'
-		}
+		position: 'relative'
+	}),
+	preloader: (props) => ({
+		height: '100vh',
+		width: '100%',
+		position: 'fixed',
+		zIndex: '100',
+		backgroundColor: props.theme === 'dark' ? '#E38600' : '#5600E8',
+		color: props.theme === 'dark' ? '#141414' : '#F2F2F2',
+		display: 'flex',
+		flexDirection: 'column',
+		gap: '20px',
+		alignItems: 'center',
+		justifyContent: 'center',
+		fontSize: '40px',
+		fontFamily: props.theme === 'dark' ? 'darkTitle' : 'lightTitle'
+	}),
+	loader: (props) => ({
+		backdropFilter: 'blur(2px)',
+		backgroundColor: props.theme === 'dark' ? 'rgba(20, 20, 20, 0.5)' : 'rgba(242, 242, 242, 0.7)',
+		color: props.theme === 'dark' ? '#E38600' : '#5600E8',
+		height: '100vh',
+		width: '100%',
+		position: 'fixed',
+		zIndex: '99',
+		display: 'flex',
+		flexDirection: 'column',
+		alignItems: 'center',
+		justifyContent: 'center',
+		gap: '20px',
+		fontSize: '40px',
+		fontFamily: props.theme === 'dark' ? 'darkTitle' : 'lightTitle',
+		visibility: props.block ? 'visible' : 'hidden',
+		opacity: props.block ? '1' : '0'
 	}),
 	header: (props) => ({
 		width: '100%',

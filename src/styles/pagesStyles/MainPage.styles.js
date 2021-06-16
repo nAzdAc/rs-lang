@@ -57,13 +57,15 @@ export const useStyles = makeStyles({
 		color: 'inherit'
 	},
 	video: (props) => ({
+		boxShadow:
+			props.theme === 'dark' ? '3px 0px 10px 3px rgba(227, 134, 0, 0.5)' : '3px 0px 10px 3px rgba(86, 0, 232, 0.6)',
 		margin: '15px 0px',
 		border: 'none',
 		borderRadius: '5px',
 		width: '100%',
 		maxWidth: '700px',
 		height: '400px',
-		cursor: props.theme === 'dark' ? `url(${icons.darkPointer}), default` : `url(${icons.lightPointer}), default`
+		cursor: props.theme === 'dark' ? `url(${icons.darkPointer}), pointer` : `url(${icons.lightPointer}), pointer`
 	}),
 	textImgWrapper: {
 		color: 'inherit',
@@ -108,41 +110,5 @@ export const useStyles = makeStyles({
 		width: '100px',
 		height: '100px',
 		marginBottom: '10px'
-	},
-	developers: {
-		display: 'flex',
-		justifyContent: 'center',
-		flexWrap: 'wrap'
-	},
-	developerCard: (props) => ({
-		backgroundColor: 'inherit',
-		boxShadow:
-			props.theme === 'dark' ? '3px 0px 10px 3px rgba(227, 134, 0, 0.5)' : '3px 0px 10px 3px rgba(86, 0, 232, 0.6)',
-		margin: '20px',
-		padding: '10px',
-		width: '350px',
-		display: 'flex',
-		flexDirection: 'column',
-		alignItems: 'center',
-		justifyContent: 'space-evenly',
-		gap: '10px',
-		color: 'inherit'
-	}),
-	developerImg: {
-		width: '300px',
-		borderRadius: 'inherit'
-	},
-	githubLink: (props) => ({
-		color: 'inherit',
-		cursor: props.theme === 'dark' ? `url(${icons.darkPointer}), pointer` : `url(${icons.lightPointer}), pointer`
-	}),
-	githubWrap: {
-		display: 'flex',
-		alignItems: 'center',
-		justifyContent: 'center',
-		gap: '10px'
-	},
-	githubImage: {
-		fontSize: '30px'
 	}
 });
