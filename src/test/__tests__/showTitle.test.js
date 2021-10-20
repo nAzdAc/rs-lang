@@ -1,4 +1,4 @@
-import { showTitle } from '../showTitle'
+import { showTitle } from '../../utils/showTitle'
 
 describe('function should return correct string', () => {
     it('showTitle without lifes', () => {
