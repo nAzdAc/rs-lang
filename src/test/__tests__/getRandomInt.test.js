@@ -1,4 +1,4 @@
-import { getRandomInt } from '../helpers'
+import { getRandomInt } from '../../utils/helpers'
 
 describe('helpers', () => {
     it('getRandomInt returns 2 or greater', () => {

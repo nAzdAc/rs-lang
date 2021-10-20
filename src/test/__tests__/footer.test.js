@@ -22,11 +22,6 @@ describe('Footer', () => {
         expect(links).toHaveLength(4)
     })
 
-    test('should contains correct year', () => {
-        const { getByText } = renderWithRedux(<Footer />)
-        getByText('2021')
-    })
-
     test('should contains correct in document', () => {
         const { getByText } = renderWithRedux(<Footer />)
         expect(getByText('2021')).toBeInTheDocument()

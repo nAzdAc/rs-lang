@@ -17,6 +17,6 @@ export const backRoutes = {
     setName: getRoute('name'),
     postFeedback: getRoute('feedback'),
     getWordsPage(group = 0, page = 0) {
-        return `${originURL}/words?group=${group}&page=${page}`
+        return `${originURL}/allWords?group=${group}&page=${page}`
     },
 }
