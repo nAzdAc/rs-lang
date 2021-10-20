@@ -29,6 +29,12 @@ export const useStyles = makeStyles({
         justifyContent: 'center',
         fontSize: '40px',
         fontFamily: props.theme === 'dark' ? 'darkTitle' : 'lightTitle',
+        '@media (max-width: 768px)': {
+            height: '30px',
+        },
+        '@media (max-width: 450px)': {
+            height: '20px',
+        },
     }),
     loader: (props) => ({
         backdropFilter: 'blur(2px)',
@@ -50,6 +56,12 @@ export const useStyles = makeStyles({
         fontFamily: props.theme === 'dark' ? 'darkTitle' : 'lightTitle',
         visibility: props.block ? 'visible' : 'hidden',
         opacity: props.block ? '1' : '0',
+        '@media (max-width: 768px)': {
+            height: '30px',
+        },
+        '@media (max-width: 450px)': {
+            height: '20px',
+        },
     }),
     header: (props) => ({
         width: '100%',
@@ -61,6 +73,9 @@ export const useStyles = makeStyles({
         color: props.theme === 'dark' ? '#141414' : '#F2F2F2',
         backgroundColor: props.theme === 'dark' ? '#E38600' : '#5600E8',
         fontFamily: 'inherit',
+        '@media (max-width: 450px)': {
+            height: '50px',
+        },
     }),
     logo: (props) => ({
         cursor:
@@ -82,6 +97,11 @@ export const useStyles = makeStyles({
             margin: '-25px 10px 0px 10px',
             fontSize: '35px',
         },
+        '@media (max-width: 450px)': {
+            margin: '-20px 10px 0px 5px',
+            fontSize: '18px',
+            width: '220px',
+        },
     }),
     toast: (props) => ({
         fontSize: '1.3rem',
@@ -90,6 +110,10 @@ export const useStyles = makeStyles({
                 ? `url(${icons.darkPointer}), pointer`
                 : `url(${icons.lightPointer}), pointer`,
         fontFamily: 'inherit',
+        '@media (max-width: 450px)': {
+            width: '85vw',
+            fontSize: '1.1rem',
+        },
         '& .Toastify__toast--success': {
             cursor:
                 props.theme === 'dark'

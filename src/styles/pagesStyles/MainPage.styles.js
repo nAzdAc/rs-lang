@@ -11,6 +11,9 @@ export const useStyles = makeStyles({
         '& > header': {
             backgroundColor: '#5600E8',
         },
+        '@media (max-width: 450px)': {
+            padding: '5px',
+        },
     },
     logo: {
         fontFamily: 'logo',
@@ -21,7 +24,13 @@ export const useStyles = makeStyles({
         color: 'inherit',
         '@media (max-width: 768px)': {
             marginTop: '-15px',
+            marginBottom: '-10px',
             fontSize: '70px',
+        },
+        '@media (max-width: 450px)': {
+            marginTop: '-30px',
+            marginBottom: '-20px',
+            fontSize: '45px',
         },
     },
     title: (props) => ({
@@ -33,6 +42,10 @@ export const useStyles = makeStyles({
         '@media (max-width: 768px)': {
             fontSize: '3rem',
         },
+        '@media (max-width: 450px)': {
+            fontSize: '1.8rem',
+            marginBottom: '5px',
+        },
     }),
     subtitle: (props) => ({
         marginBottom: '20px',
@@ -42,6 +55,9 @@ export const useStyles = makeStyles({
         '@media (max-width: 768px)': {
             fontSize: '35px',
         },
+        '@media (max-width: 450px)': {
+            fontSize: '22px',
+        },
     }),
     subtitle1: (props) => ({
         fontSize: '1.5rem',
@@ -49,12 +65,19 @@ export const useStyles = makeStyles({
         marginRight: 'auto',
         margin: '15px',
         fontFamily: props.theme === 'dark' ? 'darkTitle' : 'lightTitle',
+        '@media (max-width: 450px)': {
+            fontSize: '1.1px',
+            margin: '7px',
+        },
     }),
     subtitle2: {
         fontSize: '1.05rem',
         fontWeight: '400',
         margin: 'auto',
         color: 'inherit',
+        '@media (max-width: 450px)': {
+            fontSize: '0.9rem',
+        },
     },
     video: (props) => ({
         boxShadow:
@@ -71,6 +94,14 @@ export const useStyles = makeStyles({
             props.theme === 'dark'
                 ? `url(${icons.darkPointer}), pointer`
                 : `url(${icons.lightPointer}), pointer`,
+        '@media (max-width: 768px)': {
+            height: '300px',
+            margin: '10px 0px',
+        },
+        '@media (max-width: 450px)': {
+            height: '200px',
+            margin: '5px 0px',
+        },
     }),
     textImgWrapper: {
         color: 'inherit',
@@ -81,8 +112,12 @@ export const useStyles = makeStyles({
         fontFamily: 'inherit',
         fontWeight: '400',
         margin: '10px 0px',
+        '@media (max-width: 450px)': {
+            margin: '5px 0px',
+        },
     },
     advantagesSection: (props) => ({
+        alignSelf: 'center',
         color: 'inherit',
         backgroundColor: 'inherit',
         width: '85%',
@@ -94,6 +129,10 @@ export const useStyles = makeStyles({
             props.theme === 'dark'
                 ? '3px 0px 10px 3px rgba(227, 134, 0, 0.5)'
                 : '3px 0px 10px 3px rgba(86, 0, 232, 0.6)',
+        '@media (max-width: 450px)': {
+            padding: '10px',
+            marginBottom: '15px',
+        },
     }),
     advantagesWrapper: {
         display: 'flex',

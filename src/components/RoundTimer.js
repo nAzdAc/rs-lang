@@ -12,6 +12,11 @@ const useStyles = makeStyles({
         justifyContent: 'center',
         position: 'relative',
         borderRadius: '50%',
+        '@media (max-width: 450px)': {
+            width: '120px',
+            height: '120px',
+        },
+        margin: '15px',
     },
     timerTextWrap: {
         display: 'flex',

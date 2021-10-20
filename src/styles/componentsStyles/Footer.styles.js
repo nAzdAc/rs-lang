@@ -11,6 +11,9 @@ export const useStyles = makeStyles({
         backgroundColor: props.theme === 'dark' ? '#E38600' : '#5600E8',
         fontFamily: props.theme === 'dark' ? 'darkTitle' : 'lightTitle',
         color: props.theme === 'dark' ? '#141414' : '#F2F2F2',
+        '@media (max-width: 450px)': {
+            height: '40px',
+        },
     }),
     year: {
         fontSize: '28px',
@@ -20,6 +23,9 @@ export const useStyles = makeStyles({
         },
         '@media (max-width: 560px)': {
             fontSize: '17px',
+        },
+        '@media (max-width: 450px)': {
+            fontSize: '14px',
         },
     },
     iconsWrap: {
@@ -39,6 +45,10 @@ export const useStyles = makeStyles({
         '@media (max-width: 560px)': {
             margin: '20px',
             fontSize: '25px',
+        },
+        '@media (max-width: 450px)': {
+            margin: '10px',
+            fontSize: '20px',
         },
         '&:hover': {
             textDecoration: 'underline',
@@ -66,6 +76,10 @@ export const useStyles = makeStyles({
         '@media (max-width: 730px)': {
             width: '70px',
             height: '30px',
+        },
+        '@media (max-width: 450px)': {
+            width: '45px',
+            height: '25px',
         },
     },
     schoolLink: (props) => ({

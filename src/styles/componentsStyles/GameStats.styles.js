@@ -20,6 +20,9 @@ export const useStyles = makeStyles({
         '@media (max-width: 768px)': {
             fontSize: '1.8rem',
         },
+        '@media (max-width: 450px)': {
+            fontSize: '1.3rem',
+        },
     },
     contentContainer: {
         width: '100%',
@@ -28,7 +31,7 @@ export const useStyles = makeStyles({
         justifyContent: 'center',
     },
     tableContainer: (props) => ({
-        margin: '0px 20px 0px 20px',
+        margin: '0px 10px 0px 10px',
         backgroundColor: 'inherit',
         fontFamily: 'inherit',
         color: 'inherit',
@@ -64,6 +67,9 @@ export const useStyles = makeStyles({
             '@media (max-width: 600px)': {
                 fontSize: '0.8rem',
             },
+            '@media (max-width: 450px)': {
+                fontSize: '0.7rem',
+            },
             '& .MuiTableCell-head': {
                 fontSize: '1em',
                 fontWeight: '400',
@@ -72,6 +78,9 @@ export const useStyles = makeStyles({
                 padding: '10px',
                 textAlign: 'center',
                 borderColor: 'inherit',
+                '@media (max-width: 450px)': {
+                    padding: '0px',
+                },
             },
             '& .MuiTableCell-body': {
                 fontSize: '0.8em',
@@ -92,6 +101,10 @@ export const useStyles = makeStyles({
         height: '40px',
         '&:hover': {
             transform: 'scale(1.1)',
+        },
+        '@media (max-width: 450px)': {
+            width: '20px',
+            height: '20px',
         },
     }),
 })

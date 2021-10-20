@@ -32,7 +32,7 @@ const initialState = {
         deleteWord: true,
         translateWord: true,
         translateSentences: true,
-        theme: 'light',
+        theme: 'dark',
     },
     userWords: [],
     activeWords: [],

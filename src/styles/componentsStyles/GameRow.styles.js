@@ -13,7 +13,6 @@ export const useStyles = makeStyles({
         fontWeight: '400',
     },
     iconWrap: (props) => ({
-        marginRight: '5px',
         border: 'none',
         outline: 'none',
         cursor:
@@ -40,6 +39,9 @@ export const useStyles = makeStyles({
         '@media (max-width: 600px)': {
             fontSize: '1.5rem',
         },
+        '@media (max-width: 450px)': {
+            fontSize: '1.2rem',
+        },
     }),
     addContainer: {
         backgroundColor: 'inherit',
@@ -55,6 +57,10 @@ export const useStyles = makeStyles({
         width: '200px',
         height: '200px',
         borderRadius: '5px',
+        '@media (max-width: 450px)': {
+            width: '100px',
+            height: '100px',
+        },
     },
     addTextWrapper: {
         display: 'flex',

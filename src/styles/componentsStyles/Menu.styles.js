@@ -19,6 +19,8 @@ export const useStyles = makeStyles({
         fontFamily: props.theme === 'dark' ? 'darkTitle' : 'lightTitle',
         color: 'inherit',
         '& .MuiSvgIcon-root': {
+            width: '2rem',
+            height: '2rem',
             color: 'inherit',
             display: 'none',
             '&:hover, &:focus': {
@@ -27,6 +29,11 @@ export const useStyles = makeStyles({
             },
             '@media (max-width: 768px)': {
                 display: 'block',
+            },
+            '@media (max-width: 450px)': {
+                width: '1rem',
+                height: '1rem',
+                marginRight: '3px',
             },
         },
     }),

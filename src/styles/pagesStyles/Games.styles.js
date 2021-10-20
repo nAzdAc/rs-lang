@@ -4,24 +4,26 @@ import { icons } from '../../assets/icons/IconsRequire'
 export const useStyles = makeStyles({
     root: {
         height: '100%',
+        width: '90%',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         fontFamily: 'inherit',
         background: 'inherit',
+        alignSelf: 'center',
     },
     gameContainer: {
         position: 'relative',
-        width: '100%',
         height: '100%',
+        width: '100%',
         display: 'flex',
         flexDirection: 'column',
         flexWrap: 'wrap',
         alignItems: 'center',
         justifyContent: 'space-between',
-        padding: '20px 0px 10px 0px',
         background: 'inherit',
         color: 'inherit',
+        padding: '10px 5px',
     },
     buttonsWrap: {
         display: 'flex',
@@ -30,6 +32,10 @@ export const useStyles = makeStyles({
         justifyContent: 'space-around',
         marginBottom: '15px',
         gap: '20px',
+        '@media (max-width: 450px)': {
+            gap: '7px',
+            marginBottom: '10px',
+        },
     },
     button: (props) => ({
         padding: '3px',
@@ -57,6 +63,11 @@ export const useStyles = makeStyles({
             backgroundColor: props.theme === 'dark' ? '#141414' : '#F2F2F2',
             color: props.theme === 'dark' ? '#E38600' : '#5600E8',
         },
+        '@media (max-width: 450px)': {
+            minWidth: '85px',
+            fontSize: '0.7rem',
+            height: '40px',
+        },
     }),
     failButton: (props) => ({
         padding: '3px',
@@ -81,6 +92,11 @@ export const useStyles = makeStyles({
             border: '3px solid #FF001E',
             backgroundColor: props.theme === 'dark' ? '#141414' : '#F2F2F2',
             color: '#FF001E',
+        },
+        '@media (max-width: 450px)': {
+            minWidth: '85px',
+            fontSize: '0.7rem',
+            height: '40px',
         },
     }),
     correctButton: (props) => ({
@@ -107,6 +123,11 @@ export const useStyles = makeStyles({
             backgroundColor: props.theme === 'dark' ? '#141414' : '#F2F2F2',
             color: '#28FC03',
         },
+        '@media (max-width: 450px)': {
+            minWidth: '85px',
+            fontSize: '0.7rem',
+            height: '40px',
+        },
     }),
     speaker: (props) => ({
         width: '150px',
@@ -120,22 +141,39 @@ export const useStyles = makeStyles({
         '&:hover': {
             transform: 'scale(1.1)',
         },
+        '@media (max-width: 450px)': {
+            width: '70px',
+            height: '90px',
+            marginBottom: '20px',
+        },
     }),
     progressText: {
         fontFamily: 'inherit',
         color: 'inherit',
         marginBottom: '10px',
         fontSize: '1.5rem',
+        '@media (max-width: 450px)': {
+            marginBottom: '5px',
+            fontSize: '1.2rem',
+        },
     },
     failText: {
         fontFamily: 'inherit',
         color: '#FF001E',
         fontSize: '1.2em',
+        '@media (max-width: 450px)': {
+            marginBottom: '5px',
+            fontSize: '1rem',
+        },
     },
     correctText: {
         fontFamily: 'inherit',
         color: '#28FC03',
         fontSize: '1.2em',
+        '@media (max-width: 450px)': {
+            marginBottom: '5px',
+            fontSize: '1rem',
+        },
     },
     loader: (props) => ({
         position: 'absolute',
@@ -147,6 +185,10 @@ export const useStyles = makeStyles({
         marginBottom: '300px',
         fontSize: '2rem',
         fontFamily: props.theme === 'dark' ? 'darkTitle' : 'lightTitle',
+        '@media (max-width: 450px)': {
+            fontSize: '1.4rem',
+            marginBottom: '307px',
+        },
     }),
     fullScreenBtn: (props) => ({
         position: 'absolute',
@@ -163,6 +205,12 @@ export const useStyles = makeStyles({
         height: '50px',
         background: 'inherit',
         color: 'inherit',
+        '@media (max-width: 450px)': {
+            width: '30px',
+            height: '30px',
+            right: '10px',
+            bottom: '10px',
+        },
     }),
     fullScreenIcon: (props) => ({
         cursor:
@@ -174,6 +222,9 @@ export const useStyles = makeStyles({
         '&:hover': {
             transform: 'scale(1.1)',
         },
+        '@media (max-width: 450px)': {
+            fontSize: '30px',
+        },
     }),
     series: {
         minHeight: '100px',
@@ -183,10 +234,12 @@ export const useStyles = makeStyles({
         justifyContent: 'flex-start',
         marginBottom: '15px',
         width: '90%',
-    },
-    starIcon: {
-        fontSize: '50px',
-        color: '#FFD700',
+        '@media (max-width: 450px)': {
+            '& > img': {
+                width: '25px',
+                height: '25px',
+            },
+        },
     },
     imagesContainer: {
         width: '100%',
@@ -247,17 +300,35 @@ export const useStyles = makeStyles({
                 ? `url(${icons.darkPointer}), default`
                 : `url(${icons.lightPointer}), default`,
     }),
+    currentWordWrap: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        alignItems: 'center',
+        justifyContent: 'center',
+        '@media (max-width: 450px)': {
+            flexDirection: 'column',
+        },
+    },
     currentWord: {
-        marginRight: '20px',
-        marginLeft: '20px',
+        marginRight: '10px',
+        marginLeft: '10px',
         fontSize: '3rem',
         fontFamily: 'inherit',
+        '@media (max-width: 768px)': {
+            fontSize: '2.2rem',
+        },
+        '@media (max-width: 450px)': {
+            fontSize: '1.6rem',
+        },
     },
     example: {
         margin: '10px',
         fontSize: '1.5rem',
         fontFamily: 'inherit',
         alignSelf: 'center',
+        '@media (max-width: 450px)': {
+            fontSize: '1.3rem',
+        },
     },
     finishLine: (props) => ({
         marginBottom: '10px',

@@ -100,6 +100,7 @@ export const SignUpPage = () => {
             <div className={classes.formCard}>
                 <h2 className={classes.title}>Регистрация</h2>
                 <form
+                    autocomplete="off"
                     className={classes.form}
                     noValidate
                     onSubmit={handleSubmit}

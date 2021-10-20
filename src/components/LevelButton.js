@@ -13,6 +13,10 @@ export const useStyles = makeStyles({
             props.theme === 'dark'
                 ? '3px 0px 10px 3px rgba(227, 134, 0, 0.5)'
                 : '3px 0px 10px 3px rgba(86, 0, 232, 0.6)',
+        '@media (max-width: 450px)': {
+            borderBottom: '4px solid',
+            marginBottom: '-4px',
+        },
     }),
     button: (props) => ({
         cursor:
@@ -20,7 +24,8 @@ export const useStyles = makeStyles({
                 ? `url(${icons.darkPointer}), default`
                 : `url(${icons.lightPointer}), default`,
         width: '72px',
-        minWidth: '36px',
+        minWidth: '27px',
+        minHeight: '27px',
         height: '72px',
         fontWeight: '600',
         fontSize: '52px',
@@ -30,6 +35,11 @@ export const useStyles = makeStyles({
             width: '57px',
             height: '57px',
             fontSize: '27px',
+        },
+        '@media (max-width: 450px)': {
+            width: '27px',
+            height: '27px',
+            fontSize: '17px',
         },
         '&:hover': {
             marginBottom: '0px',

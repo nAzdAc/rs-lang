@@ -207,9 +207,15 @@ export const SprintPage = () => {
                         )}
                     </button>
                     <RoundTimer seconds={seconds} />
-                    <h4 className={classes.currentWord}>{`${
-                        currentWord.word || ''
-                    } = ${currentRussianWord || ''}`}</h4>
+                    <div className={classes.currentWordWrap}>
+                        <h4 className={classes.currentWord}>
+                            {currentWord.word || ''}
+                        </h4>
+                        <h4 className={classes.currentWord}> = </h4>
+                        <h4 className={classes.currentWord}>
+                            {currentRussianWord || ''}
+                        </h4>
+                    </div>
                     <div ref={seriesContainer} className={classes.series} />
                     <div className={classes.buttonsWrap}>
                         <button

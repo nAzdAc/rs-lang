@@ -62,7 +62,11 @@ export const SignInPage = () => {
             <Container className={classes.root}>
                 <div className={classes.formCard}>
                     <h2 className={classes.title}>Аккаунт</h2>
-                    <form className={classes.form} onSubmit={handleSubmit}>
+                    <form
+                        autocomplete="off"
+                        className={classes.form}
+                        onSubmit={handleSubmit}
+                    >
                         <CssTextField
                             variant="outlined"
                             id="email"

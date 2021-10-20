@@ -14,7 +14,6 @@ export const useStyles = makeStyles({
         flexDirection: 'column',
         flexWrap: 'wrap',
         alignItems: 'center',
-        gap: '15px',
         padding: '10px 5px',
         cursor:
             props.theme === 'dark'
@@ -26,31 +25,41 @@ export const useStyles = makeStyles({
         display: 'flex',
         justifyContent: 'space-around',
         alignItems: 'center',
+        gap: '10px',
     },
     cardImage: {
         width: '200px',
         height: '200px',
         borderRadius: '5px',
-        marginRight: '10px',
         '@media (max-width: 600px)': {
             width: '150px',
             height: '150px',
+        },
+        '@media (max-width: 450px)': {
+            width: '100px',
+            height: '100px',
         },
     },
     cardContent: {
         display: 'flex',
         flexDirection: 'column',
         flexWrap: 'wrap',
-        justifyContent: 'space-around',
-        marginBottom: '20px',
+        justifyContent: 'space-between',
+        gap: '15px',
+    },
+    buttonsPanel: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        alignItems: 'center',
     },
     infoPanel: {
         display: 'flex',
         flexWrap: 'wrap',
         alignItems: 'center',
-        marginBottom: '80px',
-        '@media (max-width: 600px)': {
-            marginBottom: '50px',
+        gap: '15px',
+        '@media (max-width: 768px)': {
+            flexDirection: 'column',
+            alignItems: 'flex-start',
         },
     },
     deleteButton: (props) => ({
@@ -108,6 +117,9 @@ export const useStyles = makeStyles({
         '@media (max-width: 600px)': {
             fontSize: '1.8rem',
         },
+        '@media (max-width: 450px)': {
+            fontSize: '1.3rem',
+        },
     }),
     cardUnitWrap: {
         display: 'flex',
@@ -139,6 +151,9 @@ export const useStyles = makeStyles({
         '@media (max-width: 600px)': {
             fontSize: '1.4rem',
         },
+        '@media (max-width: 450px)': {
+            fontSize: '1rem',
+        },
     }),
     correctText: {
         color: '#28FC03',
@@ -152,6 +167,9 @@ export const useStyles = makeStyles({
         '@media (max-width: 768px)': {
             fontSize: '1.1rem',
         },
+        '@media (max-width: 450px)': {
+            fontSize: '0.9rem',
+        },
     },
     failText: {
         color: '#FF001E',
@@ -164,6 +182,9 @@ export const useStyles = makeStyles({
         },
         '@media (max-width: 768px)': {
             fontSize: '1.1rem',
+        },
+        '@media (max-width: 450px)': {
+            fontSize: '0.9rem',
         },
     },
     englishText: {
@@ -183,6 +204,9 @@ export const useStyles = makeStyles({
         '@media (max-width: 600px)': {
             fontSize: '0.7rem',
         },
+        '@media (max-width: 450px)': {
+            fontSize: '0.6rem',
+        },
     },
     translateText: {
         color: 'inherit',
@@ -200,6 +224,9 @@ export const useStyles = makeStyles({
         '@media (max-width: 600px)': {
             fontSize: '0.7rem',
         },
+        '@media (max-width: 450px)': {
+            fontSize: '0.6rem',
+        },
     },
     wordText: {
         fontSize: '2.5rem',
@@ -215,6 +242,9 @@ export const useStyles = makeStyles({
         '@media (max-width: 600px)': {
             fontSize: '0.85rem',
         },
+        '@media (max-width: 450px)': {
+            fontSize: '0.7rem',
+        },
     },
     infoText: {
         fontSize: '2rem',
@@ -229,6 +259,9 @@ export const useStyles = makeStyles({
         },
         '@media (max-width: 600px)': {
             fontSize: '0.65rem',
+        },
+        '@media (max-width: 450px)': {
+            fontSize: '0.55rem',
         },
     },
     additionalInfo: {
@@ -247,6 +280,9 @@ export const useStyles = makeStyles({
         },
         '@media (max-width: 600px)': {
             fontSize: '2rem',
+        },
+        '@media (max-width: 450px)': {
+            fontSize: '1.5rem',
         },
     },
 })

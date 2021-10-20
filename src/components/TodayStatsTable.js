@@ -13,7 +13,7 @@ const useStyles = makeStyles({
             props.theme === 'dark'
                 ? '3px 0px 10px 3px rgba(227, 134, 0, 0.5)'
                 : '3px 0px 10px 3px rgba(86, 0, 232, 0.6)',
-        minWidth: '300px',
+        minWidth: '220px',
         maxWidth: '400px',
         color: 'inherit',
         fontFamily: 'inherit',

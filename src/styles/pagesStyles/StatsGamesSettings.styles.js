@@ -15,9 +15,13 @@ export const useStyles = makeStyles({
         '& > header': {
             background: 'inherit',
         },
+        '@media (max-width: 450px)': {
+            padding: '10px',
+        },
     },
     buttonsWrapper: {
-        width: '200px',
+        width: '100%',
+        maxWidth: '200px',
         display: 'flex',
         flexWrap: 'wrap',
         alignItems: 'center',
@@ -39,6 +43,10 @@ export const useStyles = makeStyles({
         '@media (max-width: 768px)': {
             fontSize: '3.5rem',
         },
+        '@media (max-width: 450px)': {
+            fontSize: '1.7rem',
+            marginBottom: '15px',
+        },
     }),
     gameTitle: (props) => ({
         fontSize: '3.5rem',
@@ -48,6 +56,9 @@ export const useStyles = makeStyles({
         '@media (max-width: 768px)': {
             fontSize: '2.5rem',
         },
+        '@media (max-width: 450px)': {
+            fontSize: '1.4rem',
+        },
     }),
     subtitle1: (props) => ({
         fontFamily: props.theme === 'dark' ? 'darkTitle' : 'lightTitle',
@@ -55,12 +66,19 @@ export const useStyles = makeStyles({
         fontWeight: '650',
         marginRight: 'auto',
         marginBottom: '15px',
+        '@media (max-width: 450px)': {
+            fontSize: '1.1rem',
+            marginBottom: '7px',
+        },
     }),
     subtitle2: {
         fontFamily: 'inherit',
         fontSize: '1.05rem',
         fontWeight: '400',
         marginRight: 'auto',
+        '@media (max-width: 450px)': {
+            fontSize: '0.85rem',
+        },
     },
     avatarImage: {
         width: '100px',
@@ -112,10 +130,10 @@ export const useStyles = makeStyles({
             width: '100%',
         },
     },
-    screenShot: {},
     button: (props) => ({
         padding: '3px',
         width: '100%',
+        minWidth: '0px',
         height: '36px',
         background: props.theme === 'dark' ? '#E38600' : '#5600E8',
         color: props.theme === 'dark' ? '#141414' : '#F2F2F2',
@@ -133,6 +151,12 @@ export const useStyles = makeStyles({
         fontSize: '1rem',
         '&:hover': {
             transform: 'scale(1.1)',
+        },
+        '@media (max-width: 450px)': {
+            fontSize: '0.8rem',
+            '&:hover': {
+                transform: 'scale(1.05)',
+            },
         },
     }),
     outlainedButton: (props) => ({
@@ -158,17 +182,27 @@ export const useStyles = makeStyles({
         '&:hover': {
             transform: 'scale(1.1)',
         },
+        '@media (max-width: 450px)': {
+            width: '100px',
+            fontSize: '0.8rem',
+            '&:hover': {
+                transform: 'scale(1.05)',
+            },
+        },
     }),
     buttonBox: {
         display: 'flex',
         flexWrap: 'wrap',
         marginBottom: '20px',
         gap: '30px',
+        '@media (max-width: 450px)': {
+            marginBottom: '10px',
+            gap: '15px',
+        },
     },
     cardsWrap: {
         display: 'flex',
         flexWrap: 'wrap',
-        gap: '20px',
     },
     card: {
         perspective: '1000px',
@@ -178,6 +212,10 @@ export const useStyles = makeStyles({
         fontFamily: 'inherit',
         width: '300px',
         margin: '20px',
+        '@media (max-width: 450px)': {
+            width: '250px',
+            margin: '15px',
+        },
     },
     cardItem: (props) => ({
         display: 'flex',
@@ -191,13 +229,12 @@ export const useStyles = makeStyles({
             props.theme === 'dark'
                 ? '3px 0px 10px 3px rgba(227, 134, 0, 0.5)'
                 : '3px 0px 10px 3px rgba(86, 0, 232, 0.6)',
+        '@media (max-width: 450px)': {
+            padding: '10px',
+        },
     }),
     cardTitle: {
-        marginBottom: '10px',
         marginRight: 'auto',
-    },
-    cardText: {
-        marginBottom: '10px',
     },
     link: {
         textDecoration: 'none',
@@ -239,6 +276,10 @@ export const useStyles = makeStyles({
         '& .MuiInputBase-root': {
             color: 'inherit',
         },
+        '@media (max-width: 450px)': {
+            padding: '10px',
+            alignSelf: 'center',
+        },
     }),
     form: (props) => ({
         width: '100%',
@@ -246,6 +287,10 @@ export const useStyles = makeStyles({
         flexDirection: 'column',
         '& > div': {
             margin: '0px',
+        },
+        '& > input:-webkit-autofill': {
+            boxShadow: 'inset 0 0 0 50px #111 !important',
+            color: 'red',
         },
         '& .MuiInputBase-root': {
             fontFamily: 'inherit',
@@ -277,6 +322,11 @@ export const useStyles = makeStyles({
             props.theme === 'dark'
                 ? `url(${icons.darkPointer}), default`
                 : `url(${icons.lightPointer}), default`,
+        '@media (max-width: 450px)': {
+            width: '24px',
+            height: '24px',
+            marginRight: '5px',
+        },
     }),
     field: {
         color: 'inherit',
@@ -369,7 +419,7 @@ export const SettingsSlider = withStyles({
             props.theme === 'dark'
                 ? `url(${icons.darkPointer}), pointer`
                 : `url(${icons.lightPointer}), pointer`,
-        width: '200px',
+        width: '170px',
         color: props.theme === 'dark' ? '#E38600' : '#5600E8',
         height: '8px',
         fontFamily: 'inherit',

@@ -70,7 +70,7 @@ export const WordCard = ({ word }) => {
                 />
 
                 <div className={classes.cardContent}>
-                    <div className={classes.infoPanel}>
+                    <div className={classes.buttonsPanel}>
                         {word.deleted === true ? (
                             <button
                                 data-name="deleted"
@@ -118,8 +118,21 @@ export const WordCard = ({ word }) => {
                                         />
                                     </button>
                                 )}
+
+                                <button
+                                    className={classes.iconWrap}
+                                    value={word.audio}
+                                    onClick={play}
+                                >
+                                    <PlayCircleFilledIcon
+                                        className={classes.bigCardIcon}
+                                    />
+                                </button>
                             </React.Fragment>
                         )}
+                    </div>
+
+                    <div className={classes.infoPanel}>
                         <p className={classes.infoText}>
                             Правильно:&#160;
                             <span className={classes.correctText}>
@@ -136,15 +149,6 @@ export const WordCard = ({ word }) => {
 
                     <div className={classes.cardUnitWrap}>
                         <div className={classes.cardUnitPlayWrap}>
-                            <button
-                                className={classes.iconWrap}
-                                value={word.audio}
-                                onClick={play}
-                            >
-                                <PlayCircleFilledIcon
-                                    className={classes.bigCardIcon}
-                                />
-                            </button>
                             <p
                                 className={classes.wordText}
                             >{`${word.word} `}</p>

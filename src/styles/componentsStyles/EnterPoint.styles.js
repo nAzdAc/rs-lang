@@ -16,11 +16,19 @@ export const useStyles = makeStyles(() => ({
         justifyContent: 'center',
         color: 'inherit',
         width: '70px',
+        '@media (max-width: 450px)': {
+            width: '45px',
+        },
     },
     avatar: {
         marginBottom: '3px',
         width: '55px',
         height: '55px',
+        '@media (max-width: 450px)': {
+            marginBottom: '3px',
+            width: '30px',
+            height: '30px',
+        },
     },
     logout: (props) => ({
         width: '25px',
@@ -35,6 +43,12 @@ export const useStyles = makeStyles(() => ({
         '&:hover': {
             transform: 'rotate(360deg)',
             transition: '0.5s',
+        },
+        '@media (max-width: 450px)': {
+            width: '17px',
+            height: '17px',
+            padding: '0px',
+            marginRight: '10px',
         },
     }),
     button: (props) => ({
@@ -60,6 +74,12 @@ export const useStyles = makeStyles(() => ({
         '&:hover': {
             transform: 'scale(1.1)',
         },
+        '@media (max-width: 450px)': {
+            width: '64px',
+            height: '30px',
+            fontSize: '0.8rem',
+            border: '2px solid',
+        },
     }),
     link: {
         textDecoration: 'none',
@@ -67,7 +87,10 @@ export const useStyles = makeStyles(() => ({
     },
     name: {
         letterSpacing: '1px',
-        fontSize: '1.1rem',
+        fontSize: '1.2rem',
         color: 'inherit',
+        '@media (max-width: 450px)': {
+            fontSize: '0.9rem',
+        },
     },
 }))

@@ -15,6 +15,7 @@ const useStyles = makeStyles({
         justifyContent: 'center',
         gap: '10px',
         fontFamily: 'inherit',
+        marginTop: '-20px',
     },
     sideBarText: {
         fontSize: '1.25rem',

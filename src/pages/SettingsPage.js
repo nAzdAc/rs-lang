@@ -258,10 +258,7 @@ export const SettingsPage = () => {
                         <h4 className={classes.subtitle1}>
                             Отображение перевода
                         </h4>
-                        <div
-                            className={classes.buttonsWrapper}
-                            style={{ width: '250px' }}
-                        >
+                        <div className={classes.buttonsWrapper}>
                             <h6 className={classes.subtitle2}>Перевод слов</h6>
                             <SettingsSwitch
                                 aria-valuetext="translateWord"
@@ -272,10 +269,7 @@ export const SettingsPage = () => {
                                 theme={theme}
                             />
                         </div>
-                        <div
-                            className={classes.buttonsWrapper}
-                            style={{ width: '250px' }}
-                        >
+                        <div className={classes.buttonsWrapper}>
                             <h6 className={classes.subtitle2}>
                                 Перевод предложений
                             </h6>
@@ -441,13 +435,6 @@ export const SettingsPage = () => {
                                     {message.messageErrorText}
                                 </span>
                             )}
-                            <label
-                                style={{ margin: '20px 0px' }}
-                                htmlFor="screenshotFile"
-                                className={classes.button}
-                            >
-                                + ПРИКРЕПИТЬ ФОТО
-                            </label>
                             <input
                                 name="image"
                                 ref={screenshotRef}
@@ -457,6 +444,13 @@ export const SettingsPage = () => {
                                 accept=".jpg, .png, .gif"
                                 onChange={changeScreenshot}
                             />
+                            <label
+                                style={{ margin: '10px 0px', height: '36px' }}
+                                htmlFor="screenshotFile"
+                                className={classes.button}
+                            >
+                                + ПРИКРЕПИТЬ ФОТО
+                            </label>
                             <div
                                 style={{ margin: '0 auto' }}
                                 ref={previewRef}
