@@ -1,0 +1,84 @@
+@font-face {
+    font-family: 'roboto';
+    src: url('./assets/fonts/roboto.ttf');
+}
+@font-face {
+    font-family: 'logo';
+    src: url('./assets/fonts/logo.otf');
+}
+@font-face {
+    font-family: 'darkTitle';
+    src: url('./assets/fonts/darkTitle.ttf');
+}
+
+@font-face {
+    font-family: 'lightTitle';
+    src: url('./assets/fonts/lightTitle.otf');
+}
+
+@font-face {
+    font-family: 'lightText';
+    src: url('./assets/fonts/appetite.ttf');
+}
+
+@font-face {
+    font-family: 'darkText';
+    src: url('./assets/fonts/slim.ttf');
+}
+
+#root {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+*,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin: 0;
+    padding: 0;
+}
+a:visited,
+a:active,
+a:link,
+a:hover {
+    text-decoration: none;
+}
+/* 
+input:-webkit-autofill {
+     box-shadow: inset 0 0 0 50px #111 !important;
+    color: #458245 !important;
+} */
+
+body {
+    margin: 0 auto;
+    height: 100vh;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
+        'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
+        'Helvetica Neue', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: #f2f2f2;
+}
+html,
+body {
+    scrollbar-color: #458245 #714826; /* «цвет ползунка» «цвет полосы скроллбара» */
+    scrollbar-width: auto; /* толщина */
+}
+
+.entering {
+    animation: slideDown 5s forwards;
+}
+
+@keyframes slideDown {
+    0% {
+        transform: translateY(0px);
+    }
+    100% {
+        transform: translateY(310px);
+    }
+}

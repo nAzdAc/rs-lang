@@ -2,11 +2,9 @@
 
 # RS-School / React-2021Q1 / Third Task
 
-## Deploy:   ***https://nazdac-rs-lang.netlify.app/***
-
+## Deploy: ***https://nazdac-rs-lang.netlify.app/***
 
 Task: ***https://github.com/rolling-scopes-school/tasks/blob/master/tasks/react/react-rslang.md***
-
 
 Score: 473 / 500
 
